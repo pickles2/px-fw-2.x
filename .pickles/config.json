@@ -1,0 +1,6 @@
+{
+	"<!-- comment":" for tomk79/filesystem -->",
+	"file_default_permission": "0775",
+	"dir_default_permission": "0775",
+	"filesystem_encoding": "utf-8"
+}
