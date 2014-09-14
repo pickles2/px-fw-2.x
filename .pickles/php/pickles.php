@@ -37,10 +37,14 @@ class pickles{
 
 		// load Config
 		$this->path_homedir = $path_homedir;
-		$this->conf = json_decode( file_get_contents( $this->path_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
+		if( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.json') ){
+			$this->conf = json_decode( file_get_contents( $this->path_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
+		}elseif( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.php') ){
+			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
+		}
 
 		// make instance $fs
-		$conf = json_decode('{}');
+		$conf = new \stdClass;
 		$conf->file_default_permission = $this->conf->file_default_permission;
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding     = $this->conf->filesystem_encoding;
@@ -48,7 +52,7 @@ class pickles{
 		$this->path_homedir = $this->fs->get_realpath($this->path_homedir).'/';
 
 		// make instance $req
-		$conf = json_decode('{}');
+		$conf = new \stdClass;
 		$conf->session_name   = $this->conf->session_name;
 		$conf->session_expire = $this->conf->session_expire;
 		$this->req = new \tomk79\request( $conf );

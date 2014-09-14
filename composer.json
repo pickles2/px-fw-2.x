@@ -25,6 +25,6 @@
         "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
-        "files": [".pickles/php/px.php"]
+        "files": [".pickles/php/pickles.php"]
     }
 }
