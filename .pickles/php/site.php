@@ -12,9 +12,9 @@ namespace pickles;
  * Site and page Manager
  * 
  * Pickles2 のコアオブジェクトの1つ `$site` のオブジェクトクラスです。
- * このオブジェクトは、PxFWの初期化処理の中で自動的に生成され、`$pickles` の内部に格納されます。
+ * このオブジェクトは、PxFWの初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
  * 
- * メソッド `$pickles->site()` を通じてアクセスします。
+ * メソッド `$px->site()` を通じてアクセスします。
  * 
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
@@ -22,7 +22,7 @@ class site{
 	/**
 	 * Picklesオブジェクト
 	 */
-	private $pickles;
+	private $px;
 	/**
 	 * 設定オブジェクト
 	 */
@@ -47,21 +47,21 @@ class site{
 	/**
 	 * コンストラクタ
 	 * 
-	 * @param object $pickles Picklesオブジェクト
+	 * @param object $px Picklesオブジェクト
 	 */
-	public function __construct( $pickles ){
-		$this->pickles = $pickles;
-		$this->conf = $this->pickles->get_conf();
+	public function __construct( $px ){
+		$this->px = $px;
+		$this->conf = $this->px->get_conf();
 
 		//サイトマップCSVを読み込む
 		$this->load_sitemap_csv();
 
 		//ダイナミックパスを検索、パラメータを取り出す
 		foreach( $this->sitemap_dynamic_paths as $sitemap_dynamic_path ){
-			if( preg_match( $sitemap_dynamic_path['preg'] , $this->pickles->req()->get_request_file_path() , $tmp_matched ) ){
-				$page_info = $this->get_page_info( $this->pickles->req()->get_request_file_path() );
+			if( preg_match( $sitemap_dynamic_path['preg'] , $this->px->req()->get_request_file_path() , $tmp_matched ) ){
+				$page_info = $this->get_page_info( $this->px->req()->get_request_file_path() );
 				foreach( $sitemap_dynamic_path['pattern_map'] as $key=>$val ){
-					$this->pickles->req()->set_path_param( $val , $tmp_matched[$key+1] );
+					$this->px->req()->set_path_param( $val , $tmp_matched[$key+1] );
 				}
 				break;
 			}
@@ -83,7 +83,7 @@ class site{
 	 * @return bool 常に `true`
 	 */
 	private function load_sitemap_csv(){
-		$path_sitemap_cache_dir = $this->pickles->get_path_homedir().'sys/caches/sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_path_homedir().'sys/caches/sitemaps/';
 		if( $this->is_sitemap_cache() ){
 			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
 			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
@@ -93,27 +93,27 @@ class site{
 			return true;
 		}
 
-		if( preg_match('/^clearcache(?:\\..*)?$/si', $this->pickles->req()->get_param('PX')) ){
+		if( preg_match('/^clearcache(?:\\..*)?$/si', $this->px->req()->get_param('PX')) ){
 			// clearcacheを実行する際にはCSVの読み込みを行わない。どうせ直後に消されるので。
 			return true;
 		}
 
-		$path_sitemap_dir = $this->pickles->get_path_homedir().'sitemaps/';
-		$ary_sitemap_files = $this->pickles->fs()->ls( $path_sitemap_dir );
+		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
+		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
 		sort($ary_sitemap_files);
 
 		// $path_top の設定値をチューニング
 		$path_top = $this->conf->path_top;
 		if(!strlen( $path_top )){ $path_top = '/'; }
-		$path_top = preg_replace( '/\/$/si' , '/'.$this->pickles->get_directory_index_primary() , $path_top );//index.htmlを付加する。
+		$path_top = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
-			if( strtolower( $this->pickles->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
+			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
 				continue;
 			}
-			$tmp_sitemap = $this->pickles->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
+			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
 				set_time_limit(30);//タイマー延命
 				$num_auto_pid++;
@@ -166,15 +166,15 @@ class site{
 					default:
 						// スラ止のパスに index.html を付加する。
 						// ただし、JS、アンカー、外部リンクには適用しない。
-						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->pickles->get_directory_index_primary().'$1' , $tmp_array['path'] );
+						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
 				if( !strlen( $tmp_array['content'] ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
-					$tmp_array['content'] = preg_replace('/\/$/s','/'.$this->pickles->get_directory_index_primary(), $tmp_array['content']);
+					$tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
 				}
-				$tmp_array['content'] = preg_replace( '/\/$/si' , '/'.$this->pickles->get_directory_index_primary() , $tmp_array['content'] );//index.htmlを付加する。
+				$tmp_array['content'] = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $tmp_array['content'] );//index.htmlを付加する。
 				if( !strlen( $tmp_array['id'] ) ){
 					//ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
@@ -184,7 +184,7 @@ class site{
 					// }else{
 					// 	//物理ページ
 					// 	$tmp_id = $tmp_array['path'];
-					// 	$tmp_id = $this->pickles->fs()->trim_extension($tmp_id);
+					// 	$tmp_id = $this->px->fs()->trim_extension($tmp_id);
 					// 	$tmp_id = preg_replace( '/\/index$/si' , '/' , $tmp_id );
 					// 	$tmp_id = preg_replace( '/\/+$/si' , '' , $tmp_id );
 					// 	$tmp_id = preg_replace( '/^\/+/si' , '' , $tmp_id );
@@ -275,13 +275,13 @@ class site{
 
 		//  キャッシュディレクトリを作成
 		set_time_limit(0);//タイマー延命
-		$this->pickles->fs()->mkdir($path_sitemap_cache_dir);
+		$this->px->fs()->mkdir($path_sitemap_cache_dir);
 
 		//  キャッシュファイルを作成
-		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
-		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
-		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
-		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
 		set_time_limit(30);//タイマーリセット
 
 		return true;
@@ -293,8 +293,8 @@ class site{
 	 * @return bool 読み込み可能な場合に `true`、読み込みできない場合に `false` を返します。
 	 */
 	private function is_sitemap_cache(){
-		$path_sitemap_cache_dir = $this->pickles->get_path_homedir().'sys/caches/sitemaps/';
-		$path_sitemap_dir = $this->pickles->get_path_homedir().'sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_path_homedir().'sys/caches/sitemaps/';
+		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		if(
 			!is_file($path_sitemap_cache_dir.'sitemap.array') || 
 			!is_file($path_sitemap_cache_dir.'sitemap_id_map.array') || 
@@ -302,8 +302,8 @@ class site{
 		){
 			return false;
 		}
-		foreach( $this->pickles->fs()->ls( $path_sitemap_dir ) as $filename ){
-			if( $this->pickles->fs()->is_newer_a_than_b( $path_sitemap_dir.$filename , $path_sitemap_cache_dir.'sitemap.array' ) ){
+		foreach( $this->px->fs()->ls( $path_sitemap_dir ) as $filename ){
+			if( $this->px->fs()->is_newer_a_than_b( $path_sitemap_dir.$filename , $path_sitemap_cache_dir.'sitemap.array' ) ){
 				return false;
 			}
 		}
@@ -327,7 +327,7 @@ class site{
 	 */
 	public function get_parent( $path = null ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		if(!strlen($this->get_page_info($path,'id'))){
 			// トップページの親はいない。
@@ -354,7 +354,7 @@ class site{
 	 */
 	public function get_category_top( $path = null ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$current_page_info = $this->get_page_info($path);
 		if( $current_page_info['category_top_flg'] ){
@@ -457,11 +457,11 @@ class site{
 			$path = $this->sitemap_id_map[$path];
 		}
 
-		$path = preg_replace('/\/'.$this->pickles->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
+		$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
 
 		$tmp_path = $path;
 		if( !array_key_exists($path, $this->sitemap_id_map) || is_null( $this->sitemap_array[$path] ) ){
-			foreach( $this->pickles->get_directory_index() as $index_file_name ){
+			foreach( $this->px->get_directory_index() as $index_file_name ){
 				$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/si','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
 				if( !is_null( @$this->sitemap_array[$tmp_path] ) ){
 					break;
@@ -488,7 +488,7 @@ class site{
 			case 'anchor':
 				break;
 			default:
-				$path = preg_replace( '/\/$/si' , '/'.$this->pickles->get_directory_index_primary() , $path );
+				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
 				break;
 		}
 
@@ -520,12 +520,12 @@ class site{
 		static $num_auto_pid = 0;
 		$path_type = $this->get_path_type($path);
 		if( is_null( $path_type ) || $path_type === false ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 			$path_type = $this->get_path_type($path);
 		}
 		if( is_string( $path_type ) ){
 			//  $path がスラドメされている場合に index.html を付加
-			$path = preg_replace( '/\/$/si' , '/'.$this->pickles->get_directory_index_primary() , $path );
+			$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
 		}
 
 		$before_page_info = $this->get_page_info( $path );
@@ -595,11 +595,11 @@ class site{
 		$this->sitemap_page_tree[$parent['path']] = null;
 
 		//  パブリッシュ対象にリンクを追加
-		$this->pickles->add_relatedlink( $this->pickles->theme()->href($tmp_array['path']) );
+		$this->px->add_relatedlink( $this->px->theme()->href($tmp_array['path']) );
 
 		// カレントページにレイアウトの指示があったら、テーマに反映する。
 		if( $is_target_current_page && @strlen($page_info['layout']) ){
-			$this->pickles->theme()->set_layout_id( $page_info['layout'] );
+			$this->px->theme()->set_layout_id( $page_info['layout'] );
 		}
 
 		return true;
@@ -652,7 +652,7 @@ class site{
 	 * @return array カレントページのページ情報を格納する連想配列
 	 */
 	public function get_current_page_info(){
-		$current_path = $this->pickles->req()->get_request_file_path();
+		$current_path = $this->px->req()->get_request_file_path();
 		return $this->get_page_info( $current_path );
 	}
 
@@ -663,7 +663,7 @@ class site{
 	 * @return bool 常に `true`
 	 */
 	public function set_current_page_info( $page_info ){
-		$current_path = $this->pickles->req()->get_request_file_path();
+		$current_path = $this->px->req()->get_request_file_path();
 		return $this->set_page_info( $current_path, $page_info );
 	}
 
@@ -728,7 +728,7 @@ class site{
 			continue;
 		}
 		unset($dynamic_path , $tmp_matched);
-		$path = preg_replace('/\/$/si','/'.$this->pickles->get_directory_index_primary(),$path); // index.htmlをつける
+		$path = preg_replace('/\/$/si','/'.$this->px->get_directory_index_primary(),$path); // index.htmlをつける
 		return $path;
 	}//bind_dynamic_path_param()
 
@@ -770,7 +770,7 @@ class site{
 	 */
 	public function get_children( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
 		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
@@ -893,7 +893,7 @@ class site{
 	 */
 	public function get_bros( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info($path);
 		if( !strlen($page_info['id']) ){
@@ -914,7 +914,7 @@ class site{
 	 */
 	public function get_bros_next( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
 		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
@@ -952,7 +952,7 @@ class site{
 	 */
 	public function get_bros_prev( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
 		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
@@ -996,7 +996,7 @@ class site{
 	 */
 	public function get_next( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
 		if(!is_null(@$opt['filter'])){
@@ -1059,7 +1059,7 @@ class site{
 	 */
 	public function get_prev( $path = null, $opt = array() ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
 		if(!is_null(@$opt['filter'])){
@@ -1120,7 +1120,7 @@ class site{
 	 */
 	public function get_breadcrumb_array( $path = null ){
 		if( is_null( $path ) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info( $path );
 		if( !strlen($page_info['id']) ){return array();}
@@ -1145,7 +1145,7 @@ class site{
 	 */
 	public function is_page_in_breadcrumb( $page_path, $path = null ){
 		if( is_null($path) ){
-			$path = $this->pickles->req()->get_request_file_path();
+			$path = $this->px->req()->get_request_file_path();
 		}
 		$breadcrumb = $this->get_breadcrumb_array($path);
 		$current_page_id = $this->get_page_id_by_path($path);
