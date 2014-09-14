@@ -5,21 +5,21 @@
 namespace pickles;
 
 /**
- * tomk79/pickles2 core class
+ * pickles2 core class
  * 
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pickles{
 	private $path_homedir;
 	private $conf;
-	private $fs, $req;
+	private $fs, $req, $site;
 
 	/**
 	 * constructor
 	 * @param string $path_homedir
 	 */
 	public function __construct( $path_homedir ){
-		// setup PHP
+		// initialize PHP
 		if( !extension_loaded( 'mbstring' ) ){
 			trigger_error('mbstring not loaded.');
 		}
@@ -57,9 +57,9 @@ class pickles{
 		$conf->session_expire = $this->conf->session_expire;
 		$this->req = new \tomk79\request( $conf );
 
-		// var_dump($this->conf);
-		// var_dump($this->req->get_user_agent());
-		// var_dump($this->req->get_request_file_path());
+		// make instance $site
+		$this->site = new site($this);
+
 
 		// execute content
 		$src = self::exec_content( $this->req->get_request_file_path(), $this );
@@ -83,6 +83,27 @@ class pickles{
 	 */
 	public function req(){
 		return $this->req;
+	}
+
+	/**
+	 * get $site
+	 */
+	public function site(){
+		return $this->site;
+	}
+
+	/**
+	 * get $conf
+	 */
+	public function get_conf(){
+		return $this->conf;
+	}
+
+	/**
+	 * get home directory path
+	 */
+	public function get_path_homedir(){
+		return $this->path_homedir;
 	}
 
 	/**
