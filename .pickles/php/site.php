@@ -20,13 +20,13 @@ namespace pickles;
  */
 class site{
 	/**
-	 * $picklesオブジェクト
+	 * Picklesオブジェクト
 	 */
 	private $pickles;
 	/**
-	 * サイトマップ定義
+	 * 設定オブジェクト
 	 */
-	private $sitemap_definition = array();
+	private $conf;
 	/**
 	 * サイトマップ配列
 	 */
@@ -51,6 +51,7 @@ class site{
 	 */
 	public function __construct( $pickles ){
 		$this->pickles = $pickles;
+		$this->conf = $this->pickles->get_conf();
 
 		//サイトマップCSVを読み込む
 		$this->load_sitemap_csv();
@@ -85,7 +86,6 @@ class site{
 		$path_sitemap_cache_dir = $this->pickles->get_path_homedir().'sys/caches/sitemaps/';
 		if( $this->is_sitemap_cache() ){
 			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
-			$this->sitemap_definition    = @include($path_sitemap_cache_dir.'sitemap_definition.array');
 			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
 			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
 			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
@@ -98,27 +98,12 @@ class site{
 			return true;
 		}
 
-		$path_sitemap_definition = $this->pickles->get_path_homedir().'configs/sitemap_definition.csv';
 		$path_sitemap_dir = $this->pickles->get_path_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->pickles->fs()->ls( $path_sitemap_dir );
 		sort($ary_sitemap_files);
 
-		//  サイトマップ定義をロード
-		$tmp_sitemap_definition = $this->pickles->fs()->read_csv_utf8( $path_sitemap_definition );
-		$tmp_sitemap_col = 'a';
-		foreach ($tmp_sitemap_definition as $key=>$val) {
-			$this->sitemap_definition[$val[0]] = array();
-			$this->sitemap_definition[$val[0]]['num'] = $key;
-			$this->sitemap_definition[$val[0]]['col'] = strtoupper($tmp_sitemap_col++);
-			$this->sitemap_definition[$val[0]]['key'] = $val[0];
-			$this->sitemap_definition[$val[0]]['name'] = $val[1];
-		}
-		unset($tmp_sitemap_definition);
-		unset($tmp_sitemap_col);
-		//  / サイトマップ定義をロード
-
 		// $path_top の設定値をチューニング
-		$path_top = $this->pickles->get_conf('project.path_top');
+		$path_top = $this->conf->path_top;
 		if(!strlen( $path_top )){ $path_top = '/'; }
 		$path_top = preg_replace( '/\/$/si' , '/'.$this->pickles->get_directory_index_primary() , $path_top );//index.htmlを付加する。
 
@@ -128,8 +113,7 @@ class site{
 			if( strtolower( $this->pickles->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
 				continue;
 			}
-			$tmp_sitemap = $this->pickles->fs()->read_csv_utf8( $path_sitemap_dir.$basename_sitemap_csv );
-			$tmp_sitemap_definition = $this->sitemap_definition;
+			$tmp_sitemap = $this->pickles->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
 				set_time_limit(30);//タイマー延命
 				$num_auto_pid++;
@@ -294,11 +278,10 @@ class site{
 		$this->pickles->fs()->mkdir($path_sitemap_cache_dir);
 
 		//  キャッシュファイルを作成
-		$this->pickles->fs()->file_overwrite( $path_sitemap_cache_dir.'sitemap_definition.array' , t::data2phpsrc($this->sitemap_definition) );
-		$this->pickles->fs()->file_overwrite( $path_sitemap_cache_dir.'sitemap.array' , t::data2phpsrc($this->sitemap_array) );
-		$this->pickles->fs()->file_overwrite( $path_sitemap_cache_dir.'sitemap_id_map.array' , t::data2phpsrc($this->sitemap_id_map) );
-		$this->pickles->fs()->file_overwrite( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , t::data2phpsrc($this->sitemap_dynamic_paths) );
-		$this->pickles->fs()->file_overwrite( $path_sitemap_cache_dir.'sitemap_page_tree.array' , t::data2phpsrc($this->sitemap_page_tree) );
+		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
+		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
+		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
+		$this->pickles->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
 		set_time_limit(30);//タイマーリセット
 
 		return true;
@@ -313,14 +296,10 @@ class site{
 		$path_sitemap_cache_dir = $this->pickles->get_path_homedir().'sys/caches/sitemaps/';
 		$path_sitemap_dir = $this->pickles->get_path_homedir().'sitemaps/';
 		if(
-			!is_file($path_sitemap_cache_dir.'sitemap_definition.array') || 
 			!is_file($path_sitemap_cache_dir.'sitemap.array') || 
 			!is_file($path_sitemap_cache_dir.'sitemap_id_map.array') || 
 			!is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array')
 		){
-			return false;
-		}
-		if( $this->pickles->fs()->is_newer_a_than_b( $this->pickles->get_path_homedir().'configs/sitemap_definition.csv' , $path_sitemap_cache_dir.'sitemap_definition.array' ) ){
 			return false;
 		}
 		foreach( $this->pickles->fs()->ls( $path_sitemap_dir ) as $filename ){
@@ -329,18 +308,6 @@ class site{
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * サイトマップ定義を取得する。
-	 * 
-	 * サイトマップ定義は、サイトマップ定義ファイル `./_PX/configs/sitemap_definition.csv` から作成されます。
-	 * 各 サイトマップCSV 中に個別に定義された列は、このメソッドから取得することはできません。
-	 * 
-	 * @return array サイトマップ定義を格納した連想配列
-	 */
-	public function get_sitemap_definition(){
-		return $this->sitemap_definition;
 	}
 
 	/**
@@ -468,7 +435,7 @@ class site{
 	 * <pre>&lt;?php
 	 * // ページ &quot;/aaa/bbb.html&quot; のページ情報を得る
 	 * $page_info = $px-&gt;site()-&gt;get_page_info('/aaa/bbb.html');
-	 * test::var_dump( $page_info );
+	 * var_dump( $page_info );
 	 * ?&gt;</pre>
 	 * 
 	 * ページIDで指定したページの情報を取得する例 :
@@ -476,7 +443,7 @@ class site{
 	 * // トップページのページ情報を得る
 	 * // (トップページのページIDは必ず空白の文字列)
 	 * $page_info = $px-&gt;site()-&gt;get_page_info('');
-	 * test::var_dump( $page_info );
+	 * var_dump( $page_info );
 	 * ?&gt;</pre>
 	 * 
 	 * @param string $path 取得するページのパス または ページID。省略時、カレントページから自動的に取得します。
@@ -679,7 +646,7 @@ class site{
 	 * <pre>&lt;?php
 	 * // カレントページのページ情報を得る
 	 * $page_info = $px-&gt;site()-&gt;get_current_page_info();
-	 * test::var_dump( $page_info );
+	 * var_dump( $page_info );
 	 * ?&gt;</pre>
 	 * 
 	 * @return array カレントページのページ情報を格納する連想配列
@@ -1241,5 +1208,126 @@ class site{
 		}
 		return $path_type;
 	}//get_path_type()
+
+
+	/**
+	 * 変数を受け取り、PHPのシンタックスに変換する。
+	 * 
+	 * @param mixed $value 値
+	 * @param array $options オプション
+	 * <dl>
+	 *   <dt>delete_arrayelm_if_null</dt>
+	 *     <dd>配列の要素が `null` だった場合に削除。</dd>
+	 *   <dt>array_break</dt>
+	 *     <dd>配列に適当なところで改行を入れる。</dd>
+	 * </dl>
+	 * @return string PHPシンタックスに変換された値
+	 */
+	private static function data2text( $value = null , $options = array() ){
+
+		$RTN = '';
+		if( is_array( $value ) ){
+			#	配列
+			$RTN .= 'array(';
+			if( @$options['array_break'] ){ $RTN .= "\n"; }
+			$keylist = array_keys( $value );
+			foreach( $keylist as $Line ){
+				if( @$options['delete_arrayelm_if_null'] && is_null( @$value[$Line] ) ){
+					#	配列のnull要素を削除するオプションが有効だった場合
+					continue;
+				}
+				$RTN .= ''.self::data2text( $Line ).'=>'.self::data2text( $value[$Line] , $options ).',';
+				if( @$options['array_break'] ){ $RTN .= "\n"; }
+			}
+			$RTN = preg_replace( '/,(?:\r\n|\r|\n)?$/' , '' , $RTN );
+			$RTN .= ')';
+			if( @$options['array_break'] ){ $RTN .= "\n"; }
+			return	$RTN;
+		}
+
+		if( is_int( $value ) ){
+			#	数値
+			return	$value;
+		}
+
+		if( is_float( $value ) ){
+			#	浮動小数点
+			return	$value;
+		}
+
+		if( is_string( $value ) ){
+			#	文字列型
+			$RTN = '\''.self::escape_singlequote( $value ).'\'';
+			$RTN = preg_replace( '/\r\n|\r|\n/' , '\'."\\n".\'' , $RTN );
+			$RTN = preg_replace( '/'.preg_quote('<'.'?','/').'/' , '<\'.\'?' , $RTN );
+			$RTN = preg_replace( '/'.preg_quote('?'.'>','/').'/' , '?\'.\'>' , $RTN );
+			$RTN = preg_replace( '/'.preg_quote('/'.'*','/').'/' , '/\'.\'*' , $RTN );
+			$RTN = preg_replace( '/'.preg_quote('*'.'/','/').'/' , '*\'.\'/' , $RTN );
+			$RTN = preg_replace( '/<(scr)(ipt)/i' , '<$1\'.\'$2' , $RTN );
+			$RTN = preg_replace( '/\/(scr)(ipt)>/i' , '/$1\'.\'$2>' , $RTN );
+			$RTN = preg_replace( '/<(sty)(le)/i' , '<$1\'.\'$2' , $RTN );
+			$RTN = preg_replace( '/\/(sty)(le)>/i' , '/$1\'.\'$2>' , $RTN );
+			$RTN = preg_replace( '/<\!\-\-/i' , '<\'.\'!\'.\'--' , $RTN );
+			$RTN = preg_replace( '/\-\->/i' , '--\'.\'>' , $RTN );
+			return	$RTN;
+		}
+
+		if( is_null( $value ) ){
+			#	ヌル
+			return	'null';
+		}
+
+		if( is_object( $value ) ){
+			#	オブジェクト型
+			return	'\''.self::escape_singlequote( gettype( $value ) ).'\'';
+		}
+
+		if( is_resource( $value ) ){
+			#	リソース型
+			return	'\''.self::escape_singlequote( gettype( $value ) ).'\'';
+		}
+
+		if( is_bool( $value ) ){
+			#	ブール型
+			if( $value ){
+				return	'true';
+			}else{
+				return	'false';
+			}
+		}
+
+		return	'\'unknown\'';
+
+	}//data2text()
+
+	/**
+	 * 変数をPHPのソースコードに変換する。
+	 * 
+	 * `include()` に対してそのままの値を返す形になるよう変換する。
+	 *
+	 * @param mixed $value 値
+	 * @param array $options オプション (`self::data2text()`にバイパスされます。`self::data2text()`の項目を参照してください)
+	 * @return string `include()` に対して値 `$value` を返すPHPコード
+	 */
+	private static function data2phpsrc( $value = null , $options = array() ){
+		$RTN = '';
+		$RTN .= '<'.'?php'."\n";
+		$RTN .= '	/'.'* '.@mb_internal_encoding().' *'.'/'."\n";
+		$RTN .= '	return '.self::data2text( $value , $options ).';'."\n";
+		$RTN .= '?'.'>';
+		return	$RTN;
+	}
+
+	/**
+	 * シングルクオートで囲えるようにエスケープ処理する。
+	 *
+	 * @param string $text テキスト
+	 * @return string エスケープされたテキスト
+	 */
+	private static function escape_singlequote($text){
+		$text = preg_replace( '/\\\\/' , '\\\\\\\\' , $text);
+		$text = preg_replace( '/\'/' , '\\\'' , $text);
+		return	$text;
+	}
 
 }

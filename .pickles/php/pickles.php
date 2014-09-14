@@ -13,6 +13,7 @@ class pickles{
 	private $path_homedir;
 	private $conf;
 	private $fs, $req, $site;
+	private $directory_index;
 
 	/**
 	 * constructor
@@ -107,6 +108,53 @@ class pickles{
 	}
 
 	/**
+	 * directory_index の一覧を得る。
+	 * 
+	 * @return array ディレクトリインデックスの一覧
+	 */
+	public function get_directory_index(){
+		if( count($this->directory_index) ){
+			return $this->directory_index;
+		}
+		$tmp_di = $this->conf->directory_index;
+		$this->directory_index = array();
+		foreach( $tmp_di as $file_name ){
+			$file_name = trim($file_name);
+			if( !strlen($file_name) ){ continue; }
+			array_push( $this->directory_index, $file_name );
+		}
+		if( !count( $this->directory_index ) ){
+			array_push( $this->directory_index, 'index.html' );
+		}
+		return $this->directory_index;
+	}//get_directory_index()
+
+	/**
+	 * directory_index のいずれかにマッチするためのpregパターン式を得る。
+	 * 
+	 * @param string $delimiter pregパターンのデリミタ。省略時は `/` (`preg_quote()` の実装に従う)。
+	 * @return string pregパターン
+	 */
+	public function get_directory_index_preg_pattern( $delimiter = null ){
+		$directory_index = $this->get_directory_index();
+		foreach( $directory_index as $key=>$row ){
+			$directory_index[$key] = preg_quote($row, $delimiter);
+		}
+		$rtn = '(?:'.implode( '|', $directory_index ).')';
+		return $rtn;
+	}//get_directory_index_preg_pattern()
+
+	/**
+	 * 最も優先されるインデックスファイル名を得る。
+	 * 
+	 * @return string 最も優先されるインデックスファイル名
+	 */
+	public function get_directory_index_primary(){
+		$directory_index = $this->get_directory_index();
+		return $directory_index[0];
+	}//get_directory_index_primary()
+
+	/**
 	 * execute content
 	 * @return string Content source.
 	 */
@@ -131,10 +179,10 @@ class pickles{
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>Pickles 2</title>
+		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | Pickles 2</title>
 	</head>
 	<body>
-		<h1>Pickles 2</h1>
+		<h1><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?></h1>
 		<div class="contents">
 <?= $src_content; ?>
 
