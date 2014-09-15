@@ -56,14 +56,19 @@ class pickles{
 		$conf = new \stdClass;
 		$conf->session_name   = $this->conf->session_name;
 		$conf->session_expire = $this->conf->session_expire;
+		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
 
 		// make instance $site
 		$this->site = new site($this);
 
-
 		// execute content
-		$src = self::exec_content( $this->req->get_request_file_path(), $this );
+		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
+			@header('HTTP/1.1 403 Forbidden');
+			$src = '<p>ignore path</p>';
+		}else{
+			$src = self::exec_content( $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' ), $this );
+		}
 
 		// execute theme
 		$src = self::exec_theme( $src, $this );
@@ -153,6 +158,43 @@ class pickles{
 		$directory_index = $this->get_directory_index();
 		return $directory_index[0];
 	}//get_directory_index_primary()
+
+	/**
+	 * 除外ファイルか調べる。
+	 *
+	 * @param string $path パス
+	 * @return bool 除外ファイルの場合 `true`、それ以外の場合に `false` を返します。
+	 */
+	private function is_ignore_path( $path ){
+		static $rtn = array();
+		$path = $this->fs()->get_realpath( '/'.$path );
+		if(is_dir('./'.$path)){$path .= '/';}
+
+		if( @is_bool($rtn[$path]) ){
+			return $rtn[$path];
+		}
+
+		foreach( $this->conf->paths_ignore as $row ){
+			if(!is_string($row)){continue;}
+			$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
+			if( preg_match('/\*/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_quote($row,'/');
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}elseif(is_dir($row)){
+				$preg_pattern = preg_quote($this->fs()->get_realpath($row).'/','/');
+			}elseif(is_file($row)){
+				$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
+			}
+			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
+				$rtn[$path] = true;
+				return true;
+			}
+		}
+		$rtn[$path] = false;
+		return false;
+	}//is_ignore_path();
 
 	/**
 	 * execute content

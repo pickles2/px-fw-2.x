@@ -9,13 +9,20 @@ return call_user_func( function(){
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->paths_ignore = array(
 		// パブリッシュ対象外パスの一覧(ワイルドカードとしてアスタリスクを使用可)
-		'/.pickles/' ,
-		'/vendor/' ,
+		'/.htaccess' ,
 		'/_px_execute.php' ,
 		'/composer.json' ,
 		'/composer.lock' ,
 		'/README.md' ,
-		'*.ignore/' ,
+		'/.pickles/*' ,
+		'/vendor/*' ,
+		'*.ignore/*' ,
+		'*.ignore.*' ,
+		'*/.DS_Store' ,
+		'*/Thumbs.db' ,
+		'*/.svn/*' ,
+		'*/.git/*' ,
+		'*/.gitignore' ,
 	);
 
 	// directory index

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cdc147d26589857c6506d7e06d9be8c7",
+    "hash": "a07eca99f79adf051622438c6d291090",
     "packages": [
         {
             "name": "phpoffice/phpexcel",
@@ -65,7 +65,7 @@
         },
         {
             "name": "tomk79/filesystem",
-            "version": "0.1.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/filesystem.git",
@@ -109,7 +109,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/request.git",
-                "reference": "a8c1b2f49bf6a7c3c858dc153b516064c779d5ee"
+                "reference": "b1319f35f2fc05a0fe9231732b47cd64b0fe0640"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -132,7 +132,7 @@
                     "email": "tomk79@gmail.com"
                 }
             ],
-            "time": "2014-09-14 11:02:53"
+            "time": "2014-09-15 11:34:48"
         }
     ],
     "packages-dev": [
@@ -835,6 +835,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "tomk79/filesystem": 20,
         "tomk79/request": 20
     },
     "prefer-stable": false,

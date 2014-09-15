@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": ">=5.3.0" ,
-        "tomk79/filesystem": "0.1.*",
+        "tomk79/filesystem": "dev-develop",
         "tomk79/request": "dev-develop",
         "phpoffice/phpexcel": "1.8.*"
     },
