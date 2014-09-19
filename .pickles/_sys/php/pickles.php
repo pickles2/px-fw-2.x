@@ -11,6 +11,7 @@ namespace pickles;
  */
 class pickles{
 	private $path_homedir;
+	private $path_content;
 	private $conf;
 	private $fs, $req, $site;
 	private $directory_index;
@@ -68,27 +69,27 @@ class pickles{
 		$this->site = new site($this);
 
 		// execute content
-		$path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
+		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			@header('HTTP/1.1 403 Forbidden');
 			$this->send_content('', '<p>ignore path</p>');
 		}else{
-			self::exec_content( $path_content, $this );
+			self::exec_content( $this );
 		}
 
-		$ext = 'html';//←仮実装
+		$ext = pathinfo( $this->path_content , PATHINFO_EXTENSION );
 		if( @!empty( $this->conf->extensions->{$ext} ) ){
-			foreach( $this->contents_cabinet as $key=>$src ){
+			foreach( $this->contents_cabinet as $contents_key=>$src ){
 				if( is_string($this->conf->extensions->{$ext}) ){
 					$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->extensions->{$ext} );
-					$src = call_user_func( $fnc_name, $this, $src, $path_content );
+					$src = call_user_func( $fnc_name, $this, $src, $contents_key );
 				}elseif( is_array($this->conf->extensions->{$ext}) ){
 					foreach( $this->conf->extensions->{$ext} as $fnc_name ){
 						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-						$src = call_user_func( $fnc_name, $this, $src, $path_content );
+						$src = call_user_func( $fnc_name, $this, $src, $contents_key );
 					}
 				}
-				$this->contents_cabinet[$key] = $src;
+				$this->contents_cabinet[$contents_key] = $src;
 			}
 		}
 		unset($src, $fnc_name);
@@ -126,7 +127,7 @@ class pickles{
 	/**
 	 * get $conf
 	 */
-	public function get_conf(){
+	public function conf(){
 		return $this->conf;
 	}
 
@@ -135,6 +136,10 @@ class pickles{
 	 */
 	public function get_path_homedir(){
 		return $this->path_homedir;
+	}
+
+	public function get_path_content(){
+		return $this->path_content;
 	}
 
 	/**
@@ -286,13 +291,13 @@ class pickles{
 	 * execute content
 	 * @return string Content source.
 	 */
-	private static function exec_content( $path_content, $px ){
-		if( !is_file( './'.$path_content ) ){
+	private static function exec_content( $px ){
+		if( !is_file( './'.$px->get_path_content() ) ){
 			@header('HTTP/1.1 404 NotFound');
 			return '<p>404 - File not found.</p>';
 		}
 		ob_start();
-		include( './'.$path_content );
+		include( './'.$px->get_path_content() );
 		$src = ob_get_clean();
 		$px->send_content($src);
 		return true;

@@ -15,9 +15,10 @@ class theme{
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | Pickles 2</title>
+		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | <?= htmlspecialchars( $px->conf()->name ); ?></title>
 	</head>
 	<body>
+		<p><?= htmlspecialchars( $px->conf()->name ); ?></p>
 		<h1><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?></h1>
 		<div class="contents">
 <?= $px->pull_content(); ?>

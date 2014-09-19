@@ -51,7 +51,7 @@ class site{
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
-		$this->conf = $this->px->get_conf();
+		$this->conf = $this->px->conf();
 
 		//サイトマップCSVを読み込む
 		$this->load_sitemap_csv();

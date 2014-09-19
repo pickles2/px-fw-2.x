@@ -15,11 +15,11 @@ return call_user_func( function(){
 	$conf->paths_ignore = array(
 		// パブリッシュ対象外パスの一覧(ワイルドカードとしてアスタリスクを使用可)
 		'/.htaccess' ,
-		'/_px_execute.php' ,
+		'/.px_execute.php' ,
+		'/.pickles/*' ,
 		'/composer.json' ,
 		'/composer.lock' ,
 		'/README.md' ,
-		'/.pickles/*' ,
 		'/vendor/*' ,
 		'*.ignore/*' ,
 		'*.ignore.*' ,
