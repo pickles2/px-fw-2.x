@@ -94,7 +94,7 @@ class pickles{
 		unset($src, $fnc_name);
 
 		// execute theme
-		require_once(__DIR__.'/../themes/pickles/theme.php');
+		require_once(__DIR__.'/../../themes/pickles/theme.php');
 		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->theme );
 		$src = call_user_func( $fnc_name, $this );
 

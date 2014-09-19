@@ -27,8 +27,8 @@
     },
     "autoload": {
         "files": [
-            ".pickles/php/pickles.php",
-            ".pickles/php/extensions/html/ext.php"
+            ".pickles/_sys/php/pickles.php",
+            ".pickles/_sys/php/extensions/html/ext.php"
         ]
     }
 }

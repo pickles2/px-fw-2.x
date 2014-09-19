@@ -83,7 +83,7 @@ class site{
 	 * @return bool 常に `true`
 	 */
 	private function load_sitemap_csv(){
-		$path_sitemap_cache_dir = $this->px->get_path_homedir().'sys/caches/sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
 		if( $this->is_sitemap_cache() ){
 			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
 			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
@@ -293,7 +293,7 @@ class site{
 	 * @return bool 読み込み可能な場合に `true`、読み込みできない場合に `false` を返します。
 	 */
 	private function is_sitemap_cache(){
-		$path_sitemap_cache_dir = $this->px->get_path_homedir().'sys/caches/sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		if(
 			!is_file($path_sitemap_cache_dir.'sitemap.array') || 
