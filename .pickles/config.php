@@ -39,9 +39,13 @@ return call_user_func( function(){
 	];
 	$conf->extensions->js = [
 	];
+	$conf->extensions->md = [
+		'pickles\\extensions\\html\\ext::exec' ,
+	];
 
 
 	// theme
+	require_once(__DIR__.'/themes/pickles/theme.php');
 	$conf->theme = 'pickles\\themes\\pickles\\theme::exec';
 
 	// directory index

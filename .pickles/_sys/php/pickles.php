@@ -70,9 +70,15 @@ class pickles{
 
 		// execute content
 		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
+		foreach( array_keys( get_object_vars( $this->conf->extensions ) ) as $ext ){
+			if( $this->fs()->is_file( './'.$this->path_content.'.'.$ext ) ){
+				$this->path_content = $this->path_content.'.'.$ext;
+				break;
+			}
+		}
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			@header('HTTP/1.1 403 Forbidden');
-			$this->send_content('', '<p>ignore path</p>');
+			$this->send_content('<p>ignore path</p>');
 		}else{
 			self::exec_content( $this );
 		}
@@ -95,7 +101,6 @@ class pickles{
 		unset($src, $fnc_name);
 
 		// execute theme
-		require_once(__DIR__.'/../../themes/pickles/theme.php');
 		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->theme );
 		$src = call_user_func( $fnc_name, $this );
 
@@ -289,12 +294,13 @@ class pickles{
 
 	/**
 	 * execute content
-	 * @return string Content source.
+	 * @return bool true
 	 */
 	private static function exec_content( $px ){
-		if( !is_file( './'.$px->get_path_content() ) ){
+		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
 			@header('HTTP/1.1 404 NotFound');
-			return '<p>404 - File not found.</p>';
+			$px->send_content('<p>404 - File not found.</p>');
+			return true;
 		}
 		ob_start();
 		include( './'.$px->get_path_content() );

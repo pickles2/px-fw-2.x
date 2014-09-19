@@ -1,6 +1,6 @@
 <?php
 /**
- * theme "default"
+ * theme "pickles"
  */
 namespace pickles\themes\pickles;
 
