@@ -4,6 +4,11 @@ return call_user_func( function(){
 	// initialize
 	$conf = new stdClass;
 
+	// project
+	$conf->name = 'Pickles 2';
+	$conf->domain = null;
+	$conf->path_docroot = null;
+
 	// paths
 	$conf->path_top = '/';
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
@@ -24,6 +29,20 @@ return call_user_func( function(){
 		'*/.git/*' ,
 		'*/.gitignore' ,
 	);
+
+	// extensions
+	$conf->extensions = new stdClass;
+	$conf->extensions->html = [
+		'pickles\\extensions\\html\\ext::exec' ,
+	];
+	$conf->extensions->css = [
+	];
+	$conf->extensions->js = [
+	];
+
+
+	// theme
+	$conf->theme = 'pickles\\themes\\pickles\\theme::exec';
 
 	// directory index
 	$conf->directory_index = array(
