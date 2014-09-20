@@ -68,14 +68,19 @@ class pickles{
 		require_once(__DIR__.'/site.php');
 		$this->site = new site($this);
 
+
 		// execute content
 		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
+		if( is_null( $this->path_content ) ){
+			$this->path_content = $this->req()->get_request_file_path();
+		}
 		foreach( array_keys( get_object_vars( $this->conf->extensions ) ) as $ext ){
 			if( $this->fs()->is_file( './'.$this->path_content.'.'.$ext ) ){
 				$this->path_content = $this->path_content.'.'.$ext;
 				break;
 			}
 		}
+		$this->output_content_type(); // デフォルトの Content-type を出力
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			@header('HTTP/1.1 403 Forbidden');
 			$this->send_content('<p>ignore path</p>');
@@ -83,7 +88,7 @@ class pickles{
 			self::exec_content( $this );
 		}
 
-		$ext = pathinfo( $this->path_content , PATHINFO_EXTENSION );
+		$ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
 		if( @!empty( $this->conf->extensions->{$ext} ) ){
 			foreach( $this->contents_cabinet as $contents_key=>$src ){
 				if( is_string($this->conf->extensions->{$ext}) ){
@@ -104,6 +109,7 @@ class pickles{
 		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->theme );
 		$src = call_user_func( $fnc_name, $this );
 
+		$src = $this->output_filter( $src );
 		print $src;
 		exit;
 	}
@@ -234,6 +240,80 @@ class pickles{
 	}//is_ignore_path();
 
 	/**
+	 * output content-type
+	 */
+	private function output_content_type(){
+		$extension = strtolower( pathinfo( $this->req()->get_request_file_path() , PATHINFO_EXTENSION ) );
+		$output_encoding = @$this->conf->output_encoding;
+		if( !strlen( $output_encoding ) ){
+			$output_encoding = 'utf-8';
+		}
+		switch( strtolower( $extension ) ){
+			case 'css':
+				@header('Content-type: text/css; charset='.$output_encoding);//デフォルトのヘッダー
+				break;
+			case 'js':
+				@header('Content-type: text/javascript; charset='.$output_encoding);//デフォルトのヘッダー
+				break;
+			case 'html':
+			case 'htm':
+				@header('Content-type: text/html; charset='.$output_encoding);//デフォルトのヘッダー
+				break;
+			case 'txt':
+			case 'text':
+				@header('Content-type: text/plain; charset='.$output_encoding);//デフォルトのヘッダー
+				break;
+		}
+		return ;
+	}
+
+	/**
+	 * output filter
+	 */
+	private function output_filter( $src ){
+		if( @strlen( $this->conf->output_encoding ) ){
+			$output_encoding = $this->conf->output_encoding;
+			if( !strlen($output_encoding) ){ $output_encoding = 'UTF-8'; }
+			$extension = strtolower( pathinfo( $this->get_path_content() , PATHINFO_EXTENSION ) );
+			switch( strtolower( $extension ) ){
+				case 'css':
+					//出力ソースの文字コード変換
+					$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars($output_encoding).'";',$src);
+					$src = $this->convert_encoding( $src, $output_encoding );
+					break;
+				case 'js':
+					//出力ソースの文字コード変換
+					$src = $this->convert_encoding( $src, $output_encoding );
+					break;
+				case 'html':
+				case 'htm':
+					//出力ソースの文字コード変換(HTML)
+					$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
+					$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
+					$src = $this->convert_encoding( $src, $output_encoding );
+					break;
+				default:
+					$src = $this->convert_encoding( $src, $output_encoding );
+					break;
+			}
+
+		}
+		if( @strlen( $this->conf->output_eol_coding ) ){
+			//出力ソースの改行コード変換
+			$eol_code = "\r\n";
+			switch( strtolower( $this->conf->output_eol_coding ) ){
+				case 'cr':     $eol_code = "\r"; break;
+				case 'lf':     $eol_code = "\n"; break;
+				case 'crlf':
+				default:       $eol_code = "\r\n"; break;
+			}
+			$src = preg_replace('/\r\n|\r|\n/si',$eol_code,$src);
+		}
+
+		return $src;
+	}
+
+	/**
 	 * コンテンツキャビネットにコンテンツを送る。
 	 * 
 	 * ソースコードを$themeオブジェクトに預けます。
@@ -307,6 +387,54 @@ class pickles{
 		$src = ob_get_clean();
 		$px->send_content($src);
 		return true;
+	}
+
+	/**
+	 * テキストを、指定の文字セットに変換する。
+	 * 
+	 * @param mixed $text テキスト
+	 * @param string $encode 変換後の文字セット。省略時、`mb_internal_encoding()` から取得
+	 * @param string $encodefrom 変換前の文字セット。省略時、自動検出
+	 * @return string 文字セット変換後のテキスト
+	 */
+	public function convert_encoding( $text, $encode = null, $encodefrom = null ){
+		if( !is_callable( 'mb_internal_encoding' ) ){ return $text; }
+		if( !strlen( $encode ) ){ $encode = mb_internal_encoding(); }
+		if( !strlen( $encodefrom ) ){ $encodefrom = mb_internal_encoding().',UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII'; }
+
+		switch( strtolower( $encode ) ){
+			case 'sjis':
+			case 'sjis-win':
+			case 'shift_jis':
+			case 'shift-jis':
+			case 'x-sjis':
+				// ※ 'ms_kanji'、'windows-31j'、'cp932' は、もともと SJIS-win になる
+				$encode = 'SJIS-win';
+				break;
+			case 'eucjp':
+			case 'eucjp-win':
+			case 'euc-jp':
+				$encode = 'eucJP-win';
+				break;
+		}
+
+		if( is_array( $text ) ){
+			$RTN = array();
+			if( !count( $text ) ){ return $text; }
+			$TEXT_KEYS = array_keys( $text );
+			foreach( $TEXT_KEYS as $Line ){
+				$KEY = mb_convert_encoding( $Line , $encode , $encodefrom );
+				if( is_array( $text[$Line] ) ){
+					$RTN[$KEY] = $this->convert_encoding( $text[$Line] , $encode , $encodefrom );
+				}else{
+					$RTN[$KEY] = @mb_convert_encoding( $text[$Line] , $encode , $encodefrom );
+				}
+			}
+		}else{
+			if( !strlen( $text ) ){ return $text; }
+			$RTN = @mb_convert_encoding( $text , $encode , $encodefrom );
+		}
+		return $RTN;
 	}
 
 }

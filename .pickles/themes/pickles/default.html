@@ -1,16 +1,3 @@
-<?php
-/**
- * theme "pickles"
- */
-namespace pickles\themes\pickles;
-
-/**
- * theme "default" class
- */
-class theme{
-
-	public static function exec( $px ){
-		ob_start(); ?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -26,9 +13,3 @@ class theme{
 		</div>
 	</body>
 </html>
-<?php
-		$src = ob_get_clean();
-		return $src;
-	}
-
-}

@@ -45,7 +45,7 @@ return call_user_func( function(){
 
 
 	// theme
-	require_once(__DIR__.'/themes/pickles/theme.php');
+	require_once(__DIR__.'/themes/pickles/php/theme.php');
 	$conf->theme = 'pickles\\themes\\pickles\\theme::exec';
 
 	// directory index
@@ -58,6 +58,8 @@ return call_user_func( function(){
 	$conf->file_default_permission = '0775';
 	$conf->dir_default_permission = '0775';
 	$conf->filesystem_encoding = 'utf-8';
+	$conf->output_encoding = 'utf-8';
+	$conf->output_eol_coding = 'lf';
 
 	// session
 	$conf->session_name = 'PXSID';
