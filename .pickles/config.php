@@ -17,12 +17,12 @@ return call_user_func( function(){
 		'/.htaccess' ,
 		'/.px_execute.php' ,
 		'/.pickles/*' ,
+		'*.ignore/*' ,
+		'*.ignore.*' ,
 		'/composer.json' ,
 		'/composer.lock' ,
 		'/README.md' ,
 		'/vendor/*' ,
-		'*.ignore/*' ,
-		'*.ignore.*' ,
 		'*/.DS_Store' ,
 		'*/Thumbs.db' ,
 		'*/.svn/*' ,
@@ -32,16 +32,15 @@ return call_user_func( function(){
 
 	// extensions
 	$conf->extensions = new stdClass;
-	$conf->extensions->html = [
-		'pickles\\extensions\\html\\ext::exec' ,
-	];
-	$conf->extensions->css = [
-	];
-	$conf->extensions->js = [
-	];
-	$conf->extensions->md = [
-		'pickles\\extensions\\html\\ext::exec' ,
-	];
+	// $conf->extensions->html = [
+	// ];
+	// $conf->extensions->css = [
+	// ];
+	// $conf->extensions->js = [
+	// ];
+	// $conf->extensions->md = [
+	// 	'pickles\\extensions\\html\\ext::exec' ,
+	// ];
 
 
 	// theme

@@ -456,7 +456,6 @@ class site{
 			//ページIDで指定された場合、パスに置き換える
 			$path = $this->sitemap_id_map[$path];
 		}
-
 		$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
 
 		$tmp_path = $path;
@@ -649,10 +648,15 @@ class site{
 	 * var_dump( $page_info );
 	 * ?&gt;</pre>
 	 * 
+	 * @param string $key 取り出す情報のキー
 	 * @return array カレントページのページ情報を格納する連想配列
 	 */
-	public function get_current_page_info(){
+	public function get_current_page_info( $key = null ){
 		$current_path = $this->px->req()->get_request_file_path();
+		$args = func_get_args();
+		if( count($args) ){
+			return $this->get_page_info( $current_path, $args[0] );
+		}
 		return $this->get_page_info( $current_path );
 	}
 

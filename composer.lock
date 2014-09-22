@@ -109,7 +109,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tomk79/request.git",
-                "reference": "b1319f35f2fc05a0fe9231732b47cd64b0fe0640"
+                "reference": "b4ab49a3a7365e0313b4ef291590ad54821894c1"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -132,7 +132,7 @@
                     "email": "tomk79@gmail.com"
                 }
             ],
-            "time": "2014-09-15 11:34:48"
+            "time": "2014-09-22 01:18:08"
         }
     ],
     "packages-dev": [

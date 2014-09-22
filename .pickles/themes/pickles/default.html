@@ -5,11 +5,20 @@
 		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | <?= htmlspecialchars( $px->conf()->name ); ?></title>
 	</head>
 	<body>
-		<p><?= htmlspecialchars( $px->conf()->name ); ?></p>
+		<p><a href="<?= htmlspecialchars($px->href('')); ?>"><?= htmlspecialchars( $px->conf()->name ); ?></a></p>
 		<h1><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?></h1>
 		<div class="contents">
 <?= $px->pull_content(); ?>
 
+		</div>
+		<div class="theme_col2">
+<?php
+$current_page_id = $px->site()->get_current_page_info('id');
+$children = $px->site()->get_children( $current_page_id );
+foreach( $children as $child ){
+	print '<li>'.$px->mk_link( $child ).'</li>';
+}
+?>
 		</div>
 	</body>
 </html>

@@ -92,11 +92,15 @@ class pickles{
 		if( @!empty( $this->conf->extensions->{$ext} ) ){
 			foreach( $this->contents_cabinet as $contents_key=>$src ){
 				if( is_string($this->conf->extensions->{$ext}) ){
-					$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->extensions->{$ext} );
+					if( is_string($fnc_name) ){
+						$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->extensions->{$ext} );
+					}
 					$src = call_user_func( $fnc_name, $this, $src, $contents_key );
 				}elseif( is_array($this->conf->extensions->{$ext}) ){
 					foreach( $this->conf->extensions->{$ext} as $fnc_name ){
-						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+						if( is_string($fnc_name) ){
+							$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+						}
 						$src = call_user_func( $fnc_name, $this, $src, $contents_key );
 					}
 				}
@@ -387,6 +391,258 @@ class pickles{
 		$src = ob_get_clean();
 		$px->send_content($src);
 		return true;
+	}
+
+	/**
+	 * リンク先のパスを生成する。
+	 * 
+	 * 引数には、リンク先のパス、またはページIDを受け取り、
+	 * 完成されたリンク先情報(aタグのhref属性にそのまま適用できる状態)にして返します。
+	 * 
+	 * Pickles Framework がドキュメントルート直下にインストールされていない場合、インストールパスを追加した値を返します。
+	 * 
+	 * `http://` などスキーマから始まる情報を受け取ることもできます。
+	 * 
+	 * 実装例：
+	 * <pre>&lt;?php
+	 * // パスを指定する例
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 * 
+	 * // ページIDを指定する例
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('A-00') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 * ?&gt;</pre>
+	 * 
+	 * インストールパスがドキュメントルートではない場合の例:
+	 * <pre>&lt;?php
+	 * // インストールパスが &quot;/installpath/&quot; の場合
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 *     // &quot;/installpath/aaa/bbb.html&quot; が返されます。
+	 * ?&gt;</pre>
+	 * 
+	 * @param string $linkto リンク先の パス または ページID
+	 * 
+	 * @return string href属性値
+	 */
+	public function href( $linkto ){
+		$parsed_url = parse_url($linkto);
+		$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
+		if( !$tmp_page_info_by_id ){ $tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']); }
+		$path = $linkto;
+		$path_type = $this->site()->get_path_type( $linkto );
+		if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
+			$path = @$tmp_page_info_by_id['path'];
+			$path_type = $this->site()->get_path_type( $path );
+		}
+		unset($tmp_page_info_by_id);
+
+		if( preg_match( '/^alias[0-9]*\:(.+)/' , $path , $tmp_matched ) ){
+			//  エイリアスを解決
+			$path = $tmp_matched[1];
+		}elseif( $path_type == 'dynamic' ){
+			//  ダイナミックパスをバインド
+			// $sitemap_dynamic_path = $this->site()->get_dynamic_path_info( $linkto );
+			// $tmp_path = $sitemap_dynamic_path['path_original'];
+			$tmp_path = $path;
+			$path = '';
+			while( 1 ){
+				if( !preg_match( '/^(.*?)\{(\$|\*)([a-zA-Z0-9\_\-]*)\}(.*)$/s' , $tmp_path , $tmp_matched ) ){
+					$path .= $tmp_path;
+					break;
+				}
+				$path .= $tmp_matched[1];
+				if(!strlen($tmp_matched[3])){
+					//無名のパラメータはバインドしない。
+				}elseif( !is_null( $this->req()->get_path_param($tmp_matched[3]) ) ){
+					$path .= $this->req()->get_path_param($tmp_matched[3]);
+				}else{
+					$path .= $tmp_matched[3];
+				}
+				$tmp_path = $tmp_matched[4];
+				continue;
+			}
+			unset($tmp_path , $tmp_matched);
+		}
+
+		switch( $this->site()->get_path_type( $path ) ){
+			case 'full_url':
+			case 'javascript':
+			case 'anchor':
+				break;
+			default:
+				// index.htmlを省略
+				$path = preg_replace('/\/'.$this->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);
+				break;
+		}
+
+		if( preg_match( '/^\//' , $path ) ){
+			//  スラッシュから始まる絶対パスの場合、
+			//  インストールパスを起点としたパスに書き変えて返す。
+			$path = preg_replace( '/^\/+/' , '' , $path );
+			$path = $this->get_path_docroot().$path;
+		}
+
+		// パラメータを、引数の生の状態に戻す。
+		$parsed_url_fin = parse_url($path);
+		$path = $parsed_url_fin['path'];
+		$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
+		$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'?'.@$parsed_url_fin['fragment']:''));
+
+		return $path;
+	}//href()
+
+	/**
+	 * リンクタグ(aタグ)を生成する。
+	 * 
+	 * リンク先の パス または ページID を受け取り、aタグを生成して返します。リンク先は、`href()` メソッドを通して調整されます。
+	 * 
+	 * このメソッドは、受け取ったパス(またはページID)をもとに、サイトマップからページ情報を取得し、aタグを自動補完します。
+	 * 例えば、パンくず情報をもとに `class="current"` を付加したり、ページタイトルをラベルとして採用します。
+	 * 
+	 * この動作は、引数 `$options` に値を指定して変更することができます。
+	 * 
+	 * 実装例:
+	 * <pre>&lt;?php
+	 * // ページ /aaa/bbb.html へのリンクを生成
+	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html');
+	 * 
+	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
+	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html', array(
+	 *     'label'=>'<span>リンクラベル</span>', //リンクラベルを文字列で指定
+	 *     'class'=>'class_a class_b', //CSSのクラス名を指定
+	 *     'no_escape'=>true, //エスケープ処理をキャンセル
+	 *     'current'=>true //カレント表示にする
+	 * ));
+	 * ?&gt;</pre>
+	 * 
+	 * 第2引数に文字列または関数としてリンクラベルを渡す方法もあります。
+	 * この場合、その他のオプションは第3引数に渡すことができます。
+	 * 
+	 * 実装例:
+	 * <pre>&lt;?php
+	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
+	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html',
+	 *   '<span>リンクラベル</span>' , //リンクラベルを文字列で指定
+	 *   array(
+	 *     'class'=>'class_a class_b',
+	 *     'no_escape'=>true,
+	 *     'current'=>true
+	 *   )
+	 * );
+	 * ?&gt;</pre>
+	 * 
+	 * PxFW 1.0.4 以降、リンクのラベルはコールバック関数でも指定できます。
+	 * コールバック関数には、リンク先のページ情報を格納した連想配列が引数として渡されます。
+	 * 
+	 * 実装例:
+	 * <pre>&lt;?php
+	 * //リンクラベルをコールバック関数で指定
+	 * print $px-&gt;theme()-&gt;mk_link(
+	 *   '/aaa/bbb.html',
+	 *   function($page_info){return htmlspecialchars($page_info['title_label']);}
+	 * );
+	 * ?&gt;</pre>
+	 * 
+	 * @param string $linkto リンク先のパス。PxFWのインストールパスを基点にした絶対パスで指定。
+	 * @param array $options options: [as string] Link label, [as function] callback function, [as array] Any options.
+	 * <dl>
+	 *   <dt>mixed $options['label']</dt>
+	 *     <dd>リンクのラベルを変更します。文字列か、またはコールバック関数(PxFW 1.0.4 以降)が利用できます。</dd>
+	 *   <dt>bool $options['current']</dt>
+	 *     <dd><code>true</code> または <code>false</code> を指定します。<code>class="current"</code> を強制的に付加または削除します。このオプションが指定されない場合は、自動的に選択されます。</dd>
+	 *   <dt>bool $options['no_escape']</dt>
+	 *     <dd><code>true</code> または <code>false</code> を指定します。この値が <code>true</code> の場合、リンクラベルに含まれるHTML特殊文字が自動的にエスケープされます。デフォルトは、<code>true</code>、<code>$options['label']</code>が指定された場合は自動的に <code>false</code> になります。</dd>
+	 *   <dt>mixed $options['class']</dt>
+	 *     <dd>スタイルシートの クラス名 を文字列または配列で指定します。</dd>
+	 * </dl>
+	 * 第2引数にリンクラベルを直接指定することもできます。この場合、オプション配列は第3引数に指定します。
+	 * 
+	 * @return string HTMLソース(aタグ)
+	 */
+	public function mk_link( $linkto, $options = array() ){
+		$parsed_url = parse_url($linkto);
+		$args = func_get_args();
+		$page_info = $this->site()->get_page_info($linkto);
+		if( !$page_info ){ $page_info = $this->site()->get_page_info(@$parsed_url['path']); }
+		$href = $this->href($linkto);
+		$hrefc = $this->href($this->req()->get_request_file_path());
+		$label = $page_info['title_label'];
+		$page_id = $page_info['id'];
+
+		$options = array();
+		if( count($args) >= 2 && is_array($args[count($args)-1]) ){
+			//  最後の引数が配列なら
+			//  オプション連想配列として読み込む
+			$options = $args[count($args)-1];
+			if( is_string(@$options['label']) || (is_object(@$options['label']) && is_callable(@$options['label'])) ){
+				$label = $options['label'];
+				if( !is_array($options) || !array_key_exists('no_escape', $options) || is_null($options['no_escape']) ){
+					$options['no_escape'] = true;
+				}
+			}
+		}
+		if( @is_string($args[1]) || (@is_object($args[1]) && @is_callable($args[1])) ){
+			//  第2引数が文字列、または function なら
+			//  リンクのラベルとして採用
+			$label = $args[1];
+			if( !is_array($options) || !array_key_exists('no_escape', $options) || is_null($options['no_escape']) ){
+				$options['no_escape'] = true;
+			}
+		}
+
+		$breadcrumb = $this->site()->get_breadcrumb_array($hrefc);
+		$is_current = false;
+		if( is_array($options) && array_key_exists('current', $options) && !is_null( $options['current'] ) ){
+			$is_current = !@empty($options['current']);
+		}elseif($href==$hrefc){
+			$is_current = true;
+		}elseif( $this->site()->is_page_in_breadcrumb($page_info['id']) ){
+			$is_current = true;
+		}
+		$is_popup = false;
+		if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){
+			$is_popup = true;
+		}
+		$label = (!is_null($label)?$label:$href); // labelがnullの場合、リンク先をラベルとする
+
+		$classes = array();
+		// CSSのクラスを付加
+		if( is_array($options) && array_key_exists('class', $options) && is_string($options['class']) ){
+			$options['class'] = preg_split( '/\s+/', trim($options['class']) );
+		}
+		if( is_array($options) && array_key_exists('class', $options) && is_array($options['class']) ){
+			foreach($options['class'] as $class_row){
+				array_push($classes, trim($class_row));
+			}
+		}
+		if($is_current){
+			array_push($classes, 'current');
+		}
+
+		if( is_object($label) && is_callable($label) ){
+			$label = $label($page_info);
+			if( !is_array($options) || !array_key_exists('no_escape', $options) || is_null($options['no_escape']) ){
+				$options['no_escape'] = true;
+			}
+		}
+		if( !@$options['no_escape'] ){
+			// no_escape(エスケープしない)指示がなければ、
+			// HTMLをエスケープする。
+			$label = htmlspecialchars($label);
+		}
+
+		$rtn = '<a href="'.htmlspecialchars($href).'"'.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes)).'"':'').''.($is_popup?' onclick="window.open(this.href);return false;"':'').'>'.$label.'</a>';
+		return $rtn;
+	}
+
+	/**
+	 * install path を取得する
+	 */
+	public function get_path_docroot(){
+		if( @strlen( $this->conf->path_docroot ) ){
+			return $this->conf->path_docroot;
+		}
+		$rtn = dirname( $_SERVER['SCRIPT_NAME'] ).'/';
+		return $rtn;
 	}
 
 	/**
