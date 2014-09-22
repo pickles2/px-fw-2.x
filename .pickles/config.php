@@ -38,9 +38,12 @@ return call_user_func( function(){
 	// ];
 	// $conf->extensions->js = [
 	// ];
-	// $conf->extensions->md = [
-	// 	'pickles\\extensions\\html\\ext::exec' ,
-	// ];
+	$conf->extensions->md = [
+		'pickles\\extensions\\md::exec' ,
+	];
+	$conf->extensions->scss = [
+		'pickles\\extensions\\scss::exec' ,
+	];
 
 
 	// theme

@@ -1,0 +1,9 @@
+@charset 'UTF-8';
+<?php include(__DIR__.'/normalize/normalize-3.0.1.css'); ?>
+.contents{
+<?php include(__DIR__.'/fess/fess-1.1.2.css'); ?>
+}
+body{
+	font-size:medium;
+	font-family: Meiryo, "Hiragino Kaku Gothic ProN", Verdana, sans-serif;
+}
