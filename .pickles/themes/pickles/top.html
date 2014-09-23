@@ -11,13 +11,13 @@
 		<h1><?= htmlspecialchars( $px->conf()->name ); ?></h1>
 	</header>
 	<div class="row">
-		<div class="col-sm-8">
+		<div class="col-sm-9">
 			<div class="contents">
 <?= $px->pull_content(); ?>
 
 			</div>
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-3">
 <?php
 $current_page_id = $px->site()->get_current_page_info('id');
 $children = $px->site()->get_children( $current_page_id );
