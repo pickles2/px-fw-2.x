@@ -4,13 +4,18 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | <?= htmlspecialchars( $px->conf()->name ); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
+<?= $px->pull_content('head'); ?>
 	</head>
 	<body>
+<div class="container" id="page_top">
+	<header>
 		<p><?= htmlspecialchars( $px->conf()->name ); ?></p>
+	</header>
 		<h1><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?></h1>
 		<div class="contents">
 <?= $px->pull_content(); ?>
 
 		</div>
+</div>
 	</body>
 </html>

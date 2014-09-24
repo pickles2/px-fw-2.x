@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | <?= htmlspecialchars( $px->conf()->name ); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
+<?= $px->pull_content('head'); ?>
 	</head>
 	<body>
 <?= $px->pull_content(); ?>
