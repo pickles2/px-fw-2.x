@@ -30,7 +30,27 @@ return call_user_func( function(){
 		'*/.gitignore' ,
 	);
 
-	// extensions
+	// directory index
+	$conf->directory_index = array(
+		'index.html'
+	);
+
+
+	// system
+	$conf->file_default_permission = '0775';
+	$conf->dir_default_permission = '0775';
+	$conf->filesystem_encoding = 'utf-8';
+	$conf->output_encoding = 'utf-8';
+	$conf->output_eol_coding = 'lf';
+	$conf->session_name = 'PXSID';
+	$conf->session_expire = 1800;
+
+
+	// -------- functions --------
+
+	/**
+	 * extensions
+	 */
 	$conf->extensions = new stdClass;
 	// $conf->extensions->html = [
 	// ];
@@ -46,26 +66,12 @@ return call_user_func( function(){
 	];
 
 
-	// theme
+	/**
+	 * theme
+	 */
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
 	$conf->theme = 'pickles\\themes\\pickles\\theme::exec';
 
-	// directory index
-	$conf->directory_index = array(
-		'index.html'
-	);
-
-
-	// filesystem
-	$conf->file_default_permission = '0775';
-	$conf->dir_default_permission = '0775';
-	$conf->filesystem_encoding = 'utf-8';
-	$conf->output_encoding = 'utf-8';
-	$conf->output_eol_coding = 'lf';
-
-	// session
-	$conf->session_name = 'PXSID';
-	$conf->session_expire = 1800;
 
 	return $conf;
 } );

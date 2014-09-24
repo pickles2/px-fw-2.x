@@ -4,6 +4,9 @@ html, body{
 	font-size: medium;
 	font-family: Meiryo, "Hiragino Kaku Gothic ProN", Verdana, sans-serif;
 }
+.current{
+	font-weight: bold;
+}
 .contents{
 <?php include(__DIR__.'/normalize/normalize-3.0.1.css'); ?>
 	p, ul, ol, dl{

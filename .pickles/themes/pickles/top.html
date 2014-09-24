@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title><?= htmlspecialchars($px->site()->get_page_info( $px->req()->get_request_file_path(), 'title')); ?> | <?= htmlspecialchars( $px->conf()->name ); ?></title>
+		<title><?= htmlspecialchars( $px->conf()->name ); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->pull_content('head'); ?>
 	</head>
 	<body>
 <div class="container" id="page_top">
 	<header>
-		<h1><?= htmlspecialchars( $px->conf()->name ); ?></h1>
+		<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ); ?></h1>
 	</header>
 	<div class="row">
 		<div class="col-sm-9">
