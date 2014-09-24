@@ -2,4 +2,5 @@
 Thumbs.db
 scss_cache
 /vendor/
-.pickles/sys
+/.pickles/_sys/ram/
+composer.lock
