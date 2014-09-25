@@ -19,6 +19,10 @@ class pickles{
 		''=>'',    //  メインコンテンツ
 		'head'=>'' //  ヘッドセクションに追記
 	);
+	/**
+	 * 関連ファイルのURL情報
+	 */
+	private $relatedlinks = array();
 
 	/**
 	 * constructor
@@ -116,6 +120,10 @@ class pickles{
 		$src = call_user_func( $fnc_name, $this );
 
 		$src = $this->output_filter( $src );
+
+		if( count($this->relatedlinks) ){
+			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
+		}
 
 		print $src;
 
@@ -378,6 +386,25 @@ class pickles{
 		$content = $this->contents_cabinet[$content_name];
 
 		return $content;
+	}
+
+	/**
+	 * 拡張ヘッダ X-PXFW-RELATEDLINK にリンクを追加する。
+	 * 
+	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` は、サイトマップや物理ディレクトリから発見できないファイルを、PxFWのパブリッシュツールに知らせます。
+	 * 
+	 * 通常、PxFWのパブリッシュツールは 動的に生成されたページなどを知ることができず、パブリッシュされません。このメソッドを通じて、明示的に知らせる必要があります。
+	 * 
+	 * @param string $path リンクのパス
+	 * @return bool 正常時 `true`、失敗した場合 `false`
+	 */
+	public function add_relatedlink( $path ){
+		$path = trim($path);
+		if(!strlen($path)){
+			return false;
+		}
+		array_push( $this->relatedlinks , $path );
+		return true;
 	}
 
 	/**
