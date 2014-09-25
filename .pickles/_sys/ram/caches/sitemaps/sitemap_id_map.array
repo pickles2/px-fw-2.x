@@ -1,4 +1,0 @@
-<?php
-	/* UTF-8 */
-	return array(''=>'/index.html',':auto_page_id.3'=>'/sample_pages/index.html',':auto_page_id.4'=>'/sample_pages/fess/index.html',':auto_page_id.5'=>'/sample_pages/fess/units/index.html',':auto_page_id.6'=>'/sample_pages/fess/parts/index.html',':auto_page_id.7'=>'/sample_pages/fess/statics/index.html',':auto_page_id.8'=>'/sample_pages/fess/boxes/index.html',':auto_page_id.9'=>'/sample_pages/page1/1.html',':auto_page_id.10'=>'/sample_pages/page1/2.html',':auto_page_id.11'=>'/sample_pages/page1/3.html',':auto_page_id.12'=>'alias12:/sample_pages/page2/index.html',':auto_page_id.13'=>'/sample_pages/page2/index.html',':auto_page_id.14'=>'/sample_pages/page2/1.html',':auto_page_id.15'=>'/sample_pages/page2/2.html',':auto_page_id.16'=>'/sample_pages/page3/index.html',':auto_page_id.17'=>'/sample_pages/page3/1.html',':auto_page_id.18'=>'/sample_pages/page3/2.html',':auto_page_id.19'=>'/sample_pages/help/index.html');
-?>
