@@ -48,20 +48,32 @@ return call_user_func( function(){
 
 	// -------- functions --------
 
+	$conf->funcs = new stdClass;
+
+	/**
+	 * Starting
+	 */
+	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
+	require_once(__DIR__.'/_sys/php/commands/publish.php');
+	$conf->funcs->starting = [
+		'pickles\\commands\\clearcache::funcs_starting' ,
+		'pickles\\commands\\publish::funcs_starting' ,
+	];
+
 	/**
 	 * extensions
 	 */
-	$conf->extensions = new stdClass;
+	$conf->funcs->extensions = new stdClass;
 	// $conf->extensions->html = [
 	// ];
 	// $conf->extensions->css = [
 	// ];
 	// $conf->extensions->js = [
 	// ];
-	$conf->extensions->md = [
+	$conf->funcs->extensions->md = [
 		'pickles\\extensions\\md::exec' ,
 	];
-	$conf->extensions->scss = [
+	$conf->funcs->extensions->scss = [
 		'pickles\\extensions\\scss::exec' ,
 	];
 
@@ -70,7 +82,7 @@ return call_user_func( function(){
 	 * theme
 	 */
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
-	$conf->theme = 'pickles\\themes\\pickles\\theme::exec';
+	$conf->funcs->theme = 'pickles\\themes\\pickles\\theme::exec';
 
 
 	return $conf;

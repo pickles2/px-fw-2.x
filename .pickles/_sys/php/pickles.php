@@ -25,6 +25,41 @@ class pickles{
 	private $relatedlinks = array();
 
 	/**
+	 * PxFWのバージョン情報を取得する。
+	 * 
+	 * <pre> [バージョン番号のルール]
+	 *    基本
+	 *      メジャーバージョン番号.マイナーバージョン番号.リリース番号
+	 *        例：1.0.0
+	 *        例：1.8.9
+	 *        例：12.19.129
+	 *      - 大規模な仕様の変更や追加を伴う場合にはメジャーバージョンを上げる。
+	 *      - 小規模な仕様の変更や追加の場合は、マイナーバージョンを上げる。
+	 *      - バグ修正、ドキュメント、コメント修正等の小さな変更は、リリース番号を上げる。
+	 *    開発中プレビュー版
+	 *      基本バージョンの後ろに、a(=α版)またはb(=β版)を付加し、その連番を記載する。
+	 *        例：1.0.0a1 ←最初のα版
+	 *        例：1.0.0b12 ←12回目のβ版
+	 *      開発中およびリリースバージョンの順序は次の通り
+	 *        1.0.0a1 -> 1.0.0a2 -> 1.0.0b1 ->1.0.0b2 -> 1.0.0 ->1.0.1a1 ...
+	 *    ナイトリービルド
+	 *      ビルドの手順はないので正確には "ビルド" ではないが、
+	 *      バージョン番号が振られていない、開発途中のリビジョンを
+	 *      ナイトリービルドと呼ぶ。
+	 *      ナイトリービルドの場合、バージョン情報は、
+	 *      ひとつ前のバージョン文字列の末尾に、'-nb' を付加する。
+	 *        例：1.0.0b12-nb (=1.0.0b12リリース後のナイトリービルド)
+	 *      普段の開発においてコミットする場合、
+	 *      必ずこの get_version() がこの仕様になっていることを確認すること。
+	 * </pre>
+	 * 
+	 * @return string バージョン番号を示す文字列
+	 */
+	public function get_version(){
+		return '2.0.0-nb';
+	}
+
+	/**
 	 * constructor
 	 * @param string $path_homedir Pickles のホームディレクトリ
 	 */
@@ -70,6 +105,23 @@ class pickles{
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
 
+		if( @!empty( $this->conf->funcs->starting ) ){
+			// Starting functions
+			if( is_string($this->conf->funcs->starting) ){
+				$fnc_name = $this->conf->funcs->starting;
+				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				call_user_func( $fnc_name, $this );
+			}elseif( is_array($this->conf->funcs->starting) ){
+				foreach( $this->conf->funcs->starting as $fnc_name ){
+					if( is_string($fnc_name) ){
+						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+					}
+					call_user_func( $fnc_name, $this );
+				}
+			}
+			unset($fnc_name);
+		}
+
 		// make instance $site
 		require_once(__DIR__.'/site.php');
 		$this->site = new site($this);
@@ -80,7 +132,7 @@ class pickles{
 		if( is_null( $this->path_content ) ){
 			$this->path_content = $this->req()->get_request_file_path();
 		}
-		foreach( array_keys( get_object_vars( $this->conf->extensions ) ) as $ext ){
+		foreach( array_keys( get_object_vars( $this->conf->funcs->extensions ) ) as $ext ){
 			if( $this->fs()->is_file( './'.$this->path_content.'.'.$ext ) ){
 				$this->path_content = $this->path_content.'.'.$ext;
 				break;
@@ -95,15 +147,15 @@ class pickles{
 		}
 
 		$ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
-		if( @!empty( $this->conf->extensions->{$ext} ) ){
+		if( @!empty( $this->conf->funcs->extensions->{$ext} ) ){
+			// extension functions
 			foreach( $this->contents_cabinet as $contents_key=>$src ){
-				if( is_string($this->conf->extensions->{$ext}) ){
-					if( is_string($fnc_name) ){
-						$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->extensions->{$ext} );
-					}
+				if( is_string($this->conf->funcs->extensions->{$ext}) ){
+					$fnc_name = $this->conf->funcs->extensions->{$ext};
+					$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
 					$src = call_user_func( $fnc_name, $this, $src, $contents_key );
-				}elseif( is_array($this->conf->extensions->{$ext}) ){
-					foreach( $this->conf->extensions->{$ext} as $fnc_name ){
+				}elseif( is_array($this->conf->funcs->extensions->{$ext}) ){
+					foreach( $this->conf->funcs->extensions->{$ext} as $fnc_name ){
 						if( is_string($fnc_name) ){
 							$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
 						}
@@ -116,7 +168,7 @@ class pickles{
 		unset($src, $fnc_name);
 
 		// execute theme
-		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->theme );
+		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->funcs->theme );
 		$src = call_user_func( $fnc_name, $this );
 
 		$src = $this->output_filter( $src );
@@ -405,6 +457,17 @@ class pickles{
 		}
 		array_push( $this->relatedlinks , $path );
 		return true;
+	}
+
+	/**
+	 * getting PX Command
+	 */
+	public function get_px_command(){
+		$rtn = $this->req()->get_param('PX');
+		if( is_string($rtn) ){
+			$rtn = explode('.', $rtn);
+		}
+		return $rtn;
 	}
 
 	/**
