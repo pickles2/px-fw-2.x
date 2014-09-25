@@ -40,6 +40,8 @@ class pickles{
 			@ini_set( 'mbstring.detect_order' , 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
+		header_remove('X-Powered-By');
+		@header('HTTP/1.1 200 OK');
 
 		// load Config
 		$this->path_homedir = $path_homedir;
@@ -114,7 +116,9 @@ class pickles{
 		$src = call_user_func( $fnc_name, $this );
 
 		$src = $this->output_filter( $src );
+
 		print $src;
+
 		exit;
 	}
 
@@ -635,11 +639,33 @@ class pickles{
 	}
 
 	/**
+	 * domain を取得する
+	 */
+	public function get_domain(){
+		static $rtn;
+		if( !is_null($rtn) ){
+			return $rtn;
+		}
+		if( @strlen( $this->conf->domain ) ){
+			$rtn = $this->conf->domain;
+			return $rtn;
+		}
+		$rtn = $_SERVER['SERVER_NAME'];
+		return $rtn;
+	}
+
+	/**
 	 * install path を取得する
 	 */
 	public function get_path_docroot(){
+		static $rtn;
+		if( !is_null($rtn) ){
+			return $rtn;
+		}
 		if( @strlen( $this->conf->path_docroot ) ){
-			return $this->conf->path_docroot;
+			$rtn = $this->conf->path_docroot;
+			$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
+			return $rtn;
 		}
 		$rtn = dirname( $_SERVER['SCRIPT_NAME'] ).'/';
 		return $rtn;
