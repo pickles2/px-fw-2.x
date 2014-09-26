@@ -139,6 +139,24 @@ class pickles{
 			}
 		}
 		$this->output_content_type(); // デフォルトの Content-type を出力
+
+		if( @!empty( $this->conf->funcs->before_content ) ){
+			// Before contents functions
+			if( is_string($this->conf->funcs->before_content) ){
+				$fnc_name = $this->conf->funcs->before_content;
+				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				call_user_func( $fnc_name, $this );
+			}elseif( is_array($this->conf->funcs->before_content) ){
+				foreach( $this->conf->funcs->before_content as $fnc_name ){
+					if( is_string($fnc_name) ){
+						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+					}
+					call_user_func( $fnc_name, $this );
+				}
+			}
+			unset($fnc_name);
+		}
+
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			@header('HTTP/1.1 403 Forbidden');
 			$this->send_content('<p>ignore path</p>');
@@ -274,7 +292,7 @@ class pickles{
 	 * @param string $path パス
 	 * @return bool 除外ファイルの場合 `true`、それ以外の場合に `false` を返します。
 	 */
-	private function is_ignore_path( $path ){
+	public function is_ignore_path( $path ){
 		static $rtn = array();
 		$path = $this->fs()->get_realpath( '/'.$path );
 		if( is_dir('./'.$path) ){

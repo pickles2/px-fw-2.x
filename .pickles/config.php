@@ -57,7 +57,12 @@ return call_user_func( function(){
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
 	$conf->funcs->starting = [
 		'pickles\\commands\\clearcache::funcs_starting' ,
-		'pickles\\commands\\publish::funcs_starting' ,
+	];
+	/**
+	 * Before content
+	 */
+	$conf->funcs->before_content = [
+		'pickles\\commands\\publish::funcs_before_content' ,
 	];
 
 	/**
