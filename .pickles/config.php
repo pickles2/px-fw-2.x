@@ -13,7 +13,7 @@ return call_user_func( function(){
 	$conf->path_top = '/';
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->paths_ignore = array(
-		// パブリッシュ対象外パスの一覧(ワイルドカードとしてアスタリスクを使用可)
+		// パブリッシュ対象外パスの一覧(ワイルドカードとして "*"(アスタリスク) を使用可)
 		'/.htaccess' ,
 		'/.px_execute.php' ,
 		'/.pickles/*' ,
@@ -44,6 +44,10 @@ return call_user_func( function(){
 	$conf->output_eol_coding = 'lf';
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
+
+	// commands
+	$conf->commands = new stdClass;
+	$conf->commands->php = 'php';
 
 
 	// -------- functions --------

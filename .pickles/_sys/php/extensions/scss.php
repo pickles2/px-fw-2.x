@@ -10,7 +10,7 @@ namespace pickles\extensions;
 class scss{
 	public static function exec( $px, $src, $contents_key ){
 		$tmp_current_dir = realpath('./');
-		chdir( dirname( $_SERVER['DOCUMENT_ROOT'].$px->get_path_docroot().$px->req()->get_request_file_path() ) );
+		chdir( dirname( $_SERVER['SCRIPT_FILENAME'] ) );
 		$scss = new \scssc();
 		$src = $scss->compile( $src );
 		chdir( $tmp_current_dir );

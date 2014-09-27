@@ -195,7 +195,16 @@ class pickles{
 			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
 		}
 
-		print $src;
+		switch( $this->req()->get_cli_option('-o') ){
+			case 'json':
+				$json = new \stdClass;
+				$json->body_base64 = base64_encode($src);
+				print json_encode($json);
+				break;
+			default:
+				print $src;
+				break;
+		}
 
 		exit;
 	}

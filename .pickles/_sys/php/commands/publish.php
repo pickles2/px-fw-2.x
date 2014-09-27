@@ -15,6 +15,8 @@ class publish{
 	private $paths_queue = array();
 	private $paths_done = array();
 
+	private $process_exts = array('html', 'htm', 'css', 'js');
+
 	/**
 	 * Before content function
 	 */
@@ -123,6 +125,26 @@ class publish{
 		while(1){
 			foreach( $this->paths_queue as $path=>$val ){break;}
 			print '------------'."\n";
+			print $path."\n";
+
+			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
+
+			if( array_search($ext, $this->process_exts) !== false ){
+				// pickles execute
+				ob_start();
+				passthru( implode( ' ', array(
+					$this->px->conf()->commands->php ,
+					$_SERVER['SCRIPT_FILENAME'] ,
+					'-o' , 'json' ,// output as JSON
+					$path ,
+				) ) );
+				$bin = ob_get_clean();
+				print $bin;
+			}else{
+				// copy
+				print $ext.' -> copy'."\n";
+			}
+
 			unset($this->paths_queue[$path]);
 			$this->paths_done[$path] = true;
 			print $this->cli_report();
@@ -131,6 +153,7 @@ class publish{
 				break;
 			}
 		}
+
 
 		print $this->cli_footer();
 		exit;
@@ -176,7 +199,7 @@ class publish{
 			if( $this->px->fs()->is_dir( './'.$path.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
-				foreach( array('html', 'htm', 'css', 'js') as $sample_ext ){
+				foreach( $this->process_exts as $sample_ext ){
 					if( preg_match( '/\.'.preg_quote($sample_ext,'/').'\.'.$preg_exts.'$/is', $basename ) ){
 						$basename = $this->px->fs()->trim_extension( $basename );
 						break;
