@@ -235,6 +235,9 @@ class pickles{
 		return $this->path_homedir;
 	}
 
+	/**
+	 * get content path
+	 */
 	public function get_path_content(){
 		return $this->path_content;
 	}
@@ -770,12 +773,15 @@ class pickles{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		if( @strlen( $this->conf->path_docroot ) ){
-			$rtn = $this->conf->path_docroot;
-			$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
-			return $rtn;
-		}
 		$rtn = dirname( $_SERVER['SCRIPT_NAME'] ).'/';
+		if( $this->req()->is_cmd() ){
+			$rtn = '/';
+			if( @strlen( $this->conf->path_docroot ) ){
+				$rtn = $this->conf->path_docroot;
+				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
+				return $rtn;
+			}
+		}
 		return $rtn;
 	}
 

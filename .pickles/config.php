@@ -7,7 +7,7 @@ return call_user_func( function(){
 	// project
 	$conf->name = 'Pickles 2';
 	$conf->domain = null;
-	$conf->path_docroot = null;
+	$conf->path_docroot = '/github/pickles2/';
 
 	// paths
 	$conf->path_top = '/';
@@ -37,8 +37,8 @@ return call_user_func( function(){
 
 
 	// system
-	$conf->file_default_permission = '0775';
-	$conf->dir_default_permission = '0775';
+	$conf->file_default_permission = '775';
+	$conf->dir_default_permission = '775';
 	$conf->filesystem_encoding = 'utf-8';
 	$conf->output_encoding = 'utf-8';
 	$conf->output_eol_coding = 'lf';

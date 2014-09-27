@@ -10,7 +10,7 @@ namespace pickles\commands;
 class publish{
 
 	private $px, $site;
-	private $path_tmp_publish, $path_publish_dir, $path_docroot;
+	private $path_tmp_publish, $path_publish_dir, $domain, $path_docroot;
 
 	private $paths_queue = array();
 	private $paths_done = array();
@@ -20,11 +20,11 @@ class publish{
 	 */
 	public static function funcs_before_content( $px ){
 		$pxcmd = $px->get_px_command();
-		if( $pxcmd[0] != 'publish' ){
+		if( @$pxcmd[0] != 'publish' ){
 			return;
 		}
 		$self = new self( $px );
-		if( $pxcmd[1] == 'run' ){
+		if( @$pxcmd[1] == 'run' ){
 			$self->exec_publish();
 		}else{
 			$self->exec_home();
@@ -42,7 +42,44 @@ class publish{
 		if( $this->get_path_publish_dir() !== false ){
 			$this->path_publish_dir = $px->fs()->get_realpath( $px->conf()->path_publish_dir ).DIRECTORY_SEPARATOR;
 		}
-		$this->path_docroot = $px->fs()->get_realpath( $px->get_path_docroot() ).DIRECTORY_SEPARATOR;
+		$this->domain = $px->get_domain();
+		$this->path_docroot = $px->get_path_docroot();
+	}
+
+	/**
+	 * print CLI header
+	 */
+	private function cli_header(){
+		ob_start();
+		print 'pickles '.$this->px->get_version().' - publish'."\n";
+		print 'PHP '.phpversion()."\n";
+		print @date('Y-m-d H:i:s')."\n";
+		print '------------'."\n";
+		return ob_get_clean();
+	}
+
+	/**
+	 * print CLI footer
+	 */
+	private function cli_footer(){
+		ob_start();
+		print '------------'."\n";
+		print "\n";
+		print 'end;'."\n";
+		print "\n";
+		return ob_get_clean();
+	}
+
+	/**
+	 * report
+	 */
+	private function cli_report(){
+		$cnt_queue = count( $this->paths_queue );
+		$cnt_done = count( $this->paths_done );
+		ob_start();
+		print $cnt_done.'/'.($cnt_queue+$cnt_done)."\n";
+		print 'queue: '.$cnt_queue.' / done: '.$cnt_done."\n";
+		return ob_get_clean();
 	}
 
 	/**
@@ -50,12 +87,10 @@ class publish{
 	 */
 	private function exec_home(){
 		header('Content-type: text/plain;');
-		print 'pickles '.$this->px->get_version().' - publish'."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print '------------'."\n";
+		print $this->cli_header();
 		print 'execute PX command => "?PX=publish.run"'."\n";
-		print '------------'."\n";
-		print 'end;'."\n";
+		print $this->cli_footer();
+		exit;
 	}
 
 	/**
@@ -63,20 +98,19 @@ class publish{
 	 */
 	private function exec_publish(){
 		header('Content-type: text/plain;');
-		print 'pickles '.$this->px->get_version().' - publish'."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print '------------'."\n";
-		print 'pickles publish directory(tmp): '.$this->path_tmp_publish."\n";
-		print 'pickles publish directory: '.$this->path_publish_dir."\n";
-		print 'pickles docroot directory: '.$this->path_docroot."\n";
+		print $this->cli_header();
+		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
+		print 'publish directory: '.$this->path_publish_dir."\n";
+		print 'domain: '.$this->domain."\n";
+		print 'docroot directory: '.$this->path_docroot."\n";
 		print '------------'."\n";
 		$validate = $this->validate();
 		if( !$validate['status'] ){
 			print $validate['message']."\n";
-			print '------------'."\n";
-			print 'end;'."\n";
+			print $this->cli_footer();
 			exit;
 		}
+		print "\n";
 		print '-- making list by Sitemap'."\n";
 		$this->make_list_by_sitemap();
 		print "\n";
@@ -84,11 +118,21 @@ class publish{
 		$this->make_list_by_dir_scan();
 		print "\n";
 		print '------------'."\n";
-		print count( $this->paths_queue ).'件'."\n";
+		print $this->cli_report();
 		print '------------'."\n";
-		print "\n";
-		print 'end;'."\n";
-		print "\n";
+		while(1){
+			foreach( $this->paths_queue as $path=>$val ){break;}
+			print '------------'."\n";
+			unset($this->paths_queue[$path]);
+			$this->paths_done[$path] = true;
+			print $this->cli_report();
+
+			if( !count( $this->paths_queue ) ){
+				break;
+			}
+		}
+
+		print $this->cli_footer();
 		exit;
 	}
 
@@ -108,6 +152,7 @@ class publish{
 		foreach( $sitemap as $page_info ){
 			$href = $this->px->href( $page_info['path'] );
 			$href = preg_replace( '/\/$/s', '/'.$this->px->get_directory_index_primary(), $href );
+			$href = preg_replace( '/^'.preg_quote($this->path_docroot, '/').'/s', '/', $href );
 			$this->add_queue( $href );
 		}
 		return true;
@@ -117,15 +162,30 @@ class publish{
 	 * make list by directory scan
 	 */
 	private function make_list_by_dir_scan( $path = null ){
-		$ls = $this->px->fs()->ls( $this->path_docroot.$path );
+		$extensions = array_keys( get_object_vars( $this->px->conf()->funcs->extensions ) );
+		foreach( $extensions as $key=>$val ){
+			$extensions[$key] = preg_quote($val);
+		}
+		$preg_exts = '('.implode( '|', $extensions ).')';
+
+		$ls = $this->px->fs()->ls( './'.$path );
+		if( $this->px->is_ignore_path( './'.$path ) ){
+			return true;
+		}
 		foreach( $ls as $basename ){
-			if( $this->px->fs()->is_dir( $this->path_docroot.$path.$basename ) ){
+			if( $this->px->fs()->is_dir( './'.$path.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
-				$extension = strtolower( pathinfo( $basename , PATHINFO_EXTENSION ) );
+				foreach( array('html', 'htm', 'css', 'js') as $sample_ext ){
+					if( preg_match( '/\.'.preg_quote($sample_ext,'/').'\.'.$preg_exts.'$/is', $basename ) ){
+						$basename = $this->px->fs()->trim_extension( $basename );
+						break;
+					}
+				}
 				$this->add_queue( '/'.$path.$basename );
 			}
 		}
+		return true;
 	}
 
 	/**
@@ -139,6 +199,10 @@ class publish{
 			return false;
 		}
 		if( array_key_exists($path, $this->paths_queue) ){
+			// 登録済み
+			return false;
+		}
+		if( array_key_exists($path, $this->paths_done) ){
 			// 処理済み
 			return false;
 		}
