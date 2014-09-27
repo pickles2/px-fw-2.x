@@ -15,7 +15,12 @@ class publish{
 	private $paths_queue = array();
 	private $paths_done = array();
 
-	private $process_exts = array('html', 'htm', 'css', 'js');
+	private $process_exts = array(
+		'html'=>'process',
+		'htm' =>'process',
+		'css' =>'process',
+		'js'  =>'process'
+	);
 
 	/**
 	 * Before content function
@@ -129,7 +134,9 @@ class publish{
 
 			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
 
-			if( array_search($ext, $this->process_exts) !== false ){
+			$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
+
+			if( @$this->process_exts[$ext] == 'process' ){
 				// pickles execute
 				ob_start();
 				passthru( implode( ' ', array(
@@ -139,10 +146,12 @@ class publish{
 					$path ,
 				) ) );
 				$bin = ob_get_clean();
-				print $bin;
+				$bin = json_decode($bin);
+				$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
 			}else{
 				// copy
 				print $ext.' -> copy'."\n";
+				$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
 			}
 
 			unset($this->paths_queue[$path]);
@@ -199,7 +208,7 @@ class publish{
 			if( $this->px->fs()->is_dir( './'.$path.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
-				foreach( $this->process_exts as $sample_ext ){
+				foreach( $this->process_exts as $sample_ext=>$ext_proc_type ){
 					if( preg_match( '/\.'.preg_quote($sample_ext,'/').'\.'.$preg_exts.'$/is', $basename ) ){
 						$basename = $this->px->fs()->trim_extension( $basename );
 						break;
