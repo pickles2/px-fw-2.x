@@ -73,14 +73,16 @@ return call_user_func( function(){
 	 */
 	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
+	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->starting = [
-		'pickles\\commands\\clearcache::funcs_starting' ,
+		'pickles\commands\clearcache::funcs_starting' ,
+		'tomk79\pickles2\autoindex\autoindex::funcs_starting' ,
 	];
 	/**
 	 * Before content
 	 */
 	$conf->funcs->before_content = [
-		'pickles\\commands\\publish::funcs_before_content' ,
+		'pickles\commands\publish::funcs_before_content' ,
 	];
 
 	/**
@@ -94,18 +96,28 @@ return call_user_func( function(){
 	// $conf->extensions->js = [
 	// ];
 	$conf->funcs->extensions->md = [
-		'pickles\\extensions\\md::exec' ,
+		'pickles\extensions\md::exec' ,
 	];
 	$conf->funcs->extensions->scss = [
-		'pickles\\extensions\\scss::exec' ,
+		'pickles\extensions\scss::exec' ,
 	];
+
 
 
 	/**
 	 * theme
 	 */
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
-	$conf->funcs->theme = 'pickles\\themes\\pickles\\theme::exec';
+	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
+
+
+	/**
+	 * output filter
+	 */
+	require_once(__DIR__.'/_sys/php/pkg/outputfilter.php');
+	$conf->funcs->output_filter = [
+		'tomk79\pickles2\outputfilter\outputfilter::output_filter' ,
+	];
 
 
 	return $conf;

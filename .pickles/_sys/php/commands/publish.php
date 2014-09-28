@@ -55,6 +55,7 @@ class publish{
 		print 'PHP '.phpversion()."\n";
 		print @date('Y-m-d H:i:s')."\n";
 		print '------------'."\n";
+		flush();
 		return ob_get_clean();
 	}
 
@@ -121,6 +122,7 @@ class publish{
 		print $this->cli_report();
 		print '------------'."\n";
 		while(1){
+			flush();
 			foreach( $this->paths_queue as $path=>$val ){break;}
 			print '------------'."\n";
 			print $path."\n";

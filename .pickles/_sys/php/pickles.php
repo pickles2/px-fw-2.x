@@ -23,6 +23,10 @@ class pickles{
 	 * 関連ファイルのURL情報
 	 */
 	private $relatedlinks = array();
+	/**
+	 * 出力データ
+	 */
+	private $response_body;
 
 	/**
 	 * PxFWのバージョン情報を取得する。
@@ -56,7 +60,7 @@ class pickles{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.0-nb';
+		return '2.0.0a1-nb';
 	}
 
 	/**
@@ -105,29 +109,41 @@ class pickles{
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
 
-		if( @!empty( $this->conf->funcs->starting ) ){
-			// Starting functions
-			if( is_string($this->conf->funcs->starting) ){
-				$fnc_name = $this->conf->funcs->starting;
-				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-				call_user_func( $fnc_name, $this );
-			}elseif( is_array($this->conf->funcs->starting) ){
-				foreach( $this->conf->funcs->starting as $fnc_name ){
-					if( is_string($fnc_name) ){
-						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+		$fnc_call_plugin_funcs = function( $func_list ){
+			if( is_null($func_list) ){ return false; }
+			$param_arr = func_get_args();
+			array_shift($param_arr);
+
+			if( @!empty( $func_list ) ){
+				// functions
+				if( is_string($func_list) ){
+					$fnc_name = $func_list;
+					$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+					call_user_func_array( $fnc_name, $param_arr);
+				}elseif( is_array($func_list) ){
+					foreach( $func_list as $fnc_name ){
+						if( is_string($fnc_name) ){
+							$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+						}
+						call_user_func_array( $fnc_name, $param_arr);
 					}
-					call_user_func( $fnc_name, $this );
 				}
+				unset($fnc_name);
 			}
-			unset($fnc_name);
-		}
+		};
+
+		// Starting functions
+		$fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
+
+
 
 		// make instance $site
 		require_once(__DIR__.'/site.php');
 		$this->site = new site($this);
 
 
-		// execute content
+
+		// execute Content
 		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
 		if( is_null( $this->path_content ) ){
 			$this->path_content = $this->req()->get_request_file_path();
@@ -140,22 +156,9 @@ class pickles{
 		}
 		$this->output_content_type(); // デフォルトの Content-type を出力
 
-		if( @!empty( $this->conf->funcs->before_content ) ){
-			// Before contents functions
-			if( is_string($this->conf->funcs->before_content) ){
-				$fnc_name = $this->conf->funcs->before_content;
-				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-				call_user_func( $fnc_name, $this );
-			}elseif( is_array($this->conf->funcs->before_content) ){
-				foreach( $this->conf->funcs->before_content as $fnc_name ){
-					if( is_string($fnc_name) ){
-						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-					}
-					call_user_func( $fnc_name, $this );
-				}
-			}
-			unset($fnc_name);
-		}
+		// Before contents functions
+		$fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
+
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			@header('HTTP/1.1 403 Forbidden');
@@ -185,24 +188,31 @@ class pickles{
 		}
 		unset($src, $fnc_name);
 
-		// execute theme
-		$fnc_name = preg_replace( '/^\\\\*/', '\\', $this->conf->funcs->theme );
-		$src = call_user_func( $fnc_name, $this );
 
-		$src = $this->output_filter( $src );
+		// execute Theme
+		$fnc_name = preg_replace( '/^\\\\*/', '\\', @$this->conf->funcs->theme );
+		$this->response_body = call_user_func( $fnc_name, $this );
+
+
+
+		// Output filter functions
+		$fnc_call_plugin_funcs( @$this->conf->funcs->output_filter, $this );
+
+
 
 		if( count($this->relatedlinks) ){
 			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
 		}
 
+		// 最終出力
 		switch( $this->req()->get_cli_option('-o') ){
 			case 'json':
 				$json = new \stdClass;
-				$json->body_base64 = base64_encode($src);
+				$json->body_base64 = base64_encode($this->response_body);
 				print json_encode($json);
 				break;
 			default:
-				print $src;
+				print $this->response_body;
 				break;
 		}
 
@@ -383,52 +393,6 @@ class pickles{
 	}
 
 	/**
-	 * output filter
-	 */
-	private function output_filter( $src ){
-		if( @strlen( $this->conf->output_encoding ) ){
-			$output_encoding = $this->conf->output_encoding;
-			if( !strlen($output_encoding) ){ $output_encoding = 'UTF-8'; }
-			$extension = strtolower( pathinfo( $this->get_path_content() , PATHINFO_EXTENSION ) );
-			switch( strtolower( $extension ) ){
-				case 'css':
-					//出力ソースの文字コード変換
-					$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars($output_encoding).'";',$src);
-					$src = $this->convert_encoding( $src, $output_encoding );
-					break;
-				case 'js':
-					//出力ソースの文字コード変換
-					$src = $this->convert_encoding( $src, $output_encoding );
-					break;
-				case 'html':
-				case 'htm':
-					//出力ソースの文字コード変換(HTML)
-					$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
-					$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
-					$src = $this->convert_encoding( $src, $output_encoding );
-					break;
-				default:
-					$src = $this->convert_encoding( $src, $output_encoding );
-					break;
-			}
-
-		}
-		if( @strlen( $this->conf->output_eol_coding ) ){
-			//出力ソースの改行コード変換
-			$eol_code = "\r\n";
-			switch( strtolower( $this->conf->output_eol_coding ) ){
-				case 'cr':     $eol_code = "\r"; break;
-				case 'lf':     $eol_code = "\n"; break;
-				case 'crlf':
-				default:       $eol_code = "\r\n"; break;
-			}
-			$src = preg_replace('/\r\n|\r|\n/si',$eol_code,$src);
-		}
-
-		return $src;
-	}
-
-	/**
 	 * コンテンツキャビネットにコンテンツを送る。
 	 * 
 	 * ソースコードを$themeオブジェクトに預けます。
@@ -485,6 +449,21 @@ class pickles{
 		$content = $this->contents_cabinet[$content_name];
 
 		return $content;
+	}
+
+	/**
+	 * get response body
+	 */
+	public function get_response_body(){
+		return $this->response_body;
+	}
+
+	/**
+	 * set response body
+	 */
+	public function set_response_body($src){
+		$this->response_body = $src;
+		return true;
 	}
 
 	/**
