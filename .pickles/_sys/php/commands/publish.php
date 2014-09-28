@@ -105,6 +105,8 @@ class publish{
 		print 'domain: '.$this->domain."\n";
 		print 'docroot directory: '.$this->path_docroot."\n";
 		print '------------'."\n";
+		$this->clearcache();
+		print '------------'."\n";
 		$validate = $this->validate();
 		if( !$validate['status'] ){
 			print $validate['message']."\n";
@@ -142,8 +144,15 @@ class publish{
 					) ) );
 					$bin = ob_get_clean();
 					$bin = json_decode($bin);
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
-					$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
+					if( $bin->status >= 500 ){
+					}elseif( $bin->status >= 400 ){
+					}elseif( $bin->status >= 300 ){
+					}elseif( $bin->status >= 200 ){
+						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
+						$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
+					}elseif( $bin->status >= 100 ){
+					}
+
 					break;
 				case 'copy':
 				default:
@@ -174,6 +183,13 @@ class publish{
 	private function validate(){
 		$rtn = array('status'=>true, 'message'=>'');
 		return $rtn;
+	}
+
+	/**
+	 * clearcache
+	 */
+	private function clearcache(){
+		(new \pickles\commands\clearcache( $this->px ))->exec();
 	}
 
 	/**

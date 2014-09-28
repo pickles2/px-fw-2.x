@@ -20,7 +20,7 @@ class clearcache{
 		if( $pxcmd[0] != 'clearcache' ){
 			return;
 		}
-		new self( $px );
+		(new self( $px ))->kick();
 		exit;
 	}
 
@@ -29,30 +29,47 @@ class clearcache{
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
-		header('Content-type: text/plain;');
-		$this->path_homedir = $px->fs()->get_realpath( $px->get_path_homedir() ).DIRECTORY_SEPARATOR;
-		$this->path_docroot = $px->fs()->get_realpath( $px->get_path_docroot() ).DIRECTORY_SEPARATOR;
+		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir() ).DIRECTORY_SEPARATOR;
+		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot() ).DIRECTORY_SEPARATOR;
+	}
 
+
+	/**
+	 * kick
+	 */
+	private function kick(){
+		header('Content-type: text/plain;');
 		print "\n";
 		print "\n";
-		print 'pickles '.$px->get_version().' - clearcache'."\n";
+		print 'pickles '.$this->px->get_version().' - clearcache'."\n";
 		print @date('Y-m-d H:i:s')."\n";
 		print '------------------------'."\n";
 		print 'pickles home directory: '.$this->path_homedir."\n";
 		print 'pickles docroot directory: '.$this->path_docroot."\n";
 		print '------------------------'."\n";
 		print "\n";
-		print '-- cleaning "caches"'."\n";
-		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/caches/' ).' items done.'."\n";
-		print "\n";
-		print '-- cleaning "publish"'."\n";
-		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
+		$this->exec();
 		print "\n";
 		print '------------------------'."\n";
 		print "\n";
 		print 'end;'."\n";
 		print @date('Y-m-d H:i:s')."\n";
 		print "\n";
+		exit;
+	}
+
+	/**
+	 * execution: clearcache
+	 * 外部から直接呼び出すときはこちら。
+	 */
+	public function exec(){
+		print '-- cleaning "caches"'."\n";
+		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/caches/' ).' items done.'."\n";
+		print "\n";
+		print '-- cleaning "publish"'."\n";
+		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
+		print "\n";
+		return true;
 	}
 
 	/**

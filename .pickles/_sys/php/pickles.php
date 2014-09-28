@@ -24,9 +24,13 @@ class pickles{
 	 */
 	private $relatedlinks = array();
 	/**
-	 * 出力データ
+	 * 応答出力データ
 	 */
 	private $response_body;
+	/**
+	 * 応答ステータスコード
+	 */
+	private $response_status = 200;
 
 	/**
 	 * PxFWのバージョン情報を取得する。
@@ -84,7 +88,7 @@ class pickles{
 			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
 		header_remove('X-Powered-By');
-		@header('HTTP/1.1 200 OK');
+		$this->set_status(200);// 200 OK
 
 		// load Config
 		$this->path_homedir = $path_homedir;
@@ -161,7 +165,7 @@ class pickles{
 
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
-			@header('HTTP/1.1 403 Forbidden');
+			$this->set_status(403);// 403 Forbidden
 			$this->send_content('<p>ignore path</p>');
 		}else{
 			self::exec_content( $this );
@@ -208,6 +212,7 @@ class pickles{
 		switch( $this->req()->get_cli_option('-o') ){
 			case 'json':
 				$json = new \stdClass;
+				$json->status = $this->get_status();
 				$json->body_base64 = base64_encode($this->response_body);
 				print json_encode($json);
 				break;
@@ -452,6 +457,34 @@ class pickles{
 	}
 
 	/**
+	 * get response status
+	 */
+	public function get_status(){
+		return $this->response_status;
+	}
+
+	/**
+	 * set response status
+	 */
+	public function set_status($code){
+		$code = intval($code);
+		if( strlen( $code ) != 3 ){
+			return false;
+		}
+		if( !($code >= 100 && $code <= 599) ){
+			return false;
+		}
+		$this->response_status = intval($code);
+		switch( $this->response_status ){
+			case 200: @header('HTTP/1.1 '.$this->response_status.' OK'); break;
+			case 403: @header('HTTP/1.1 '.$this->response_status.' Forbidden'); break;
+			case 404: @header('HTTP/1.1 '.$this->response_status.' NotFound'); break;
+			default:  @header('HTTP/1.1 '.$this->response_status.''); break;
+		}
+		return true;
+	}
+
+	/**
 	 * get response body
 	 */
 	public function get_response_body(){
@@ -502,7 +535,7 @@ class pickles{
 	 */
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
-			@header('HTTP/1.1 404 NotFound');
+			$this->set_status(404);// 404 NotFound
 			$px->send_content('<p>404 - File not found.</p>');
 			return true;
 		}
