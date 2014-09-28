@@ -15,13 +15,6 @@ class publish{
 	private $paths_queue = array();
 	private $paths_done = array();
 
-	private $process_exts = array(
-		'html'=>'process',
-		'htm' =>'process',
-		'css' =>'process',
-		'js'  =>'process'
-	);
-
 	/**
 	 * Before content function
 	 */
@@ -133,25 +126,30 @@ class publish{
 			print $path."\n";
 
 			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
-
-			$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
-
-			if( @$this->process_exts[$ext] == 'process' ){
-				// pickles execute
-				ob_start();
-				passthru( implode( ' ', array(
-					$this->px->conf()->commands->php ,
-					$_SERVER['SCRIPT_FILENAME'] ,
-					'-o' , 'json' ,// output as JSON
-					$path ,
-				) ) );
-				$bin = ob_get_clean();
-				$bin = json_decode($bin);
-				$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
-			}else{
-				// copy
-				print $ext.' -> copy'."\n";
-				$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
+			$proc_type = $this->px->get_path_proc_type( $path );
+			switch( $proc_type ){
+				case 'process':
+					// pickles execute
+					print $ext.' -> '.$proc_type."\n";
+					ob_start();
+					passthru( implode( ' ', array(
+						$this->px->conf()->commands->php ,
+						$_SERVER['SCRIPT_FILENAME'] ,
+						'-o' , 'json' ,// output as JSON
+						$path ,
+					) ) );
+					$bin = ob_get_clean();
+					$bin = json_decode($bin);
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
+					$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
+					break;
+				case 'copy':
+				default:
+					// copy
+					print $ext.' -> copy'."\n";
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
+					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
+					break;
 			}
 
 			unset($this->paths_queue[$path]);
@@ -208,13 +206,12 @@ class publish{
 			if( $this->px->fs()->is_dir( './'.$path.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
-				foreach( $this->process_exts as $sample_ext=>$ext_proc_type ){
-					if( preg_match( '/\.'.preg_quote($sample_ext,'/').'\.'.$preg_exts.'$/is', $basename ) ){
-						$basename = $this->px->fs()->trim_extension( $basename );
-						break;
-					}
+				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
+				$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
+				if( !$this->px->get_path_proc_type( $tmp_localpath ) == 'process' ){
+					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				}
-				$this->add_queue( '/'.$path.$basename );
+				$this->add_queue( $tmp_localpath );
 			}
 		}
 		return true;

@@ -299,12 +299,15 @@ class pickles{
 	}//get_directory_index_primary()
 
 	/**
-	 * 除外ファイルか調べる。
+	 * ファイルの処理方法を調べる。
 	 *
 	 * @param string $path パス
-	 * @return bool 除外ファイルの場合 `true`、それ以外の場合に `false` を返します。
+	 * @return string 処理方法
+	 * - process = Pickles の加工処理を通して出力
+	 * - ignore = 対象外パス
+	 * - direct = 加工せずそのまま出力する(デフォルト)
 	 */
-	public function is_ignore_path( $path ){
+	public function get_path_proc_type( $path ){
 		static $rtn = array();
 		$path = $this->fs()->get_realpath( '/'.$path );
 		if( is_dir('./'.$path) ){
@@ -315,7 +318,7 @@ class pickles{
 			return $rtn[$path];
 		}
 
-		foreach( $this->conf->paths_ignore as $row ){
+		foreach( $this->conf->paths_proc_type as $row => $type ){
 			if(!is_string($row)){continue;}
 			$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
 			if( preg_match('/\*/',$preg_pattern) ){
@@ -329,11 +332,25 @@ class pickles{
 				$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
 			}
 			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
-				$rtn[$path] = true;
-				return true;
+				$rtn[$path] = $type;
+				return $rtn[$path];
 			}
 		}
-		$rtn[$path] = false;
+		$rtn[$path] = 'direct';// <- default
+		return $rtn[$path];
+	}//get_path_proc_type();
+
+	/**
+	 * 除外ファイルか調べる。
+	 *
+	 * @param string $path パス
+	 * @return bool 除外ファイルの場合 `true`、それ以外の場合に `false` を返します。
+	 */
+	public function is_ignore_path( $path ){
+		$type = $this->get_path_proc_type($path);
+		if( $type == 'ignore' ){
+			return true;
+		}
 		return false;
 	}//is_ignore_path();
 

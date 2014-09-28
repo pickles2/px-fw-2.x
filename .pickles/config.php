@@ -12,22 +12,36 @@ return call_user_func( function(){
 	// paths
 	$conf->path_top = '/';
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
-	$conf->paths_ignore = array(
-		// パブリッシュ対象外パスの一覧(ワイルドカードとして "*"(アスタリスク) を使用可)
-		'/.htaccess' ,
-		'/.px_execute.php' ,
-		'/.pickles/*' ,
-		'*.ignore/*' ,
-		'*.ignore.*' ,
-		'/composer.json' ,
-		'/composer.lock' ,
-		'/README.md' ,
-		'/vendor/*' ,
-		'*/.DS_Store' ,
-		'*/Thumbs.db' ,
-		'*/.svn/*' ,
-		'*/.git/*' ,
-		'*/.gitignore' ,
+	$conf->paths_proc_type = array(
+		// 処理方法を設定
+		//     - process = Pickles の加工処理を通して出力
+		//     - ignore = 対象外パス
+		//     - direct = 加工せずそのまま出力する(デフォルト)
+		// パターンは先頭から検索され、はじめにマッチした設定を採用する。
+		// ワイルドカードとして "*"(アスタリスク) を使用可。
+		'/.htaccess' => 'ignore' ,
+		'/.px_execute.php' => 'ignore' ,
+		'/.pickles/*' => 'ignore' ,
+		'*.ignore/*' => 'ignore' ,
+		'*.ignore.*' => 'ignore' ,
+		'/composer.json' => 'ignore' ,
+		'/composer.lock' => 'ignore' ,
+		'/README.md' => 'ignore' ,
+		'/vendor/*' => 'ignore' ,
+		'*/.DS_Store' => 'ignore' ,
+		'*/Thumbs.db' => 'ignore' ,
+		'*/.svn/*' => 'ignore' ,
+		'*/.git/*' => 'ignore' ,
+		'*/.gitignore' => 'ignore' ,
+
+		'*.html' => 'process' ,
+		'*.htm' => 'process' ,
+		'*.css' => 'process' ,
+		'*.js' => 'process' ,
+		'*.png' => 'direct' ,
+		'*.jpg' => 'direct' ,
+		'*.gif' => 'direct' ,
+		'*.svg' => 'direct' ,
 	);
 
 	// directory index
