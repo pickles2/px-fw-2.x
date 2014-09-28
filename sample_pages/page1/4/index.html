@@ -1,0 +1,10 @@
+
+<p>index.html</p>
+
+<?php
+	print '<p>'.htmlspecialchars($px->site()->get_path_param('')).'</p>'."\n";
+
+	$px->add_relatedlink('./test1.html');
+	$px->add_relatedlink('./test2.html');
+	$px->add_relatedlink('./test3.html');
+?>

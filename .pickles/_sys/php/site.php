@@ -43,6 +43,10 @@ class site{
 	 * サイトマップのツリー構造
 	 */
 	private $sitemap_page_tree = array();
+	/**
+	 * ダイナミックパスパラメータ
+	 */
+	private $dynamic_path_param = array();
 
 	/**
 	 * コンストラクタ
@@ -61,12 +65,34 @@ class site{
 			if( preg_match( $sitemap_dynamic_path['preg'] , $this->px->req()->get_request_file_path() , $tmp_matched ) ){
 				$page_info = $this->get_page_info( $this->px->req()->get_request_file_path() );
 				foreach( $sitemap_dynamic_path['pattern_map'] as $key=>$val ){
-					$this->px->req()->set_path_param( $val , $tmp_matched[$key+1] );
+					$this->set_path_param( $val , $tmp_matched[$key+1] );
 				}
 				break;
 			}
 		}
 	}
+
+	/**
+	 * ダイナミックパスからパラメータを受け取る。
+	 * 
+	 * @param string $key ダイナミックパスパラメータ名
+	 * @return string ダイナミックパスパラメータ値
+	 */
+	public function get_path_param( $key ){
+		return $this->dynamic_path_param[$key];
+	}//get_path_param()
+
+	/**
+	 * ダイナミックパスからのパラメータをセットする。
+	 * 
+	 * @param string $key ダイナミックパスパラメータ名
+	 * @param string $val ダイナミックパスパラメータ値
+	 * @return bool 常に `true`
+	 */
+	public function set_path_param( $key , $val ){
+		$this->dynamic_path_param[$key] = $val;
+		return true;
+	}//set_path_param()
 
 	/**
 	 * サイトマップCSVを読み込む。
@@ -169,12 +195,6 @@ class site{
 						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
-				if( !strlen( $tmp_array['content'] ) ){
-					$tmp_array['content'] = $tmp_array['path'];
-					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
-					$tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
-				}
-				$tmp_array['content'] = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $tmp_array['content'] );//index.htmlを付加する。
 				if( !strlen( $tmp_array['id'] ) ){
 					//ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
@@ -230,12 +250,21 @@ class site{
 						'preg'=>'/^'.$preg_pattern.'$/s',
 						'pattern_map'=>$pattern_map[2],
 					) );
+					if( !strlen( $tmp_array['content'] ) ){
+						$tmp_array['content'] = $tmp_array['path'];
+					}
 					$tmp_array['path'] = $tmp_path_original;
 					unset($preg_pattern);
 					unset($pattern_map);
 					unset($tmp_path_original);
 				}
 
+				if( !strlen( $tmp_array['content'] ) ){
+					$tmp_array['content'] = $tmp_array['path'];
+					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
+					$tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
+				}
+				$tmp_array['content'] = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $tmp_array['content'] );//index.htmlを付加する。
 				if( preg_match( '/^alias\:/s' , $tmp_array['path'] ) ){
 					//エイリアスの値調整
 					$tmp_array['content'] = null;
