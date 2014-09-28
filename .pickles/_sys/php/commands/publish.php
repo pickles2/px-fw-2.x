@@ -144,16 +144,22 @@ class publish{
 					) ) );
 					$bin = ob_get_clean();
 					$bin = json_decode($bin);
+
 					if( $bin->status >= 500 ){
 					}elseif( $bin->status >= 400 ){
 					}elseif( $bin->status >= 300 ){
 					}elseif( $bin->status >= 200 ){
 						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
 						$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
+						foreach( $bin->relatedlinks as $link ){
+							$link = $this->px->fs()->get_realpath( $link, dirname($path) );
+							$this->add_queue( $link );
+						}
 					}elseif( $bin->status >= 100 ){
 					}
 
 					break;
+
 				case 'copy':
 				default:
 					// copy
@@ -226,7 +232,7 @@ class publish{
 			}else{
 				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
-				if( !$this->px->get_path_proc_type( $tmp_localpath ) == 'process' ){
+				if( $this->px->get_path_proc_type( $tmp_localpath ) != 'process' ){
 					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				}
 				$this->add_queue( $tmp_localpath );

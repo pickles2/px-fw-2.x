@@ -204,6 +204,7 @@ class pickles{
 
 
 
+		// relatedlinks
 		if( count($this->relatedlinks) ){
 			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
 		}
@@ -213,6 +214,7 @@ class pickles{
 			case 'json':
 				$json = new \stdClass;
 				$json->status = $this->get_status();
+				$json->relatedlinks = $this->relatedlinks;
 				$json->body_base64 = base64_encode($this->response_body);
 				print json_encode($json);
 				break;
@@ -223,6 +225,7 @@ class pickles{
 
 		exit;
 	}
+
 
 	/**
 	 * get $fs
@@ -535,7 +538,7 @@ class pickles{
 	 */
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
-			$this->set_status(404);// 404 NotFound
+			$px->set_status(404);// 404 NotFound
 			$px->send_content('<p>404 - File not found.</p>');
 			return true;
 		}
