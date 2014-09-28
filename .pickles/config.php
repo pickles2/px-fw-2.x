@@ -76,7 +76,6 @@ return call_user_func( function(){
 	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->starting = [
 		'pickles\commands\clearcache::funcs_starting' ,
-		'tomk79\pickles2\autoindex\autoindex::funcs_starting' ,
 	];
 	/**
 	 * Before content
@@ -89,14 +88,16 @@ return call_user_func( function(){
 	 * extensions
 	 */
 	$conf->funcs->extensions = new stdClass;
-	// $conf->extensions->html = [
+	$conf->funcs->extensions->html = [
+		'tomk79\pickles2\autoindex\autoindex::exec' ,
+	];
+	// $conf->funcs->extensions->css = [
 	// ];
-	// $conf->extensions->css = [
-	// ];
-	// $conf->extensions->js = [
+	// $conf->funcs->extensions->js = [
 	// ];
 	$conf->funcs->extensions->md = [
 		'pickles\extensions\md::exec' ,
+		'tomk79\pickles2\autoindex\autoindex::exec' ,
 	];
 	$conf->funcs->extensions->scss = [
 		'pickles\extensions\scss::exec' ,
