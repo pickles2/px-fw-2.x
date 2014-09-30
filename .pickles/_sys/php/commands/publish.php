@@ -135,14 +135,12 @@ class publish{
 				case 'process':
 					// pickles execute
 					print $ext.' -> '.$proc_type."\n";
-					ob_start();
-					passthru( implode( ' ', array(
+					$bin = $this->passthru( array(
 						$this->px->conf()->commands->php ,
 						$_SERVER['SCRIPT_FILENAME'] ,
 						'-o' , 'json' ,// output as JSON
 						$path ,
-					) ) );
-					$bin = ob_get_clean();
+					) );
 					$bin = json_decode($bin);
 
 					if( $bin->status >= 500 ){
@@ -181,6 +179,24 @@ class publish{
 
 		print $this->cli_footer();
 		exit;
+	}
+
+	/**
+	 * コマンドを実行し、標準出力値を返す
+	 * @param array $ary_command コマンドのパラメータを要素として持つ配列
+	 * @return string コマンドの標準出力値
+	 */
+	private function passthru( $ary_command ){
+		$cmd = array();
+		foreach( $ary_command as $row ){
+			$param = '"'.addslashes($row).'"';
+			array_push( $cmd, $param );
+		}
+		$cmd = implode( ' ', $cmd );
+		ob_start();
+		passthru( $cmd );
+		$bin = ob_get_clean();
+		return $bin;
 	}
 
 	/**
