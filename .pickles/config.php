@@ -7,7 +7,7 @@ return call_user_func( function(){
 	// project
 	$conf->name = 'Pickles 2';
 	$conf->domain = null;
-	$conf->path_docroot = '/github/pickles2/';
+	$conf->path_docroot = '/';
 
 	// paths
 	$conf->path_top = '/';

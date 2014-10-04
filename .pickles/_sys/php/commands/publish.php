@@ -40,7 +40,7 @@ class publish{
 
 		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' ).DIRECTORY_SEPARATOR;
 		if( $this->get_path_publish_dir() !== false ){
-			$this->path_publish_dir = $px->fs()->get_realpath( $px->conf()->path_publish_dir ).DIRECTORY_SEPARATOR;
+			$this->path_publish_dir = $this->get_path_publish_dir();
 		}
 		$this->domain = $px->get_domain();
 		$this->path_docroot = $px->get_path_docroot();
@@ -66,6 +66,7 @@ class publish{
 		ob_start();
 		print '------------'."\n";
 		print "\n";
+		print @date('Y-m-d H:i:s')."\n";
 		print 'end;'."\n";
 		print "\n";
 		return ob_get_clean();
@@ -167,6 +168,18 @@ class publish{
 					break;
 			}
 
+			if( !empty( $this->path_publish_dir ) ){
+				// パブリッシュ先ディレクトリにコピー
+				if( $this->px->fs()->is_file( $this->path_publish_dir.$path ) ){
+					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$path ) );
+					$this->px->fs()->copy(
+						$this->path_tmp_publish.$path ,
+						$this->path_publish_dir.$path
+					);
+					print ' -> copied to publish dir'."\n";
+				}
+			}
+
 			unset($this->paths_queue[$path]);
 			$this->paths_done[$path] = true;
 			print $this->cli_report();
@@ -176,6 +189,20 @@ class publish{
 			}
 		}
 
+		print "\n";
+		print 'done.'."\n";
+		print "\n";
+
+		if( !empty( $this->path_publish_dir ) ){
+			// パブリッシュ先ディレクトリを同期
+			print "\n";
+			print '-- syncing to publish dir...'."\n";
+			$this->px->fs()->sync_dir(
+				$this->path_tmp_publish ,
+				$this->path_publish_dir
+			);
+		}
+		print "\n";
 
 		print $this->cli_footer();
 		exit;
@@ -287,7 +314,14 @@ class publish{
 		if( @!strlen( $this->px->conf()->path_publish_dir ) ){
 			return false;
 		}
-		return $this->px->fs()->get_realpath( $this->px->conf()->path_publish_dir );
-	}
+		$tmp_path = $this->px->fs()->get_realpath( $this->px->conf()->path_publish_dir ).DIRECTORY_SEPARATOR;
+		if( !$this->px->fs()->is_dir( $tmp_path ) ){
+			return false;
+		}
+		if( !$this->px->fs()->is_writable( $tmp_path ) ){
+			return false;
+		}
+		return $tmp_path;
+	}// get_path_publish_dir()
 
 }
