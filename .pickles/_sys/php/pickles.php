@@ -525,12 +525,16 @@ class pickles{
 	 * getting PX Command
 	 */
 	public function get_px_command(){
-		$rtn = $this->req()->get_param('PX');
-		if( is_string($rtn) ){
-			$rtn = explode('.', $rtn);
+		if( !$this->conf()->allow_pxcommands && !$this->req()->is_cmd() ){
+			return null;
+		}
+		$rtn = null;
+		$cmd = $this->req()->get_param('PX');
+		if( is_string($cmd) && strlen($cmd) ){
+			$rtn = explode('.', $cmd);
 		}
 		return $rtn;
-	}
+	}// get_px_command()
 
 	/**
 	 * execute content

@@ -58,9 +58,10 @@ return call_user_func( function(){
 	$conf->output_eol_coding = 'lf';
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
+	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
 
 	// commands
-	$conf->commands = new stdClass;
+	$conf->commands = array();
 	$conf->commands->php = 'php';
 
 
@@ -71,10 +72,12 @@ return call_user_func( function(){
 	/**
 	 * Starting
 	 */
+	require_once(__DIR__.'/_sys/php/commands/phpinfo.php');
 	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
 	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->starting = [
+		'pickles\commands\phpinfo::funcs_starting' ,
 		'pickles\commands\clearcache::funcs_starting' ,
 	];
 	/**
