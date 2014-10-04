@@ -11,6 +11,7 @@ class publish{
 
 	private $px, $site;
 	private $path_tmp_publish, $path_publish_dir, $domain, $path_docroot;
+	private $path_region, $param_path_region;
 
 	private $paths_queue = array();
 	private $paths_done = array();
@@ -44,6 +45,25 @@ class publish{
 		}
 		$this->domain = $px->get_domain();
 		$this->path_docroot = $px->get_path_docroot();
+
+		$this->path_region = $this->px->req()->get_request_file_path();
+		$this->path_region = preg_replace('/^\/+/s','/',$this->path_region);
+		$this->path_region = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'$/s','/',$this->path_region);
+		$func_check_param_path = function($path){
+			if( !preg_match('/^\//', $path) ){
+				return false;
+			}
+			$path = preg_replace('/(?:\/|\\\\)/', '/', $path);
+			if( preg_match('/(?:^|\/)\.{1,2}(?:$|\/)/', $path) ){
+				return false;
+			}
+			return true;
+		};
+		$param_path_region = $this->px->req()->get_param('path_region');
+		if( strlen( $param_path_region ) && $param_path_region != $this->path_region && $func_check_param_path( $param_path_region ) ){
+			$this->path_region = $param_path_region;
+			$this->param_path_region = $param_path_region;
+		}
 	}
 
 	/**
@@ -54,6 +74,12 @@ class publish{
 		print 'pickles '.$this->px->get_version().' - publish'."\n";
 		print 'PHP '.phpversion()."\n";
 		print @date('Y-m-d H:i:s')."\n";
+		print '------------'."\n";
+		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
+		print 'publish directory: '.$this->path_publish_dir."\n";
+		print 'domain: '.$this->domain."\n";
+		print 'docroot directory: '.$this->path_docroot."\n";
+		print 'region: '.$this->path_region."\n";
 		print '------------'."\n";
 		flush();
 		return ob_get_clean();
@@ -101,11 +127,7 @@ class publish{
 	private function exec_publish(){
 		header('Content-type: text/plain;');
 		print $this->cli_header();
-		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
-		print 'publish directory: '.$this->path_publish_dir."\n";
-		print 'domain: '.$this->domain."\n";
-		print 'docroot directory: '.$this->path_docroot."\n";
-		print '------------'."\n";
+
 		$this->clearcache();
 		print '------------'."\n";
 		$validate = $this->validate();
@@ -198,8 +220,8 @@ class publish{
 			print "\n";
 			print '-- syncing to publish dir...'."\n";
 			$this->px->fs()->sync_dir(
-				$this->path_tmp_publish ,
-				$this->path_publish_dir
+				$this->path_tmp_publish.$this->path_region ,
+				$this->path_publish_dir.$this->path_region
 			);
 		}
 		print "\n";
@@ -294,6 +316,10 @@ class publish{
 			// 対象外
 			return false;
 		}
+		if( !$this->is_region_path( $path ) ){
+			// 範囲外
+			return false;
+		}
 		if( array_key_exists($path, $this->paths_queue) ){
 			// 登録済み
 			return false;
@@ -306,6 +332,21 @@ class publish{
 		print 'added queue - "'.$path.'"'."\n";
 		return true;
 	}
+
+	/**
+	 * パブリッシュ範囲内か調べる
+	 */
+	private function is_region_path( $path ){
+		$path = $this->px->fs()->get_realpath( '/'.$path );
+		if( $this->px->fs()->is_dir('./'.$path) ){
+			$path .= '/';
+		}
+		if( preg_match( '/^'.preg_quote( $this->path_region, '/' ).'/s' , $path ) ){
+			return true;
+		}
+		return false;
+	}// is_region_path()
+
 
 	/**
 	 * パブリッシュ先ディレクトリを取得

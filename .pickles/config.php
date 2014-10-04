@@ -5,12 +5,12 @@ return call_user_func( function(){
 	$conf = new stdClass;
 
 	// project
-	$conf->name = 'Pickles 2';
-	$conf->domain = null;
-	$conf->path_docroot = '/';
+	$conf->name = 'Pickles 2'; // サイト名
+	$conf->domain = null; // ドメイン
+	$conf->path_docroot = '/'; // ドキュメントルートのディレクトリ
 
 	// paths
-	$conf->path_top = '/';
+	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->paths_proc_type = array(
 		// 処理方法を設定
