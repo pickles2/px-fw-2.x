@@ -30,7 +30,7 @@ class clearcache{
 	public function __construct( $px ){
 		$this->px = $px;
 		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir() ).DIRECTORY_SEPARATOR;
-		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot() ).DIRECTORY_SEPARATOR;
+		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_controot() ).DIRECTORY_SEPARATOR;
 	}
 
 

@@ -10,7 +10,6 @@ namespace pickles\commands;
 class phpinfo{
 
 	private $px;
-	private $path_homedir, $path_docroot;
 
 	/**
 	 * Starting function

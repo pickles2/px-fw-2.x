@@ -7,7 +7,7 @@ return call_user_func( function(){
 	// project
 	$conf->name = 'Pickles 2'; // サイト名
 	$conf->domain = null; // ドメイン
-	$conf->path_docroot = '/'; // ドキュメントルートのディレクトリ
+	$conf->path_controot = '/'; // コンテンツルートのディレクトリ
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
@@ -61,7 +61,7 @@ return call_user_func( function(){
 	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
 
 	// commands
-	$conf->commands = array();
+	$conf->commands = new stdClass;
 	$conf->commands->php = 'php';
 
 

@@ -44,7 +44,7 @@ class publish{
 			$this->path_publish_dir = $this->get_path_publish_dir();
 		}
 		$this->domain = $px->get_domain();
-		$this->path_docroot = $px->get_path_docroot();
+		$this->path_docroot = $px->get_path_controot();
 
 		$this->path_region = $this->px->req()->get_request_file_path();
 		$this->path_region = preg_replace('/^\/+/s','/',$this->path_region);

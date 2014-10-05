@@ -638,7 +638,7 @@ class pickles{
 			//  スラッシュから始まる絶対パスの場合、
 			//  インストールパスを起点としたパスに書き変えて返す。
 			$path = preg_replace( '/^\/+/' , '' , $path );
-			$path = $this->get_path_docroot().$path;
+			$path = $this->get_path_controot().$path;
 		}
 
 		// パラメータを、引数の生の状態に戻す。
@@ -811,9 +811,9 @@ class pickles{
 	}
 
 	/**
-	 * install path を取得する
+	 * コンテンツルートパス(=install path) を取得する
 	 */
-	public function get_path_docroot(){
+	public function get_path_controot(){
 		static $rtn;
 		if( !is_null($rtn) ){
 			return $rtn;
@@ -821,14 +821,233 @@ class pickles{
 		$rtn = dirname( $_SERVER['SCRIPT_NAME'] ).'/';
 		if( $this->req()->is_cmd() ){
 			$rtn = '/';
-			if( @strlen( $this->conf->path_docroot ) ){
-				$rtn = $this->conf->path_docroot;
+			if( @strlen( $this->conf->path_controot ) ){
+				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
 				return $rtn;
 			}
 		}
 		return $rtn;
 	}
+
+	/**
+	 * DOCUMENT_ROOT のパスを取得する
+	 */
+	public function get_path_docroot(){
+		$path_controot = $this->fs()->get_realpath( $this->get_path_controot() );
+		$path_cd = $this->fs()->get_realpath( '.' );
+		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
+		return $rtn;
+	}
+
+	/**
+	 * ローカルリソースディレクトリのパスを得る。
+	 * 
+	 * @param string $localpath_resource ローカルリソースのパス
+	 * @return string ローカルリソースの実際の絶対パス
+	 */
+	public function path_files( $localpath_resource = null ){
+		$tmp_page_info = $this->site()->get_current_page_info();
+		$path_content = $tmp_page_info['content'];
+		if( is_null($path_content) ){
+			$path_content = $this->req()->get_request_file_path();
+		}
+		unset($tmp_page_info);
+
+		$rtn = $path_content;
+		$rtn = $this->fs()->get_realpath( $this->fs()->trim_extension($rtn).'.files/'.$localpath_resource );
+		if( $this->fs()->is_dir('./'.$rtn) ){
+			$rtn .= '/';
+		}
+		return $this->href( $rtn );
+	}//path_files()
+
+	/**
+	 * ローカルリソースディレクトリのサーバー内部パスを得る。
+	 * 
+	 * @param string $localpath_resource ローカルリソースのパス
+	 * @return string ローカルリソースのサーバー内部パス
+	 */
+	public function realpath_files( $localpath_resource = null ){
+		$rtn = $this->path_files( $localpath_resource );
+		$rtn = $this->fs()->get_realpath( $rtn );
+		if( $this->fs()->is_dir($rtn) ){
+			$rtn .= '/';
+		}
+		return $this->fs()->get_realpath($this->get_path_docroot().$rtn);
+	}//realpath_files()
+
+	// /**
+	//  * ローカルリソースのキャッシュディレクトリのパスを得る。
+	//  * 
+	//  * @param string $localpath_resource ローカルリソースのパス
+	//  * @return string ローカルリソースキャッシュのパス
+	//  */
+	// public function path_files_cache( $localpath_resource = null ){
+	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
+	// 	$path_content = $tmp_page_info['content'];
+	// 	if( is_null($path_content) ){
+	// 		$path_content = $this->req()->get_request_file_path();
+	// 	}
+	// 	unset($tmp_page_info);
+
+	// 	$path_original = $this->get_install_path().$path_content;
+	// 	$path_original = $this->dbh()->get_realpath($this->dbh()->trim_extension($path_original).'.files/'.$localpath_resource);
+	// 	$rtn = $this->get_install_path().'/'.$this->get_conf('system.public_cache_dir').'/contents'.$path_content;
+	// 	$rtn = $this->dbh()->get_realpath($this->dbh()->trim_extension($rtn).'.files/'.$localpath_resource);
+	// 	if( file_exists( $_SERVER['DOCUMENT_ROOT'].$path_original ) ){
+	// 		if( is_dir($_SERVER['DOCUMENT_ROOT'].$path_original) ){
+	// 			$rtn .= '/';
+	// 			$this->dbh()->mkdir_all( $_SERVER['DOCUMENT_ROOT'].$rtn );
+	// 		}else{
+	// 			$this->dbh()->mkdir_all( dirname( $_SERVER['DOCUMENT_ROOT'].$rtn ) );
+	// 		}
+	// 		$this->dbh()->copy_all( $_SERVER['DOCUMENT_ROOT'].$path_original, $_SERVER['DOCUMENT_ROOT'].$rtn );
+	// 	}
+	// 	$this->add_relatedlink($rtn);
+	// 	return $rtn;
+	// }//path_files_cache()
+
+	// /**
+	//  * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @param string $localpath_resource ローカルリソースのパス
+	//  * @return string ローカルリソースキャッシュのサーバー内部パス
+	//  */
+	// public function realpath_files_cache( $localpath_resource = null ){
+	// 	$rtn = $this->path_files_cache( $localpath_resource );
+	// 	$rtn = $this->dbh()->get_realpath( $_SERVER['DOCUMENT_ROOT'].$rtn );
+	// 	if( is_dir($rtn) ){
+	// 		$rtn .= '/';
+	// 	}
+	// 	return $rtn;
+	// }//realpath_files_cache()
+
+	// /**
+	//  * テーマリソースディレクトリのパスを得る。
+	//  * 
+	//  * @param string $localpath_theme_resource テーマリソースのパス
+	//  * @return string テーマリソースのパス
+	//  */
+	// public function path_theme_files( $localpath_theme_resource = null ){
+	// 	$localpath_theme_resource = preg_replace('/^\/+/', '', $localpath_theme_resource);
+
+	// 	$realpath_original = $this->realpath_theme_files().'/'.$localpath_theme_resource;
+	// 	$realpath_copyto = $_SERVER['DOCUMENT_ROOT'].$this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
+	// 	if( is_file($realpath_original) ){
+	// 		// 対象がファイルだったら
+	// 		if( strtolower($this->dbh()->get_extension($realpath_copyto)) == 'nopublish' ){
+	// 			// 拡張子 *.nopublish のファイルはコピーしない
+	// 		}elseif( !is_file($realpath_copyto) || $this->dbh()->is_newer_a_than_b( $realpath_original, $realpath_copyto ) ){
+	// 			// キャッシュが存在しないか、オリジナルの方が新しい場合。
+	// 			// キャッシュを作成・更新。
+	// 			$this->dbh()->mkdir_all( dirname($realpath_copyto) );
+	// 			$this->dbh()->copy( $realpath_original, $realpath_copyto );
+	// 			$this->add_relatedlink( $this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource );
+	// 		}
+	// 	}elseif( is_dir($realpath_original) ){
+	// 		// 対象がディレクトリだったら
+	// 		$this->dbh()->mkdir_all( $realpath_copyto );
+	// 		foreach( $this->dbh()->ls($realpath_original) as $tmp_basename ){
+	// 			$this->path_theme_files( $localpath_theme_resource.'/'.$tmp_basename );
+	// 		}
+	// 	}
+
+	// 	$rtn = $this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
+	// 	return $rtn;
+	// }//path_theme_files()
+
+	// /**
+	//  * テーマリソースのサーバー内部パスを得る。
+	//  * 
+	//  * @param string $localpath_theme_resource テーマリソースのパス
+	//  * @return string テーマリソースのサーバー内部パス
+	//  */
+	// public function realpath_theme_files( $localpath_theme_resource = null ){
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'themes/'.$this->theme()->get_theme_id().'/theme.files/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath.$localpath_theme_resource );
+	// 	if( is_dir($rtn) ){
+	// 		$rtn .= '/';
+	// 	}
+	// 	return $rtn;
+	// }//realpath_theme_files()
+
+	// /**
+	//  * カレントコンテンツのramdataディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @return string RAMデータディレクトリのサーバー内部パス
+	//  */
+	// public function realpath_ramdata_dir(){
+	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
+	// 	$path_content = $tmp_page_info['content'];
+
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/ramdata/contents/'.$this->dbh()->trim_extension($path_content).'.files/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	if( !is_dir($rtn) ){
+	// 		$this->dbh()->mkdir_all($rtn);
+	// 	}
+	// 	return $rtn;
+	// }
+
+	// /**
+	//  * 選択されたテーマのramdataディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @return string RAMデータディレクトリのサーバー内部パス
+	//  */
+	// public function realpath_theme_ramdata_dir(){
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/ramdata/themes/'.$this->theme()->get_theme_id().'/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	if( !is_dir($rtn) ){
+	// 		$this->dbh()->mkdir_all($rtn);
+	// 	}
+	// 	return $rtn;
+	// }
+
+	// /**
+	//  * カレントコンテンツのプライベートキャッシュディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @return string プライベートキャッシュディレクトリのサーバー内部パス
+	//  */
+	// public function realpath_private_cache_dir(){
+	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
+	// 	$path_content = $tmp_page_info['content'];
+
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/contents/'.$this->dbh()->trim_extension($path_content).'.files/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	if( !is_dir($rtn) ){
+	// 		$this->dbh()->mkdir_all($rtn);
+	// 	}
+	// 	return $rtn;
+	// }
+
+	// /**
+	//  * 選択されたテーマのプライベートキャッシュディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @return string プライベートキャッシュディレクトリのサーバー内部パス
+	//  */
+	// public function realpath_theme_private_cache_dir(){
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/themes/'.$this->theme()->get_theme_id().'/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	if( !is_dir($rtn) ){
+	// 		$this->dbh()->mkdir_all($rtn);
+	// 	}
+	// 	return $rtn;
+	// }
+
+	// /**
+	//  * プラグインのプライベートキャッシュディレクトリのサーバー内部パスを得る。
+	//  * 
+	//  * @param string $plugin_name プラグイン名
+	//  * @return string プライベートキャッシュディレクトリのサーバー内部パス
+	//  */
+	// public function realpath_plugin_private_cache_dir($plugin_name){
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/plugins/'.$plugin_name.'/';
+	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	if( !is_dir($rtn) ){
+	// 		$this->dbh()->mkdir_all($rtn);
+	// 	}
+	// 	return $rtn;
+	// }
 
 	/**
 	 * テキストを、指定の文字セットに変換する。
