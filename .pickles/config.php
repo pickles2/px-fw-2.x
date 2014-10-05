@@ -12,6 +12,7 @@ return call_user_func( function(){
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
+	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
 	$conf->paths_proc_type = array(
 		// 処理方法を設定
 		//     - process = Pickles の加工処理を通して出力

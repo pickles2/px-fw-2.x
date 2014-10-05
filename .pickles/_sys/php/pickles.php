@@ -877,51 +877,49 @@ class pickles{
 		return $this->fs()->get_realpath($this->get_path_docroot().$rtn);
 	}//realpath_files()
 
-	// /**
-	//  * ローカルリソースのキャッシュディレクトリのパスを得る。
-	//  * 
-	//  * @param string $localpath_resource ローカルリソースのパス
-	//  * @return string ローカルリソースキャッシュのパス
-	//  */
-	// public function path_files_cache( $localpath_resource = null ){
-	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
-	// 	$path_content = $tmp_page_info['content'];
-	// 	if( is_null($path_content) ){
-	// 		$path_content = $this->req()->get_request_file_path();
-	// 	}
-	// 	unset($tmp_page_info);
+	/**
+	 * ローカルリソースのキャッシュディレクトリのパスを得る。
+	 * 
+	 * @param string $localpath_resource ローカルリソースのパス
+	 * @return string ローカルリソースキャッシュのパス
+	 */
+	public function path_files_cache( $localpath_resource = null ){
+		$tmp_page_info = $this->site()->get_current_page_info();
+		$path_content = $tmp_page_info['content'];
+		if( is_null($path_content) ){
+			$path_content = $this->req()->get_request_file_path();
+		}
+		unset($tmp_page_info);
 
-	// 	$path_original = $this->get_install_path().$path_content;
-	// 	$path_original = $this->dbh()->get_realpath($this->dbh()->trim_extension($path_original).'.files/'.$localpath_resource);
-	// 	$rtn = $this->get_install_path().'/'.$this->get_conf('system.public_cache_dir').'/contents'.$path_content;
-	// 	$rtn = $this->dbh()->get_realpath($this->dbh()->trim_extension($rtn).'.files/'.$localpath_resource);
-	// 	if( file_exists( $_SERVER['DOCUMENT_ROOT'].$path_original ) ){
-	// 		if( is_dir($_SERVER['DOCUMENT_ROOT'].$path_original) ){
-	// 			$rtn .= '/';
-	// 			$this->dbh()->mkdir_all( $_SERVER['DOCUMENT_ROOT'].$rtn );
-	// 		}else{
-	// 			$this->dbh()->mkdir_all( dirname( $_SERVER['DOCUMENT_ROOT'].$rtn ) );
-	// 		}
-	// 		$this->dbh()->copy_all( $_SERVER['DOCUMENT_ROOT'].$path_original, $_SERVER['DOCUMENT_ROOT'].$rtn );
-	// 	}
-	// 	$this->add_relatedlink($rtn);
-	// 	return $rtn;
-	// }//path_files_cache()
+		$path_original = $this->get_path_controot().$path_content;
+		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
+		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/contents'.$path_content;
+		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
+		if( file_exists( $this->get_path_docroot().$path_original ) ){
+			if( is_dir($this->get_path_docroot().$path_original) ){
+				$rtn .= '/';
+			}
+			$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+			$this->fs()->copy_r( $this->get_path_docroot().$path_original, $this->get_path_docroot().$rtn );
+		}
+		$this->add_relatedlink($rtn);
+		return $rtn;
+	}//path_files_cache()
 
-	// /**
-	//  * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
-	//  * 
-	//  * @param string $localpath_resource ローカルリソースのパス
-	//  * @return string ローカルリソースキャッシュのサーバー内部パス
-	//  */
-	// public function realpath_files_cache( $localpath_resource = null ){
-	// 	$rtn = $this->path_files_cache( $localpath_resource );
-	// 	$rtn = $this->dbh()->get_realpath( $_SERVER['DOCUMENT_ROOT'].$rtn );
-	// 	if( is_dir($rtn) ){
-	// 		$rtn .= '/';
-	// 	}
-	// 	return $rtn;
-	// }//realpath_files_cache()
+	/**
+	 * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
+	 * 
+	 * @param string $localpath_resource ローカルリソースのパス
+	 * @return string ローカルリソースキャッシュのサーバー内部パス
+	 */
+	public function realpath_files_cache( $localpath_resource = null ){
+		$rtn = $this->path_files_cache( $localpath_resource );
+		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		if( is_dir($rtn) ){
+			$rtn .= '/';
+		}
+		return $rtn;
+	}//realpath_files_cache()
 
 	// /**
 	//  * テーマリソースディレクトリのパスを得る。
@@ -933,7 +931,7 @@ class pickles{
 	// 	$localpath_theme_resource = preg_replace('/^\/+/', '', $localpath_theme_resource);
 
 	// 	$realpath_original = $this->realpath_theme_files().'/'.$localpath_theme_resource;
-	// 	$realpath_copyto = $_SERVER['DOCUMENT_ROOT'].$this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
+	// 	$realpath_copyto = $this->get_path_docroot().$this->get_path_controot().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
 	// 	if( is_file($realpath_original) ){
 	// 		// 対象がファイルだったら
 	// 		if( strtolower($this->dbh()->get_extension($realpath_copyto)) == 'nopublish' ){
@@ -943,7 +941,7 @@ class pickles{
 	// 			// キャッシュを作成・更新。
 	// 			$this->dbh()->mkdir_all( dirname($realpath_copyto) );
 	// 			$this->dbh()->copy( $realpath_original, $realpath_copyto );
-	// 			$this->add_relatedlink( $this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource );
+	// 			$this->add_relatedlink( $this->get_path_controot().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource );
 	// 		}
 	// 	}elseif( is_dir($realpath_original) ){
 	// 		// 対象がディレクトリだったら
@@ -953,7 +951,7 @@ class pickles{
 	// 		}
 	// 	}
 
-	// 	$rtn = $this->get_install_path().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
+	// 	$rtn = $this->get_path_controot().''.$this->get_conf('system.public_cache_dir').'/themes/'.$this->theme()->get_theme_id().'/'.$localpath_theme_resource;
 	// 	return $rtn;
 	// }//path_theme_files()
 
@@ -965,7 +963,7 @@ class pickles{
 	//  */
 	// public function realpath_theme_files( $localpath_theme_resource = null ){
 	// 	$lib_realpath = $this->get_conf('paths.px_dir').'themes/'.$this->theme()->get_theme_id().'/theme.files/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath.$localpath_theme_resource );
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath.$localpath_theme_resource );
 	// 	if( is_dir($rtn) ){
 	// 		$rtn .= '/';
 	// 	}
@@ -981,8 +979,8 @@ class pickles{
 	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
 	// 	$path_content = $tmp_page_info['content'];
 
-	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/ramdata/contents/'.$this->dbh()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/ramdata/contents/'.$this->fs()->trim_extension($path_content).'.files/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
 	// 	if( !is_dir($rtn) ){
 	// 		$this->dbh()->mkdir_all($rtn);
 	// 	}
@@ -996,7 +994,7 @@ class pickles{
 	//  */
 	// public function realpath_theme_ramdata_dir(){
 	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/ramdata/themes/'.$this->theme()->get_theme_id().'/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
 	// 	if( !is_dir($rtn) ){
 	// 		$this->dbh()->mkdir_all($rtn);
 	// 	}
@@ -1012,8 +1010,8 @@ class pickles{
 	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
 	// 	$path_content = $tmp_page_info['content'];
 
-	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/contents/'.$this->dbh()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/contents/'.$this->fs()->trim_extension($path_content).'.files/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
 	// 	if( !is_dir($rtn) ){
 	// 		$this->dbh()->mkdir_all($rtn);
 	// 	}
@@ -1027,7 +1025,7 @@ class pickles{
 	//  */
 	// public function realpath_theme_private_cache_dir(){
 	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/themes/'.$this->theme()->get_theme_id().'/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
 	// 	if( !is_dir($rtn) ){
 	// 		$this->dbh()->mkdir_all($rtn);
 	// 	}
@@ -1042,7 +1040,7 @@ class pickles{
 	//  */
 	// public function realpath_plugin_private_cache_dir($plugin_name){
 	// 	$lib_realpath = $this->get_conf('paths.px_dir').'_sys/caches/plugins/'.$plugin_name.'/';
-	// 	$rtn = $this->dbh()->get_realpath( $lib_realpath ).'/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
 	// 	if( !is_dir($rtn) ){
 	// 		$this->dbh()->mkdir_all($rtn);
 	// 	}
