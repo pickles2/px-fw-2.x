@@ -4,3 +4,4 @@ scss_cache
 /vendor/
 /.pickles/_sys/ram/
 composer.lock
+/caches/

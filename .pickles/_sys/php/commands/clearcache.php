@@ -10,7 +10,7 @@ namespace pickles\commands;
 class clearcache{
 
 	private $px;
-	private $path_homedir, $path_docroot;
+	private $path_homedir, $path_docroot, $path_public_caches;
 
 	/**
 	 * Starting function
@@ -30,7 +30,8 @@ class clearcache{
 	public function __construct( $px ){
 		$this->px = $px;
 		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir() ).DIRECTORY_SEPARATOR;
-		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_controot() ).DIRECTORY_SEPARATOR;
+		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot() ).DIRECTORY_SEPARATOR;
+		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$this->px->conf()->public_cache_dir ).DIRECTORY_SEPARATOR;
 	}
 
 
@@ -46,6 +47,7 @@ class clearcache{
 		print '------------------------'."\n";
 		print 'pickles home directory: '.$this->path_homedir."\n";
 		print 'pickles docroot directory: '.$this->path_docroot."\n";
+		print 'pickles public cache directory: '.$this->path_public_caches."\n";
 		print '------------------------'."\n";
 		print "\n";
 		$this->exec();
@@ -68,6 +70,9 @@ class clearcache{
 		print "\n";
 		print '-- cleaning "publish"'."\n";
 		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
+		print "\n";
+		print '-- cleaning "public caches"'."\n";
+		print $this->cleanup_dir( $this->path_public_caches ).' items done.'."\n";
 		print "\n";
 		return true;
 	}
