@@ -174,7 +174,11 @@ class publish{
 						$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
 						foreach( $bin->relatedlinks as $link ){
 							$link = $this->px->fs()->get_realpath( $link, dirname($path) );
-							$this->add_queue( $link );
+							if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
+								$this->make_list_by_dir_scan( $link.'/' );
+							}else{
+								$this->add_queue( $link );
+							}
 						}
 					}elseif( $bin->status >= 100 ){
 					}
