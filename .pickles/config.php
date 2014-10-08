@@ -66,13 +66,13 @@ return call_user_func( function(){
 	$conf->commands->php = 'php';
 
 
+
+
 	// -------- functions --------
 
 	$conf->funcs = new stdClass;
 
-	/**
-	 * Starting
-	 */
+	// Starting
 	require_once(__DIR__.'/_sys/php/commands/phpinfo.php');
 	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
@@ -81,24 +81,21 @@ return call_user_func( function(){
 		'pickles\commands\phpinfo::funcs_starting' ,
 		'pickles\commands\clearcache::funcs_starting' ,
 	];
-	/**
-	 * Before content
-	 */
+
+	// Before content
 	$conf->funcs->before_content = [
 		'pickles\commands\publish::funcs_before_content' ,
 	];
 
-	/**
-	 * extensions
-	 */
+	// extensions
 	$conf->funcs->extensions = new stdClass;
 	$conf->funcs->extensions->html = [
 		'tomk79\pickles2\autoindex\autoindex::exec' ,
 	];
-	// $conf->funcs->extensions->css = [
-	// ];
-	// $conf->funcs->extensions->js = [
-	// ];
+	$conf->funcs->extensions->css = [
+	];
+	$conf->funcs->extensions->js = [
+	];
 	$conf->funcs->extensions->md = [
 		'pickles\extensions\md::exec' ,
 		'tomk79\pickles2\autoindex\autoindex::exec' ,
@@ -109,16 +106,12 @@ return call_user_func( function(){
 
 
 
-	/**
-	 * theme
-	 */
+	// theme
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
 	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
 
 
-	/**
-	 * output filter
-	 */
+	// output filter
 	require_once(__DIR__.'/_sys/php/pkg/outputfilter.php');
 	$conf->funcs->output_filter = [
 		'tomk79\pickles2\outputfilter\outputfilter::output_filter' ,
