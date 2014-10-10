@@ -78,30 +78,30 @@ return call_user_func( function(){
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
 	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->starting = [
-		'pickles\commands\phpinfo::funcs_starting' ,
-		'pickles\commands\clearcache::funcs_starting' ,
+		'pickles\commands\phpinfo::funcs_starting' , // PX=phpinfo
+		'pickles\commands\clearcache::funcs_starting' , // PX=clearcache
 	];
 
 	// Before content
 	$conf->funcs->before_content = [
-		'pickles\commands\publish::funcs_before_content' ,
+		'pickles\commands\publish::funcs_before_content' , // PX=publish
 	];
 
 	// extensions
 	$conf->funcs->extensions = new stdClass;
 	$conf->funcs->extensions->html = [
-		'tomk79\pickles2\autoindex\autoindex::exec' ,
+		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
 	];
 	$conf->funcs->extensions->css = [
 	];
 	$conf->funcs->extensions->js = [
 	];
 	$conf->funcs->extensions->md = [
-		'pickles\extensions\md::exec' ,
-		'tomk79\pickles2\autoindex\autoindex::exec' ,
+		'pickles\extensions\md::exec' , // Markdown文法を処理する
+		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
 	];
 	$conf->funcs->extensions->scss = [
-		'pickles\extensions\scss::exec' ,
+		'pickles\extensions\scss::exec' , // SCSS文法を処理する
 	];
 
 
@@ -112,9 +112,9 @@ return call_user_func( function(){
 
 
 	// output filter
-	require_once(__DIR__.'/_sys/php/pkg/outputfilter.php');
+	require_once(__DIR__.'/_sys/php/pkg/encodingconverter.php');
 	$conf->funcs->output_filter = [
-		'tomk79\pickles2\outputfilter\outputfilter::output_filter' ,
+		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 	];
 
 

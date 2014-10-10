@@ -1,13 +1,13 @@
 <?php
 /**
- * PX Commands "outputfilter"
+ * PX Commands "encodingconverter"
  */
 namespace tomk79\pickles2\outputfilter;
 
 /**
- * PX Commands "outputfilter"
+ * PX Commands "encodingconverter"
  */
-class outputfilter{
+class encodingconverter{
 
 	private $px;
 
