@@ -15,7 +15,13 @@ class encodingconverter{
 	 * Starting function
 	 */
 	public static function output_filter( $px ){
-		new self( $px );
+		$me = new self( $px );
+		$keys = $px->get_content_keys();
+		foreach( $keys as $key ){
+			$src = $px->pull_content( $key );
+			$src = $me->apply($src);
+			$px->replace_content( $src, $key );
+		}
 	}
 
 	/**
@@ -23,9 +29,6 @@ class encodingconverter{
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
-		$src = $px->get_response_body();
-		$src = $this->apply($src);
-		$px->set_response_body( $src );
 	}
 
 	/**
@@ -37,28 +40,12 @@ class encodingconverter{
 			$output_encoding = $this->px->conf()->output_encoding;
 			if( !strlen($output_encoding) ){ $output_encoding = 'UTF-8'; }
 
-			$extension = strtolower( pathinfo( $this->px->get_path_content() , PATHINFO_EXTENSION ) );
-			switch( strtolower( $extension ) ){
-				case 'css':
-					//出力ソースの文字コード変換
-					$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars($output_encoding).'";',$src);
-					$src = $this->px->convert_encoding( $src, $output_encoding );
-					break;
-				case 'js':
-					//出力ソースの文字コード変換
-					$src = $this->px->convert_encoding( $src, $output_encoding );
-					break;
-				case 'html':
-				case 'htm':
-					//出力ソースの文字コード変換(HTML)
-					$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
-					$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
-					$src = $this->px->convert_encoding( $src, $output_encoding );
-					break;
-				default:
-					$src = $this->px->convert_encoding( $src, $output_encoding );
-					break;
-			}
+			//出力ソースの文字コード変換(HTML)
+			$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars($output_encoding).'";',$src);
+			$src = preg_replace('/\@charset\s+\'[a-zA-Z0-9\_\-\.]+\'\;/si','@charset \''.htmlspecialchars($output_encoding).'\';',$src);
+			$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
+			$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
+			$src = $this->px->convert_encoding( $src, $output_encoding );
 
 		}
 
