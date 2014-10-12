@@ -16,8 +16,8 @@ class pickles{
 	private $fs, $req, $site;
 	private $directory_index;
 	private $contents_cabinet = array(
-		''=>'',    //  メインコンテンツ
-		'head'=>'' //  ヘッドセクションに追記
+		// ''=>'',    //  メインコンテンツ
+		// 'head'=>'' //  ヘッドセクションに追記
 	);
 	/**
 	 * 関連ファイルのURL情報
@@ -403,8 +403,8 @@ class pickles{
 	/**
 	 * コンテンツキャビネットにコンテンツを送る。
 	 * 
-	 * ソースコードを$themeオブジェクトに預けます。
-	 * このメソッドから預けられたコードは、同じ `$content_name` 値 をキーにして、`$theme->pull_content()` から引き出すことができます。
+	 * ソースコードを$pxオブジェクトに預けます。
+	 * このメソッドから預けられたコードは、同じ `$content_name` 値 をキーにして、`$px->pull_content()` から引き出すことができます。
 	 * 
 	 * この機能は、コンテンツからテーマへコンテンツを渡すために使用されます。
 	 * 
@@ -412,7 +412,7 @@ class pickles{
 	 * 
 	 * @param string $src 送るHTMLソース
 	 * @param string $content_name キャビネットの格納名。
-	 * $theme->pull_content() から取り出す際に使用する名称です。
+	 * $px->pull_content() から取り出す際に使用する名称です。
 	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
 	 * 
 	 * @return bool 成功時 true、失敗時 false
@@ -427,12 +427,12 @@ class pickles{
 	/**
 	 * コンテンツキャビネットのコンテンツを置き換える。
 	 * 
-	 * ソースコードを$themeオブジェクトに預けます。
-	 * `$theme->send_content()` と同じですが、複数回送信した場合に、このメソッドは追記ではなく上書きする点が異なります。
+	 * ソースコードを$pxオブジェクトに預けます。
+	 * `$px->send_content()` と同じですが、複数回送信した場合に、このメソッドは追記ではなく上書きする点が異なります。
 	 * 
 	 * @param string $src 送るHTMLソース
 	 * @param string $content_name キャビネットの格納名。
-	 * $theme->pull_content() から取り出す際に使用する名称です。
+	 * $px->pull_content() から取り出す際に使用する名称です。
 	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
 	 * 
 	 * @return bool 成功時 true、失敗時 false
@@ -446,6 +446,9 @@ class pickles{
 
 	/**
 	 * コンテンツキャビネットからコンテンツを引き出す
+	 * 
+	 * 引き出したコンテンツは、キャビネットからはなくなります。
+	 * 
 	 * @param string $content_name キャビネット上のコンテンツ名
 	 * @param bool $do_finalize ファイナライズ処理を有効にするか(default: true)
 	 * @return mixed 成功時、キャビネットから得られたHTMLソースを返す。失敗時、false
@@ -455,8 +458,18 @@ class pickles{
 		if( !is_string($content_name) ){ return false; }
 
 		$content = $this->contents_cabinet[$content_name];
+		unset( $this->contents_cabinet[$content_name] );// コンテンツを引き出したら、キャビネット上にはなくなる。
 
 		return $content;
+	}
+
+	/**
+	 * コンテンツキャビネットにあるコンテンツの索引を取得する
+	 * @return array キャビネットのキーの一覧
+	 */
+	public function get_content_keys(){
+		$keys = array_keys( $this->contents_cabinet );
+		return $keys;
 	}
 
 	/**
