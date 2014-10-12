@@ -13,7 +13,7 @@
 "/sample_pages/page1/4/{*}",,,"ダイナミックパス",,,,"/sample_pages/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
 "alias:/sample_pages/page2/",,,"サンプルページ2へのエイリアス",,,,"/sample_pages/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
 "/sample_pages/page2/",,,"サンプルページ2",,,,,1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",1
-"/sample_pages/page2/1.html",,,"サンプル2-1",,,,"/sample_pages/page2/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
+"/sample_pages/page2/1.htm",,,"サンプル2-1",,,,"/sample_pages/page2/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
 "/sample_pages/page2/2.html",,,"サンプル2-2",,,,"/sample_pages/page2/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
 "/sample_pages/page3/",,,"サンプルページ3",,,,,1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",1
 "/sample_pages/page3/1.html",,,"サンプル3-1",,,,"/sample_pages/page3/",1,,,,,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",

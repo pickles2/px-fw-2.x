@@ -15,9 +15,9 @@ return call_user_func( function(){
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
 	$conf->paths_proc_type = array(
 		// パスのパターン別に処理方法を設定
-		//     - process = Pickles の加工処理を通して出力
 		//     - ignore = 対象外パス
 		//     - direct = 加工せずそのまま出力する(デフォルト)
+		//     - その他 = extension 名
 		// パターンは先頭から検索され、はじめにマッチした設定を採用する。
 		// ワイルドカードとして "*"(アスタリスク) を使用可。
 		'/.htaccess' => 'ignore' ,
@@ -35,10 +35,10 @@ return call_user_func( function(){
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
 
-		'*.html' => 'process' ,
-		'*.htm' => 'process' ,
-		'*.css' => 'process' ,
-		'*.js' => 'process' ,
+		'*.html' => 'html' ,
+		'*.htm' => 'html' ,
+		'*.css' => 'css' ,
+		'*.js' => 'js' ,
 		'*.png' => 'direct' ,
 		'*.jpg' => 'direct' ,
 		'*.gif' => 'direct' ,
