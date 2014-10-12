@@ -155,7 +155,14 @@ class publish{
 			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
 			$proc_type = $this->px->get_path_proc_type( $path );
 			switch( $proc_type ){
-				case 'process':
+				case 'direct':
+					// direct
+					print $ext.' -> direct'."\n";
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
+					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
+					break;
+
+				default:
 					// pickles execute
 					print $ext.' -> '.$proc_type."\n";
 					$bin = $this->passthru( array(
@@ -184,18 +191,10 @@ class publish{
 					}
 
 					break;
-
-				case 'copy':
-				default:
-					// copy
-					print $ext.' -> copy'."\n";
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
-					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
-					break;
 			}
 
 			if( !empty( $this->path_publish_dir ) ){
-				// パブリッシュ先ディレクトリにコピー
+				// パブリッシュ先ディレクトリに都度コピー
 				if( $this->px->fs()->is_file( $this->path_publish_dir.$path ) ){
 					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$path ) );
 					$this->px->fs()->copy(

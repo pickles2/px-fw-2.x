@@ -113,31 +113,9 @@ class pickles{
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
 
-		$fnc_call_plugin_funcs = function( $func_list ){
-			if( is_null($func_list) ){ return false; }
-			$param_arr = func_get_args();
-			array_shift($param_arr);
-
-			if( @!empty( $func_list ) ){
-				// functions
-				if( is_string($func_list) ){
-					$fnc_name = $func_list;
-					$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-					call_user_func_array( $fnc_name, $param_arr);
-				}elseif( is_array($func_list) ){
-					foreach( $func_list as $fnc_name ){
-						if( is_string($fnc_name) ){
-							$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-						}
-						call_user_func_array( $fnc_name, $param_arr);
-					}
-				}
-				unset($fnc_name);
-			}
-		};
 
 		// Starting functions
-		$fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
 
 
 
@@ -161,7 +139,7 @@ class pickles{
 		$this->output_content_type(); // デフォルトの Content-type を出力
 
 		// Before contents functions
-		$fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
 
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
@@ -174,17 +152,17 @@ class pickles{
 
 		// extension functions
 		$ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
-		$fnc_call_plugin_funcs( @$this->conf->funcs->extensions->{$ext}, $this );
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->extensions->{$ext}, $this );
 
 
-		// execute Theme
+		// // execute Theme
 		$fnc_name = preg_replace( '/^\\\\*/', '\\', @$this->conf->funcs->theme );
 		$this->response_body = call_user_func( $fnc_name, $this );
 
 
 
 		// Output filter functions
-		$fnc_call_plugin_funcs( @$this->conf->funcs->output_filter, $this );
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->output_filter, $this );
 
 
 
@@ -208,6 +186,34 @@ class pickles{
 		}
 
 		exit;
+	}
+
+	/**
+	 * call plugin functions
+	 */
+	private static function fnc_call_plugin_funcs( $func_list ){
+		if( is_null($func_list) ){ return false; }
+		$param_arr = func_get_args();
+		array_shift($param_arr);
+
+		if( @!empty( $func_list ) ){
+			// functions
+			if( is_string($func_list) ){
+				$fnc_name = $func_list;
+				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				call_user_func_array( $fnc_name, $param_arr);
+			}elseif( is_array($func_list) ){
+				foreach( $func_list as $fnc_name ){
+					if( is_string($fnc_name) ){
+						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+					}
+					$param_arr_dd = $param_arr;
+					array_unshift( $param_arr_dd, $fnc_name );
+					call_user_func_array( 'self::fnc_call_plugin_funcs', $param_arr_dd);
+				}
+			}
+			unset($fnc_name);
+		}
 	}
 
 

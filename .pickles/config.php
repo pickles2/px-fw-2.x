@@ -14,7 +14,7 @@ return call_user_func( function(){
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
 	$conf->paths_proc_type = array(
-		// 処理方法を設定
+		// パスのパターン別に処理方法を設定
 		//     - process = Pickles の加工処理を通して出力
 		//     - ignore = 対象外パス
 		//     - direct = 加工せずそのまま出力する(デフォルト)
@@ -92,6 +92,7 @@ return call_user_func( function(){
 	$conf->funcs->extensions = new stdClass;
 	$conf->funcs->extensions->html = [
 		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
+		// 'pickles\themes\pickles\theme::exec' , // テーマにくるむ
 	];
 	$conf->funcs->extensions->css = [
 	];
@@ -99,15 +100,16 @@ return call_user_func( function(){
 	];
 	$conf->funcs->extensions->md = [
 		'pickles\extensions\md::exec' , // Markdown文法を処理する
-		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
+		$conf->funcs->extensions->html , // html の処理を追加
 	];
 	$conf->funcs->extensions->scss = [
 		'pickles\extensions\scss::exec' , // SCSS文法を処理する
+		$conf->funcs->extensions->css , // css の処理を追加
 	];
 
 
 
-	// theme
+	// // theme
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
 	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
 
