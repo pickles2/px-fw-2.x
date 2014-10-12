@@ -300,7 +300,7 @@ class publish{
 			}else{
 				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
-				if( $this->px->get_path_proc_type( $tmp_localpath ) != 'process' ){
+				if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'direct' ){
 					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				}
 				$this->add_queue( $tmp_localpath );

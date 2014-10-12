@@ -23,8 +23,8 @@ return call_user_func( function(){
 	// system
 	$conf->file_default_permission = '775';
 	$conf->dir_default_permission = '775';
-	$conf->filesystem_encoding = 'utf-8';
-	$conf->output_encoding = 'shift_jis';
+	$conf->filesystem_encoding = 'UTF-8';
+	$conf->output_encoding = 'UTF-8';
 	$conf->output_eol_coding = 'lf';
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
