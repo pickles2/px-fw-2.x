@@ -132,7 +132,7 @@ class pickles{
 		}
 		$ext = $this->get_path_proc_type();
 		// $ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
-		foreach( array_keys( get_object_vars( $this->conf->funcs->extensions ) ) as $tmp_ext ){
+		foreach( array_keys( get_object_vars( $this->conf->funcs->process ) ) as $tmp_ext ){
 			if( $this->fs()->is_file( './'.$this->path_content.'.'.$tmp_ext ) ){
 				$ext = $tmp_ext;
 				$this->path_content = $this->path_content.'.'.$tmp_ext;
@@ -153,8 +153,8 @@ class pickles{
 		}
 
 
-		// extension functions
-		self::fnc_call_plugin_funcs( @$this->conf->funcs->extensions->{$ext}, $this );
+		// process functions
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->process->{$ext}, $this );
 
 
 		// execute Theme
@@ -315,7 +315,7 @@ class pickles{
 	 * @return string 処理方法
 	 * - ignore = 対象外パス
 	 * - direct = 加工せずそのまま出力する(デフォルト)
-	 * - その他 = extension 名を格納して返す
+	 * - その他 = process名を格納して返す
 	 */
 	public function get_path_proc_type( $path = null ){
 		static $rtn = array();

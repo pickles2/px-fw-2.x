@@ -73,9 +73,6 @@ return call_user_func( function(){
 	$conf->funcs = new stdClass;
 
 	// Starting
-	require_once(__DIR__.'/_sys/php/commands/phpinfo.php');
-	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
-	require_once(__DIR__.'/_sys/php/commands/publish.php');
 	$conf->funcs->starting = [
 		'pickles\commands\phpinfo::funcs_starting' , // PX=phpinfo
 		'pickles\commands\clearcache::funcs_starting' , // PX=clearcache
@@ -87,36 +84,33 @@ return call_user_func( function(){
 	];
 
 
-	// extensions
-	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
-	$conf->funcs->extensions = new stdClass;
-	$conf->funcs->extensions->html = [
+	// process
+	$conf->funcs->process = new stdClass;
+	$conf->funcs->process->html = [
 		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
 		// 'pickles\themes\pickles\theme::exec' , // テーマにくるむ
 	];
-	$conf->funcs->extensions->css = [
+	$conf->funcs->process->css = [
 	];
-	$conf->funcs->extensions->js = [
+	$conf->funcs->process->js = [
 	];
-	$conf->funcs->extensions->md = [
-		'pickles\extensions\md::exec' , // Markdown文法を処理する
-		$conf->funcs->extensions->html , // html の処理を追加
+	$conf->funcs->process->md = [
+		'pickles\processors\md::exec' , // Markdown文法を処理する
+		$conf->funcs->process->html , // html の処理を追加
 	];
-	$conf->funcs->extensions->scss = [
-		'pickles\extensions\scss::exec' , // SCSS文法を処理する
-		$conf->funcs->extensions->css , // css の処理を追加
+	$conf->funcs->process->scss = [
+		'pickles\processors\scss::exec' , // SCSS文法を処理する
+		$conf->funcs->process->css , // css の処理を追加
 	];
 
 
 
-	// // theme
-	require_once(__DIR__.'/themes/pickles/php/theme.php');
+	// theme
 	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
 
 
 
 	// output filter
-	require_once(__DIR__.'/_sys/php/pkg/encodingconverter.php');
 	$conf->funcs->output_filter = [
 		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 	];

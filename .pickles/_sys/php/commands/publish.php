@@ -284,11 +284,11 @@ class publish{
 	 * make list by directory scan
 	 */
 	private function make_list_by_dir_scan( $path = null ){
-		$extensions = array_keys( get_object_vars( $this->px->conf()->funcs->extensions ) );
-		foreach( $extensions as $key=>$val ){
-			$extensions[$key] = preg_quote($val);
+		$process = array_keys( get_object_vars( $this->px->conf()->funcs->process ) );
+		foreach( $process as $key=>$val ){
+			$process[$key] = preg_quote($val);
 		}
-		$preg_exts = '('.implode( '|', $extensions ).')';
+		$preg_exts = '('.implode( '|', $process ).')';
 
 		$ls = $this->px->fs()->ls( './'.$path );
 		if( $this->px->is_ignore_path( './'.$path ) ){

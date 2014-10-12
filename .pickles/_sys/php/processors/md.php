@@ -1,11 +1,11 @@
 <?php
 /**
- * extention "*.md"
+ * processor "*.md"
  */
-namespace pickles\extensions;
+namespace pickles\processors;
 
 /**
- * extention "*.md" class
+ * processor "*.md" class
  */
 class md{
 	public static function exec( $px ){

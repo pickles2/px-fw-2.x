@@ -1,11 +1,11 @@
 <?php
 /**
- * extention "*.scss"
+ * processor "*.scss"
  */
-namespace pickles\extensions;
+namespace pickles\processors;
 
 /**
- * extention "*.scss" class
+ * processor "*.scss" class
  */
 class scss{
 	public static function exec( $px ){
