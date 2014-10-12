@@ -171,26 +171,10 @@ class pickles{
 			self::exec_content( $this );
 		}
 
+
+		// extension functions
 		$ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
-		if( @!empty( $this->conf->funcs->extensions->{$ext} ) ){
-			// extension functions
-			foreach( $this->contents_cabinet as $contents_key=>$src ){
-				if( is_string($this->conf->funcs->extensions->{$ext}) ){
-					$fnc_name = $this->conf->funcs->extensions->{$ext};
-					$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-					$src = call_user_func( $fnc_name, $this, $src, $contents_key );
-				}elseif( is_array($this->conf->funcs->extensions->{$ext}) ){
-					foreach( $this->conf->funcs->extensions->{$ext} as $fnc_name ){
-						if( is_string($fnc_name) ){
-							$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-						}
-						$src = call_user_func( $fnc_name, $this, $src, $contents_key );
-					}
-				}
-				$this->contents_cabinet[$contents_key] = $src;
-			}
-		}
-		unset($src, $fnc_name);
+		$fnc_call_plugin_funcs( @$this->conf->funcs->extensions->{$ext}, $this );
 
 
 		// execute Theme
@@ -456,6 +440,7 @@ class pickles{
 	public function pull_content( $content_name = '' ){
 		if( !strlen($content_name) ){ $content_name = ''; }
 		if( !is_string($content_name) ){ return false; }
+		if( !array_key_exists($content_name, $this->contents_cabinet) ){ return null; }
 
 		$content = $this->contents_cabinet[$content_name];
 		unset( $this->contents_cabinet[$content_name] );// コンテンツを引き出したら、キャビネット上にはなくなる。

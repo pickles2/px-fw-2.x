@@ -19,15 +19,19 @@ class autoindex{
 	/**
 	 * extensions function
 	 */
-	public static function exec( $px, $src, $contents_key ){
+	public static function exec( $px ){
 		$autoindex = new self( $px );
 
 		//  autoindex
 		if( strlen( $autoindex->func_data_memos ) ){
-			$src = $autoindex->apply_autoindex( $src );
+			foreach( $px->get_content_keys() as $key ){
+				$src = $px->pull_content( $key );
+				$src = $autoindex->apply_autoindex( $src );
+				$src = $px->replace_content( $src, $key );
+			}
 		}
 
-		return $src;
+		return true;
 	}
 
 	/**

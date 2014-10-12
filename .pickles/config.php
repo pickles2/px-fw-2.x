@@ -76,7 +76,6 @@ return call_user_func( function(){
 	require_once(__DIR__.'/_sys/php/commands/phpinfo.php');
 	require_once(__DIR__.'/_sys/php/commands/clearcache.php');
 	require_once(__DIR__.'/_sys/php/commands/publish.php');
-	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->starting = [
 		'pickles\commands\phpinfo::funcs_starting' , // PX=phpinfo
 		'pickles\commands\clearcache::funcs_starting' , // PX=clearcache
@@ -87,7 +86,9 @@ return call_user_func( function(){
 		'pickles\commands\publish::funcs_before_content' , // PX=publish
 	];
 
+
 	// extensions
+	require_once(__DIR__.'/_sys/php/pkg/autoindex/autoindex.php');
 	$conf->funcs->extensions = new stdClass;
 	$conf->funcs->extensions->html = [
 		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
@@ -109,6 +110,7 @@ return call_user_func( function(){
 	// theme
 	require_once(__DIR__.'/themes/pickles/php/theme.php');
 	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
+
 
 
 	// output filter
