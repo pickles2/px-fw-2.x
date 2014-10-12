@@ -24,10 +24,6 @@ class pickles{
 	 */
 	private $relatedlinks = array();
 	/**
-	 * 応答出力データ
-	 */
-	private $response_body;
-	/**
 	 * 応答ステータスコード
 	 */
 	private $response_status = 200;
@@ -157,9 +153,9 @@ class pickles{
 		self::fnc_call_plugin_funcs( @$this->conf->funcs->process->{$ext}, $this );
 
 
-		// execute Theme
-		$fnc_name = preg_replace( '/^\\\\*/', '\\', @$this->conf->funcs->theme );
-		$this->response_body = call_user_func( $fnc_name, $this );
+		// // execute Theme
+		// $fnc_name = preg_replace( '/^\\\\*/', '\\', @$this->conf->funcs->theme );
+		// $this->response_body = call_user_func( $fnc_name, $this );
 
 
 
@@ -179,11 +175,11 @@ class pickles{
 				$json = new \stdClass;
 				$json->status = $this->get_status();
 				$json->relatedlinks = $this->relatedlinks;
-				$json->body_base64 = base64_encode($this->response_body);
+				$json->body_base64 = base64_encode($this->pull_content());
 				print json_encode($json);
 				break;
 			default:
-				print $this->response_body;
+				print $this->pull_content();
 				break;
 		}
 
@@ -493,21 +489,6 @@ class pickles{
 			case 404: @header('HTTP/1.1 '.$this->response_status.' NotFound'); break;
 			default:  @header('HTTP/1.1 '.$this->response_status.''); break;
 		}
-		return true;
-	}
-
-	/**
-	 * get response body
-	 */
-	public function get_response_body(){
-		return $this->response_body;
-	}
-
-	/**
-	 * set response body
-	 */
-	public function set_response_body($src){
-		$this->response_body = $src;
 		return true;
 	}
 

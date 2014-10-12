@@ -31,19 +31,10 @@ class theme{
 	 * entry method
 	 */
 	public static function exec( $px ){
-		switch( strtolower( pathinfo( $px->req()->get_request_file_path() , PATHINFO_EXTENSION ) ) ){
-			// HTML以外はスルー
-			case 'html':
-			case 'htm':
-				break;
-			default:
-				return $px->pull_content();
-				break;
-		}
-
 		$self = new self($px);
 		$src = $self->bind($px);
-		return $src;
+		$px->replace_content($src, '');
+		return true;
 	}
 
 	/**

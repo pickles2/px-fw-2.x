@@ -88,7 +88,7 @@ return call_user_func( function(){
 	$conf->funcs->process = new stdClass;
 	$conf->funcs->process->html = [
 		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
-		// 'pickles\themes\pickles\theme::exec' , // テーマにくるむ
+		'pickles\themes\pickles\theme::exec' , // テーマにくるむ
 	];
 	$conf->funcs->process->css = [
 	];
@@ -104,15 +104,9 @@ return call_user_func( function(){
 	];
 
 
-
-	// theme
-	$conf->funcs->theme = 'pickles\themes\pickles\theme::exec';
-
-
-
 	// output filter
 	$conf->funcs->output_filter = [
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		// 'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 	];
 
 
