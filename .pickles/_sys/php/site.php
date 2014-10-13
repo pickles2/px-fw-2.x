@@ -198,18 +198,6 @@ class site{
 				if( !strlen( $tmp_array['id'] ) ){
 					//ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
-					// if( preg_match( '/^alias\:/s' , $tmp_array['path'] ) ){
-					// 	//エイリアス
-					// 	$tmp_id = ':auto_page_id.'.($num_auto_pid);
-					// }else{
-					// 	//物理ページ
-					// 	$tmp_id = $tmp_array['path'];
-					// 	$tmp_id = $this->px->fs()->trim_extension($tmp_id);
-					// 	$tmp_id = preg_replace( '/\/index$/si' , '/' , $tmp_id );
-					// 	$tmp_id = preg_replace( '/\/+$/si' , '' , $tmp_id );
-					// 	$tmp_id = preg_replace( '/^\/+/si' , '' , $tmp_id );
-					// 	$tmp_id = preg_replace( '/\//si' , '.' , $tmp_id );
-					// }
 					$tmp_array['id'] = $tmp_id;
 					unset($tmp_id);
 				}
@@ -531,6 +519,7 @@ class site{
 		if( !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
+		if( !strlen( @$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
 		if( count($args) >= 2 ){
 			$rtn = $rtn[$args[1]];
 		}
@@ -597,6 +586,7 @@ class site{
 			unset( $tmp_array['title_breadcrumb'] );
 			unset( $tmp_array['title_h1'] );
 			unset( $tmp_array['title_label'] );
+			unset( $tmp_array['title_full'] );
 		}
 
 		//  パンくず欄の先頭が > から始まっていた場合、削除
