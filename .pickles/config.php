@@ -7,7 +7,7 @@ return call_user_func( function(){
 	// project
 	$conf->name = 'Pickles 2'; // サイト名
 	$conf->domain = null; // ドメイン
-	$conf->path_controot = '/'; // コンテンツルートのディレクトリ
+	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
@@ -74,36 +74,61 @@ return call_user_func( function(){
 
 	// Starting
 	$conf->funcs->starting = [
-		'pickles\commands\phpinfo::funcs_starting' , // PX=phpinfo
-		'pickles\commands\clearcache::funcs_starting' , // PX=clearcache
+		 // PX=phpinfo
+		'pickles\commands\phpinfo::funcs_starting' ,
+
+		// PX=clearcache
+		'pickles\commands\clearcache::funcs_starting' ,
 	];
 
 	// Before content
 	$conf->funcs->before_content = [
-		'pickles\commands\publish::funcs_before_content' , // PX=publish
+		// PX=publish
+		'pickles\commands\publish::funcs_before_content' ,
 	];
 
 
 	// processors
 	$conf->funcs->process = new stdClass;
+
 	$conf->funcs->process->html = [
-		'tomk79\pickles2\autoindex\autoindex::exec' , // ページ内目次を自動生成する
-		'pickles\themes\pickles\theme::exec' , // テーマにくるむ
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		// ページ内目次を自動生成する
+		'tomk79\pickles2\autoindex\autoindex::exec' ,
+
+		// テーマ
+		'pickles\themes\pickles\theme::exec' , 
+
+		// Apache互換のSSIの記述を解決する
+		'tomk79\pickles2\ssi\ssi::output_filter' ,
+
+		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
 	];
+
 	$conf->funcs->process->css = [
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
 	];
+
 	$conf->funcs->process->js = [
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' , // output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
 	];
+
 	$conf->funcs->process->md = [
-		'pickles\processors\md::exec' , // Markdown文法を処理する
-		$conf->funcs->process->html , // html の処理を追加
+		// Markdown文法を処理する
+		'pickles\processors\md::exec' ,
+
+		// html の処理を追加
+		$conf->funcs->process->html ,
 	];
+
 	$conf->funcs->process->scss = [
-		'pickles\processors\scss::exec' , // SCSS文法を処理する
-		$conf->funcs->process->css , // css の処理を追加
+		// SCSS文法を処理する
+		'pickles\processors\scss::exec' ,
+
+		// css の処理を追加
+		$conf->funcs->process->css ,
 	];
 
 

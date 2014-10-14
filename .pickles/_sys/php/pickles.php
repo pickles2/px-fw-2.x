@@ -153,11 +153,6 @@ class pickles{
 		self::fnc_call_plugin_funcs( @$this->conf->funcs->process->{$ext}, $this );
 
 
-		// // execute Theme
-		// $fnc_name = preg_replace( '/^\\\\*/', '\\', @$this->conf->funcs->theme );
-		// $this->response_body = call_user_func( $fnc_name, $this );
-
-
 
 		// Output filter functions
 		self::fnc_call_plugin_funcs( @$this->conf->funcs->output_filter, $this );
@@ -845,7 +840,7 @@ class pickles{
 		unset($tmp_page_info);
 
 		$rtn = $path_content;
-		$rtn = $this->fs()->get_realpath( $this->fs()->trim_extension($rtn).'.files/'.$localpath_resource );
+		$rtn = $this->fs()->get_realpath( $this->fs()->trim_extension($rtn).'_files/'.$localpath_resource );
 		if( $this->fs()->is_dir('./'.$rtn) ){
 			$rtn .= '/';
 		}
