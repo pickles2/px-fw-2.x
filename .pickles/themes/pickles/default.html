@@ -5,7 +5,7 @@
 		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->get_contents_manifesto(); ?>
-<?= $px->pull_content('head'); ?>
+<?= $px->bowl()->pull('head'); ?>
 	</head>
 	<body>
 <div class="container" id="page_top">
@@ -16,7 +16,7 @@
 		<div class="col-sm-9">
 			<h1><?= htmlspecialchars($px->site()->get_current_page_info( 'title')); ?></h1>
 			<div class="contents">
-<?= $px->pull_content(); ?>
+<?= $px->bowl()->pull(); ?>
 			</div>
 		</div>
 		<div class="col-sm-3">

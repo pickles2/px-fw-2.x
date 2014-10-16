@@ -9,8 +9,8 @@ namespace pickles\processors\scss;
  */
 class ext{
 	public static function exec( $px ){
-		foreach( $px->get_content_keys() as $key ){
-			$src = $px->pull_content( $key );
+		foreach( $px->bowl()->get_keys() as $key ){
+			$src = $px->bowl()->pull( $key );
 
 			$tmp_current_dir = realpath('./');
 			chdir( dirname( $_SERVER['SCRIPT_FILENAME'] ) );
@@ -18,7 +18,7 @@ class ext{
 			$src = $scss->compile( $src );
 			chdir( $tmp_current_dir );
 
-			$src = $px->replace_content( $src, $key );
+			$src = $px->bowl()->replace( $src, $key );
 		}
 
 		return true;

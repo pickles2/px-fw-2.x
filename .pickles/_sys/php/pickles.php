@@ -15,10 +15,7 @@ class pickles{
 	private $conf;
 	private $fs, $req, $site;
 	private $directory_index;
-	private $contents_cabinet = array(
-		// ''=>'',    //  メインコンテンツ
-		// 'head'=>'' //  ヘッドセクションに追記
-	);
+
 	/**
 	 * 関連ファイルのURL情報
 	 */
@@ -29,7 +26,7 @@ class pickles{
 	private $response_status = 200;
 
 	/**
-	 * PxFWのバージョン情報を取得する。
+	 * Pickles のバージョン情報を取得する。
 	 * 
 	 * <pre> [バージョン番号のルール]
 	 *    基本
@@ -119,6 +116,10 @@ class pickles{
 		require_once(__DIR__.'/site.php');
 		$this->site = new site($this);
 
+		// make instance $bowl
+		require_once(__DIR__.'/bowl.php');
+		$this->bowl = new bowl();
+
 
 
 		// execute Content
@@ -143,7 +144,7 @@ class pickles{
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			$this->set_status(403);// 403 Forbidden
-			$this->send_content('<p>ignore path</p>');
+			$this->bowl()->send('<p>ignore path</p>');
 		}else{
 			self::exec_content( $this );
 		}
@@ -170,11 +171,11 @@ class pickles{
 				$json = new \stdClass;
 				$json->status = $this->get_status();
 				$json->relatedlinks = $this->relatedlinks;
-				$json->body_base64 = base64_encode($this->pull_content());
+				$json->body_base64 = base64_encode($this->bowl()->pull());
 				print json_encode($json);
 				break;
 			default:
-				print $this->pull_content();
+				print $this->bowl()->pull();
 				break;
 		}
 
@@ -229,6 +230,13 @@ class pickles{
 	 */
 	public function site(){
 		return $this->site;
+	}
+
+	/**
+	 * get $bowl
+	 */
+	public function bowl(){
+		return $this->bowl;
 	}
 
 	/**
@@ -387,79 +395,6 @@ class pickles{
 	}
 
 	/**
-	 * コンテンツキャビネットにコンテンツを送る。
-	 * 
-	 * ソースコードを$pxオブジェクトに預けます。
-	 * このメソッドから預けられたコードは、同じ `$content_name` 値 をキーにして、`$px->pull_content()` から引き出すことができます。
-	 * 
-	 * この機能は、コンテンツからテーマへコンテンツを渡すために使用されます。
-	 * 
-	 * 同じ名前(`$content_name`値)で複数回ソースを送った場合、後方に追記されます。
-	 * 
-	 * @param string $src 送るHTMLソース
-	 * @param string $content_name キャビネットの格納名。
-	 * $px->pull_content() から取り出す際に使用する名称です。
-	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
-	 * 
-	 * @return bool 成功時 true、失敗時 false
-	 */
-	public function send_content( $src , $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
-		if( !is_string($content_name) ){ return false; }
-		@$this->contents_cabinet[$content_name] .= $src;
-		return true;
-	}
-
-	/**
-	 * コンテンツキャビネットのコンテンツを置き換える。
-	 * 
-	 * ソースコードを$pxオブジェクトに預けます。
-	 * `$px->send_content()` と同じですが、複数回送信した場合に、このメソッドは追記ではなく上書きする点が異なります。
-	 * 
-	 * @param string $src 送るHTMLソース
-	 * @param string $content_name キャビネットの格納名。
-	 * $px->pull_content() から取り出す際に使用する名称です。
-	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
-	 * 
-	 * @return bool 成功時 true、失敗時 false
-	 */
-	public function replace_content( $src , $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
-		if( !is_string($content_name) ){ return false; }
-		@$this->contents_cabinet[$content_name] = $src;
-		return true;
-	}
-
-	/**
-	 * コンテンツキャビネットからコンテンツを引き出す
-	 * 
-	 * 引き出したコンテンツは、キャビネットからはなくなります。
-	 * 
-	 * @param string $content_name キャビネット上のコンテンツ名
-	 * @param bool $do_finalize ファイナライズ処理を有効にするか(default: true)
-	 * @return mixed 成功時、キャビネットから得られたHTMLソースを返す。失敗時、false
-	 */
-	public function pull_content( $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
-		if( !is_string($content_name) ){ return false; }
-		if( !array_key_exists($content_name, $this->contents_cabinet) ){ return null; }
-
-		$content = $this->contents_cabinet[$content_name];
-		unset( $this->contents_cabinet[$content_name] );// コンテンツを引き出したら、キャビネット上にはなくなる。
-
-		return $content;
-	}
-
-	/**
-	 * コンテンツキャビネットにあるコンテンツの索引を取得する
-	 * @return array キャビネットのキーの一覧
-	 */
-	public function get_content_keys(){
-		$keys = array_keys( $this->contents_cabinet );
-		return $keys;
-	}
-
-	/**
 	 * get response status
 	 */
 	public function get_status(){
@@ -528,13 +463,13 @@ class pickles{
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
 			$px->set_status(404);// 404 NotFound
-			$px->send_content('<p>404 - File not found.</p>');
+			$px->bowl()->send('<p>404 - File not found.</p>');
 			return true;
 		}
 		ob_start();
 		include( './'.$px->get_path_content() );
 		$src = ob_get_clean();
-		$px->send_content($src);
+		$px->bowl()->send($src);
 		return true;
 	}
 

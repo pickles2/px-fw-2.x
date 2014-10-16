@@ -5,7 +5,7 @@
 		<title><?= htmlspecialchars( $px->conf()->name ); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->get_contents_manifesto(); ?>
-<?= $px->pull_content('head'); ?>
+<?= $px->bowl()->pull('head'); ?>
 	</head>
 	<body>
 <div class="container" id="page_top">
@@ -15,7 +15,7 @@
 	<div class="row">
 		<div class="col-sm-9">
 			<div class="contents">
-<?= $px->pull_content(); ?>
+<?= $px->bowl()->pull(); ?>
 
 			</div>
 		</div>

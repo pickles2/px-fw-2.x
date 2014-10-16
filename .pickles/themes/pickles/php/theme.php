@@ -33,7 +33,7 @@ class theme{
 	public static function exec( $px ){
 		$self = new self($px);
 		$src = $self->bind($px);
-		$px->replace_content($src, '');
+		$px->bowl()->replace($src, '');
 		return true;
 	}
 

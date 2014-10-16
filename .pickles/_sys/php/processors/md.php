@@ -10,12 +10,12 @@ namespace pickles\processors\md;
 class ext{
 	public static function exec( $px ){
 
-		foreach( $px->get_content_keys() as $key ){
-			$src = $px->pull_content( $key );
+		foreach( $px->bowl()->get_keys() as $key ){
+			$src = $px->bowl()->pull( $key );
 
 			$src = \Michelf\MarkdownExtra::defaultTransform($src);
 
-			$src = $px->replace_content( $src, $key );
+			$src = $px->bowl()->replace( $src, $key );
 		}
 
 		return true;

@@ -24,10 +24,10 @@ class autoindex{
 
 		//  autoindex
 		if( strlen( $autoindex->func_data_memos ) ){
-			foreach( $px->get_content_keys() as $key ){
-				$src = $px->pull_content( $key );
+			foreach( $px->bowl()->get_keys() as $key ){
+				$src = $px->bowl()->pull( $key );
 				$src = $autoindex->apply_autoindex( $src );
-				$src = $px->replace_content( $src, $key );
+				$src = $px->bowl()->replace( $src, $key );
 			}
 		}
 

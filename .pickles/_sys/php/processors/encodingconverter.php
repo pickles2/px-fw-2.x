@@ -16,11 +16,11 @@ class encodingconverter{
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
-		$keys = $px->get_content_keys();
+		$keys = $px->bowl()->get_keys();
 		foreach( $keys as $key ){
-			$src = $px->pull_content( $key );
+			$src = $px->bowl()->pull( $key );
 			$src = $me->apply($src);
-			$px->replace_content( $src, $key );
+			$px->bowl()->replace( $src, $key );
 		}
 	}
 
