@@ -30,9 +30,9 @@
             ".pickles/_sys/php/commands/phpinfo.php",
             ".pickles/_sys/php/commands/clearcache.php",
             ".pickles/_sys/php/commands/publish.php",
-            ".pickles/_sys/php/pkg/autoindex/autoindex.php",
-            ".pickles/_sys/php/pkg/encodingconverter.php",
-            ".pickles/_sys/php/pkg/ssi.php",
+            ".pickles/_sys/php/processors/autoindex.php",
+            ".pickles/_sys/php/processors/encodingconverter.php",
+            ".pickles/_sys/php/processors/ssi.php",
             ".pickles/themes/pickles/php/theme.php"
         ]
     }

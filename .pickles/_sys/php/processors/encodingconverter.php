@@ -2,7 +2,7 @@
 /**
  * PX Commands "encodingconverter"
  */
-namespace tomk79\pickles2\outputfilter;
+namespace pickles\processors\encodingconverter;
 
 /**
  * PX Commands "encodingconverter"
@@ -14,7 +14,7 @@ class encodingconverter{
 	/**
 	 * Starting function
 	 */
-	public static function output_filter( $px ){
+	public static function exec( $px ){
 		$me = new self( $px );
 		$keys = $px->get_content_keys();
 		foreach( $keys as $key ){

@@ -2,12 +2,12 @@
 /**
  * processor "*.scss"
  */
-namespace pickles\processors;
+namespace pickles\processors\scss;
 
 /**
  * processor "*.scss" class
  */
-class scss{
+class ext{
 	public static function exec( $px ){
 		foreach( $px->get_content_keys() as $key ){
 			$src = $px->pull_content( $key );

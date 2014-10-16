@@ -539,6 +539,16 @@ class pickles{
 	}
 
 	/**
+	 * 実行者がパブリッシュツールかどうか調べる
+	 */
+	public function is_publish_tool(){
+		if( @strlen( $_SERVER['HTTP_USER_AGENT'] ) ){//←パブリッシュじゃないとき、の条件
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * リンク先のパスを生成する。
 	 * 
 	 * 引数には、リンク先のパス、またはページIDを受け取り、

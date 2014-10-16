@@ -2,7 +2,7 @@
 /**
  * PX Commands "autoindex"
  */
-namespace tomk79\pickles2\autoindex;
+namespace pickles\processors\autoindex;
 
 /**
  * PX Commands "autoindex"

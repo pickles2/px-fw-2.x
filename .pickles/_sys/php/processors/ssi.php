@@ -2,7 +2,7 @@
 /**
  * PX Commands "ssi"
  */
-namespace tomk79\pickles2\ssi;
+namespace pickles\processors\ssi;
 
 /**
  * PX Commands "ssi"
@@ -14,7 +14,7 @@ class ssi{
 	/**
 	 * Starting function
 	 */
-	public static function output_filter( $px ){
+	public static function exec( $px ){
 		$me = new self( $px );
 		$keys = $px->get_content_keys();
 		foreach( $keys as $key ){
@@ -36,7 +36,7 @@ class ssi{
 	 */
 	private function apply($src, $current_path){
 
-		if( @strlen( $_SERVER['HTTP_USER_AGENT'] ) ){//←パブリッシュじゃないとき、の条件
+		if( !$this->px->is_publish_tool() ){
 
 			// SSI命令の解決
 			$tmp_src = $src;

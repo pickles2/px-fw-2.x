@@ -93,31 +93,31 @@ return call_user_func( function(){
 
 	$conf->funcs->process->html = [
 		// ページ内目次を自動生成する
-		'tomk79\pickles2\autoindex\autoindex::exec' ,
+		'pickles\processors\autoindex\autoindex::exec' ,
 
 		// テーマ
 		'pickles\themes\pickles\theme::exec' , 
 
 		// Apache互換のSSIの記述を解決する
-		'tomk79\pickles2\ssi\ssi::output_filter' ,
+		'pickles\processors\ssi\ssi::exec' ,
 
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
+		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->process->css = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
+		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->process->js = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'tomk79\pickles2\outputfilter\encodingconverter::output_filter' ,
+		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->process->md = [
 		// Markdown文法を処理する
-		'pickles\processors\md::exec' ,
+		'pickles\processors\md\ext::exec' ,
 
 		// html の処理を追加
 		$conf->funcs->process->html ,
@@ -125,7 +125,7 @@ return call_user_func( function(){
 
 	$conf->funcs->process->scss = [
 		// SCSS文法を処理する
-		'pickles\processors\scss::exec' ,
+		'pickles\processors\scss\ext::exec' ,
 
 		// css の処理を追加
 		$conf->funcs->process->css ,

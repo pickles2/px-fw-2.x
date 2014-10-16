@@ -2,12 +2,12 @@
 /**
  * processor "*.md"
  */
-namespace pickles\processors;
+namespace pickles\processors\md;
 
 /**
  * processor "*.md" class
  */
-class md{
+class ext{
 	public static function exec( $px ){
 
 		foreach( $px->get_content_keys() as $key ){
