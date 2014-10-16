@@ -106,4 +106,18 @@ class bowl{
 		return $keys;
 	}
 
+	/**
+	 * 全ボウルのコンテンツに同じ加工を施す
+	 * @param callback 加工処理関数
+	 * @return object $bowlオブジェクト
+	 */
+	public function each( $func ){
+		foreach( $this->get_keys() as $key ){
+			$src = $this->pull( $key );
+			$src = call_user_func( $func, $src );
+			$src = $this->replace( $src, $key );
+		}
+		return $this;
+	}
+
 }

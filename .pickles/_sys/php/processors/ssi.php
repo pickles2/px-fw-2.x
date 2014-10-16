@@ -16,12 +16,7 @@ class ssi{
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
-		$keys = $px->bowl()->get_keys();
-		foreach( $keys as $key ){
-			$src = $px->bowl()->pull( $key );
-			$src = $me->apply($src, $px->req()->get_request_file_path() );
-			$px->bowl()->replace( $src, $key );
-		}
+		$keys = $px->bowl()->each( array($me, 'apply') );
 	}
 
 	/**
@@ -34,7 +29,10 @@ class ssi{
 	/**
 	 * apply output filter
 	 */
-	private function apply($src, $current_path){
+	public function apply($src, $current_path = null){
+		if( is_null($current_path) ){
+			$current_path = $this->px->req()->get_request_file_path();
+		}
 
 		if( !$this->px->is_publish_tool() ){
 

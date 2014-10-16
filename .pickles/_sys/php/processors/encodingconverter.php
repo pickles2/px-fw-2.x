@@ -16,12 +16,7 @@ class encodingconverter{
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
-		$keys = $px->bowl()->get_keys();
-		foreach( $keys as $key ){
-			$src = $px->bowl()->pull( $key );
-			$src = $me->apply($src);
-			$px->bowl()->replace( $src, $key );
-		}
+		$px->bowl()->each( array($me, 'apply') );
 	}
 
 	/**
@@ -34,7 +29,7 @@ class encodingconverter{
 	/**
 	 * apply output filter
 	 */
-	private function apply($src){
+	public function apply($src){
 
 		if( @strlen( $this->px->conf()->output_encoding ) ){
 			$output_encoding = $this->px->conf()->output_encoding;

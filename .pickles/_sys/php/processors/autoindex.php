@@ -24,11 +24,7 @@ class autoindex{
 
 		//  autoindex
 		if( strlen( $autoindex->func_data_memos ) ){
-			foreach( $px->bowl()->get_keys() as $key ){
-				$src = $px->bowl()->pull( $key );
-				$src = $autoindex->apply_autoindex( $src );
-				$src = $px->bowl()->replace( $src, $key );
-			}
+			$px->bowl()->each( array($autoindex, 'apply_autoindex') );
 		}
 
 		return true;
@@ -41,20 +37,6 @@ class autoindex{
 		$this->px = $px;
 	}
 
-	/**
-	 * ページ内の目次を自動生成する。
-	 * 
-	 * ページ内の目次を生成するHTMLソースを返すように動作しますが、実際の内部処理は、
-	 * 直接的には一時的に生成されたランダムな文字列を返し、最終処理の中で目次HTMLに置き換えるように動作します。
-	 *
-	 * @return string ページ内の目次のHTMLソース
-	 */
-	public function autoindex(){
-		if( !is_string( $this->func_data_memos ) ){
-			$this->func_data_memos = '[__autoindex_'.md5( time() ).'__]';
-		}
-		return $this->func_data_memos;
-	}//autoindex();
 
 	/**
 	 * ページ内の目次をソースに反映する。
@@ -65,7 +47,7 @@ class autoindex{
 	 * 
 	 * @return string 目次が反映されたHTMLソース
 	 */
-	private function apply_autoindex( $content ){
+	public function apply_autoindex( $content ){
 		$tmp_cont = $content;
 		$content = '';
 		$index = array();
