@@ -539,7 +539,23 @@ class pickles{
 	}
 
 	/**
+	 * Contents Manifesto のソースを取得する
+	 */
+	public function get_contents_manifesto(){
+		$px = $this;
+		$rtn = '';
+		$realpath = $this->get_path_docroot().$this->href( $this->conf()->ontents_manifesto );
+		if( !$this->fs()->is_file( $realpath ) ){ return ''; }
+		ob_start();
+		include( $realpath );
+		$rtn = ob_get_clean();
+		return $rtn;
+	}
+
+	/**
 	 * 実行者がパブリッシュツールかどうか調べる
+	 * 
+	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
 		if( @strlen( $_SERVER['HTTP_USER_AGENT'] ) ){//←パブリッシュじゃないとき、の条件
