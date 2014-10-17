@@ -14,7 +14,7 @@ class phpinfo{
 	/**
 	 * Starting function
 	 */
-	public static function funcs_starting( $px ){
+	public static function regist( $px ){
 		$pxcmd = $px->get_px_command();
 		if( $pxcmd[0] != 'phpinfo' ){
 			return;

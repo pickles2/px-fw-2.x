@@ -19,7 +19,7 @@ class publish{
 	/**
 	 * Before content function
 	 */
-	public static function funcs_before_content( $px ){
+	public static function regist( $px ){
 		$pxcmd = $px->get_px_command();
 		if( @$pxcmd[0] != 'publish' ){
 			return;
@@ -284,7 +284,7 @@ class publish{
 	 * make list by directory scan
 	 */
 	private function make_list_by_dir_scan( $path = null ){
-		$process = array_keys( get_object_vars( $this->px->conf()->funcs->process ) );
+		$process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
 		foreach( $process as $key=>$val ){
 			$process[$key] = preg_quote($val);
 		}

@@ -21,8 +21,8 @@ namespace pickles;
 class bowl{
 
 	private $contents_bowl = array(
-		// 'main'=>'', //  メインコンテンツ
-		// 'head'=>''  //  ヘッドセクションに追記
+		// 'main'=>'', // メインコンテンツ
+		// 'head'=>''  // ヘッドセクションに追記
 	);
 
 	/**
@@ -44,14 +44,14 @@ class bowl{
 	 * 同じ名前(`$content_name`値)で複数回ソースを送った場合、後方に追記されます。
 	 * 
 	 * @param string $src 送るHTMLソース
-	 * @param string $content_name ボウルの格納名。
+	 * @param string $content_name ボウルの格納名。(省略時 'main')
 	 * $px->bowl()->pull() から取り出す際に使用する名称です。
 	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
 	 * 
 	 * @return bool 成功時 true、失敗時 false
 	 */
-	public function send( $src , $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
+	public function send( $src , $content_name = 'main' ){
+		if( !strlen($content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		@$this->contents_bowl[$content_name] .= $src;
 		return true;
@@ -64,14 +64,14 @@ class bowl{
 	 * `$px->bowl()->send()` と同じですが、複数回送信した場合に、このメソッドは追記ではなく上書きする点が異なります。
 	 * 
 	 * @param string $src 送るHTMLソース
-	 * @param string $content_name ボウルの格納名。
+	 * @param string $content_name ボウルの格納名。(省略時 'main')
 	 * $px->bowl()->pull() から取り出す際に使用する名称です。
 	 * 任意の名称が利用できます。PxFWの標準状態では、無名(空白文字列) = メインコンテンツ、'head' = ヘッダー内コンテンツ の2種類が定義されています。
 	 * 
 	 * @return bool 成功時 true、失敗時 false
 	 */
-	public function replace( $src , $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
+	public function replace( $src , $content_name = 'main' ){
+		if( !strlen($content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		@$this->contents_bowl[$content_name] = $src;
 		return true;
@@ -80,14 +80,13 @@ class bowl{
 	/**
 	 * コンテンツボウルからコンテンツを引き出す
 	 * 
-	 * 引き出したコンテンツは、ボウルからはなくなります。
+	 * 引き出したコンテンツは、ボウルから削除されます。
 	 * 
-	 * @param string $content_name ボウル上のコンテンツ名
-	 * @param bool $do_finalize ファイナライズ処理を有効にするか(default: true)
+	 * @param string $content_name ボウルの格納名。(省略時 'main')
 	 * @return mixed 成功時、ボウルから得られたHTMLソースを返す。失敗時、false
 	 */
-	public function pull( $content_name = '' ){
-		if( !strlen($content_name) ){ $content_name = ''; }
+	public function pull( $content_name = 'main' ){
+		if( !strlen($content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		if( !array_key_exists($content_name, $this->contents_bowl) ){ return null; }
 

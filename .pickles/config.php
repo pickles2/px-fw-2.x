@@ -76,23 +76,23 @@ return call_user_func( function(){
 	// Starting
 	$conf->funcs->starting = [
 		 // PX=phpinfo
-		'pickles\commands\phpinfo::funcs_starting' ,
+		'pickles\commands\phpinfo::regist' ,
 
 		// PX=clearcache
-		'pickles\commands\clearcache::funcs_starting' ,
+		'pickles\commands\clearcache::regist' ,
 	];
 
 	// Before content
 	$conf->funcs->before_content = [
 		// PX=publish
-		'pickles\commands\publish::funcs_before_content' ,
+		'pickles\commands\publish::regist' ,
 	];
 
 
-	// processors
-	$conf->funcs->process = new stdClass;
+	// processor
+	$conf->funcs->processor = new stdClass;
 
-	$conf->funcs->process->html = [
+	$conf->funcs->processor->html = [
 		// ページ内目次を自動生成する
 		'pickles\processors\autoindex\autoindex::exec' ,
 
@@ -106,36 +106,36 @@ return call_user_func( function(){
 		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
-	$conf->funcs->process->css = [
+	$conf->funcs->processor->css = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
-	$conf->funcs->process->js = [
+	$conf->funcs->processor->js = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 		'pickles\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
-	$conf->funcs->process->md = [
+	$conf->funcs->processor->md = [
 		// Markdown文法を処理する
 		'pickles\processors\md\ext::exec' ,
 
 		// html の処理を追加
-		$conf->funcs->process->html ,
+		$conf->funcs->processor->html ,
 	];
 
-	$conf->funcs->process->scss = [
+	$conf->funcs->processor->scss = [
 		// SCSS文法を処理する
 		'pickles\processors\scss\ext::exec' ,
 
 		// css の処理を追加
-		$conf->funcs->process->css ,
+		$conf->funcs->processor->css ,
 	];
 
 
 	// output filter
-	$conf->funcs->output_filter = [
-	];
+	// $conf->funcs->output_filter = [
+	// ];
 
 
 	return $conf;

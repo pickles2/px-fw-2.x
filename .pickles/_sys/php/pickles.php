@@ -129,7 +129,7 @@ class pickles{
 		}
 		$ext = $this->get_path_proc_type();
 		// $ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
-		foreach( array_keys( get_object_vars( $this->conf->funcs->process ) ) as $tmp_ext ){
+		foreach( array_keys( get_object_vars( $this->conf->funcs->processor ) ) as $tmp_ext ){
 			if( $this->fs()->is_file( './'.$this->path_content.'.'.$tmp_ext ) ){
 				$ext = $tmp_ext;
 				$this->path_content = $this->path_content.'.'.$tmp_ext;
@@ -151,7 +151,7 @@ class pickles{
 
 
 		// process functions
-		self::fnc_call_plugin_funcs( @$this->conf->funcs->process->{$ext}, $this );
+		self::fnc_call_plugin_funcs( @$this->conf->funcs->processor->{$ext}, $this );
 
 
 
@@ -184,6 +184,7 @@ class pickles{
 
 	/**
 	 * call plugin functions
+	 * @param mixed $func_list List of plugins function
 	 */
 	private static function fnc_call_plugin_funcs( $func_list ){
 		if( is_null($func_list) ){ return false; }
@@ -213,6 +214,7 @@ class pickles{
 
 	/**
 	 * get $fs
+	 * see more: https://github.com/tomk79/filesystem
 	 */
 	public function fs(){
 		return $this->fs;
@@ -220,6 +222,7 @@ class pickles{
 
 	/**
 	 * get $req
+	 * see more: https://github.com/tomk79/request
 	 */
 	public function req(){
 		return $this->req;
