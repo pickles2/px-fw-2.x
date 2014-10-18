@@ -81,7 +81,7 @@ class pickles{
 			@ini_set( 'mbstring.detect_order' , 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
-		header_remove('X-Powered-By');
+		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
 
 		// load Config

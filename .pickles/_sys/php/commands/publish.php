@@ -158,8 +158,8 @@ class publish{
 				case 'direct':
 					// direct
 					print $ext.' -> direct'."\n";
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
-					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.$path );
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$path ) );
+					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$path );
 					break;
 
 				default:
@@ -177,8 +177,8 @@ class publish{
 					}elseif( $bin->status >= 400 ){
 					}elseif( $bin->status >= 300 ){
 					}elseif( $bin->status >= 200 ){
-						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.$path ) );
-						$this->px->fs()->save_file( $this->path_tmp_publish.$path, base64_decode( @$bin->body_base64 ) );
+						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$path ) );
+						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$path, base64_decode( @$bin->body_base64 ) );
 						foreach( $bin->relatedlinks as $link ){
 							$link = $this->px->fs()->get_realpath( $link, dirname($path) );
 							if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
@@ -198,7 +198,7 @@ class publish{
 				if( $this->px->fs()->is_file( $this->path_publish_dir.$path ) ){
 					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$path ) );
 					$this->px->fs()->copy(
-						$this->path_tmp_publish.$path ,
+						$this->path_tmp_publish.'/htdocs'.$path ,
 						$this->path_publish_dir.$path
 					);
 					print ' -> copied to publish dir'."\n";
@@ -223,7 +223,7 @@ class publish{
 			print "\n";
 			print '-- syncing to publish dir...'."\n";
 			$this->px->fs()->sync_dir(
-				$this->path_tmp_publish.$this->path_region ,
+				$this->path_tmp_publish.'/htdocs'.$this->path_region ,
 				$this->path_publish_dir.$this->path_region
 			);
 		}
