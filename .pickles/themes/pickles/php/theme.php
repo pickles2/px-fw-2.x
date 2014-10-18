@@ -25,6 +25,8 @@ class theme{
 		if( !$px->fs()->is_file( $this->path_tpl.$this->page['layout'].'.html' ) ){
 			$this->page['layout'] = 'default';
 		}
+		// $this->px->realpath_plugin_private_cache('/test/abc/test.inc');
+		$this->px->fs()->copy_r( __DIR__.'/../theme_files/', $this->px->realpath_plugin_files('/') );
 	}
 
 	/**
