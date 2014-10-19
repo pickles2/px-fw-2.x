@@ -1,5 +1,5 @@
 {
-    "name": "tomk79/pickles2",
+    "name": "tomk79/PxFW-2.x",
     "description": "",
     "keywords": ["pickles"],
     "license": "MIT",
@@ -15,7 +15,6 @@
         "php": ">=5.3.0" ,
         "tomk79/filesystem": "dev-develop",
         "tomk79/request": "dev-develop",
-        "phpoffice/phpexcel": "1.8.*",
         "michelf/php-markdown": "1.4.*",
         "leafo/scssphp": "0.1.*"
     },
@@ -33,7 +32,7 @@
             ".pickles/_sys/php/processors/autoindex.php",
             ".pickles/_sys/php/processors/encodingconverter.php",
             ".pickles/_sys/php/processors/ssi.php",
-            ".pickles/themes/pickles/php/theme.php"
+            ".pickles/theme/php/theme.php"
         ]
     }
 }
