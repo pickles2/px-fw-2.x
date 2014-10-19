@@ -2,7 +2,7 @@
 /**
  * pickles2
  */
-namespace pickles;
+namespace picklesFramework2;
 
 /**
  * pickles2 core class

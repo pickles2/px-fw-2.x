@@ -2,7 +2,7 @@
 /**
  * PX Commands "phpinfo"
  */
-namespace pickles\commands;
+namespace picklesFramework2\commands;
 
 /**
  * PX Commands "phpinfo"

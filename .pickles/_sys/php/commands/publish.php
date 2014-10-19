@@ -2,7 +2,7 @@
 /**
  * PX Commands "publish"
  */
-namespace pickles\commands;
+namespace picklesFramework2\commands;
 
 /**
  * PX Commands "publish"

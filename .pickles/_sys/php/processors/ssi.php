@@ -2,7 +2,7 @@
 /**
  * PX Commands "ssi"
  */
-namespace pickles\processors\ssi;
+namespace picklesFramework2\processors\ssi;
 
 /**
  * PX Commands "ssi"

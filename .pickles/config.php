@@ -76,16 +76,16 @@ return call_user_func( function(){
 	// Starting
 	$conf->funcs->starting = [
 		 // PX=phpinfo
-		'pickles\commands\phpinfo::regist' ,
+		'picklesFramework2\commands\phpinfo::regist' ,
 
 		// PX=clearcache
-		'pickles\commands\clearcache::regist' ,
+		'picklesFramework2\commands\clearcache::regist' ,
 	];
 
 	// Before content
 	$conf->funcs->before_content = [
 		// PX=publish
-		'pickles\commands\publish::regist' ,
+		'picklesFramework2\commands\publish::regist' ,
 	];
 
 
@@ -94,31 +94,31 @@ return call_user_func( function(){
 
 	$conf->funcs->processor->html = [
 		// ページ内目次を自動生成する
-		'pickles\processors\autoindex\autoindex::exec' ,
+		'picklesFramework2\processors\autoindex\autoindex::exec' ,
 
 		// テーマ
-		'theme'=>'pickles\theme::exec' , 
+		'picklesFramework2\theme::exec' , 
 
 		// Apache互換のSSIの記述を解決する
-		'pickles\processors\ssi\ssi::exec' ,
+		'picklesFramework2\processors\ssi\ssi::exec' ,
 
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'pickles\processors\encodingconverter\encodingconverter::exec' ,
+		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->processor->css = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'pickles\processors\encodingconverter\encodingconverter::exec' ,
+		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->processor->js = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'pickles\processors\encodingconverter\encodingconverter::exec' ,
+		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	];
 
 	$conf->funcs->processor->md = [
 		// Markdown文法を処理する
-		'pickles\processors\md\ext::exec' ,
+		'picklesFramework2\processors\md\ext::exec' ,
 
 		// html の処理を追加
 		$conf->funcs->processor->html ,
@@ -126,7 +126,7 @@ return call_user_func( function(){
 
 	$conf->funcs->processor->scss = [
 		// SCSS文法を処理する
-		'pickles\processors\scss\ext::exec' ,
+		'picklesFramework2\processors\scss\ext::exec' ,
 
 		// css の処理を追加
 		$conf->funcs->processor->css ,

@@ -2,7 +2,7 @@
 /**
  * theme "pickles"
  */
-namespace pickles;
+namespace picklesFramework2;
 
 /**
  * theme "pickles" class

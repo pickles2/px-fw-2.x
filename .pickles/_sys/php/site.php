@@ -6,7 +6,7 @@
  * 
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
-namespace pickles;
+namespace picklesFramework2;
 
 /**
  * Site and page Manager

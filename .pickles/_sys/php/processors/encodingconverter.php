@@ -2,7 +2,7 @@
 /**
  * PX Commands "encodingconverter"
  */
-namespace pickles\processors\encodingconverter;
+namespace picklesFramework2\processors\encodingconverter;
 
 /**
  * PX Commands "encodingconverter"

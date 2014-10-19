@@ -2,7 +2,7 @@
 /**
  * PX Commands "clearcache"
  */
-namespace pickles\commands;
+namespace picklesFramework2\commands;
 
 /**
  * PX Commands "clearcache"

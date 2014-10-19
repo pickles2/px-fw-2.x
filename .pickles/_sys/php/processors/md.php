@@ -2,7 +2,7 @@
 /**
  * processor "*.md"
  */
-namespace pickles\processors\md;
+namespace picklesFramework2\processors\md;
 
 /**
  * processor "*.md" class

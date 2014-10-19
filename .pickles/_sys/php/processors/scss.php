@@ -2,7 +2,7 @@
 /**
  * processor "*.scss"
  */
-namespace pickles\processors\scss;
+namespace picklesFramework2\processors\scss;
 
 /**
  * processor "*.scss" class
