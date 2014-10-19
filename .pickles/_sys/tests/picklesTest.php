@@ -44,6 +44,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run' ,
 		] );
+		clearstatcache();
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/.pickles/_sys/ram/publish/htdocs/index.html' ) );
 
