@@ -263,7 +263,7 @@ class publish{
 	 * clearcache
 	 */
 	private function clearcache(){
-		(new \pickles\commands\clearcache( $this->px ))->exec();
+		(new clearcache( $this->px ))->exec();
 	}
 
 	/**
