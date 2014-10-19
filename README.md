@@ -1,4 +1,4 @@
-Pickles 2
+PxFW-2.x
 =========
 
 ## インストール手順 - Install
