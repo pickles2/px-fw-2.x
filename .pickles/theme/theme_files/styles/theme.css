@@ -1,0 +1,113 @@
+@charset "utf-8";
+
+html, body{
+	background-color: #eee;
+}
+
+/**
+ * ヘッダー
+ */
+.theme_header{
+	background-color: #00a0e6;
+	padding:1em 0 0.5em 0;
+}
+
+/**
+ * メインエリア
+ */
+.theme_mainblock{
+	background-color: #fff;
+	padding:18px 0;
+}
+
+/**
+ * Site Identity
+ */
+.theme_si{
+}
+.theme_si,
+.theme_si *{
+	font-size: xx-large;
+	margin: 0;
+	padding: 0;
+	color: #fff;
+	line-height: 1.3;
+}
+.theme_si *:hover{
+	color: #eee;
+}
+.theme_si:before{
+	content: url('data:image/svg+xml;base64,<?= base64_encode( $px->get_pickles_logo_svg() ) ?>');
+	margin: 0 20px 0 0;
+}
+
+
+/**
+ * コンテンツエリア
+ */
+.contents{
+	margin-bottom: 3em;
+}
+
+/**
+ * ナビゲーション
+ */
+.theme_common_navi{
+}
+.theme_common_navi a{
+	display: block;
+	padding:10px;
+	background-color: #eee;
+}
+.theme_common_navi p{
+	text-align:center;
+	margin:1px 0; padding:0;
+}
+.theme_common_navi ul{
+	display:block;
+	margin:0; padding:0;
+}
+.theme_common_navi ul li{
+	display:block;
+	margin:1px 0; padding:0;
+	list-style-type:none;
+}
+.theme_common_navi ul ul a{
+	padding-left: 25px;
+	background-color: #f5f5f5;
+	font-size:small;
+}
+.theme_common_navi ul ul ul a{
+	padding-left: 40px;
+	background-color: #fefefe;
+	font-size:small;
+}
+
+/**
+ * パンくず
+ */
+.theme_breadcrumb{
+	margin:0 0;
+}
+.theme_breadcrumb ul,
+.theme_breadcrumb ul li{
+	display:inline;
+	padding: 0 0.3em 0 0;
+	font-size:small;
+}
+.theme_breadcrumb ul li a:after{
+	content:'>';
+	margin: 0 0.3em;
+}
+.theme_breadcrumb ul li span{
+	font-weight:bold;
+}
+
+
+/**
+ * フッター
+ */
+.theme_footer{
+	padding:1em 0 0.5em 0;
+}
+

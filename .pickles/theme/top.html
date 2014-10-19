@@ -2,36 +2,47 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title><?= htmlspecialchars( $px->conf()->name ); ?></title>
+		<title><?= htmlspecialchars( $px->conf()->name ) ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->bowl()->pull('head') ?>
 	</head>
 	<body>
-<div class="container" id="page_top">
-	<header>
-		<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ); ?></h1>
-	</header>
-	<div class="row">
-		<div class="col-sm-9">
-			<div class="contents">
-<?= $px->bowl()->pull() ?>
+<header class="theme_header" id="page_top">
+	<div class="container">
+		<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ) ?></h1>
+	</div>
+</header>
+<div class="theme_mainblock">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-9">
+				<div class="contents">
+	<?= $px->bowl()->pull() ?>
 
+				</div>
 			</div>
-		</div>
-		<div class="col-sm-3">
-<?php
-$current_page_id = $px->site()->get_current_page_info('id');
-$children = $px->site()->get_children( $current_page_id );
-if( count($children) ){
-	print '<ul>';
-	foreach( $children as $child ){
-		print '<li>'.$px->mk_link( $child ).'</li>';
+			<div class="col-sm-3">
+				<nav class="theme_common_navi">
+	<?php
+	$current_page_id = $px->site()->get_current_page_info('id');
+	$children = $px->site()->get_children( $current_page_id );
+	if( count($children) ){
+		print '<ul>';
+		foreach( $children as $child ){
+			print '<li>'.$px->mk_link( $child ).'</li>';
+		}
+		print '</ul>';
 	}
-	print '</ul>';
-}
-?>
-		</div>
-	</div><!-- /.row -->
-</div><!-- /.container -->
+	?>
+				</nav>
+			</div>
+		</div><!-- /.row -->
+	</div><!-- /.container -->
+</div><!-- /.theme_mainblock -->
+<footer class="theme_footer">
+	<div class="container">
+		<p style="text-align:center;">Pickles Framework is made by &copy;Tomoya Koyanagi.</p>
+	</div>
+</footer>
 	</body>
 </html>

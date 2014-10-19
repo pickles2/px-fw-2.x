@@ -73,7 +73,7 @@ class theme{
 	private function mk_global_sub_menu( $parent_page_id ){
 		$rtn = '';
 		$children = $this->px->site()->get_children( $parent_page_id );
-		if( count($children) && $this->px->site()->get_category_top() == $parent_page_id ){
+		if( count($children) && $this->px->site()->is_page_in_breadcrumb( $parent_page_id ) ){
 			$rtn .= '<ul>'."\n";
 			foreach( $children as $child ){
 				$rtn .= '<li>'.$this->px->mk_link( $child );
@@ -82,6 +82,21 @@ class theme{
 			}
 			$rtn .= '</ul>'."\n";
 		}
+		return $rtn;
+	}
+
+	/**
+	 * パンくずを自動生成する
+	 */
+	public function mk_breadcrumb(){
+		$breadcrumb = $this->px->site()->get_breadcrumb_array();
+		$rtn = '';
+		$rtn .= '<ul>';
+		foreach( $breadcrumb as $pid ){
+			$rtn .= '<li>'.$this->px->mk_link( $pid, array('label'=>$this->px->site()->get_page_info($pid, 'title_breadcrumb'), 'current'=>false) ).'</li>';
+		}
+		$rtn .= '<li><span>'.htmlspecialchars( $this->px->site()->get_current_page_info('title_breadcrumb') ).'</span></li>';
+		$rtn .= '</ul>';
 		return $rtn;
 	}
 
