@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
-<?= $px->bowl()->pull('head'); ?>
+<?= $px->bowl()->pull('head') ?>
 	</head>
 	<body>
 <div class="container" id="page_top">
@@ -15,34 +15,12 @@
 		<div class="col-sm-9">
 			<h1><?= htmlspecialchars($px->site()->get_current_page_info( 'title')); ?></h1>
 			<div class="contents">
-<?= $px->bowl()->pull(); ?>
+<?= $px->bowl()->pull() ?>
 			</div>
 		</div>
 		<div class="col-sm-3">
-<?php
-$current_page_id = $px->site()->get_current_page_info('id');
-$parent = $px->site()->get_parent($current_page_id);
-if( is_string($parent) ){
-	print '<p><a href="'.htmlspecialchars( $px->href($parent) ).'">'.htmlspecialchars($px->site()->get_page_info($parent, 'title_label')).'</a></p>';
-}
-$bros = $px->site()->get_bros( $current_page_id );
-if( count($bros) ){
-	print '<ul>';
-	foreach( $bros as $bro ){
-		print '<li>'.$px->mk_link( $bro );
-		$children = $px->site()->get_children( $bro );
-		if( $bro == $current_page_id && count($children) ){
-			print '<ul>';
-			foreach( $children as $child ){
-				print '<li>'.$px->mk_link( $child ).'</li>';
-			}
-			print '</ul>';
-		}
-		print '</li>';
-	}
-	print '</ul>';
-}
-?>
+<p><a href="<?= htmlspecialchars( $px->href('') ) ?>"><?= htmlspecialchars($px->site()->get_page_info('', 'title_label')) ?></a></p>
+<?= $theme->mk_global_menu() ?>
 		</div>
 	</div><!-- /.row -->
 </div><!-- /.container -->

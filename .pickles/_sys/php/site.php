@@ -357,7 +357,7 @@ class site{
 		if(is_null($rtn)){
 			return false;
 		}
-		return $rtn;
+		return $this->get_page_info( $rtn, 'id' );
 	}
 
 	/**
@@ -382,6 +382,7 @@ class site{
 			//  自身がトップページだった場合。
 			return '';
 		}
+		$parent_pid = $this->get_page_info($path, 'id');
 		while( $parent_pid = $this->get_parent($parent_pid) ){
 			if(!strlen($parent_pid)){
 				break;

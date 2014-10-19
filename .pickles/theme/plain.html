@@ -4,9 +4,9 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
-<?= $px->bowl()->pull('head'); ?>
+<?= $px->bowl()->pull('head') ?>
 	</head>
 	<body>
-<?= $px->bowl()->pull(); ?>
+<?= $px->bowl()->pull() ?>
 	</body>
 </html>
