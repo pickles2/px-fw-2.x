@@ -7,42 +7,41 @@
 <?= $px->bowl()->pull('head') ?>
 	</head>
 	<body>
-<header class="theme_header" id="page_top">
-	<div class="container">
-		<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ) ?></h1>
-	</div>
-</header>
-<div class="theme_mainblock">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-9">
-				<div class="contents">
-	<?= $px->bowl()->pull() ?>
-
-				</div>
+		<header class="theme_header" id="page_top">
+			<div class="container">
+				<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ) ?></h1>
 			</div>
-			<div class="col-sm-3">
-				<nav class="theme_common_navi">
-	<?php
-	$current_page_id = $px->site()->get_current_page_info('id');
-	$children = $px->site()->get_children( $current_page_id );
-	if( count($children) ){
-		print '<ul>';
-		foreach( $children as $child ){
-			print '<li>'.$px->mk_link( $child ).'</li>';
-		}
-		print '</ul>';
+		</header>
+		<div class="theme_mainblock">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="contents">
+<?= $px->bowl()->pull() ?>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<nav class="theme_common_navi">
+<?php
+$current_page_id = $px->site()->get_current_page_info('id');
+$children = $px->site()->get_children( $current_page_id );
+if( count($children) ){
+	print '<ul>';
+	foreach( $children as $child ){
+		print '<li>'.$px->mk_link( $child ).'</li>';
 	}
-	?>
-				</nav>
+	print '</ul>';
+}
+?>
+						</nav>
+					</div>
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.theme_mainblock -->
+		<footer class="theme_footer">
+			<div class="container">
+				<p style="text-align:center;">Pickles Framework is made by &copy;Tomoya Koyanagi.</p>
 			</div>
-		</div><!-- /.row -->
-	</div><!-- /.container -->
-</div><!-- /.theme_mainblock -->
-<footer class="theme_footer">
-	<div class="container">
-		<p style="text-align:center;">Pickles Framework is made by &copy;Tomoya Koyanagi.</p>
-	</div>
-</footer>
+		</footer>
 	</body>
 </html>

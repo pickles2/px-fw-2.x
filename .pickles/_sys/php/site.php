@@ -474,6 +474,13 @@ class site{
 			//ページIDで指定された場合、パスに置き換える
 			$path = $this->sitemap_id_map[$path];
 		}
+		if( !preg_match( '/^(?:\/|[a-zA-Z0-9]+\:)/s', $path ) ){
+			// $path が相対パスで指定された場合
+			preg_match( '/(\/)$/s', $path, $tmp_matched );
+			$path = $this->px->fs()->get_realpath( dirname( $this->px->req()->get_request_file_path() ).'/'.$path );
+			if( @strlen($tmp_matched[1]) ){ $path .= $tmp_matched[1]; }
+			unset( $tmp_matched );
+		}
 		$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
 
 		$tmp_path = $path;

@@ -23,5 +23,42 @@
 	Pickles Framework では、 <a href="https://github.com/tomk79/FESS" target="_blank">FESS</a> が規定するコーディング規則およびドキュメントモジュール定義を利用しています。詳しい内容は次のページに同梱していますので、参照してみてください。<br />
 </p>
 <ul>
-	<li><a href="./fess/">FESSドキュメント</a></li>
+	<li><?= $px->mk_link( './fess/' ) ?></li>
 </ul>
+
+
+<h2>HTMLコンテンツの書き方</h2>
+
+<p>
+	コンテンツエリアのみHTMLを書くようにします。<br />
+</p>
+
+<div class="unit">
+	<div class="code"><pre><code>&lt;p&gt;
+	コンテンツ本文のHTML部分。&lt;br /&gt;
+&lt;/p&gt;
+</code></pre></div>
+</div>
+
+<p>
+	コンテンツに特有のCSSを書きたい場合など、headセクション内にコードを出力したい場合があります。<br />
+</p>
+<p>
+	そのような場合は、次の例のように、<code>$px-&gt;bowl()-&gt;send( $html, 'head' )</code> にコードを渡してください。<br />
+</p>
+
+<div class="unit">
+	<div class="code"><pre><code>&lt;?php ob_start(); ?&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+.cont_exam{
+	font-size:90%;
+	color:#888888;
+}
+&lt;/style&gt;
+&lt;?php $px-&gt;bowl()-&gt;send( ob_get_clean(), 'head' ); ?&gt;
+
+&lt;p&gt;
+	コンテンツ本文のHTML部分。&lt;br /&gt;
+&lt;/p&gt;
+</code></pre></div>
+</div>
