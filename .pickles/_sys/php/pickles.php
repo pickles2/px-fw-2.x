@@ -347,6 +347,7 @@ class pickles{
 		if( is_dir('./'.$path) ){
 			$path .= '/';
 		}
+		$path = $this->fs()->normalize_path($path);
 
 		if( @is_bool($rtn[$path]) ){
 			return $rtn[$path];
@@ -354,16 +355,16 @@ class pickles{
 
 		foreach( $this->conf->paths_proc_type as $row => $type ){
 			if(!is_string($row)){continue;}
-			$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
+			$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)), '/');
 			if( preg_match('/\*/',$preg_pattern) ){
 				// ワイルドカードが使用されている場合
 				$preg_pattern = preg_quote($row,'/');
 				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
 				$preg_pattern = $preg_pattern.'$';//前方・後方一致
 			}elseif(is_dir($row)){
-				$preg_pattern = preg_quote($this->fs()->get_realpath($row).'/','/');
+				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)).'/','/');
 			}elseif(is_file($row)){
-				$preg_pattern = preg_quote($this->fs()->get_realpath($row),'/');
+				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)),'/');
 			}
 			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
 				$rtn[$path] = $type;
@@ -776,7 +777,7 @@ class pickles{
 			$rtn = $this->conf->domain;
 			return $rtn;
 		}
-		$rtn = $_SERVER['SERVER_NAME'];
+		$rtn = @$_SERVER['SERVER_NAME'];
 		return $rtn;
 	}
 
@@ -844,9 +845,9 @@ class pickles{
 	public function realpath_files( $localpath_resource = null ){
 		$rtn = $this->path_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $rtn );
-		if( $this->fs()->is_dir($rtn) ){
-			$rtn .= '/';
-		}
+		// if( $this->fs()->is_dir($rtn) ){
+		// 	$rtn .= '/';
+		// }
 		return $this->fs()->get_realpath($this->get_path_docroot().$rtn);
 	}//realpath_files()
 
@@ -875,6 +876,7 @@ class pickles{
 		// 	}
 		// 	$this->fs()->copy_r( $this->get_path_docroot().$path_original, $this->get_path_docroot().$rtn ); // コピーされる意味がないのでナシ
 		// }
+		$rtn = $this->fs()->normalize_path($rtn);
 		$this->add_relatedlink($rtn);
 		return $rtn;
 	}//path_files_cache()
@@ -888,9 +890,9 @@ class pickles{
 	public function realpath_files_cache( $localpath_resource = null ){
 		$rtn = $this->path_files_cache( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
-		if( is_dir($rtn) ){
-			$rtn .= '/';
-		}
+		// if( $this->fs()->is_dir($rtn) ){
+		// 	$rtn .= '/';
+		// }
 		return $rtn;
 	}//realpath_files_cache()
 
@@ -941,7 +943,7 @@ class pickles{
 			$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
 		}
 		if( !strlen( $localpath_resource ) ){
-			return $rtn;
+			return $this->fs()->normalize_path($rtn);
 		}
 		$rtn = $this->fs()->get_realpath( $rtn.'/'.$localpath_resource );
 		if( $this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
@@ -950,7 +952,7 @@ class pickles{
 		if( !$this->fs()->is_dir( dirname($this->get_path_docroot().$rtn) ) ){
 			$this->fs()->mkdir_r( dirname($this->get_path_docroot().$rtn) );
 		}
-		return $rtn;
+		return $this->fs()->normalize_path($rtn);
 	}
 
 	/**
@@ -962,9 +964,9 @@ class pickles{
 	public function realpath_plugin_files( $localpath_resource = null ){
 		$rtn = $this->path_plugin_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
-		if( is_dir($rtn) ){
-			$rtn .= '/';
-		}
+		// if( is_dir($rtn) ){
+		// 	$rtn .= '/';
+		// }
 		return $rtn;
 	}
 
@@ -984,9 +986,10 @@ class pickles{
 			return $rtn;
 		}
 		$rtn .= '/'.$localpath_resource;
-		if( $this->fs()->is_dir( $rtn ) ){
-			$rtn .= '/';
-		}
+		// if( $this->fs()->is_dir( $rtn ) ){
+		// 	$rtn .= '/';
+		// }
+		$rtn = $this->fs()->get_realpath( $rtn );
 		if( !$this->fs()->is_dir( dirname($rtn) ) ){
 			$this->fs()->mkdir_r( dirname($rtn) );
 		}

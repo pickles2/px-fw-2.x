@@ -344,6 +344,7 @@ class publish{
 		if( $this->px->fs()->is_dir('./'.$path) ){
 			$path .= '/';
 		}
+		$path = $this->px->fs()->normalize_path($path);
 		if( preg_match( '/^'.preg_quote( $this->path_region, '/' ).'/s' , $path ) ){
 			return true;
 		}
