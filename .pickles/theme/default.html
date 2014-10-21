@@ -28,6 +28,9 @@
 						<p><a href="<?= htmlspecialchars( $px->href('') ) ?>"><?= htmlspecialchars($px->site()->get_page_info('', 'title_label')) ?></a></p>
 <?= $theme->mk_global_menu() ?>
 						</nav>
+						<nav class="theme_common_navi">
+<?= $theme->mk_shoulder_menu() ?>
+						</nav>
 					</div>
 				</div><!-- /.row -->
 			</div><!-- /.container -->

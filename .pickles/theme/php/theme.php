@@ -64,20 +64,39 @@ class theme{
 		$rtn .= '<ul>'."\n";
 		foreach( $global_menu as $global_menu_page_id ){
 			$rtn .= '<li>'.$this->px->mk_link( $global_menu_page_id );
-			$rtn .= $this->mk_global_sub_menu( $global_menu_page_id );
+			$rtn .= $this->mk_sub_menu( $global_menu_page_id );
 			$rtn .= '</li>'."\n";
 		}
 		$rtn .= '</ul>'."\n";
 		return $rtn;
 	}
-	private function mk_global_sub_menu( $parent_page_id ){
+	/**
+	 * ショルダーナビを自動生成する
+	 */
+	public function mk_shoulder_menu(){
+		$shoulder_menu = $this->px->site()->get_shoulder_menu();
+		if( !count($shoulder_menu) ){
+			return '';
+		}
+
+		$rtn = '';
+		$rtn .= '<ul>'."\n";
+		foreach( $shoulder_menu as $shoulder_menu_page_id ){
+			$rtn .= '<li>'.$this->px->mk_link( $shoulder_menu_page_id );
+			$rtn .= $this->mk_sub_menu( $shoulder_menu_page_id );
+			$rtn .= '</li>'."\n";
+		}
+		$rtn .= '</ul>'."\n";
+		return $rtn;
+	}
+	private function mk_sub_menu( $parent_page_id ){
 		$rtn = '';
 		$children = $this->px->site()->get_children( $parent_page_id );
 		if( count($children) && $this->px->site()->is_page_in_breadcrumb( $parent_page_id ) ){
 			$rtn .= '<ul>'."\n";
 			foreach( $children as $child ){
 				$rtn .= '<li>'.$this->px->mk_link( $child );
-				$rtn .= $this->mk_global_sub_menu( $child );
+				$rtn .= $this->mk_sub_menu( $child );
 				$rtn .= '</li>'."\n";
 			}
 			$rtn .= '</ul>'."\n";

@@ -53,6 +53,7 @@ html, body{
  * ナビゲーション
  */
 .theme_common_navi{
+	margin-bottom:0.7em;
 }
 .theme_common_navi a{
 	display: block;

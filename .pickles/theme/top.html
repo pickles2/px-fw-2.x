@@ -22,17 +22,10 @@
 					</div>
 					<div class="col-sm-3">
 						<nav class="theme_common_navi">
-<?php
-$current_page_id = $px->site()->get_current_page_info('id');
-$children = $px->site()->get_children( $current_page_id );
-if( count($children) ){
-	print '<ul>';
-	foreach( $children as $child ){
-		print '<li>'.$px->mk_link( $child ).'</li>';
-	}
-	print '</ul>';
-}
-?>
+<?= $theme->mk_global_menu() ?>
+						</nav>
+						<nav class="theme_common_navi">
+<?= $theme->mk_shoulder_menu() ?>
 						</nav>
 					</div>
 				</div><!-- /.row -->
