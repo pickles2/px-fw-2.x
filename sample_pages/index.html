@@ -5,11 +5,38 @@
 
 <!-- autoindex -->
 
+
+<h2>composer のインストール</h2>
+
+<p>
+	Pickles 2 のインストールは、composer を使用します。<br />
+	<code>composer</code> のインストールについて詳しくは <a href="https://getcomposer.org/doc/00-intro.md" target="_blank">https://getcomposer.org/doc/00-intro.md</a> を参照してください。<br />
+</p>
+
+
+<h3>Mac OSX</h3>
+<p>
+	Mac の方は、次のコマンドでグローバルインストールできます。<br />
+</p>
+
+<div class="unit">
+	<div class="code"><pre><code>$ curl -sS https://getcomposer.org/installer | php
+$ mv composer.phar /usr/local/bin/composer
+</code></pre></div>
+</div>
+
+<h3>Windows</h3>
+<p>
+	Windows の方は、GUIインストーラ <a href="https://getcomposer.org/Composer-Setup.exe">Composer-Setup.exe</a> が用意されていますので、これを使うのがおすすめです。<br />
+</p>
+
+
+
 <h2>サイトマップCSV</h2>
 <p>
 	これらのサンプルコードは、サイトマップCSVに定義されています。サイトマップCSVは次のパスに配置されています。<br />
 </p>
-<ul><li><code>./_PX/sitemaps/sitemap.csv</code></li></ul>
+<ul><li><code>./.pickles/sitemaps/sitemap.csv</code></li></ul>
 <p>
 	このファイル3行目以降は、サンプルページについて定義しています。<br />
 </p>
@@ -25,6 +52,7 @@
 <ul>
 	<li><?= $px->mk_link( './fess/' ) ?></li>
 </ul>
+
 
 
 <h2>HTMLコンテンツの書き方</h2>

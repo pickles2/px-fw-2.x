@@ -29,9 +29,9 @@ class clearcache{
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
-		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir() ).DIRECTORY_SEPARATOR;
-		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot() ).DIRECTORY_SEPARATOR;
-		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$this->px->conf()->public_cache_dir ).DIRECTORY_SEPARATOR;
+		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir().'/' );
+		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().'/' );
+		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/' );
 	}
 
 

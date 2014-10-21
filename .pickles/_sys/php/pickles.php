@@ -98,7 +98,7 @@ class pickles{
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding     = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $conf );
-		$this->path_homedir = $this->fs->get_realpath($this->path_homedir).'/';
+		$this->path_homedir = $this->fs->get_realpath($this->path_homedir.'/');
 
 		// make instance $req
 		$conf = new \stdClass;
@@ -502,7 +502,9 @@ class pickles{
 		$px = $this;
 		$rtn = '';
 		$realpath = $this->get_path_docroot().$this->href( $this->conf()->contents_manifesto );
-		if( !$this->fs()->is_file( $realpath ) ){ return ''; }
+		if( !$this->fs()->is_file( $realpath ) ){
+			return '';
+		}
 		ob_start();
 		include( $realpath );
 		$rtn = ob_get_clean();
@@ -806,7 +808,7 @@ class pickles{
 	 */
 	public function get_path_docroot(){
 		$path_controot = $this->fs()->get_realpath( $this->get_path_controot() );
-		$path_cd = $this->fs()->get_realpath( '.' );
+		$path_cd = $this->fs()->get_realpath( './' );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
 		return $rtn;
 	}
@@ -902,7 +904,7 @@ class pickles{
 	// 	$path_content = $tmp_page_info['content'];
 
 	// 	$lib_realpath = $this->get_path_homedir().'_sys/ramdata/contents/'.$this->fs()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 	// 	if( !is_dir($rtn) ){
 	// 		$this->fs()->mkdir_r($rtn);
 	// 	}
@@ -919,7 +921,7 @@ class pickles{
 	// 	$path_content = $tmp_page_info['content'];
 
 	// 	$lib_realpath = $this->get_path_homedir().'_sys/caches/contents/'.$this->fs()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
+	// 	$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 	// 	if( !is_dir($rtn) ){
 	// 		$this->fs()->mkdir_r($rtn);
 	// 	}
@@ -934,7 +936,7 @@ class pickles{
 	 */
 	public function path_plugin_files( $localpath_resource = null ){
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
-		$rtn = $this->fs()->get_realpath( $rtn ).'/';
+		$rtn = $this->fs()->get_realpath( $rtn.'/' );
 		if( !$this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
 			$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
 		}
@@ -974,7 +976,7 @@ class pickles{
 	 */
 	public function realpath_plugin_private_cache( $localpath_resource = null ){
 		$lib_realpath = $this->get_path_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
-		$rtn = $this->fs()->get_realpath( $lib_realpath ).'/';
+		$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 		if( !$this->fs()->is_dir( $rtn ) ){
 			$this->fs()->mkdir_r( $rtn );
 		}

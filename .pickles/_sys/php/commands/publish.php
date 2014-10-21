@@ -39,7 +39,7 @@ class publish{
 	public function __construct( $px ){
 		$this->px = $px;
 
-		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' ).DIRECTORY_SEPARATOR;
+		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' );
 		if( $this->get_path_publish_dir() !== false ){
 			$this->path_publish_dir = $this->get_path_publish_dir();
 		}
@@ -358,7 +358,7 @@ class publish{
 		if( @!strlen( $this->px->conf()->path_publish_dir ) ){
 			return false;
 		}
-		$tmp_path = $this->px->fs()->get_realpath( $this->px->conf()->path_publish_dir ).DIRECTORY_SEPARATOR;
+		$tmp_path = $this->px->fs()->get_realpath( $this->px->conf()->path_publish_dir.'/' );
 		if( !$this->px->fs()->is_dir( $tmp_path ) ){
 			return false;
 		}
