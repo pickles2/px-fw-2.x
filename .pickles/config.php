@@ -29,7 +29,7 @@ return call_user_func( function(){
 	$conf->output_eol_coding = 'lf';
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
-	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
+	$conf->allow_pxcommands = 1; // PX Commands の実行を許可
 
 	// commands
 	$conf->commands = new stdClass;
@@ -75,6 +75,9 @@ return call_user_func( function(){
 
 	// Starting
 	$conf->funcs->starting = [
+		 // PX=config
+		'picklesFramework2\commands\config::regist' ,
+
 		 // PX=phpinfo
 		'picklesFramework2\commands\phpinfo::regist' ,
 

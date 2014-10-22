@@ -24,11 +24,12 @@
     "autoload": {
         "files": [
             ".pickles/_sys/php/pickles.php",
+            ".pickles/_sys/php/commands/clearcache.php",
+            ".pickles/_sys/php/commands/config.php",
+            ".pickles/_sys/php/commands/phpinfo.php",
+            ".pickles/_sys/php/commands/publish.php",
             ".pickles/_sys/php/processors/md.php",
             ".pickles/_sys/php/processors/scss.php",
-            ".pickles/_sys/php/commands/phpinfo.php",
-            ".pickles/_sys/php/commands/clearcache.php",
-            ".pickles/_sys/php/commands/publish.php",
             ".pickles/_sys/php/processors/autoindex.php",
             ".pickles/_sys/php/processors/encodingconverter.php",
             ".pickles/_sys/php/processors/ssi.php",
