@@ -72,21 +72,20 @@
 				<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ) ?></h1>
 			</div>
 		</header>
-		<div class="theme_mainblock">
-			<div class="theme_welcome">
-				<div class="theme_welcome-inner">
-					<p class="theme_welcome-title"><?php print $theme_top->create_src_welcome_svg(); ?></p>
-					<div class="theme_welcome-body clearfix">
-						<div class="theme_welcome-message">
-							<?php print $theme_top->mk_setup_test( $test_results ); ?>
-						</div>
-						<?php if( !count($test_results) ){ ?>
-							<div class="theme_welcome-image_everyone"><img src="<?php print $px->path_plugin_files('images/everyone.png'); ?>" alt="" /></div>
-						<?php } ?>
+		<div class="theme_welcome">
+			<div class="theme_welcome-inner">
+				<p class="theme_welcome-title"><?php print $theme_top->create_src_welcome_svg(); ?></p>
+				<div class="theme_welcome-body clearfix">
+					<div class="theme_welcome-message">
+						<?php print $theme_top->mk_setup_test( $test_results ); ?>
 					</div>
+					<?php if( !count($test_results) ){ ?>
+						<div class="theme_welcome-image_everyone"><img src="<?php print $px->path_plugin_files('images/everyone.png'); ?>" alt="" /></div>
+					<?php } ?>
 				</div>
 			</div>
-
+		</div><!-- /.theme_welcome -->
+		<div class="theme_mainblock">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-9">
