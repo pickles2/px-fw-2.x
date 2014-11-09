@@ -382,7 +382,8 @@ class site{
 			//  自身がトップページだった場合。
 			return '';
 		}
-		$parent_pid = $this->get_page_info($path, 'id');
+		$page_info = $current_page_info;
+		$parent_pid = $page_info['id'];
 		while( $parent_pid = $this->get_parent($parent_pid) ){
 			if(!strlen($parent_pid)){
 				break;
@@ -393,7 +394,7 @@ class site{
 				return $page_info['id'];
 			}
 		}
-		return '';//引っかからなかったらトップページを返す
+		return $page_info['id'];
 	}//get_category_top()
 
 	/**
