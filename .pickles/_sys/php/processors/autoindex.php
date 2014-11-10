@@ -14,7 +14,7 @@ class autoindex{
 	/**
 	 * 機能別に値を記憶する領域
 	 */
-	private $func_data_memos = '<!-- autoindex -->';
+	private $func_data_memos = '\\<\\!\\-\\-\\s*autoindex\\s*\\-\\-\\>';
 
 	/**
 	 * extensions function
@@ -137,13 +137,13 @@ class autoindex{
 					break;
 				}elseif( $nsa>0 ){
 					#	つぎ下がるとき
-#					for( $i = $nsa; $i>0; $i -- ){
-#						$anchorlinks .= '</li></ul></li>';
-#					}
+					// for( $i = $nsa; $i>0; $i -- ){
+					// 	$anchorlinks .= '</li></ul></li>';
+					// }
 				}elseif( $nsa<0 ){
 					#	つぎ上がるとき
 					for( $i = $nsa; $i<0; $i ++ ){
-//						$anchorlinks .= '</li></ul>'."\n";
+						// $anchorlinks .= '</li></ul>'."\n";
 					}
 				}else{
 					#	つぎ現状維持
@@ -158,7 +158,7 @@ class autoindex{
 			$anchorlinks .= '<!-- / autoindex -->'."\n";
 		}
 
-		$content = preg_replace( '/'.preg_quote($this->func_data_memos,'/').'/si' , $anchorlinks , $content );
+		$content = preg_replace( '/'.$this->func_data_memos.'/s' , $anchorlinks , $content );
 		return $content;
 	}//apply_autoindex();
 
