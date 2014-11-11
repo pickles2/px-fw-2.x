@@ -1,6 +1,6 @@
 {
     "name": "tomk79/px-fw-2.x",
-    "description": "",
+    "description": "Pickles Framework(PxFW) は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。",
     "keywords": ["pickles"],
     "license": "MIT",
     "authors": [
