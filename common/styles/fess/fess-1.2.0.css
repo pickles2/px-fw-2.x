@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /**
- * FESS 1.1.2
+ * FESS 1.2.0
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 /**
@@ -881,23 +881,27 @@ table.def tfoot td {
 .code {
   margin: 1em 0;
 }
-.code pre {
-  margin: 0;
-}
-.code code,
+.code pre,
 .code textarea {
+  margin: 0;
   border: 1px solid #999999;
   background: #f5f5f5;
   padding: 1em;
   font-size: small;
   line-height: 1.5;
 }
-.code code {
+.code pre {
   display: block;
   width: auto;
   background: #e8e8e8;
   border: 1px dashed #999999;
   overflow: auto;
+}
+.code pre code {
+  border: none;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
 }
 .code textarea {
   display: block;
