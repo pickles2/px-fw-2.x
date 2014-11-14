@@ -260,7 +260,7 @@ class site{
 				}
 
 				//  パンくず欄の先頭が > から始まっていた場合、削除
-				$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] );
+				$tmp_array['logical_path'] = @preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] );
 
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 				$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
@@ -848,7 +848,7 @@ class site{
 			// $target_layer = '';
 			$parent_page_id = '';
 			if( strlen( trim($row['id']) ) ){
-				$tmp_breadcrumb = explode( '>', $row['logical_path'] );
+				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
 				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
 				$parent_page_id = trim($tmp_page_info['id']);
 
@@ -1159,7 +1159,7 @@ class site{
 		if( !strlen($page_info['id']) ){return array();}
 
 		$rtn = array('');
-		$tmp_breadcrumb = explode( '>', $page_info['logical_path'] );
+		$tmp_breadcrumb = @explode( '>', $page_info['logical_path'] );
 		foreach( $tmp_breadcrumb as $tmp_id ){
 			if( !strlen($tmp_id) ){continue;}
 			$tmp_page_info = $this->get_page_info( trim($tmp_id) );
