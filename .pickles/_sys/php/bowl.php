@@ -27,8 +27,6 @@ class bowl{
 
 	/**
 	 * コンストラクタ
-	 * 
-	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct(){
 	}

@@ -13,7 +13,7 @@ class pickles{
 	private $path_homedir;
 	private $path_content;
 	private $conf;
-	private $fs, $req, $site;
+	private $fs, $req, $site, $bowl, $cmd;
 	private $directory_index;
 	private $proc_type, $proc_id, $proc_num = 0;
 
@@ -58,7 +58,7 @@ class pickles{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.0a1-nb';
+		return '2.0.0b1-nb';
 	}
 
 	/**
@@ -107,6 +107,10 @@ class pickles{
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
 
+
+		// make instance $cmd
+		require_once(__DIR__.'/cmd.php');
+		$this->cmd = new cmd($this);
 
 		// Starting functions
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
@@ -252,6 +256,13 @@ class pickles{
 	 */
 	public function site(){
 		return $this->site;
+	}
+
+	/**
+	 * get $cmd
+	 */
+	public function cmd(){
+		return $this->cmd;
 	}
 
 	/**

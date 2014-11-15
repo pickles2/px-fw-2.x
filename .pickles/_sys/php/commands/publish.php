@@ -71,10 +71,7 @@ class publish{
 	 */
 	private function cli_header(){
 		ob_start();
-		print 'pickles '.$this->px->get_version().' - publish'."\n";
-		print 'PHP '.phpversion()."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print '------------'."\n";
+		print $this->px->cmd()->get_cli_header();
 		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
 		print 'publish directory: '.$this->path_publish_dir."\n";
 		print 'domain: '.$this->domain."\n";
@@ -90,11 +87,7 @@ class publish{
 	 */
 	private function cli_footer(){
 		ob_start();
-		print '------------'."\n";
-		print "\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print 'end;'."\n";
-		print "\n";
+		print $this->px->cmd()->get_cli_footer();
 		return ob_get_clean();
 	}
 
