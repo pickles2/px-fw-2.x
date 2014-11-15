@@ -71,7 +71,7 @@ class publish{
 	 */
 	private function cli_header(){
 		ob_start();
-		print $this->px->cmd()->get_cli_header();
+		print $this->px->pxcmd()->get_cli_header();
 		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
 		print 'publish directory: '.$this->path_publish_dir."\n";
 		print 'domain: '.$this->domain."\n";
@@ -87,7 +87,7 @@ class publish{
 	 */
 	private function cli_footer(){
 		ob_start();
-		print $this->px->cmd()->get_cli_footer();
+		print $this->px->pxcmd()->get_cli_footer();
 		return ob_get_clean();
 	}
 
@@ -114,7 +114,12 @@ class publish{
 			print $this->cli_footer();
 		}else{
 			$html = '';
-			$html .= htmlspecialchars('execute PX command => "?PX=publish.run"');
+			ob_start(); ?>
+<div class="unit">
+	<button onclick="window.open('?PX=publish.run');">パブリッシュを実行する</button>
+</div>
+<?php
+			$html .= ob_get_clean();
 			print $this->px->pxcmd()->wrap_gui_frame($html);
 		}
 		exit;

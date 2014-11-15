@@ -19,7 +19,7 @@ namespace picklesFramework2;
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pxcmd{
-	private $px;
+	private $px, $bowl;
 	private $pxcommands = array();
 
 	/**
@@ -30,6 +30,11 @@ class pxcmd{
 	public function __construct($px){
 		$this->px = $px;
 		$this->pxcommands = array();
+
+		// make instance $bowl
+		require_once(__DIR__.'/bowl.php');
+		$this->bowl = new bowl();
+
 	}
 
 	/**
@@ -50,6 +55,13 @@ class pxcmd{
 			$fnc();
 		}
 		return true;
+	}
+
+	/**
+	 * get $bowl
+	 */
+	public function bowl(){
+		return $this->bowl;
 	}
 
 	/**
@@ -83,26 +95,50 @@ class pxcmd{
 	 * wrap GUI frame
 	 */
 	public function wrap_gui_frame( $content ){
+		$this->bowl()->send($content);
+		unset($content);
+
+		// リソースをキャッシュ領域にコピー
+		$path_pxcache = $this->px->fs()->get_realpath( $this->px->conf()->public_cache_dir.'/px/' );
+		$realpath_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$path_pxcache );
+		$this->px->fs()->mkdir( $realpath_pxcache );
+		$this->px->fs()->copy_r( __DIR__.'/files/', $realpath_pxcache );
+
 		$pxcmd = $this->px->get_px_command();
 		ob_start();?>
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8" />
-	<title><?= htmlspecialchars( $this->px->conf()->name ) ?></title>
-</head>
-<body>
-<?php
-		print htmlspecialchars( 'Pickles '.$this->px->get_version().' -> '.$pxcmd[0] ).'<br />'."\n";
-		print htmlspecialchars( 'PHP '.phpversion() ).'<br />'."\n";
-		print @date('Y-m-d H:i:s').'<br />'."\n";
-?>
-<hr />
-<div class="contents">
-<?= $content; ?>
-</div>
-<hr />
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<title><?= htmlspecialchars( $this->px->conf()->name ) ?></title>
+		<!-- jQuery -->
+		<script src="<?php print htmlspecialchars($this->px->href($path_pxcache.'scripts/jquery-1.10.1.min.js')); ?>" type="text/javascript"></script>
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="<?= htmlspecialchars( $this->px->href($path_pxcache.'styles/bootstrap/css/bootstrap.min.css') ); ?>">
+		<script src="<?= htmlspecialchars( $this->px->href($path_pxcache.'styles/bootstrap/js/bootstrap.min.js') ); ?>"></script>
+
+		<!-- FESS -->
+		<link rel="stylesheet" href="<?php print htmlspecialchars($this->px->href($path_pxcache.'styles/contents.css')); ?>" type="text/css" />
+
+<?= $this->bowl()->pull('head') ?>
+	</head>
+	<body>
+		<div class="container">
+			<p>Pickles <?= htmlspecialchars( $this->px->get_version() ) ?> - <?= htmlspecialchars($pxcmd[0]) ?></p>
+			<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
+			<p><?= htmlspecialchars(@date('Y-m-d H:i:s')) ?></p>
+		</div>
+		<hr />
+		<div class="container">
+			<div class="contents">
+<?= $this->bowl()->pull() ?>
+			</div>
+		</div>
+		<hr />
+		<div class="container">
+		</div>
+	</body>
 </html>
 <?php
 		return ob_get_clean();

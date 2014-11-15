@@ -91,6 +91,11 @@ class pickles{
 		}elseif( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.php') ){
 			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
+		$this->conf = json_decode( json_encode( $this->conf ) );
+
+		// make instance $bowl
+		require_once(__DIR__.'/bowl.php');
+		$this->bowl = new bowl();
 
 		// make instance $fs
 		$conf = new \stdClass;
@@ -120,10 +125,6 @@ class pickles{
 		// make instance $site
 		require_once(__DIR__.'/site.php');
 		$this->site = new site($this);
-
-		// make instance $bowl
-		require_once(__DIR__.'/bowl.php');
-		$this->bowl = new bowl();
 
 
 

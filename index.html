@@ -61,7 +61,26 @@
 <p>
 	しばらくすると、次のパスに、静的なHTMLファイルが生成されます。<br />
 </p>
-<div class="code"><pre><code>./.pickles/_sys/ram/publish/</code></pre></div>
+<div class="unit">
+	<div class="code"><pre><code>./.pickles/_sys/ram/publish/
+</code></pre></div>
+</div>
 
 
+<div class="attention_box">
+	<p class="attention_box-heading">PXコマンドに関する注意事項</p>
+
+	<p>
+		PXコマンドは、Pickles 2 を便利に使うためのさまざまな機能を提供します(例：パブリッシュ機能 <a href="?PX=publish">?PX=publish</a>)。PXコマンドはサーバー内部の情報にアクセスしたり、サーバー上のデータを書き換えるインターフェイスを提供する場合があるため、<strong>第3者にアクセスされると大変キケンです</strong>。<br />
+		Pickles 2 をインターネット上のサーバーで動かす場合には、次のことに注意してください。<br />
+	</p>
+	<ul>
+		<li>ウェブ制作環境として利用する場合、利用基本認証やIP制限などの処理を施し、一般のユーザーがアクセスできない場所に設置してください。</li>
+		<li>または、Pickles 2 上に構築したウェブアプリケーションをサービスとして公開する場合、設定ファイル (<code>./.pickles/config.php</code>) の <code>$conf-&gt;allow_pxcommands</code> の値を <code>0</code> に設定し、PXコマンド機能を無効にしてください。
+			<div class="code"><pre><code>$conf-&gt;allow_pxcommands = 0; // PX Commands の実行を許可
+	</code></pre></div>
+		</li>
+	</ul>
+
+</div><!-- /.attention_box -->
 
