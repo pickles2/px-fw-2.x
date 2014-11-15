@@ -13,7 +13,7 @@ class pickles{
 	private $path_homedir;
 	private $path_content;
 	private $conf;
-	private $fs, $req, $site, $bowl, $cmd;
+	private $fs, $req, $site, $bowl, $pxcmd;
 	private $directory_index;
 	private $proc_type, $proc_id, $proc_num = 0;
 
@@ -108,9 +108,9 @@ class pickles{
 		$this->req = new \tomk79\request( $conf );
 
 
-		// make instance $cmd
-		require_once(__DIR__.'/cmd.php');
-		$this->cmd = new cmd($this);
+		// make instance $pxcmd
+		require_once(__DIR__.'/pxcmd.php');
+		$this->pxcmd = new pxcmd($this);
 
 		// Starting functions
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
@@ -259,10 +259,10 @@ class pickles{
 	}
 
 	/**
-	 * get $cmd
+	 * get $pxcmd
 	 */
-	public function cmd(){
-		return $this->cmd;
+	public function pxcmd(){
+		return $this->pxcmd;
 	}
 
 	/**

@@ -36,33 +36,12 @@ class config{
 	 */
 	private function kick(){
 		$conf = clone $this->px->conf();
-		$this->header();
+		print $this->px->pxcmd()->get_cli_header();
 
 		var_dump( $conf );
 
-		$this->footer();
+		print $this->px->pxcmd()->get_cli_footer();
 		exit;
 	}
-
-	/**
-	 * ヘッダーを出力
-	 */
-	private function header(){
-		@header('Content-type: text/plain');
-
-		print 'pickles '.$this->px->get_version().''."\n";
-		print 'PHP '.phpversion()."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print '------------'."\n";
-
-	}
-
-	/**
-	 * フッターを出力
-	 */
-	private function footer(){
-		echo ''."\n";
-	}
-
 
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * class cmd
+ * class pxcmd
  * 
- * Pickles2 のコアオブジェクトの1つ `$cmd` のオブジェクトクラスを定義します。
+ * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスを定義します。
  * 
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
@@ -11,14 +11,14 @@ namespace picklesFramework2;
 /**
  * PX Commands
  * 
- * Pickles2 のコアオブジェクトの1つ `$cmd` のオブジェクトクラスです。
+ * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスです。
  * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
  * 
- * メソッド `$px->cmd()` を通じてアクセスします。
+ * メソッド `$px->pxcmd()` を通じてアクセスします。
  * 
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
-class cmd{
+class pxcmd{
 	private $px;
 	private $pxcommands = array();
 
@@ -57,6 +57,7 @@ class cmd{
 	 */
 	public function get_cli_header(){
 		$pxcmd = $this->px->get_px_command();
+		@header('Content-type: text/plain');
 		ob_start();
 		print '------------'."\n";
 		print 'Pickles '.$this->px->get_version().' -> '.$pxcmd[0]."\n";
@@ -82,14 +83,28 @@ class cmd{
 	 * wrap GUI frame
 	 */
 	public function wrap_gui_frame( $content ){
-		ob_start();
-		print '<!DOCTYPE html>'."\n";
-		print '<html>'."\n";
-		print '<body>'."\n";
+		$pxcmd = $this->px->get_px_command();
+		ob_start();?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title><?= htmlspecialchars( $this->px->conf()->name ) ?></title>
+</head>
+<body>
+<?php
+		print htmlspecialchars( 'Pickles '.$this->px->get_version().' -> '.$pxcmd[0] ).'<br />'."\n";
+		print htmlspecialchars( 'PHP '.phpversion() ).'<br />'."\n";
 		print @date('Y-m-d H:i:s').'<br />'."\n";
-		print $content."\n";
-		print '</body>'."\n";
-		print '</html>';
+?>
+<hr />
+<div class="contents">
+<?= $content; ?>
+</div>
+<hr />
+</body>
+</html>
+<?php
 		return ob_get_clean();
 	}
 

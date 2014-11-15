@@ -107,10 +107,16 @@ class publish{
 	 * execute home
 	 */
 	private function exec_home(){
-		header('Content-type: text/plain;');
-		print $this->cli_header();
-		print 'execute PX command => "?PX=publish.run"'."\n";
-		print $this->cli_footer();
+		if( $this->px->req()->is_cmd() ){
+			header('Content-type: text/plain;');
+			print $this->cli_header();
+			print 'execute PX command => "?PX=publish.run"'."\n";
+			print $this->cli_footer();
+		}else{
+			$html = '';
+			$html .= htmlspecialchars('execute PX command => "?PX=publish.run"');
+			print $this->px->pxcmd()->wrap_gui_frame($html);
+		}
 		exit;
 	}
 

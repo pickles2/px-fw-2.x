@@ -39,12 +39,7 @@ class clearcache{
 	 * kick
 	 */
 	private function kick(){
-		header('Content-type: text/plain;');
-		print "\n";
-		print "\n";
-		print 'pickles '.$this->px->get_version().' - clearcache'."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print '------------------------'."\n";
+		print $this->px->pxcmd()->get_cli_header();
 		print 'pickles home directory: '.$this->path_homedir."\n";
 		print 'pickles docroot directory: '.$this->path_docroot."\n";
 		print 'pickles public cache directory: '.$this->path_public_caches."\n";
@@ -52,11 +47,7 @@ class clearcache{
 		print "\n";
 		$this->exec();
 		print "\n";
-		print '------------------------'."\n";
-		print "\n";
-		print 'end;'."\n";
-		print @date('Y-m-d H:i:s')."\n";
-		print "\n";
+		print $this->px->pxcmd()->get_cli_footer();
 		exit;
 	}
 
