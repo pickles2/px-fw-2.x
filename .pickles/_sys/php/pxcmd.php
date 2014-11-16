@@ -98,9 +98,11 @@ class pxcmd{
 		$this->bowl()->send($content);
 		unset($content);
 
+		@header( 'Content-type: text/html; charset="UTF-8"' );
+
 		// リソースをキャッシュ領域にコピー
-		$path_pxcache = $this->px->fs()->get_realpath( $this->px->conf()->public_cache_dir.'/px/' );
-		$realpath_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$path_pxcache );
+		$path_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/px/' );
+		$realpath_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$path_pxcache );
 		$this->px->fs()->mkdir( $realpath_pxcache );
 		$this->px->fs()->copy_r( __DIR__.'/files/', $realpath_pxcache );
 
@@ -111,33 +113,89 @@ class pxcmd{
 	<head>
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars( $this->px->conf()->name ) ?></title>
+
 		<!-- jQuery -->
-		<script src="<?php print htmlspecialchars($this->px->href($path_pxcache.'scripts/jquery-1.10.1.min.js')); ?>" type="text/javascript"></script>
+		<script src="<?= htmlspecialchars( $path_pxcache.'scripts/jquery-1.10.1.min.js' ); ?>" type="text/javascript"></script>
 
 		<!-- Bootstrap -->
-		<link rel="stylesheet" href="<?= htmlspecialchars( $this->px->href($path_pxcache.'styles/bootstrap/css/bootstrap.min.css') ); ?>">
-		<script src="<?= htmlspecialchars( $this->px->href($path_pxcache.'styles/bootstrap/js/bootstrap.min.js') ); ?>"></script>
+		<link rel="stylesheet" href="<?= htmlspecialchars( $path_pxcache.'styles/bootstrap/css/bootstrap.min.css' ); ?>">
+		<script src="<?= htmlspecialchars( $path_pxcache.'styles/bootstrap/js/bootstrap.min.js' ); ?>"></script>
 
 		<!-- FESS -->
-		<link rel="stylesheet" href="<?php print htmlspecialchars($this->px->href($path_pxcache.'styles/contents.css')); ?>" type="text/css" />
+		<link rel="stylesheet" href="<?= htmlspecialchars( $path_pxcache.'styles/contents.css' ); ?>" type="text/css" />
+
+		<!-- layout -->
+		<link rel="stylesheet" href="<?= htmlspecialchars( $path_pxcache.'styles/layout.css' ); ?>" type="text/css" />
 
 <?= $this->bowl()->pull('head') ?>
 	</head>
-	<body>
-		<div class="container">
-			<p>Pickles <?= htmlspecialchars( $this->px->get_version() ) ?> - <?= htmlspecialchars($pxcmd[0]) ?></p>
-			<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
-			<p><?= htmlspecialchars(@date('Y-m-d H:i:s')) ?></p>
+	<body class="pxcmd">
+		<div class="pxcmd-outline">
+		<div class="pxcmd-pxfw clearfix">
+		<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles (version:<?= htmlspecialchars( $this->px->get_version() ) ?>)</div>
+		<div class="pxcmd-pxfw_r">
+		<!--<form class="inline">
+		<select onchange="window.location.href=\'?PX=\'+this.options[this.selectedIndex].value;">
+		foreach( $px_command_list as $command_name_row ){
+			<option value="'.t::h($command_name_row).'"'.($this->pxcommand_name[0]==$command_name_row?' selected="selected"':'').'>'.t::h($command_name_row).'</option>
+		}
+		if( count($plugins_list) ){
+			foreach($plugins_list as $plugin_name){
+				<option value="plugins.'.t::h(urlencode($plugin_name)).'"'.(implode( '.', array(@$this->pxcommand_name[0], @$this->pxcommand_name[1]) )=='plugins.'.$plugin_name?' selected="selected"':'').'>plugins.'.t::h($plugin_name).'</option>
+			}
+		}
+		</select>
+		</form>-->
 		</div>
-		<hr />
-		<div class="container">
-			<div class="contents">
+		</div><!-- /.pxcmd-pxfw -->
+
+		<div class="pxcmd-header">
+			<div class="pxcmd-project_title"><?= htmlspecialchars( @$this->px->conf()->name ) ?></div>
+		</div><!-- /.pxcmd-header -->
+
+		<div class="pxcmd-middle">
+<?php
+		$command_title = $pxcmd[0].(@strlen($pxcmd[1])?'.'.$pxcmd[1]:'');
+		$page_title = null;
+?>
+		<div class="pxcmd-title">
+		<?php if(strlen($page_title)){ ?>
+			<p class="pxcmd-category_title"><a href="?PX=<?= htmlspecialchars( $command_title ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars($command_title) ?></a></p>
+			<h1><?= htmlspecialchars( $page_title ) ?></h1>
+		<?php }else{ ?>
+			<h1><a href="?PX=<?= htmlspecialchars( $command_title ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars( $command_title ) ?></a></h1>
+		<?php } ?>
+		</div><!-- /.pxcmd-title -->
+		<div id="content" class="contents">
 <?= $this->bowl()->pull() ?>
-			</div>
 		</div>
-		<hr />
-		<div class="container">
+		</div><!-- /.pxcmd-middle -->
+
+		<div class="pxcmd-footer">
+		<!-- <dl class="clearfix">
+		<dt>standard:</dt>
+		foreach( $px_command_list as $command_name_row ){
+			<dd><a href="?PX='.t::h($command_name_row).'"'.($this->pxcommand_name[0]==$command_name_row?' class="current"':'').'>'.t::h($command_name_row).'</a></dd>
+		}
+		<dt>standard (unpaged functions):</dt>
+		foreach( $px_command_unpaged_list as $command_name_row ){
+			<dd><a href="?PX='.t::h($command_name_row).'"'.($this->pxcommand_name[0]==$command_name_row?' class="current"':'').' target="_blank">'.t::h($command_name_row).'</a></dd>
+		}
+		if( count($plugins_list) ){
+			<dt>plugins:</dt>
+			foreach($plugins_list as $plugin_name){
+				<dd><a href="?PX=plugins.'.t::h(urlencode($plugin_name)).'"'.(implode( '.', array(@$this->pxcommand_name[0], @$this->pxcommand_name[1]) )=='plugins.'.$plugin_name?' class="current"':'').'>'.t::h($plugin_name).'</a></dd>
+			}
+		}
+		</dl>-->
+
+		<p><a href="?">PX Commands を終了する</a></p>
+		<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
+		<p><?= htmlspecialchars(@date('Y-m-d H:i:s')) ?></p>
+		<p class="pxcmd-credits"><a href="http://pickles.pxt.jp/" target="_blank">Pickles Framework</a> (C)Tomoya Koyanagi.</p>
+		</div><!-- /.footer -->
 		</div>
+
 	</body>
 </html>
 <?php

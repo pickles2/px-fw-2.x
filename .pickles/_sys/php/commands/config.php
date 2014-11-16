@@ -36,11 +36,23 @@ class config{
 	 */
 	private function kick(){
 		$conf = clone $this->px->conf();
-		print $this->px->pxcmd()->get_cli_header();
 
-		var_dump( $conf );
+		if( $this->px->req()->is_cmd() ){
+			header('Content-type: text/plain;');
+			print $this->px->pxcmd()->get_cli_header();
+			var_dump( $conf );
+			print $this->px->pxcmd()->get_cli_footer();
+		}else{
+			$html = '';
+			ob_start(); ?>
+<div class="unit">
+	<pre><?php var_dump( $conf ); ?></pre>
+</div>
+<?php
+			$html .= ob_get_clean();
+			print $this->px->pxcmd()->wrap_gui_frame($html);
+		}
 
-		print $this->px->pxcmd()->get_cli_footer();
 		exit;
 	}
 
