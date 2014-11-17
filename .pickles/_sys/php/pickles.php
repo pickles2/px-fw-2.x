@@ -117,9 +117,9 @@ class pickles{
 		require_once(__DIR__.'/pxcmd.php');
 		$this->pxcmd = new pxcmd($this);
 
-		// Starting functions
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->starting, $this );
 
+		// funcs: Before sitemap
+		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_sitemap, $this );
 
 
 		// make instance $site
@@ -127,12 +127,9 @@ class pickles{
 		$this->site = new site($this);
 
 
-		// Before contents functions
+		// funcs: Before contents
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
 
-
-		// Run PX Commands
-		$this->pxcmd()->run();
 
 
 		// execute Content
@@ -164,13 +161,8 @@ class pickles{
 		}
 
 
-		// process functions
+		// funcs: process functions
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->processor->{$this->proc_type}, $this );
-
-
-
-		// Output filter functions
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->output_filter, $this );
 
 
 
@@ -178,6 +170,12 @@ class pickles{
 		if( count($this->relatedlinks) ){
 			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
 		}
+
+
+		// funcs: Before output
+		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_output, $this );
+
+
 
 		// 最終出力
 		switch( $this->req()->get_cli_option('-o') ){
@@ -486,9 +484,9 @@ class pickles{
 		if( !$this->conf()->allow_pxcommands && !$this->req()->is_cmd() ){
 			return null;
 		}
-		$rtn = null;
+		$rtn = array();
 		$cmd = $this->req()->get_param('PX');
-		if( is_string($cmd) && strlen($cmd) ){
+		if( is_string($cmd) ){
 			$rtn = explode('.', $cmd);
 		}
 		return $rtn;

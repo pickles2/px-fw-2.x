@@ -40,7 +40,10 @@ class pxcmd{
 	/**
 	 * PXコマンドを登録する
 	 */
-	public function register( $cmd, $fnc, $rightnow = false ){
+	public function register( $cmd, $fnc ){
+		if( !is_string($cmd) ){
+			return false;
+		}
 		if( array_key_exists($cmd, $this->pxcommands) ){
 			trigger_error('PX Command "'.$cmd.'" is already registered.');
 			return false;
@@ -50,28 +53,32 @@ class pxcmd{
 			'name' => $cmd ,
 			'fnc' => $fnc ,
 		);
-		if( $rightnow ){
-			$pxcmd = $this->px->get_px_command();
-			if( $pxcmd[0] == $cmd ){
-				$this->pxcommands = array();
-				$fnc($this->px);
-			}
+		// if( $rightnow ){
+		// 	$pxcmd = $this->px->get_px_command();
+		// 	if( $pxcmd[0] == $cmd ){
+		// 		$this->pxcommands = array();
+		// 		$fnc($this->px);
+		// 	}
+		// }
+		$pxcmd = $this->px->get_px_command();
+		if( is_array($pxcmd) && count($pxcmd) && $pxcmd[0] == $cmd ){
+			$fnc($this->px);
 		}
 		return true;
 	}
 
-	/**
-	 * Run PX Commands
-	 */
-	public function run(){
-		$pxcmd = $this->px->get_px_command();
-		foreach( $this->pxcommands as $key=>$row ){
-			if( $pxcmd[0] == $row['cmd'] ){
-				$row['fnc']($this->px);
-			}
-		}
-		return true;
-	}
+	// /**
+	//  * Run PX Commands
+	//  */
+	// public function run(){
+	// 	$pxcmd = $this->px->get_px_command();
+	// 	foreach( $this->pxcommands as $key=>$row ){
+	// 		if( $pxcmd[0] == $row['cmd'] ){
+	// 			$row['fnc']($this->px);
+	// 		}
+	// 	}
+	// 	return true;
+	// }
 
 	/**
 	 * get $bowl
@@ -151,14 +158,14 @@ class pxcmd{
 				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles (version:<?= htmlspecialchars( $this->px->get_version() ) ?>)</div>
 				<div class="pxcmd-pxfw_r">
 <?php
-	$pxcommands = $this->pxcommands;
-	if( count($pxcommands) ){
-		print '<select onchange="window.location.href=\'?PX=\'+this.options[this.selectedIndex].value;">';
-		foreach( $pxcommands as $row ){
-			print '<option value="'.htmlspecialchars($row['cmd']).'"'.($row['cmd']==$pxcmd[0]?' selected="selected"':'').'>'.htmlspecialchars($row['name']).'</option>';
-		}
-		print '</select>';
-	}
+	// $pxcommands = $this->pxcommands;
+	// if( count($pxcommands) ){
+	// 	print '<select onchange="window.location.href=\'?PX=\'+this.options[this.selectedIndex].value;">';
+	// 	foreach( $pxcommands as $row ){
+	// 		print '<option value="'.htmlspecialchars($row['cmd']).'"'.($row['cmd']==$pxcmd[0]?' selected="selected"':'').'>'.htmlspecialchars($row['name']).'</option>';
+	// 	}
+	// 	print '</select>';
+	// }
 ?>
 				</div>
 			</div><!-- /.pxcmd-pxfw -->
