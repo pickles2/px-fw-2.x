@@ -38,21 +38,37 @@ class pxcmd{
 	}
 
 	/**
-	 * PXコマンド登録
+	 * PXコマンドを登録する
 	 */
-	public static function regist( $cmd, $fnc ){
-		if( array_key_exists($this->pxcommands, $cmd) ){
+	public function register( $cmd, $fnc, $rightnow = false ){
+		if( array_key_exists($cmd, $this->pxcommands) ){
+			trigger_error('PX Command "'.$cmd.'" is already registered.');
 			return false;
 		}
-		$pxcommands[$cmd] = array(
+		$this->pxcommands[$cmd] = array(
 			'cmd' => $cmd ,
 			'name' => $cmd ,
 			'fnc' => $fnc ,
 		);
+		if( $rightnow ){
+			$pxcmd = $this->px->get_px_command();
+			if( $pxcmd[0] == $cmd ){
+				$this->pxcommands = array();
+				$fnc($this->px);
+			}
+		}
+		return true;
+	}
 
-		$pxcmd = $px->get_px_command();
-		if( $pxcmd[0] == $cmd ){
-			$fnc();
+	/**
+	 * Run PX Commands
+	 */
+	public function run(){
+		$pxcmd = $this->px->get_px_command();
+		foreach( $this->pxcommands as $key=>$row ){
+			if( $pxcmd[0] == $row['cmd'] ){
+				$row['fnc']($this->px);
+			}
 		}
 		return true;
 	}
@@ -133,7 +149,18 @@ class pxcmd{
 		<div class="pxcmd-outline">
 			<div class="pxcmd-pxfw clearfix">
 				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles (version:<?= htmlspecialchars( $this->px->get_version() ) ?>)</div>
-				<div class="pxcmd-pxfw_r"></div>
+				<div class="pxcmd-pxfw_r">
+<?php
+	$pxcommands = $this->pxcommands;
+	if( count($pxcommands) ){
+		print '<select onchange="window.location.href=\'?PX=\'+this.options[this.selectedIndex].value;">';
+		foreach( $pxcommands as $row ){
+			print '<option value="'.htmlspecialchars($row['cmd']).'"'.($row['cmd']==$pxcmd[0]?' selected="selected"':'').'>'.htmlspecialchars($row['name']).'</option>';
+		}
+		print '</select>';
+	}
+?>
+				</div>
 			</div><!-- /.pxcmd-pxfw -->
 
 			<div class="pxcmd-header">

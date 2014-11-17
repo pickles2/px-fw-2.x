@@ -19,18 +19,17 @@ class publish{
 	/**
 	 * Before content function
 	 */
-	public static function regist( $px ){
-		$pxcmd = $px->get_px_command();
-		if( @$pxcmd[0] != 'publish' ){
-			return;
-		}
-		$self = new self( $px );
-		if( @$pxcmd[1] == 'run' ){
-			$self->exec_publish();
-		}else{
-			$self->exec_home();
-		}
-		exit;
+	public static function register( $px ){
+		$px->pxcmd()->register('publish', function($px){
+			$pxcmd = $px->get_px_command();
+			$self = new self( $px );
+			if( @$pxcmd[1] == 'run' ){
+				$self->exec_publish();
+			}else{
+				$self->exec_home();
+			}
+			exit;
+		});
 	}
 
 	/**

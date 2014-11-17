@@ -119,11 +119,6 @@ class site{
 			return true;
 		}
 
-		if( preg_match('/^clearcache(?:\\..*)?$/si', $this->px->req()->get_param('PX')) ){
-			// clearcacheを実行する際にはCSVの読み込みを行わない。どうせ直後に消されるので。
-			return true;
-		}
-
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
 		sort($ary_sitemap_files);

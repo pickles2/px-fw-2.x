@@ -76,19 +76,21 @@ return call_user_func( function(){
 	// Starting
 	$conf->funcs->starting = [
 		 // PX=config
-		'picklesFramework2\commands\config::regist' ,
+		'picklesFramework2\commands\config::register' ,
 
 		 // PX=phpinfo
-		'picklesFramework2\commands\phpinfo::regist' ,
+		'picklesFramework2\commands\phpinfo::register' ,
 
 		// PX=clearcache
-		'picklesFramework2\commands\clearcache::regist' ,
+		'picklesFramework2\commands\clearcache::register' ,
+
 	];
 
 	// Before content
 	$conf->funcs->before_content = [
 		// PX=publish
-		'picklesFramework2\commands\publish::regist' ,
+		'picklesFramework2\commands\publish::register' ,
+
 	];
 
 

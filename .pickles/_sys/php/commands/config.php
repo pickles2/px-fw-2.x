@@ -15,13 +15,11 @@ class config{
 	/**
 	 * Starting function
 	 */
-	public static function regist( $px ){
-		$pxcmd = $px->get_px_command();
-		if( $pxcmd[0] != 'config' ){
-			return;
-		}
-		(new self( $px ))->kick();
-		exit;
+	public static function register( $px ){
+		$px->pxcmd()->register('config', function($px){
+			(new self( $px ))->kick();
+			exit;
+		});
 	}
 
 	/**

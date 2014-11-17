@@ -127,6 +127,13 @@ class pickles{
 		$this->site = new site($this);
 
 
+		// Before contents functions
+		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
+
+
+		// Run PX Commands
+		$this->pxcmd()->run();
+
 
 		// execute Content
 		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
@@ -147,10 +154,6 @@ class pickles{
 
 		// デフォルトの Content-type を出力
 		$this->output_content_type();
-
-
-		// Before contents functions
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
 
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){

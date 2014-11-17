@@ -15,13 +15,11 @@ class clearcache{
 	/**
 	 * Starting function
 	 */
-	public static function regist( $px ){
-		$pxcmd = $px->get_px_command();
-		if( $pxcmd[0] != 'clearcache' ){
-			return;
-		}
-		(new self( $px ))->kick();
-		exit;
+	public static function register( $px ){
+		$px->pxcmd()->register('clearcache', function($px){
+			(new self( $px ))->kick();
+			exit;
+		}, true);
 	}
 
 	/**
