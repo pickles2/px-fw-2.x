@@ -43,8 +43,8 @@ class publish{
 		if( $this->get_path_publish_dir() !== false ){
 			$this->path_publish_dir = $this->get_path_publish_dir();
 		}
-		$this->domain = $px->get_domain();
-		$this->path_docroot = $px->get_path_controot();
+		$this->domain = $px->conf()->domain;
+		$this->path_docroot = $px->conf()->path_controot;
 
 		$this->path_region = $this->px->req()->get_request_file_path();
 		$this->path_region = preg_replace('/^\/+/s','/',$this->path_region);
@@ -115,8 +115,59 @@ class publish{
 		}else{
 			$html = '';
 			ob_start(); ?>
+<script type="text/javascript">
+function cont_EditPublishTargetPath(){
+	$('.cont_publish_target_path_preview').hide();
+	$('.cont_publish_target_path_editor').show();
+}
+function cont_EditPublishTargetPathApply(formElm){
+	var path = $('input[name=path]', formElm).val();
+	window.location.href = <?= json_encode($this->px->get_path_controot()) ?> + path + '?PX=publish&path_region='+encodeURIComponent(path);
+}
+</script>
 <div class="unit">
-	<button onclick="window.open('?PX=publish.run');">パブリッシュを実行する</button>
+	<p>プロジェクト『<?= htmlspecialchars($this->px->conf()->name) ?>』をパブリッシュします。</p>
+	<table class="def" style="width:100%;">
+		<colgroup><col width="30%" /><col width="70%" /></colgroup>
+		<tr>
+			<th style="word-break:break-all;">publish directory(tmp)</th>
+			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_tmp_publish) ?></td>
+		</tr>
+		<tr>
+			<th style="word-break:break-all;">publish directory</th>
+			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_publish_dir) ?></td>
+		</tr>
+		<tr>
+			<th style="word-break:break-all;">domain</th>
+			<td style="word-break:break-all;"><?= htmlspecialchars($this->domain) ?></td>
+		</tr>
+		<tr>
+			<th style="word-break:break-all;">docroot directory</th>
+			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_docroot) ?></td>
+		</tr>
+		<tr>
+			<th style="word-break:break-all;">region</th>
+			<td style="word-break:break-all;">
+				<div class="cont_publish_target_path_preview">
+					<div style="word-break:break-all;"><?= htmlspecialchars($this->path_region) ?></div>
+					<div class="small"><a href="javascript:cont_EditPublishTargetPath();" class="icon">変更する</a></div>
+				</div>
+				<div class="cont_publish_target_path_editor" style="display:none;">
+					<form action="?" method="get" onsubmit="cont_EditPublishTargetPathApply(this); return false;" class="inline">
+						<input type="text" name="path" size="25" style="max-width:70%;" value="<?= htmlspecialchars($this->path_region) ?>" />
+						<input type="submit" style="width:20%;" value="変更する" />
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="unit">
+	<p>次のボタンをクリックしてパブリッシュを実行してください。</p>
+	<form action="?" method="get" target="_blank">
+	<p class="center"><button class="xlarge">パブリッシュを実行する</button></p>
+	<div><input type="hidden" name="PX" value="publish.run" /><input type="hidden" name="path_region" value="<?= htmlspecialchars($this->px->req()->get_param('path_region')) ?>" /></div>
+	</form>
 </div>
 <?php
 			$html .= ob_get_clean();

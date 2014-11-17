@@ -9,14 +9,26 @@ html, body{
 }
 .contents{
 <?php include(__DIR__.'/normalize/normalize-3.0.1.css'); ?>
+
+	/* ライブラリ同士の衝突吸収 */
 	p, ul, ol, dl{
 		margin: 1em 0;
 	}
 	dl dd {
 		margin-left: 2em;
 	}
-	body, p, li, dt, dd{
+	p, li, dt, dd{
 		line-height: 1.6;
 	}
+	.btn{
+		background-color:#428bca;
+	}
+	pre code{
+		border:none;
+		padding:0;
+		margin:0;
+		display:inline;
+	}
+
 <?php include(__DIR__.'/fess/fess-1.2.0.css'); ?>
 }
