@@ -485,7 +485,8 @@ class api{
 				return $this->data2xml($val);
 				break;
 		}
-		return self::data2jssrc($val);
+		// return self::data2jssrc($val);
+		return json_encode($val);
 	}
 
 	/**
@@ -495,7 +496,7 @@ class api{
 	 * @return string 加工されたテキストデータ
 	 */
 	private function data2xml($val){
-		return '<api>'.self::text_data2xml($val).'</api>';
+		return '<api>'.self::xml_encode($val).'</api>';
 	}
 
 	/**
@@ -505,7 +506,8 @@ class api{
 	 * @return string 加工されたテキストデータ
 	 */
 	private function data2json($val){
-		return self::data2jssrc($val);
+		// return self::data2jssrc($val);
+		return json_encode($val);
 	}
 
 	/**
@@ -520,140 +522,13 @@ class api{
 		if( !strlen($cb) ){
 			$cb = 'callback';
 		}
-		return $cb.'('.self::data2jssrc($val).');';
+		// return $cb.'('.self::data2jssrc($val).');';
+		return $cb.'('.json_encode($val).');';
 	}
 
-	/**
-	 * 変数をJavaScriptのシンタックスに変換する。
-	 * 
-	 * @param mixed $value 値
-	 * @param array $options オプション
-	 * <dl>
-	 *   <dt>delete_arrayelm_if_null</dt>
-	 *     <dd>配列の要素が `null` だった場合に削除。</dd>
-	 *   <dt>array_break</dt>
-	 *     <dd>配列に適当なところで改行を入れる。</dd>
-	 * </dl>
-	 * @return string JavaScriptシンタックスに変換された値
-	 */
-	private static function data2jssrc( $value = null , $options = array() ){
-
-		if( is_array( $value ) ){
-			#	配列
-			$RTN = '';
-			$is_hash = false;
-			$i = 0;
-			foreach( $value as $key=>$val ){
-				#	ArrayかHashか見極める
-				if( !is_int( $key ) ){
-					$is_hash = true;
-					break;
-				}
-				if( $key != $i ){
-					#	順番通りに並んでなかったらHash とする。
-					$is_hash = true;
-					break;
-				}
-				$i ++;
-			}
-
-			if( $is_hash ){
-				$RTN .= '{';
-			}else{
-				$RTN .= '[';
-			}
-			if( @$options['array_break'] ){ $RTN .= "\n"; }
-			foreach( $value as $key=>$val ){
-				if( @$options['delete_arrayelm_if_null'] && is_null( $value[$key] ) ){
-					#	配列のnull要素を削除するオプションが有効だった場合
-					continue;
-				}
-				if( $is_hash ){
-					$RTN .= ''.self::data2jssrc( $key.'' , $options ).':';
-				}
-				$RTN .= self::data2jssrc( $value[$key] , $options );
-				$RTN .= ', ';
-				if( @$options['array_break'] ){ $RTN .= "\n"; }
-			}
-			$RTN = preg_replace( '/,(?:\s+)?(?:\r\n|\r|\n)?$/' , '' , $RTN );
-			if( $is_hash ){
-				$RTN .= '}';
-			}else{
-				$RTN .= ']';
-			}
-			if( @$options['array_break'] ){ $RTN .= "\n"; }
-			return	$RTN;
-		}
-
-		if( is_object( $value ) ){
-			#	オブジェクト型
-			$RTN = '';
-			$RTN .= '{';
-			$proparray = get_object_vars( $value );
-			$methodarray = get_class_methods( get_class( $value ) );
-			foreach( $proparray as $key=>$val ){
-				$RTN .= ''.self::data2jssrc( $key , $options ).':';
-
-				$RTN .= self::data2jssrc( $val , $options );
-				$RTN .= ', ';
-			}
-			$RTN = preg_replace( '/,(?:\s+)?(?:\r\n|\r|\n)?$/' , '' , $RTN );
-			$RTN .= '}';
-			return	$RTN;
-		}
-
-		if( is_int( $value ) ){
-			#	数値
-			return	$value;
-		}
-
-		if( is_float( $value ) ){
-			#	浮動小数点
-			return	$value;
-		}
-
-		if( is_string( $value ) ){
-			#	文字列型
-			$RTN = '"'.self::escape_doublequote( $value ).'"';
-			$RTN = preg_replace( '/\r\n|\r|\n/' , '"+"\n"+"' , $RTN );
-			$RTN = preg_replace( '/'.preg_quote('<'.'?','/').'/' , '<"+"?' , $RTN );
-			$RTN = preg_replace( '/'.preg_quote('?'.'>','/').'/' , '?"+">' , $RTN );
-			$RTN = preg_replace( '/'.preg_quote('/'.'*','/').'/' , '/"+"*' , $RTN );
-			$RTN = preg_replace( '/'.preg_quote('*'.'/','/').'/' , '*"+"/' , $RTN );
-			$RTN = preg_replace( '/<(scr)(ipt)/i' , '<$1"+"$2' , $RTN );
-			$RTN = preg_replace( '/\/(scr)(ipt)>/i' , '/$1"+"$2>' , $RTN );
-			$RTN = preg_replace( '/<(sty)(le)/i' , '<$1"+"$2' , $RTN );
-			$RTN = preg_replace( '/\/(sty)(le)>/i' , '/$1"+"$2>' , $RTN );
-			$RTN = preg_replace( '/<\!\-\-/i' , '<"+"!"+"--' , $RTN );
-			$RTN = preg_replace( '/\-\->/i' , '--"+">' , $RTN );
-			return	$RTN;
-		}
-
-		if( is_null( $value ) ){
-			#	ヌル
-			return	'null';
-		}
-
-		if( is_resource( $value ) ){
-			#	リソース型
-			return	'undefined';
-		}
-
-		if( is_bool( $value ) ){
-			#	ブール型
-			if( $value ){
-				return	'true';
-			}else{
-				return	'false';
-			}
-		}
-
-		return	'undefined';
-
-	}
 
 	/**
-	 * 変数をXMLのシンタックスに変換する。
+	 * 変数をXML構造に変換する
 	 * 
 	 * @param mixed $value 値
 	 * @param array $options オプション
@@ -665,7 +540,7 @@ class api{
 	 * </dl>
 	 * @return string XMLシンタックスに変換された値
 	 */
-	private static function text_data2xml( $value = null , $options = array() ){
+	private static function xml_encode( $value = null , $options = array() ){
 
 		if( is_array( $value ) ){
 			#	配列
@@ -701,7 +576,7 @@ class api{
 					$RTN .= ' name="'.htmlspecialchars( $key ).'"';
 				}
 				$RTN .= '>';
-				$RTN .= self::text_data2xml( $value[$key] , $options );
+				$RTN .= self::xml_encode( $value[$key] , $options );
 				$RTN .= '</element>';
 				if( $options['array_break'] ){ $RTN .= "\n"; }
 			}
@@ -723,7 +598,7 @@ class api{
 			foreach( $proparray as $key=>$val ){
 				$RTN .= '<element name="'.htmlspecialchars( $key ).'">';
 
-				$RTN .= self::text_data2xml( $val , $options );
+				$RTN .= self::xml_encode( $val , $options );
 				$RTN .= '</element>';
 			}
 			$RTN .= '</object>';
