@@ -24,6 +24,7 @@
     "autoload": {
         "files": [
             ".pickles/_sys/php/pickles.php",
+            ".pickles/_sys/php/commands/api.php",
             ".pickles/_sys/php/commands/clearcache.php",
             ".pickles/_sys/php/commands/config.php",
             ".pickles/_sys/php/commands/phpinfo.php",
