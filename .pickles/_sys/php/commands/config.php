@@ -45,7 +45,7 @@ class config{
 			$html = '';
 			ob_start(); ?>
 <h2>basic</h2>
-<table class="def" style="width:100%;">
+<table class="def" style="width:100%; table-layout: fixed;">
 <colgroup><col width="30%" /><col width="30%" /><col width="40%" /></colgroup>
 <?php
 print $this->mk_config_unit('name', 'プロジェクト名', 'string');
@@ -56,11 +56,11 @@ print $this->mk_config_unit('path_publish_dir', 'パブリッシュ先ディレ�
 print $this->mk_config_unit('public_cache_dir', '公開キャッシュディレクトリのパス', 'string');
 print $this->mk_config_unit('contents_manifesto', 'コンテンツマニフェストのパス', 'string');
 print $this->mk_config_unit('directory_index', 'ディレクトリインデックス', 'array');
-print $this->mk_config_unit('commands', 'コマンド', 'object');
+print $this->mk_config_unit('commands', 'コマンド', 'hash');
 ?>
 </table>
 <h2>filesystem</h2>
-<table class="def" style="width:100%;">
+<table class="def" style="width:100%; table-layout: fixed;">
 <colgroup><col width="30%" /><col width="30%" /><col width="40%" /></colgroup>
 <?php
 print $this->mk_config_unit('file_default_permission', 'デフォルトのファイルパーミッション', 'string', true);
@@ -71,7 +71,7 @@ print $this->mk_config_unit('output_eol_coding', '出力時の改行コード', 
 ?>
 </table>
 <h2>session</h2>
-<table class="def" style="width:100%;">
+<table class="def" style="width:100%; table-layout: fixed;">
 <colgroup><col width="30%" /><col width="30%" /><col width="40%" /></colgroup>
 <?php
 print $this->mk_config_unit('session_name', 'セッション名', 'string');
@@ -81,11 +81,40 @@ print $this->mk_config_unit('allow_pxcommands', 'PXコマンドを許可', 'bool
 </table>
 
 <h2>processor</h2>
-<table class="def" style="width:100%;">
-<colgroup><col width="30%" /><col width="30%" /><col width="40%" /></colgroup>
+<h3>paths_proc_type (プロセスタイプ)</h3>
 <?php
-print $this->mk_config_unit('paths_proc_type', 'プロセスタイプ', 'object');
-print $this->mk_config_unit('funcs', 'プロセス機能', 'object');
+	$conf_value = @$this->conf->{'paths_proc_type'};
+	unset( $this->conf->{'paths_proc_type'} );
+?>
+<table class="def" style="width:100%; table-layout: fixed;">
+<colgroup><col width="70%" /><col width="30%" /></colgroup>
+<thead>
+<tr>
+<th>path</th>
+<th>proc</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<th>path</th>
+<th>proc</th>
+</tr>
+</tfoot>
+<?php
+foreach( $conf_value as $key=>$val ){
+	print '<tr>';
+	print '<td>'.htmlspecialchars($key).'</td>';
+	print '<td>'.htmlspecialchars($val).'</td>';
+	print '</tr>';
+}
+?>
+</table>
+
+<h3>funcs (プロセス機能)</h3>
+<table class="def" style="width:100%; table-layout: fixed;">
+<colgroup><col width="10%" /><col width="15%" /><col width="75%" /></colgroup>
+<?php
+print $this->mk_config_unit('funcs', 'プロセス機能', 'hash');
 ?>
 </table>
 
@@ -113,23 +142,71 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'object');
 	 * @param bool $required 必須項目の場合 `true`、それ以外は `false`
 	 * @return string コンフィグ1件分のHTMLソース(trタグ)
 	 */
-	private function mk_config_unit( $key,$label,$type='string',$required = false ){
+	private function mk_config_unit( $key, $label, $type='string', $required = false ){
 		$conf_value = @$this->conf->{$key};
 		unset( $this->conf->{$key} );
+		$rowspan = 1;
+		if( $type == 'array' && is_array($conf_value) && count($conf_value) >= 1 ){
+			$rowspan = count($conf_value);
+		}
 
 		$src = '';
 		$src .= '	<tr>'."\n";
-		$src .= '		<th style="word-break:break-all;"'.(strlen($label)?'':' colspan="2"').'>'.htmlspecialchars( $key ).'</th>'."\n";
+		$src .= '		<th style="word-break:break-all;" rowspan="'.intval($rowspan).'"'.(strlen($label)?'':' colspan="2"').'>'.htmlspecialchars( $key ).'</th>'."\n";
 		if( strlen($label) ){
-			$src .= '		<th style="word-break:break-all;">'.htmlspecialchars( $label ).'</th>'."\n";
+			$src .= '		<th style="word-break:break-all;" rowspan="'.intval($rowspan).'">';
+			$src .= htmlspecialchars( $label );
+			$src .= '</th>'."\n";
 		}
-		$src .= '		<td style="word-break:break-all;">';
-		if(is_null(@$conf_value)){
+		if( $type == 'array' && @is_array($conf_value) ){
+			if( !count($conf_value) ){
+				$src .= '		<td style="word-break:break-all;">'.'---'.'</td>'."\n";
+			}else{
+				$i = 0;
+				foreach( $conf_value as $conf_value_row ){
+					if( $i > 0 ){
+						$src .= '	</tr>'."\n";
+						$src .= '	<tr>'."\n";
+					}
+					$src .= '		<td style="word-break:break-all;">'.htmlspecialchars($conf_value_row).'</td>'."\n";
+					$i ++;
+				}
+			}
+		}elseif( $type == 'hash' && (@is_array($conf_value) || @is_object($conf_value)) ){
+			$src .= '		<td style="word-break:break-all;">';
+			$conf_value_test = $conf_value;
+			if( is_object($conf_value) ){
+				$conf_value_test = get_object_vars($conf_value);
+			}
+			$conf_value_test = $conf_value;
+			if( !count($conf_value_test) ){
+				$src .= '---';
+			}else{
+				$src .= '<dl>';
+				foreach( $conf_value as $ary_key=>$ary_val ){
+					$src .= '<dt>'.htmlspecialchars($ary_key).'</dt>';
+					$src .= '<dd>';
+					if( is_string($ary_val) || is_int($ary_val) || is_float($ary_val) ){
+						$src .= htmlspecialchars($ary_val);
+					}else{
+						ob_start();
+						var_dump($ary_val);
+						$src .= '<pre>'.htmlspecialchars( ob_get_clean() ).'</pre>';
+					}
+					$src .= '</dd>';
+				}
+				$src .= '</dl>';
+			}
+			$src .= '</td>'."\n";
+		}elseif(@is_null($conf_value)){
+			$src .= '		<td style="word-break:break-all;">';
 			$src .= '<span style="font-style:italic; color:#aaa; background-color:#fff;">null</span>';
 			if( $required ){
 				$src .= '<strong style="margin-left:1em; color:#f00; background-color:#fff;">required!!</strong>';
 			}
-		}elseif(is_array(@$conf_value) || is_object(@$conf_value)){
+			$src .= '</td>'."\n";
+		}elseif(@is_array($conf_value) || @is_object($conf_value)){
+			$src .= '		<td style="word-break:break-all;">';
 			$src .= '<pre>';
 			ob_start();
 			var_dump($conf_value);
@@ -138,7 +215,9 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'object');
 			if( $required ){
 				$src .= '<strong style="margin-left:1em; color:#f00; background-color:#fff;">required!!</strong>';
 			}
+			$src .= '</td>'."\n";
 		}else{
+			$src .= '		<td style="word-break:break-all;">';
 			switch(strtolower($type)){
 				case 'bool':
 					$src .= ($conf_value?'<span style="font-style:italic; color:#03d; background-color:#fff;">true</span>':'<span style="font-style:italic; color:#03d; background-color:#fff;">false</span>');
@@ -156,8 +235,8 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'object');
 					}
 					break;
 			}
+			$src .= '</td>'."\n";
 		}
-		$src .= '</td>'."\n";
 		$src .= '	</tr>'."\n";
 		return $src;
 	}
