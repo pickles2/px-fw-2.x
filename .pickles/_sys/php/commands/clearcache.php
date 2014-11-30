@@ -11,6 +11,7 @@ class clearcache{
 
 	private $px;
 	private $path_homedir, $path_docroot, $path_public_caches;
+	private $path_lockfile;
 
 	/**
 	 * Starting function
@@ -30,6 +31,8 @@ class clearcache{
 		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir().'/' );
 		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().'/' );
 		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/' );
+
+		$this->path_lockfile = $this->px->fs()->get_realpath( $this->px->get_path_homedir().'_sys/ram/publish/applock.txt' );
 	}
 
 
@@ -43,6 +46,14 @@ class clearcache{
 		print 'pickles public cache directory: '.$this->path_public_caches."\n";
 		print '------------------------'."\n";
 		print "\n";
+		if( $this->is_publish_locked() ){
+			print 'publish is now locked.'."\n";
+			print '  (lockfile updated: '.@date('Y-m-d H:i:s', filemtime($this->path_lockfile)).')'."\n";
+			print 'Try again later...'."\n";
+			print 'exit.'."\n";
+			print $this->px->pxcmd()->get_cli_footer();
+			exit;
+		}
 		$this->exec();
 		print "\n";
 		print $this->px->pxcmd()->get_cli_footer();
@@ -82,9 +93,14 @@ class clearcache{
 				print 'rmdir '.$this->px->fs()->get_realpath( $path.$localpath.$basename )."\n";
 				$count ++;
 			}else{
-				$this->px->fs()->rm($path.$localpath.$basename);
-				print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename )."\n";
-				$count ++;
+				clearstatcache();
+				if( $this->px->fs()->get_realpath($path.$localpath.$basename) == $this->path_lockfile ){
+					// パブリッシュロックファイルは消さない
+				}else{
+					$this->px->fs()->rm($path.$localpath.$basename);
+					print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename )."\n";
+					$count ++;
+				}
 			}
 		}
 
@@ -93,4 +109,26 @@ class clearcache{
 		}
 		return $count;
 	}
+
+	/**
+	 * パブリッシュがロックされているか確認する。
+	 * 
+	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
+	 */
+	private function is_publish_locked(){
+		$lockfilepath = $this->path_lockfile;
+		$lockfile_expire = 60*30;//有効期限は30分
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		if( $this->px->fs()->is_file($lockfilepath) ){
+			if( ( time() - filemtime($lockfilepath) ) > $lockfile_expire ){
+				#	有効期限を過ぎていたら、ロックは成立する。
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}//is_publish_locked()
 }

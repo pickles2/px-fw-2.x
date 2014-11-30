@@ -12,6 +12,7 @@ class publish{
 	private $px, $site;
 	private $path_tmp_publish, $path_publish_dir, $domain, $path_docroot;
 	private $path_region, $param_path_region;
+	private $path_lockfile;
 
 	private $paths_queue = array();
 	private $paths_done = array();
@@ -39,6 +40,7 @@ class publish{
 		$this->px = $px;
 
 		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' );
+		$this->path_lockfile = $this->path_tmp_publish.'applock.txt';
 		if( $this->get_path_publish_dir() !== false ){
 			$this->path_publish_dir = $this->get_path_publish_dir();
 		}
@@ -72,6 +74,7 @@ class publish{
 		ob_start();
 		print $this->px->pxcmd()->get_cli_header();
 		print 'publish directory(tmp): '.$this->path_tmp_publish."\n";
+		print 'lockfile: '.$this->path_lockfile."\n";
 		print 'publish directory: '.$this->path_publish_dir."\n";
 		print 'domain: '.$this->domain."\n";
 		print 'docroot directory: '.$this->path_docroot."\n";
@@ -113,7 +116,54 @@ class publish{
 			print $this->cli_footer();
 		}else{
 			$html = '';
-			ob_start(); ?>
+
+			if(!is_dir($this->path_docroot)){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p class="error">ドキュメントルートディレクトリが存在しません。</p>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_docroot ).'</li></ul>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}elseif(!is_dir($this->path_tmp_publish)){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p class="error">パブリッシュ先一時ディレクトリが存在しません。</p>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_tmp_publish ).'</li></ul>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}elseif(!is_writable($this->path_tmp_publish)){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p class="error">パブリッシュ先一時ディレクトリに書き込み許可がありません。</p>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_tmp_publish ).'</li></ul>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}elseif( strlen($this->path_publish_dir) && !is_dir($this->path_publish_dir) ){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p class="error">パブリッシュ先ディレクトリが存在しません。</p>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}elseif( strlen($this->path_publish_dir) && !is_writable($this->path_publish_dir) ){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p class="error">パブリッシュ先ディレクトリに書き込み許可がありません。</p>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}elseif( $this->is_locked() ){
+				$html .= '<div class="unit">'."\n";
+				$html .= '	<p>パブリッシュは<strong>ロックされています</strong>。</p>'."\n";
+				$html .= '	<p>'."\n";
+				$html .= '		現在、他のプロセスでパブリッシュが実行中である可能性があります。<br />'."\n";
+				$html .= '		しばらく待ってから、リロードしてください。<br />'."\n";
+				$html .= '	</p>'."\n";
+				$html .= '	<p>'."\n";
+				$html .= '		ロックファイルの内容を下記に示します。<br />'."\n";
+				$html .= '	</p>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( $this->px->fs()->read_file( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
+				$html .= '	<p>'."\n";
+				$html .= '		ロックファイルは下記の時刻に更新されました。<br />'."\n";
+				$html .= '	</p>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( date( 'Y-m-d H:i:s', filemtime( $this->path_lockfile ) ) ).'</pre></blockquote>'."\n";
+				$html .= '	<p>'."\n";
+				$html .= '		ロックファイルは、次のパスに存在します。<br />'."\n";
+				$html .= '	</p>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( realpath( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
+				$html .= '</div><!-- /.unit -->'."\n";
+			}else{
+				ob_start(); ?>
 <script type="text/javascript">
 function cont_EditPublishTargetPath(){
 	$('.cont_publish_target_path_preview').hide();
@@ -169,7 +219,25 @@ function cont_EditPublishTargetPathApply(formElm){
 	</form>
 </div>
 <?php
-			$html .= ob_get_clean();
+				$html .= ob_get_clean();
+				// $internal_errors = $this->get_internal_error_log();
+				// if( count($internal_errors) ){
+				// 	$html .= '<div class="unit form_error_box">'."\n";
+				// 	$html .= '	<p>次のエラーがありました。</p>'."\n";
+				// 	$html .= '	<ul>'."\n";
+				// 	foreach($internal_errors as $error_row){
+				// 		$html .= '		<li>'.htmlspecialchars($error_row['message']).'</li>'."\n";
+				// 	}
+				// 	$html .= '	</ul>'."\n";
+				// 	$html .= '</div><!-- /.form_error_box -->'."\n";
+				// 	$html .= '<div class="unit">'."\n";
+				// 	$html .= '	<p>パブリッシュを実行する前に、設定を変更し、エラーを解消してください。</p>'."\n";
+				// 	$html .= '</div><!-- /.unit -->'."\n";
+
+				// }
+
+			}
+
 			print $this->px->pxcmd()->wrap_gui_frame($html);
 		}
 		exit;
@@ -182,14 +250,26 @@ function cont_EditPublishTargetPathApply(formElm){
 		header('Content-type: text/plain;');
 		print $this->cli_header();
 
-		$this->clearcache();
-		print '------------'."\n";
 		$validate = $this->validate();
 		if( !$validate['status'] ){
 			print $validate['message']."\n";
 			print $this->cli_footer();
 			exit;
 		}
+		flush();
+		if( !$this->lock() ){//ロック
+			print '------'."\n";
+			print 'publish is now locked.'."\n";
+			print '  (lockfile updated: '.@date('Y-m-d H:i:s', filemtime($this->path_lockfile)).')'."\n";
+			print 'Try again later...'."\n";
+			print 'exit.'."\n";
+			print $this->cli_footer();
+			exit;
+		}
+
+		$this->clearcache();
+		print '------------'."\n";
+
 		print "\n";
 		print '-- making list by Sitemap'."\n";
 		$this->make_list_by_sitemap();
@@ -263,6 +343,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			$this->paths_done[$path] = true;
 			print $this->cli_report();
 
+			$this->touch_lockfile();
+
 			if( !count( $this->paths_queue ) ){
 				break;
 			}
@@ -282,6 +364,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			);
 		}
 		print "\n";
+
+		$this->unlock();//ロック解除
 
 		print $this->cli_footer();
 		exit;
@@ -422,5 +506,93 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 		return $tmp_path;
 	}// get_path_publish_dir()
+
+	/**
+	 * パブリッシュをロックする。
+	 * 
+	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
+	 */
+	private function lock(){
+		$lockfilepath = $this->path_lockfile;
+		$timeout_limit = 5;
+
+		if( !@is_dir( dirname( $lockfilepath ) ) ){
+			$this->px->fs()->mkdir_r( dirname( $lockfilepath ) );
+		}
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		$i = 0;
+		while( $this->is_locked() ){
+			$i ++;
+			if( $i >= $timeout_limit ){
+				return false;
+				break;
+			}
+			sleep(1);
+
+			#	PHPのFileStatusCacheをクリア
+			clearstatcache();
+		}
+		$src = '';
+		$src .= 'ProcessID='.getmypid()."\r\n";
+		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$RTN = $this->px->fs()->save_file( $lockfilepath , $src );
+		return	$RTN;
+	}//lock()
+
+	/**
+	 * パブリッシュがロックされているか確認する。
+	 * 
+	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
+	 */
+	private function is_locked(){
+		$lockfilepath = $this->path_lockfile;
+		$lockfile_expire = 60*30;//有効期限は30分
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		if( $this->px->fs()->is_file($lockfilepath) ){
+			if( ( time() - filemtime($lockfilepath) ) > $lockfile_expire ){
+				#	有効期限を過ぎていたら、ロックは成立する。
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}//is_locked()
+
+	/**
+	 * パブリッシュロックを解除する。
+	 * 
+	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
+	 */
+	private function unlock(){
+		$lockfilepath = $this->path_lockfile;
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		return @unlink( $lockfilepath );
+	}//unlock()
+
+	/**
+	 * パブリッシュロックファイルの更新日を更新する。
+	 * 
+	 * @return bool 成功時に `true`、失敗時に `false` を返します。
+	 */
+	private function touch_lockfile(){
+		$lockfilepath = $this->path_lockfile;
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+		if( !is_file( $lockfilepath ) ){
+			return false;
+		}
+
+		return touch( $lockfilepath );
+	}//touch_lockfile()
 
 }
