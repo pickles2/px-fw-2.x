@@ -111,6 +111,9 @@ class pickles{
 		$conf->session_expire = $this->conf->session_expire;
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
+		if( strlen(@$this->req->get_cli_option( '-u' )) ){
+			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
+		}
 
 
 		// make instance $pxcmd
@@ -531,10 +534,15 @@ class pickles{
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
-		if( @strlen( $_SERVER['HTTP_USER_AGENT'] ) ){//←パブリッシュじゃないとき、の条件
-			return false;
+		if( !strlen( $_SERVER['HTTP_USER_AGENT'] ) ){
+			// UAが空白なら パブリッシュツール
+			return true;
 		}
-		return true;
+		if( preg_match( '/PicklesCrawler/', $_SERVER['HTTP_USER_AGENT'] ) ){
+			// "PicklesCrawler" が含まれていたら パブリッシュツール
+			return true;
+		}
+		return false;
 	}
 
 	/**
