@@ -578,7 +578,9 @@ class pickles{
 	public function href( $linkto ){
 		$parsed_url = parse_url($linkto);
 		$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
-		if( !$tmp_page_info_by_id ){ $tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']); }
+		if( !$tmp_page_info_by_id ){
+			$tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']);
+		}
 		$path = $linkto;
 		$path_type = $this->site()->get_path_type( $linkto );
 		if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
@@ -615,6 +617,7 @@ class pickles{
 			unset($tmp_path , $tmp_matched);
 		}
 
+		$path = $this->fs()->normalize_path($path);
 		switch( $this->site()->get_path_type( $path ) ){
 			case 'full_url':
 			case 'javascript':
@@ -626,7 +629,7 @@ class pickles{
 				break;
 		}
 
-		if( preg_match( '/^\//' , $path ) ){
+		if( preg_match( '/^\\//' , $path ) ){
 			//  スラッシュから始まる絶対パスの場合、
 			//  インストールパスを起点としたパスに書き変えて返す。
 			$path = preg_replace( '/^\/+/' , '' , $path );
@@ -635,7 +638,7 @@ class pickles{
 
 		// パラメータを、引数の生の状態に戻す。
 		$parsed_url_fin = parse_url($path);
-		$path = $parsed_url_fin['path'];
+		$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
 		$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
 		$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'?'.@$parsed_url_fin['fragment']:''));
 
@@ -819,9 +822,11 @@ class pickles{
 			if( @strlen( $this->conf->path_controot ) ){
 				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
+				$rtn = $this->fs->normalize_path($rtn);
 				return $rtn;
 			}
 		}
+		$rtn = $this->fs->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -829,9 +834,10 @@ class pickles{
 	 * DOCUMENT_ROOT のパスを取得する
 	 */
 	public function get_path_docroot(){
-		$path_controot = $this->fs()->get_realpath( $this->get_path_controot() );
-		$path_cd = $this->fs()->get_realpath( './' );
+		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
+		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( './' ) );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
+		$rtn = $this->fs->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -854,7 +860,9 @@ class pickles{
 		if( $this->fs()->is_dir('./'.$rtn) ){
 			$rtn .= '/';
 		}
-		return $this->href( $rtn );
+		$rtn = $this->href( $rtn );
+		$rtn = $this->fs->normalize_path($rtn);
+		return $rtn;
 	}//path_files()
 
 	/**
@@ -866,7 +874,8 @@ class pickles{
 	public function realpath_files( $localpath_resource = null ){
 		$rtn = $this->path_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $rtn );
-		return $this->fs()->get_realpath($this->get_path_docroot().$rtn);
+		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		return $rtn;
 	}//realpath_files()
 
 	/**
@@ -905,40 +914,6 @@ class pickles{
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
 		return $rtn;
 	}//realpath_files_cache()
-
-	// /**
-	//  * カレントコンテンツのramdataディレクトリのサーバー内部パスを得る。
-	//  * 
-	//  * @return string RAMデータディレクトリのサーバー内部パス
-	//  */
-	// public function realpath_ramdata_dir(){
-	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
-	// 	$path_content = $tmp_page_info['content'];
-
-	// 	$lib_realpath = $this->get_path_homedir().'_sys/ramdata/contents/'.$this->fs()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
-	// 	if( !is_dir($rtn) ){
-	// 		$this->fs()->mkdir_r($rtn);
-	// 	}
-	// 	return $rtn;
-	// }
-
-	// /**
-	//  * カレントコンテンツのプライベートキャッシュディレクトリのサーバー内部パスを得る。
-	//  * 
-	//  * @return string プライベートキャッシュディレクトリのサーバー内部パス
-	//  */
-	// public function realpath_private_cache_dir(){
-	// 	$tmp_page_info = $this->site()->get_page_info($this->req()->get_request_file_path());
-	// 	$path_content = $tmp_page_info['content'];
-
-	// 	$lib_realpath = $this->get_path_homedir().'_sys/caches/contents/'.$this->fs()->trim_extension($path_content).'.files/';
-	// 	$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
-	// 	if( !is_dir($rtn) ){
-	// 		$this->fs()->mkdir_r($rtn);
-	// 	}
-	// 	return $rtn;
-	// }
 
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。

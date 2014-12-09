@@ -48,7 +48,7 @@ class ssi{
 				$src .= $tmp_matched[1];
 
 				// SSI先のファイルを読み込む
-				$href_incfile = trim($tmp_matched[2]);
+				$href_incfile = $this->px->fs()->normalize_path( trim($tmp_matched[2]) );
 				$realpath_incfile = null;
 				$path_incfile = null;
 				if( preg_match( '/^\//s', $href_incfile ) ){
