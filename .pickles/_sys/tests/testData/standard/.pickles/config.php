@@ -73,19 +73,27 @@ return call_user_func( function(){
 
 	$conf->funcs = new stdClass;
 
-	// Starting
-	$conf->funcs->starting = [
-		 // PX=phpinfo
-		'picklesFramework2\commands\phpinfo::regist' ,
-
+	// funcs: Before sitemap
+	$conf->funcs->before_sitemap = [
 		// PX=clearcache
-		'picklesFramework2\commands\clearcache::regist' ,
+		'picklesFramework2\commands\clearcache::register' ,
+
+		 // PX=config
+		'picklesFramework2\commands\config::register' ,
+
+		 // PX=phpinfo
+		'picklesFramework2\commands\phpinfo::register' ,
+
 	];
 
-	// Before content
+	// funcs: Before content
 	$conf->funcs->before_content = [
+		// PX=api
+		'picklesFramework2\commands\api::register' ,
+
 		// PX=publish
-		'picklesFramework2\commands\publish::regist' ,
+		'picklesFramework2\commands\publish::register' ,
+
 	];
 
 
@@ -133,9 +141,9 @@ return call_user_func( function(){
 	];
 
 
-	// output filter
-	// $conf->funcs->output_filter = [
-	// ];
+	// funcs: Before output
+	$conf->funcs->before_output = [
+	];
 
 
 	return $conf;

@@ -5,7 +5,6 @@
  * $ cd (project dir)
  * $ ./vendor/phpunit/phpunit/phpunit picklesTest "./.pickles/_sys/tests/picklesTest.php"
  */
-require_once( __DIR__.'/../../../vendor/autoload.php' );
 
 class picklesTest extends PHPUnit_Framework_TestCase{
 

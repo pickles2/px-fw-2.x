@@ -117,12 +117,7 @@ class publish{
 		}else{
 			$html = '';
 
-			if(!is_dir($this->path_docroot)){
-				$html .= '<div class="unit">'."\n";
-				$html .= '	<p class="error">ドキュメントルートディレクトリが存在しません。</p>'."\n";
-				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_docroot ).'</li></ul>'."\n";
-				$html .= '</div><!-- /.unit -->'."\n";
-			}elseif(!is_dir($this->path_tmp_publish)){
+			if(!is_dir($this->path_tmp_publish)){
 				$html .= '<div class="unit">'."\n";
 				$html .= '	<p class="error">パブリッシュ先一時ディレクトリが存在しません。</p>'."\n";
 				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_tmp_publish ).'</li></ul>'."\n";
@@ -220,22 +215,6 @@ function cont_EditPublishTargetPathApply(formElm){
 </div>
 <?php
 				$html .= ob_get_clean();
-				// $internal_errors = $this->get_internal_error_log();
-				// if( count($internal_errors) ){
-				// 	$html .= '<div class="unit form_error_box">'."\n";
-				// 	$html .= '	<p>次のエラーがありました。</p>'."\n";
-				// 	$html .= '	<ul>'."\n";
-				// 	foreach($internal_errors as $error_row){
-				// 		$html .= '		<li>'.htmlspecialchars($error_row['message']).'</li>'."\n";
-				// 	}
-				// 	$html .= '	</ul>'."\n";
-				// 	$html .= '</div><!-- /.form_error_box -->'."\n";
-				// 	$html .= '<div class="unit">'."\n";
-				// 	$html .= '	<p>パブリッシュを実行する前に、設定を変更し、エラーを解消してください。</p>'."\n";
-				// 	$html .= '</div><!-- /.unit -->'."\n";
-
-				// }
-
 			}
 
 			print $this->px->pxcmd()->wrap_gui_frame($html);
@@ -292,8 +271,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				case 'direct':
 					// direct
 					print $ext.' -> direct'."\n";
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$path ) );
-					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$path );
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
+					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path );
 					break;
 
 				default:
@@ -306,19 +285,21 @@ function cont_EditPublishTargetPathApply(formElm){
 						$path ,
 					) );
 					$bin = json_decode($bin);
-
-					if( $bin->status >= 500 ){
+					if( !is_object($bin) ){
+					}elseif( $bin->status >= 500 ){
 					}elseif( $bin->status >= 400 ){
 					}elseif( $bin->status >= 300 ){
 					}elseif( $bin->status >= 200 ){
-						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$path ) );
-						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$path, base64_decode( @$bin->body_base64 ) );
+						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
+						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
 						foreach( $bin->relatedlinks as $link ){
-							$link = $this->px->fs()->get_realpath( $link, dirname($path) );
+							$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
+							$link = $this->px->fs()->normalize_path( $link );
+							$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
 							if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
-								$this->make_list_by_dir_scan( $link.'/' );
+								$this->make_list_by_dir_scan( $tmp_link.'/' );
 							}else{
-								$this->add_queue( $link );
+								$this->add_queue( $tmp_link );
 							}
 						}
 					}elseif( $bin->status >= 100 ){
@@ -329,11 +310,11 @@ function cont_EditPublishTargetPathApply(formElm){
 
 			if( !empty( $this->path_publish_dir ) ){
 				// パブリッシュ先ディレクトリに都度コピー
-				if( $this->px->fs()->is_file( $this->path_publish_dir.$path ) ){
-					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$path ) );
+				if( $this->px->fs()->is_file( $this->path_publish_dir.$this->path_docroot.$path ) ){
+					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$this->path_docroot.$path ) );
 					$this->px->fs()->copy(
-						$this->path_tmp_publish.'/htdocs'.$path ,
-						$this->path_publish_dir.$path
+						$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ,
+						$this->path_publish_dir.$this->path_docroot.$path
 					);
 					print ' -> copied to publish dir'."\n";
 				}
@@ -359,8 +340,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			print "\n";
 			print '-- syncing to publish dir...'."\n";
 			$this->px->fs()->sync_dir(
-				$this->path_tmp_publish.'/htdocs'.$this->path_region ,
-				$this->path_publish_dir.$this->path_region
+				$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$this->path_region ,
+				$this->path_publish_dir.$this->path_docroot.$this->path_region
 			);
 		}
 		print "\n";
@@ -412,7 +393,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		foreach( $sitemap as $page_info ){
 			$href = $this->px->href( $page_info['path'] );
 			$href = preg_replace( '/\/$/s', '/'.$this->px->get_directory_index_primary(), $href );
-			$href = preg_replace( '/^'.preg_quote($this->path_docroot, '/').'/s', '/', $href );
+			$href = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $href );
 			$this->add_queue( $href );
 		}
 		return true;
@@ -428,12 +409,13 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 		$preg_exts = '('.implode( '|', $process ).')';
 
-		$ls = $this->px->fs()->ls( './'.$path );
+		$realpath = $this->px->fs()->get_realpath('./'.$path);
+		$ls = $this->px->fs()->ls( $realpath );
 		if( $this->px->is_ignore_path( './'.$path ) ){
 			return true;
 		}
 		foreach( $ls as $basename ){
-			if( $this->px->fs()->is_dir( './'.$path.$basename ) ){
+			if( $this->px->fs()->is_dir( $realpath.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
 				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
@@ -441,6 +423,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'direct' ){
 					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				}
+				$tmp_localpath = $this->px->fs()->normalize_path( $tmp_localpath );
 				$this->add_queue( $tmp_localpath );
 			}
 		}
