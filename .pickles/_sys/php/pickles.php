@@ -534,11 +534,11 @@ class pickles{
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
-		if( !strlen( $_SERVER['HTTP_USER_AGENT'] ) ){
+		if( !strlen( @$_SERVER['HTTP_USER_AGENT'] ) ){
 			// UAが空白なら パブリッシュツール
 			return true;
 		}
-		if( preg_match( '/PicklesCrawler/', $_SERVER['HTTP_USER_AGENT'] ) ){
+		if( preg_match( '/PicklesCrawler/', @$_SERVER['HTTP_USER_AGENT'] ) ){
 			// "PicklesCrawler" が含まれていたら パブリッシュツール
 			return true;
 		}
