@@ -1,0 +1,9 @@
+<?php
+
+if( $px->lock('testAppLock', 60) ){
+	print 'testAppLock [SUCCESS]';
+}else{
+	print 'testAppLock [FAILED]';
+}
+
+

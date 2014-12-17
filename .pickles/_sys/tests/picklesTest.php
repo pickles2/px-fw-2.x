@@ -80,6 +80,50 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/.pickles/_sys/ram/caches/sitemaps/' ) );
 	}
 
+	/**
+	 * アプリケーションロックのテスト
+	 */
+	public function testAppLock(){
+		// ロックする
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/applock/lock.html' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/testAppLock.lock.txt' ) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('testAppLock [SUCCESS]', '/').'/s', $output) );
+
+		// ロックされてて動かない
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/applock/lock.html' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/testAppLock.lock.txt' ) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('testAppLock [FAILED]', '/').'/s', $output) );
+
+		// ロックを解除
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/applock/unlock.html' ,
+		] );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/.pickles/_sys/ram/applock/testAppLock.lock.txt' ) );
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/.pickles/_sys/ram/caches/sitemaps/' ) );
+	}
+
 
 
 

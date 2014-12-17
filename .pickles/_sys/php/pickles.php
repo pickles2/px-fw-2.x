@@ -1029,6 +1029,100 @@ class pickles{
 	}
 
 	/**
+	 * アプリケーションロックする。
+	 * 
+	 * @param string アプリケーションロック名
+	 * @param int 有効時間(秒) (省略時: 60秒)
+	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
+	 */
+	public function lock( $app_name, $expire = 60 ){
+		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$timeout_limit = 5;
+
+		if( !@is_dir( dirname( $lockfilepath ) ) ){
+			$this->fs()->mkdir_r( dirname( $lockfilepath ) );
+		}
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		$i = 0;
+		while( $this->is_locked( $app_name, $expire ) ){
+			$i ++;
+			if( $i >= $timeout_limit ){
+				return false;
+				break;
+			}
+			sleep(1);
+
+			#	PHPのFileStatusCacheをクリア
+			clearstatcache();
+		}
+		$src = '';
+		$src .= 'ProcessID='.getmypid()."\r\n";
+		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$RTN = $this->fs()->save_file( $lockfilepath , $src );
+		return	$RTN;
+	}//lock()
+
+	/**
+	 * アプリケーションロックされているか確認する。
+	 * 
+	 * @param string アプリケーションロック名
+	 * @param int 有効時間(秒) (省略時: 60秒)
+	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
+	 */
+	public function is_locked( $app_name, $expire = 60 ){
+		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfile_expire = $expire;
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		if( $this->fs()->is_file($lockfilepath) ){
+			if( ( time() - filemtime($lockfilepath) ) > $lockfile_expire ){
+				#	有効期限を過ぎていたら、ロックは成立する。
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}//is_locked()
+
+	/**
+	 * アプリケーションロックを解除する。
+	 * 
+	 * @param string アプリケーションロック名
+	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
+	 */
+	public function unlock( $app_name ){
+		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+
+		return @unlink( $lockfilepath );
+	}//unlock()
+
+	/**
+	 * アプリケーションロックファイルの更新日を更新する。
+	 * 
+	 * @param string アプリケーションロック名
+	 * @return bool 成功時に `true`、失敗時に `false` を返します。
+	 */
+	public function touch_lockfile( $app_name ){
+		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+
+		#	PHPのFileStatusCacheをクリア
+		clearstatcache();
+		if( !is_file( $lockfilepath ) ){
+			return false;
+		}
+
+		return touch( $lockfilepath );
+	}//touch_lockfile()
+
+	/**
 	 * Pickles の SVG ロゴソースを取得する
 	 * @param array $opt オプション
 	 * <dl>
