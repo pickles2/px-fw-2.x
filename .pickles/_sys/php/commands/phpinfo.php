@@ -9,10 +9,14 @@ namespace picklesFramework2\commands;
  */
 class phpinfo{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function register( $px ){
 		$px->pxcmd()->register('phpinfo', function($px){
@@ -23,6 +27,7 @@ class phpinfo{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -31,6 +36,7 @@ class phpinfo{
 
 	/**
 	 * kick
+	 * @return void
 	 */
 	private function kick(){
 		phpinfo();

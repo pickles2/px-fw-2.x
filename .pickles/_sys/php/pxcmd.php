@@ -19,11 +19,17 @@ namespace picklesFramework2;
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pxcmd{
+	/**
+	 * オブジェクト
+	 */
 	private $px, $bowl;
+	/**
+	 * PXコマンド
+	 */
 	private $pxcommands = array();
 
 	/**
-	 * コンストラクタ
+	 * constructor
 	 * 
 	 * @param object $px Picklesオブジェクト
 	 */
@@ -39,6 +45,9 @@ class pxcmd{
 
 	/**
 	 * PXコマンドを登録する
+	 * @param string $cmd PXコマンド名
+	 * @param function $fnc 実行するコマンド
+	 * @return bool 成功時 `true`、失敗時 `false`
 	 */
 	public function register( $cmd, $fnc ){
 		if( !is_string($cmd) ){
@@ -82,6 +91,7 @@ class pxcmd{
 
 	/**
 	 * get $bowl
+	 * @return object $bowlオブジェクト
 	 */
 	public function bowl(){
 		return $this->bowl;
@@ -89,6 +99,7 @@ class pxcmd{
 
 	/**
 	 * generate CLI header
+	 * @return string Header
 	 */
 	public function get_cli_header(){
 		$pxcmd = $this->px->get_px_command();
@@ -104,6 +115,7 @@ class pxcmd{
 
 	/**
 	 * generate CLI footer
+	 * @return string Footer
 	 */
 	public function get_cli_footer(){
 		ob_start();
@@ -116,6 +128,8 @@ class pxcmd{
 
 	/**
 	 * wrap GUI frame
+	 * @param string $content コンテンツ領域のHTMLソースコード
+	 * @return string HTML全体のHTMLソースコード
 	 */
 	public function wrap_gui_frame( $content ){
 		$this->bowl()->send($content);

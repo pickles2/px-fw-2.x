@@ -9,6 +9,9 @@ namespace picklesFramework2\commands;
  */
 class api{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
 
 	/**
@@ -19,6 +22,7 @@ class api{
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function register( $px ){
 		$px->pxcmd()->register('api', function($px){
@@ -30,7 +34,7 @@ class api{
 	/**
 	 * constructor
 	 * 
-	 * @param object $px $pxオブジェクト
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -111,6 +115,7 @@ class api{
 
 	/**
 	 * ユーザーへのメッセージを表示して終了する
+	 * @param string $msg メッセージテキスト
 	 */
 	private function user_message($msg){
 		if( $this->px->req()->is_cmd() ){

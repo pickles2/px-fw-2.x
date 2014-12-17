@@ -8,6 +8,11 @@ namespace picklesFramework2\processors\scss;
  * processor "*.scss" class
  */
 class ext{
+
+	/**
+	 * 変換処理の実行
+	 * @param object $px Picklesオブジェクト
+	 */
 	public static function exec( $px ){
 		foreach( $px->bowl()->get_keys() as $key ){
 			$src = $px->bowl()->pull( $key );

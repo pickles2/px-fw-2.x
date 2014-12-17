@@ -9,6 +9,9 @@ namespace picklesFramework2\processors\autoindex;
  */
 class autoindex{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
 
 	/**
@@ -18,6 +21,7 @@ class autoindex{
 
 	/**
 	 * extensions function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function exec( $px ){
 		$autoindex = new self( $px );
@@ -32,6 +36,7 @@ class autoindex{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;

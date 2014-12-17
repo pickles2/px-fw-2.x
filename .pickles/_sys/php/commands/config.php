@@ -9,11 +9,19 @@ namespace picklesFramework2\commands;
  */
 class config{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
+
+	/**
+	 * 設定オブジェクト
+	 */
 	private $conf;
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function register( $px ){
 		$px->pxcmd()->register('config', function($px){
@@ -24,6 +32,7 @@ class config{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;

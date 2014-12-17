@@ -20,13 +20,16 @@ namespace picklesFramework2;
  */
 class bowl{
 
+	/**
+	 * コンテンツボウル
+	 */
 	private $contents_bowl = array(
 		// 'main'=>'', // メインコンテンツ
 		// 'head'=>''  // ヘッドセクションに追記
 	);
 
 	/**
-	 * コンストラクタ
+	 * constructor
 	 */
 	public function __construct(){
 	}
@@ -105,7 +108,7 @@ class bowl{
 
 	/**
 	 * 全ボウルのコンテンツに同じ加工を施す
-	 * @param callback 加工処理関数
+	 * @param callback $func 加工処理関数
 	 * @return object $bowlオブジェクト
 	 */
 	public function each( $func ){

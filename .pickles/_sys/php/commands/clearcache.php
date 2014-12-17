@@ -9,12 +9,24 @@ namespace picklesFramework2\commands;
  */
 class clearcache{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
+
+	/**
+	 * ディレクトリ設定
+	 */
 	private $path_homedir, $path_docroot, $path_public_caches;
+
+	/**
+	 * パブリッシュロックファイルのパス
+	 */
 	private $path_lockfile;
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function register( $px ){
 		$px->pxcmd()->register('clearcache', function($px){
@@ -25,6 +37,7 @@ class clearcache{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -79,6 +92,8 @@ class clearcache{
 
 	/**
 	 * ディレクトリをクリーニング
+	 * @param string $path クリーニング対象のパス
+	 * @param string $localpath $pathの仮想のパス (再帰処理のために使用)
 	 */
 	private function cleanup_dir( $path, $localpath = null ){
 		$count = 0;
@@ -131,4 +146,5 @@ class clearcache{
 		}
 		return false;
 	}//is_publish_locked()
+
 }

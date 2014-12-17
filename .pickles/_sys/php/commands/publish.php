@@ -9,16 +9,49 @@ namespace picklesFramework2\commands;
  */
 class publish{
 
-	private $px, $site;
-	private $path_tmp_publish, $path_publish_dir, $domain, $path_docroot;
+	/**
+	 * Picklesオブジェクト
+	 */
+	private $px;
+
+	/**
+	 * サイトオブジェクト
+	 */
+	private $site;
+
+	/**
+	 * パス設定
+	 */
+	private $path_tmp_publish, $path_publish_dir, $path_docroot;
+
+	/**
+	 * ドメイン設定
+	 */
+	private $domain;
+
+	/**
+	 * パブリッシュ範囲設定
+	 */
 	private $path_region, $param_path_region;
+
+	/**
+	 * ロックファイルの格納パス
+	 */
 	private $path_lockfile;
 
+	/**
+	 * 処理待ちのパス一覧
+	 */
 	private $paths_queue = array();
+
+	/**
+	 * 処理済みのパス一覧
+	 */
 	private $paths_done = array();
 
 	/**
 	 * Before content function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function register( $px ){
 		$px->pxcmd()->register('publish', function($px){
@@ -35,6 +68,7 @@ class publish{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -441,6 +475,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * make list by directory scan
+	 * @param string $path パス
 	 */
 	private function make_list_by_dir_scan( $path = null ){
 		$process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
@@ -472,6 +507,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * add queue
+	 * @param string $path 対象のパス
 	 */
 	private function add_queue( $path ){
 		$path = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path, $this->path_docroot ) );
@@ -499,6 +535,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * パブリッシュ範囲内か調べる
+	 * @param string $path 対象のパス
 	 */
 	private function is_region_path( $path ){
 		$path = $this->px->fs()->get_realpath( '/'.$path );

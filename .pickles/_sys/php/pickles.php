@@ -10,19 +10,45 @@ namespace picklesFramework2;
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pickles{
+	/**
+	 * Pickles のホームディレクトリのパス
+	 * @access private
+	 */
 	private $path_homedir;
+
+	/**
+	 * コンテンツディレクトリのパス
+	 * @access private
+	 */
 	private $path_content;
-	private $conf;
-	private $fs, $req, $site, $bowl, $pxcmd;
+
+	/**
+	 * オブジェクト
+	 * @access private
+	 */
+	private $conf, $fs, $req, $site, $bowl, $pxcmd;
+
+	/**
+	 * ディレクトリインデックス(省略できるファイル名の一覧)
+	 * @access private
+	 */
 	private $directory_index;
+
+	/**
+	 * プロセス関連情報
+	 * @access private
+	 */
 	private $proc_type, $proc_id, $proc_num = 0;
 
 	/**
 	 * 関連ファイルのURL情報
+	 * @access private
 	 */
 	private $relatedlinks = array();
+
 	/**
 	 * 応答ステータスコード
+	 * @access private
 	 */
 	private $response_status = 200;
 
@@ -63,7 +89,8 @@ class pickles{
 
 	/**
 	 * constructor
-	 * @param string $path_homedir Pickles のホームディレクトリ
+	 * 
+	 * @param string $path_homedir Pickles のホームディレクトリのパス
 	 */
 	public function __construct( $path_homedir ){
 		// initialize PHP
@@ -199,7 +226,9 @@ class pickles{
 
 	/**
 	 * call plugin functions
+	 * 
 	 * @param mixed $func_list List of plugins function
+	 * @return bool 成功時 `true`、失敗時 `false`
 	 */
 	private function fnc_call_plugin_funcs( $func_list ){
 		if( is_null($func_list) ){ return false; }
@@ -242,7 +271,8 @@ class pickles{
 
 	/**
 	 * get $fs
-	 * see more: https://github.com/tomk79/filesystem
+	 * @see https://github.com/tomk79/filesystem
+	 * @return object $fs オブジェクト
 	 */
 	public function fs(){
 		return $this->fs;
@@ -250,7 +280,8 @@ class pickles{
 
 	/**
 	 * get $req
-	 * see more: https://github.com/tomk79/request
+	 * @see https://github.com/tomk79/request
+	 * @return object $req オブジェクト
 	 */
 	public function req(){
 		return $this->req;
@@ -258,6 +289,7 @@ class pickles{
 
 	/**
 	 * get $site
+	 * @return object $site オブジェクト
 	 */
 	public function site(){
 		return $this->site;
@@ -265,6 +297,7 @@ class pickles{
 
 	/**
 	 * get $pxcmd
+	 * @return object $pxcmd オブジェクト
 	 */
 	public function pxcmd(){
 		return $this->pxcmd;
@@ -272,6 +305,7 @@ class pickles{
 
 	/**
 	 * get $bowl
+	 * @return object $bowl オブジェクト
 	 */
 	public function bowl(){
 		return $this->bowl;
@@ -279,6 +313,7 @@ class pickles{
 
 	/**
 	 * get $conf
+	 * @return object $conf オブジェクト
 	 */
 	public function conf(){
 		return $this->conf;
@@ -286,6 +321,7 @@ class pickles{
 
 	/**
 	 * get home directory path
+	 * @return string ホームディレクトリパス
 	 */
 	public function get_path_homedir(){
 		return $this->path_homedir;
@@ -293,13 +329,14 @@ class pickles{
 
 	/**
 	 * get content path
+	 * @return string コンテンツディレクトリパス
 	 */
 	public function get_path_content(){
 		return $this->path_content;
 	}
 
 	/**
-	 * directory_index の一覧を得る。
+	 * directory_index(省略できるファイル名) の一覧を得る。
 	 * 
 	 * @return array ディレクトリインデックスの一覧
 	 */
@@ -435,6 +472,7 @@ class pickles{
 
 	/**
 	 * get response status
+	 * @param int ステータスコード
 	 */
 	public function get_status(){
 		return $this->response_status;
@@ -442,6 +480,8 @@ class pickles{
 
 	/**
 	 * set response status
+	 * @param int $code ステータスコード
+	 * @return bool 成功時 true, 失敗時 false
 	 */
 	public function set_status($code){
 		$code = intval($code);
@@ -497,6 +537,7 @@ class pickles{
 
 	/**
 	 * execute content
+	 * @param object $px picklesオブジェクト
 	 * @return bool true
 	 */
 	private static function exec_content( $px ){
@@ -514,6 +555,7 @@ class pickles{
 
 	/**
 	 * Contents Manifesto のソースを取得する
+	 * @return string HTMLコード
 	 */
 	public function get_contents_manifesto(){
 		$px = $this;
@@ -791,6 +833,7 @@ class pickles{
 
 	/**
 	 * domain を取得する
+	 * @return string ドメイン名
 	 */
 	public function get_domain(){
 		static $rtn;
@@ -806,7 +849,8 @@ class pickles{
 	}
 
 	/**
-	 * コンテンツルートパス(=install path) を取得する
+	 * コンテンツルートディレクトリのパス(=install path) を取得する
+	 * @return string コンテンツディレクトリのパス
 	 */
 	public function get_path_controot(){
 		static $rtn;
@@ -832,6 +876,7 @@ class pickles{
 
 	/**
 	 * DOCUMENT_ROOT のパスを取得する
+	 * @return string ドキュメントルートのパス
 	 */
 	public function get_path_docroot(){
 		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );

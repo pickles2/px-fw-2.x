@@ -9,10 +9,14 @@ namespace picklesFramework2\processors\encodingconverter;
  */
 class encodingconverter{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
@@ -21,6 +25,7 @@ class encodingconverter{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -28,6 +33,8 @@ class encodingconverter{
 
 	/**
 	 * apply output filter
+	 * @param string $src HTML, CSS, JavaScriptなどの出力コード
+	 * @return string 加工後の出力コード
 	 */
 	public function apply($src){
 

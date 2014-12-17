@@ -9,10 +9,14 @@ namespace picklesFramework2\processors\ssi;
  */
 class ssi{
 
+	/**
+	 * Picklesオブジェクト
+	 */
 	private $px;
 
 	/**
 	 * Starting function
+	 * @param object $px Picklesオブジェクト
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
@@ -21,6 +25,7 @@ class ssi{
 
 	/**
 	 * constructor
+	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
@@ -28,6 +33,9 @@ class ssi{
 
 	/**
 	 * apply output filter
+	 * @param string $src HTML, CSS, JavaScriptなどの出力コード
+	 * @param string $current_path コンテンツのカレントディレクトリパス
+	 * @return string 加工後の出力コード
 	 */
 	public function apply($src, $current_path = null){
 		if( is_null($current_path) ){
