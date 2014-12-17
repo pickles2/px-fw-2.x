@@ -259,6 +259,14 @@ function cont_EditPublishTargetPathApply(formElm){
 		print '------------'."\n";
 		print $this->cli_report();
 		print '------------'."\n";
+
+		$this->log(array(
+			'* datetime' ,
+			'* path' ,
+			'* proc_type' ,
+			'* status code'
+		));
+
 		while(1){
 			flush();
 			foreach( $this->paths_queue as $path=>$val ){break;}
@@ -286,9 +294,13 @@ function cont_EditPublishTargetPathApply(formElm){
 					) );
 					$bin = json_decode($bin);
 					if( !is_object($bin) ){
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'unknown server error' ));
 					}elseif( $bin->status >= 500 ){
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
 					}elseif( $bin->status >= 400 ){
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
 					}elseif( $bin->status >= 300 ){
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
 					}elseif( $bin->status >= 200 ){
 						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
 						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
@@ -303,10 +315,18 @@ function cont_EditPublishTargetPathApply(formElm){
 							}
 						}
 					}elseif( $bin->status >= 100 ){
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
 					}
 
 					break;
 			}
+
+			$this->log(array(
+				@date('Y-m-d H:i:s') ,
+				$path ,
+				$proc_type ,
+				$bin->status
+			));
 
 			if( !empty( $this->path_publish_dir ) ){
 				// パブリッシュ先ディレクトリに都度コピー
@@ -350,6 +370,26 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		print $this->cli_footer();
 		exit;
+	}
+
+	/**
+	 * パブリッシュログ
+	 * @param array $row ログデータ
+	 * @return bool ログ書き込みの成否
+	 */
+	private function log( $row ){
+		$path_logfile = $this->path_tmp_publish.'publish_log.csv';
+		return error_log( $this->px->fs()->mk_csv( array($row) ), 3, $path_logfile );
+	}
+
+	/**
+	 * パブリッシュアラートログ
+	 * @param array $row ログデータ
+	 * @return bool ログ書き込みの成否
+	 */
+	private function alert_log( $row ){
+		$path_logfile = $this->path_tmp_publish.'alert_log.csv';
+		return error_log( $this->px->fs()->mk_csv( array($row) ), 3, $path_logfile );
 	}
 
 	/**

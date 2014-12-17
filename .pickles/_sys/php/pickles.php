@@ -1031,8 +1031,8 @@ class pickles{
 	/**
 	 * アプリケーションロックする。
 	 * 
-	 * @param string アプリケーションロック名
-	 * @param int 有効時間(秒) (省略時: 60秒)
+	 * @param string $app_name アプリケーションロック名
+	 * @param int $expire 有効時間(秒) (省略時: 60秒)
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function lock( $app_name, $expire = 60 ){
@@ -1068,8 +1068,8 @@ class pickles{
 	/**
 	 * アプリケーションロックされているか確認する。
 	 * 
-	 * @param string アプリケーションロック名
-	 * @param int 有効時間(秒) (省略時: 60秒)
+	 * @param string $app_name アプリケーションロック名
+	 * @param int $expire 有効時間(秒) (省略時: 60秒)
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	public function is_locked( $app_name, $expire = 60 ){
@@ -1092,7 +1092,7 @@ class pickles{
 	/**
 	 * アプリケーションロックを解除する。
 	 * 
-	 * @param string アプリケーションロック名
+	 * @param string $app_name アプリケーションロック名
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function unlock( $app_name ){
@@ -1107,7 +1107,7 @@ class pickles{
 	/**
 	 * アプリケーションロックファイルの更新日を更新する。
 	 * 
-	 * @param string アプリケーションロック名
+	 * @param string $app_name アプリケーションロック名
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function touch_lockfile( $app_name ){
