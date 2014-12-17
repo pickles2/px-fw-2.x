@@ -1,0 +1,40 @@
+<?php
+/**
+ * PX Commands "phpinfo"
+ */
+namespace picklesFramework2\commands;
+
+/**
+ * PX Commands "phpinfo"
+ */
+class phpinfo{
+
+	private $px;
+
+	/**
+	 * Starting function
+	 */
+	public static function register( $px ){
+		$px->pxcmd()->register('phpinfo', function($px){
+			(new self( $px ))->kick();
+			exit;
+		}, true);
+	}
+
+	/**
+	 * constructor
+	 */
+	public function __construct( $px ){
+		$this->px = $px;
+	}
+
+
+	/**
+	 * kick
+	 */
+	private function kick(){
+		phpinfo();
+		exit;
+	}
+}
+

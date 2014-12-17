@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>     &raquo; Compilation errors
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/picklesFramework2.html">\picklesFramework2</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">139</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+
+            <ul class="side-nav nav nav-list">
+                <li class="nav-header">Navigation</li>
+                                                                            <li><a href="#bowl.php"><i class="icon-file"></i> bowl.php</a></li>
+                                                                                                    <li><a href="#commands/api.php"><i class="icon-file"></i> commands/api.php</a></li>
+                                                                                                    <li><a href="#commands/clearcache.php"><i class="icon-file"></i> commands/clearcache.php</a></li>
+                                                                                                    <li><a href="#commands/config.php"><i class="icon-file"></i> commands/config.php</a></li>
+                                                                                                    <li><a href="#commands/phpinfo.php"><i class="icon-file"></i> commands/phpinfo.php</a></li>
+                                                                                                    <li><a href="#commands/publish.php"><i class="icon-file"></i> commands/publish.php</a></li>
+                                                                                                    <li><a href="#pickles.php"><i class="icon-file"></i> pickles.php</a></li>
+                                                                                                    <li><a href="#processors/autoindex.php"><i class="icon-file"></i> processors/autoindex.php</a></li>
+                                                                                                    <li><a href="#processors/encodingconverter.php"><i class="icon-file"></i> processors/encodingconverter.php</a></li>
+                                                                                                    <li><a href="#processors/md.php"><i class="icon-file"></i> processors/md.php</a></li>
+                                                                                                    <li><a href="#processors/scss.php"><i class="icon-file"></i> processors/scss.php</a></li>
+                                                                                                    <li><a href="#processors/ssi.php"><i class="icon-file"></i> processors/ssi.php</a></li>
+                                                                                                    <li><a href="#pxcmd.php"><i class="icon-file"></i> pxcmd.php</a></li>
+                                                                                                    <li><a href="#site.php"><i class="icon-file"></i> site.php</a></li>
+                                                                    </ul>
+        </div>
+
+        <div class="span10 offset2">
+            <ul class="breadcrumb">
+                <li><a href="../"><i class="icon-remove-sign"></i></a><span class="divider">\</span></li>
+                <li>Compilation Errors</li>
+            </ul>
+
+            
+                            <div class="package-contents">
+                                            <a name="bowl.php" id="bowl.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            bowl.php
+                            <small style="float: right;padding-right: 10px;">5</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>51</td>
+                                        <td>Argument $src is missing from the Docblock of send</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>71</td>
+                                        <td>Argument $src is missing from the Docblock of replace</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>86</td>
+                                        <td>Argument $content_name is missing from the Docblock of pull</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>111</td>
+                                        <td>Argument $func is missing from the Docblock of each</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>23</td>
+                                        <td>No summary for property $contents_bowl</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="commands/api.php" id="commands/api.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            commands/api.php
+                            <small style="float: right;padding-right: 10px;">10</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>23</td>
+                                        <td>Argument $px is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>35</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>115</td>
+                                        <td>Argument $msg is missing from the Docblock of user_message</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>466</td>
+                                        <td>Argument $val is missing from the Docblock of data_convert</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>498</td>
+                                        <td>Argument $val is missing from the Docblock of data2xml</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>508</td>
+                                        <td>Argument $val is missing from the Docblock of data2json</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>519</td>
+                                        <td>Argument $val is missing from the Docblock of data2jsonp</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>543</td>
+                                        <td>Argument $value is missing from the Docblock of xml_encode</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>655</td>
+                                        <td>Argument $text is missing from the Docblock of escape_doublequote</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="commands/clearcache.php" id="commands/clearcache.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            commands/clearcache.php
+                            <small style="float: right;padding-right: 10px;">9</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>19</td>
+                                        <td>Argument $px is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>29</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>83</td>
+                                        <td>Argument $path is missing from the Docblock of cleanup_dir</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>83</td>
+                                        <td>Argument $localpath is missing from the Docblock of cleanup_dir</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_homedir</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_docroot</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_public_caches</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>14</td>
+                                        <td>No summary for property $path_lockfile</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="commands/config.php" id="commands/config.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            commands/config.php
+                            <small style="float: right;padding-right: 10px;">6</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>18</td>
+                                        <td>Argument $px is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>28</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>145</td>
+                                        <td>Argument $key is missing from the Docblock of mk_config_unit</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>252</td>
+                                        <td>Argument $txt is missing from the Docblock of h</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $conf</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="commands/phpinfo.php" id="commands/phpinfo.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            commands/phpinfo.php
+                            <small style="float: right;padding-right: 10px;">3</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>17</td>
+                                        <td>Argument $px is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>27</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="commands/publish.php" id="commands/publish.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            commands/publish.php
+                            <small style="float: right;padding-right: 10px;">19</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>23</td>
+                                        <td>Argument $px is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>39</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>380</td>
+                                        <td>Argument $row is missing from the Docblock of log</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>390</td>
+                                        <td>Argument $row is missing from the Docblock of alert_log</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>400</td>
+                                        <td>Argument $ary_command is missing from the Docblock of passthru</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>445</td>
+                                        <td>Argument $path is missing from the Docblock of make_list_by_dir_scan</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>476</td>
+                                        <td>Argument $path is missing from the Docblock of add_queue</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>503</td>
+                                        <td>Argument $path is missing from the Docblock of is_region_path</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $site</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_tmp_publish</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_publish_dir</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $domain</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_docroot</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>14</td>
+                                        <td>No summary for property $path_region</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>14</td>
+                                        <td>No summary for property $param_path_region</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>15</td>
+                                        <td>No summary for property $path_lockfile</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>17</td>
+                                        <td>No summary for property $paths_queue</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>18</td>
+                                        <td>No summary for property $paths_done</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="pickles.php" id="pickles.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            pickles.php
+                            <small style="float: right;padding-right: 10px;">35</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>68</td>
+                                        <td>Argument $path_homedir is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>204</td>
+                                        <td>Argument $func_list is missing from the Docblock of fnc_call_plugin_funcs</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>329</td>
+                                        <td>Argument $delimiter is missing from the Docblock of get_directory_index_preg_pattern</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>357</td>
+                                        <td>Argument $path is missing from the Docblock of get_path_proc_type</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>400</td>
+                                        <td>Argument $path is missing from the Docblock of is_ignore_path</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>446</td>
+                                        <td>Argument $code is missing from the Docblock of set_status</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>474</td>
+                                        <td>Argument $path is missing from the Docblock of add_relatedlink</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>502</td>
+                                        <td>Argument $px is missing from the Docblock of exec_content</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>578</td>
+                                        <td>Argument $linkto is missing from the Docblock of href</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>716</td>
+                                        <td>Argument $linkto is missing from the Docblock of mk_link</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>850</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of path_files</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>874</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of realpath_files</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>887</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of path_files_cache</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>912</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of realpath_files_cache</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>924</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of path_plugin_files</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>951</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of realpath_plugin_files</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>963</td>
+                                        <td>Argument $localpath_resource is missing from the Docblock of realpath_plugin_private_cache</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>991</td>
+                                        <td>Argument $text is missing from the Docblock of convert_encoding</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1038</td>
+                                        <td>Argument $app_name is missing from the Docblock of lock</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1075</td>
+                                        <td>Argument $app_name is missing from the Docblock of is_locked</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1098</td>
+                                        <td>Argument $app_name is missing from the Docblock of unlock</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1113</td>
+                                        <td>Argument $app_name is missing from the Docblock of touch_lockfile</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1133</td>
+                                        <td>Argument $opt is missing from the Docblock of get_pickles_logo_svg</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>13</td>
+                                        <td>No summary for property $path_homedir</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>14</td>
+                                        <td>No summary for property $path_content</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>15</td>
+                                        <td>No summary for property $conf</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>16</td>
+                                        <td>No summary for property $fs</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>16</td>
+                                        <td>No summary for property $req</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>16</td>
+                                        <td>No summary for property $site</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>16</td>
+                                        <td>No summary for property $bowl</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>16</td>
+                                        <td>No summary for property $pxcmd</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>17</td>
+                                        <td>No summary for property $directory_index</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>18</td>
+                                        <td>No summary for property $proc_type</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>18</td>
+                                        <td>No summary for property $proc_id</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>18</td>
+                                        <td>No summary for property $proc_num</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="processors/autoindex.php" id="processors/autoindex.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            processors/autoindex.php
+                            <small style="float: right;padding-right: 10px;">4</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>22</td>
+                                        <td>Argument $px is missing from the Docblock of exec</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>36</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>50</td>
+                                        <td>Argument $content is missing from the Docblock of apply_autoindex</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="processors/encodingconverter.php" id="processors/encodingconverter.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            processors/encodingconverter.php
+                            <small style="float: right;padding-right: 10px;">4</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>17</td>
+                                        <td>Argument $px is missing from the Docblock of exec</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>25</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>32</td>
+                                        <td>Argument $src is missing from the Docblock of apply</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="processors/md.php" id="processors/md.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            processors/md.php
+                            <small style="float: right;padding-right: 10px;">2</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>11</td>
+                                        <td>Argument $px is missing from the Docblock of exec</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>11</td>
+                                        <td>No summary for method &quot;&quot;</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="processors/scss.php" id="processors/scss.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            processors/scss.php
+                            <small style="float: right;padding-right: 10px;">2</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>11</td>
+                                        <td>Argument $px is missing from the Docblock of exec</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>11</td>
+                                        <td>No summary for method &quot;&quot;</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="processors/ssi.php" id="processors/ssi.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            processors/ssi.php
+                            <small style="float: right;padding-right: 10px;">5</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>17</td>
+                                        <td>Argument $px is missing from the Docblock of exec</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>25</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>32</td>
+                                        <td>Argument $src is missing from the Docblock of apply</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>32</td>
+                                        <td>Argument $current_path is missing from the Docblock of apply</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>12</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="pxcmd.php" id="pxcmd.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            pxcmd.php
+                            <small style="float: right;padding-right: 10px;">7</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>30</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>43</td>
+                                        <td>Argument $cmd is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>43</td>
+                                        <td>Argument $fnc is missing from the Docblock of register</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>120</td>
+                                        <td>Argument $content is missing from the Docblock of wrap_gui_frame</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>22</td>
+                                        <td>No summary for property $px</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>22</td>
+                                        <td>No summary for property $bowl</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>23</td>
+                                        <td>No summary for property $pxcommands</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                            <div class="package-contents">
+                                            <a name="site.php" id="site.php"></a>
+                        <h3>
+                            <i class="icon-file"></i>
+                            site.php
+                            <small style="float: right;padding-right: 10px;">28</small>
+                        </h3>
+                        <div>
+                            <table class="table markers table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Line</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>56</td>
+                                        <td>Argument $px is missing from the Docblock of __construct</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>81</td>
+                                        <td>Argument $key is missing from the Docblock of get_path_param</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>92</td>
+                                        <td>Argument $key is missing from the Docblock of set_path_param</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>340</td>
+                                        <td>Argument $path is missing from the Docblock of get_parent</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>367</td>
+                                        <td>Argument $path is missing from the Docblock of get_category_top</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>467</td>
+                                        <td>Argument $path is missing from the Docblock of get_page_info</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>541</td>
+                                        <td>Argument $path is missing from the Docblock of set_page_info</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>637</td>
+                                        <td>Argument $page_id is missing from the Docblock of get_page_info_by_id</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>647</td>
+                                        <td>Argument $path is missing from the Docblock of get_page_id_by_path</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>658</td>
+                                        <td>Argument $page_id is missing from the Docblock of get_page_path_by_id</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>678</td>
+                                        <td>Argument $key is missing from the Docblock of get_current_page_info</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>693</td>
+                                        <td>Argument $page_info is missing from the Docblock of set_current_page_info</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>704</td>
+                                        <td>Argument $path is missing from the Docblock of is_match_dynamic_path</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>720</td>
+                                        <td>Argument $path is missing from the Docblock of get_dynamic_path_info</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>740</td>
+                                        <td>Argument $dynamic_path is missing from the Docblock of bind_dynamic_path_param</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>799</td>
+                                        <td>Argument $path is missing from the Docblock of get_children</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>898</td>
+                                        <td>Argument $a is missing from the Docblock of usort_sitemap</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>922</td>
+                                        <td>Argument $path is missing from the Docblock of get_bros</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>943</td>
+                                        <td>Argument $path is missing from the Docblock of get_bros_next</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>981</td>
+                                        <td>Argument $path is missing from the Docblock of get_bros_prev</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1025</td>
+                                        <td>Argument $path is missing from the Docblock of get_next</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1088</td>
+                                        <td>Argument $path is missing from the Docblock of get_prev</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1149</td>
+                                        <td>Argument $path is missing from the Docblock of get_breadcrumb_array</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1174</td>
+                                        <td>Argument $page_path is missing from the Docblock of is_page_in_breadcrumb</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1205</td>
+                                        <td>Argument $path is missing from the Docblock of get_path_type</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1254</td>
+                                        <td>Argument $value is missing from the Docblock of data2text</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1340</td>
+                                        <td>Argument $value is missing from the Docblock of data2phpsrc</td>
+                                    </tr>
+                                                                    <tr>
+                                        <td>error</td>
+                                        <td>1355</td>
+                                        <td>Argument $text is missing from the Docblock of escape_singlequote</td>
+                                    </tr>
+                                                            </tbody>
+                            </table>
+                        </div>
+                                    </div>
+                    </div>
+    </section>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/picklesFramework2.html">\picklesFramework2</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on 
+Warning: date_default_timezone_get(): It is not safe to rely on the system's timezone settings. You are *required* to use the date.timezone setting or the date_default_timezone_set() function. In case you used any of those methods and you are still getting this warning, you most likely misspelled the timezone identifier. We selected the timezone 'UTC' for now, but please set date.timezone to select your timezone. in /mydoc_TomK/Dropbox/localhosts/dropbox.localhost/htdocs/github/PxFW-2.x/vendor/twig/twig/lib/Twig/Extension/Core.php on line 89
+December 17th, 2014 at 01:20.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

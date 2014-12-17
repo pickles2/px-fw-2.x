@@ -47,12 +47,31 @@ $ chmod -R 777 ./caches
   - safe_mode が無効に設定されていること
 
 
-## テスト - Test
+## 開発者向け情報 - for Developer
+
+### テスト - Test
 
 ```
 $ cd {$documentRoot}
 $ ./vendor/phpunit/phpunit/phpunit picklesTest "./.pickles/_sys/tests/picklesTest.php"
 ```
 
+### ドキュメント出力 - phpDocumentor
+
+$ php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d "./.pickles/_sys/php/" -t "./.pickles/phpdoc/"
+
+
+
+
+## ライセンス - License
+
+MIT License
+
+
+## 作者 - Author
+
+- (C)Tomoya Koyanagi <tomk79@gmail.com>
+- website: <http://www.pxt.jp/>
+- Twitter: @tomk79 <http://twitter.com/tomk79/>
 
 
