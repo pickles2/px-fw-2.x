@@ -30,7 +30,7 @@ $ composer create-project tomk79/pickles2 ./ dev-master
 Pickles Framework が書き込みを行うディレクトリがあります。次のコマンドは、書き込み権限を付与するためのものです。すでに権限がある場合は実行する必要はありません。
 
 ```
-$ chmod -R 777 ./.pickles/_sys
+$ chmod -R 777 ./px-files/_sys
 $ chmod -R 777 ./caches
 ```
 
@@ -53,12 +53,12 @@ $ chmod -R 777 ./caches
 
 ```
 $ cd {$documentRoot}
-$ ./vendor/phpunit/phpunit/phpunit picklesTest "./.pickles/_sys/tests/picklesTest.php"
+$ ./vendor/phpunit/phpunit/phpunit picklesTest "./px-files/_sys/tests/picklesTest.php"
 ```
 
 ### ドキュメント出力 - phpDocumentor
 
-$ php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title "Pickles Framework 2.x API Document" -d "./.pickles/_sys/php/" -f "./vendor/tomk79/filesystem/php/filesystem.php","./vendor/tomk79/request/php/request.php" -t "./.pickles/phpdoc/"
+$ php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title "Pickles Framework 2.x API Document" -d "./px-files/_sys/php/" -f "./vendor/tomk79/filesystem/php/filesystem.php","./vendor/tomk79/request/php/request.php" -t "./px-files/phpdoc/"
 
 
 

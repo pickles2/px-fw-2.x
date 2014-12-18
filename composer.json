@@ -24,18 +24,18 @@
     },
     "autoload": {
         "files": [
-            ".pickles/_sys/php/pickles.php",
-            ".pickles/_sys/php/commands/api.php",
-            ".pickles/_sys/php/commands/clearcache.php",
-            ".pickles/_sys/php/commands/config.php",
-            ".pickles/_sys/php/commands/phpinfo.php",
-            ".pickles/_sys/php/commands/publish.php",
-            ".pickles/_sys/php/processors/md.php",
-            ".pickles/_sys/php/processors/scss.php",
-            ".pickles/_sys/php/processors/autoindex.php",
-            ".pickles/_sys/php/processors/encodingconverter.php",
-            ".pickles/_sys/php/processors/ssi.php",
-            ".pickles/theme/php/theme.php"
+            "px-files/_sys/php/pickles.php",
+            "px-files/_sys/php/commands/api.php",
+            "px-files/_sys/php/commands/clearcache.php",
+            "px-files/_sys/php/commands/config.php",
+            "px-files/_sys/php/commands/phpinfo.php",
+            "px-files/_sys/php/commands/publish.php",
+            "px-files/_sys/php/processors/md.php",
+            "px-files/_sys/php/processors/scss.php",
+            "px-files/_sys/php/processors/autoindex.php",
+            "px-files/_sys/php/processors/encodingconverter.php",
+            "px-files/_sys/php/processors/ssi.php",
+            "px-files/theme/php/theme.php"
         ]
     }
 }
