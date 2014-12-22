@@ -45,7 +45,7 @@ return call_user_func( function(){
 		// ワイルドカードとして "*"(アスタリスク) を使用可。
 		'/.htaccess' => 'ignore' ,
 		'/.px_execute.php' => 'ignore' ,
-		'/.pickles/*' => 'ignore' ,
+		'/px-files/*' => 'ignore' ,
 		'*.ignore/*' => 'ignore' ,
 		'*.ignore.*' => 'ignore' ,
 		'/composer.json' => 'ignore' ,
