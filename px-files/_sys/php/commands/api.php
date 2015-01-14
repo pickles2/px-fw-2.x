@@ -45,15 +45,10 @@ class api{
 	 * kick
 	 */
 	private function kick(){
-		// print $this->px->pxcmd()->get_cli_header();
-		// print "\n";
-		// print 'now under development.'."\n";
-		// print "\n";
-		// print $this->px->pxcmd()->get_cli_footer();
 
 		$this->command = $this->px->get_px_command();
 
-		switch( $this->command[1] ){
+		switch( @$this->command[1] ){
 			case 'get':
 				//各種情報の取得
 				$this->api_get();
@@ -80,7 +75,7 @@ class api{
 			// 	break;
 		}
 
-		if( !strlen($this->command[1]) ){
+		if( !strlen( @$this->command[1] ) ){
 			$this->homepage();
 		}
 		$this->error();
