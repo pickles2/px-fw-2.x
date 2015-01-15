@@ -1,15 +1,17 @@
 <?php
 /**
- * test for tomk79\pickles2
+ * test for tomk79\PxFW-2.x
  * 
  * $ cd (project dir)
  * $ ./vendor/phpunit/phpunit/phpunit picklesTest "./px-files/_sys/tests/picklesTest.php"
  */
 
 class picklesTest extends PHPUnit_Framework_TestCase{
+	private $fs;
 
 	public function setup(){
 		mb_internal_encoding('UTF-8');
+		$this->fs = new tomk79\filesystem();
 	}
 
 
@@ -46,6 +48,17 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		clearstatcache();
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page1/template.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力A』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page3/3.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力B』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
 
 		// 後始末
 		$output = $this->passthru( [
