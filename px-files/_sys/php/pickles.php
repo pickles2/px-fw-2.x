@@ -163,12 +163,13 @@ class pickles{
 
 
 		// execute Content
-		$this->path_content = $this->site()->get_page_info( $this->req()->get_request_file_path(), 'content' );
+		$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
+		$this->path_content = $current_page_info['content'];
 		if( is_null( $this->path_content ) ){
 			$this->path_content = $this->req()->get_request_file_path();
 		}
-		$ext = $this->get_path_proc_type( $this->path_content );
-		// $ext = strtolower( pathinfo( $this->path_content , PATHINFO_EXTENSION ) );
+		$ext = $this->get_path_proc_type( $this->req()->get_request_file_path() );
+		// $ext = $this->get_path_proc_type( $this->path_content );
 		foreach( array_keys( get_object_vars( $this->conf->funcs->processor ) ) as $tmp_ext ){
 			if( $this->fs()->is_file( './'.$this->path_content.'.'.$tmp_ext ) ){
 				$ext = $tmp_ext;
