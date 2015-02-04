@@ -601,16 +601,16 @@ class pickles{
 	 * 実装例：
 	 * <pre>&lt;?php
 	 * // パスを指定する例
-	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
 	 * 
 	 * // ページIDを指定する例
-	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('A-00') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('A-00') ).'&quot;&gt;リンク&lt;/a&gt;';
 	 * ?&gt;</pre>
 	 * 
 	 * インストールパスがドキュメントルートではない場合の例:
 	 * <pre>&lt;?php
 	 * // インストールパスが &quot;/installpath/&quot; の場合
-	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;theme()-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
+	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
 	 *     // &quot;/installpath/aaa/bbb.html&quot; が返されます。
 	 * ?&gt;</pre>
 	 * 
@@ -701,10 +701,10 @@ class pickles{
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * // ページ /aaa/bbb.html へのリンクを生成
-	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html');
+	 * print $px-&gt;mk_link('/aaa/bbb.html');
 	 * 
 	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
-	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html', array(
+	 * print $px-&gt;mk_link('/aaa/bbb.html', array(
 	 *     'label'=>'<span>リンクラベル</span>', //リンクラベルを文字列で指定
 	 *     'class'=>'class_a class_b', //CSSのクラス名を指定
 	 *     'no_escape'=>true, //エスケープ処理をキャンセル
@@ -718,7 +718,7 @@ class pickles{
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
-	 * print $px-&gt;theme()-&gt;mk_link('/aaa/bbb.html',
+	 * print $px-&gt;mk_link('/aaa/bbb.html',
 	 *   '<span>リンクラベル</span>' , //リンクラベルを文字列で指定
 	 *   array(
 	 *     'class'=>'class_a class_b',
@@ -734,7 +734,7 @@ class pickles{
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * //リンクラベルをコールバック関数で指定
-	 * print $px-&gt;theme()-&gt;mk_link(
+	 * print $px-&gt;mk_link(
 	 *   '/aaa/bbb.html',
 	 *   function($page_info){return htmlspecialchars($page_info['title_label']);}
 	 * );

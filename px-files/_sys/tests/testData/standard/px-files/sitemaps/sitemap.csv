@@ -2,6 +2,7 @@
 "/",,,"ホーム",,,,,,1,"top",,,,
 "/applock/lock.html",,,"applock test (lock)",,,,,,1,,,"","",1
 "/applock/unlock.html",,,"applock test (unlock)",,,,,,1,,,"","",1
+"/site/set_page_info.html",,,"set_page_info()",,,,,,1,,,"","",1
 "/sample_pages/",,,"サンプルページ1",,,,,,1,,,"","",1
 "/sample_pages/fess/",,,"FESSドキュメント",,,,,"/sample_pages/",1,,,"","",
 "/sample_pages/fess/units/",,,"ユニットモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",

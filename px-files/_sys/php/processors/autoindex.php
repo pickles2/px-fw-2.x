@@ -46,7 +46,7 @@ class autoindex{
 	/**
 	 * ページ内の目次をソースに反映する。
 	 * 
-	 * `$theme->autoindex()` によって生成予告された目次を実際に生成します。
+	 * `<!-- autoindex -->` によって生成予告された目次を実際に生成します。
 	 * 
 	 * @param string $content 予告状態の コンテンツ HTMLソース
 	 * 

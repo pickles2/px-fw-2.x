@@ -1,0 +1,16 @@
+<?php
+$px->site()->set_page_info(
+	$px->site()->get_current_page_info( 'id' ) ,
+	array(
+		'layout' => 'naked'
+	)
+);
+$px->site()->set_page_info(
+	'/site/set_page_info.test.html',
+	array(
+		'title' => 'set_page_info() test (dynamic added)',
+		'layout' => 'naked',
+	)
+);
+echo( $px->site()->get_page_info( '/site/set_page_info.test.html', 'layout' ) );
+?>

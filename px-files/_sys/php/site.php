@@ -563,7 +563,7 @@ class site{
 			if( is_string( $path_type ) ){
 				//  パスでの指定だった場合
 				$before_page_info['path'] = $path;
-				if(@!strlen($page_info['id'])){
+				if( @!strlen($page_info['id']) ){
 					//ページIDを動的に発行
 					$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 				}
@@ -576,14 +576,17 @@ class site{
 			//既存ページをページIDで指定されていたら
 			$before_page_info['id'] = $path;
 		}else{
-			//既存ページをパスで指定されていたら
+			// 既存ページをパスで指定されていたら
 			$before_page_info['path'] = $path;
-			if(!strlen($page_info['id'])){
-				//ページIDを動的に発行
+			if( !strlen($page_info['id']) ){
+				// ページIDが未定義なら、動的に発行する
 				$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 			}
 		}
 		$tmp_array = $before_page_info;
+		foreach( $page_info as $key=>$val ){
+			$tmp_array[$key] = $val;
+		}
 
 		if( @strlen($page_info['title']) && $page_info['title']!=@$tmp_array['title'] ){
 			//タイトルの指定があったら
@@ -618,12 +621,12 @@ class site{
 		$this->sitemap_page_tree[$parent['path']] = null;
 
 		//  パブリッシュ対象にリンクを追加
-		$this->px->add_relatedlink( $this->px->theme()->href($tmp_array['path']) );
+		$this->px->add_relatedlink( $this->px->href($tmp_array['path']) );
 
-		// カレントページにレイアウトの指示があったら、テーマに反映する。
-		if( $is_target_current_page && @strlen($page_info['layout']) ){
-			$this->px->theme()->set_layout_id( $page_info['layout'] );
-		}
+		// // カレントページにレイアウトの指示があったら、テーマに反映する。
+		// if( $is_target_current_page && @strlen($page_info['layout']) ){
+		// 	$this->px->theme()->set_layout_id( $page_info['layout'] );
+		// }
 
 		return true;
 	}//set_page_info()
@@ -771,7 +774,7 @@ class site{
 	 * $children = $px-&gt;site()-&gt;get_children();
 	 * print '&lt;ul&gt;';
 	 * foreach( $children as $child ){
-	 * 	print '&lt;li&gt;'.$px-&gt;theme()-&gt;mk_link($child).'&lt;/li&gt;';
+	 * 	print '&lt;li&gt;'.$px-&gt;mk_link($child).'&lt;/li&gt;';
 	 * }
 	 * print '&lt;/ul&gt;';
 	 * ?&gt;</pre>
@@ -783,7 +786,7 @@ class site{
 	 * $children = $px-&gt;site()-&gt;get_children(null, array('filter'=&gt;false));
 	 * print '&lt;ul&gt;';
 	 * foreach( $children as $child ){
-	 * 	print '&lt;li&gt;'.$px-&gt;theme()-&gt;mk_link($child).'&lt;/li&gt;';
+	 * 	print '&lt;li&gt;'.$px-&gt;mk_link($child).'&lt;/li&gt;';
 	 * }
 	 * print '&lt;/ul&gt;';
 	 * ?&gt;</pre>
