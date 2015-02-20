@@ -16,3 +16,5 @@ $a = $px->path_files_cache('/test/');
 $b = $px->realpath_files_cache('/test/');
 // var_dump($b);
 ?>
+
+<!--#include virtual="<?= htmlspecialchars($px->href('./index_files/test/test.inc')) ?>" -->

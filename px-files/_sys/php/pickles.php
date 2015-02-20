@@ -944,6 +944,15 @@ class pickles{
 		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
 		$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
 
+		if( file_exists( $this->get_path_docroot().$path_original ) ){
+			if( is_dir($this->get_path_docroot().$path_original) ){
+				$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
+			}else{
+				$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+			}
+			$this->fs()->copy_r( $this->get_path_docroot().$path_original, $this->get_path_docroot().$rtn );
+		}
+
 		$rtn = $this->fs()->normalize_path($rtn);
 		$this->add_relatedlink($rtn);
 		return $rtn;

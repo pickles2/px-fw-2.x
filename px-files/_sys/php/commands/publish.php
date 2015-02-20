@@ -302,12 +302,22 @@ function cont_EditPublishTargetPathApply(formElm){
 
 			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
 			$proc_type = $this->px->get_path_proc_type( $path );
+			$status_code = null;
 			switch( $proc_type ){
 				case 'direct':
 					// direct
 					print $ext.' -> direct'."\n";
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
-					$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path );
+					if( !$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ) ){
+						$status_code = 500;
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to making parent directory.' ));
+						break;
+					}
+					if( !$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ){
+						$status_code = 500;
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to copying file.' ));
+						break;
+					}
+					$status_code = 200;
 					break;
 
 				default:
@@ -320,6 +330,7 @@ function cont_EditPublishTargetPathApply(formElm){
 						$path ,
 					) );
 					$bin = json_decode($bin);
+					$status_code = $bin->status;
 					if( !is_object($bin) ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown server error.' ));
 					}elseif( $bin->status >= 500 ){
@@ -354,7 +365,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				@date('Y-m-d H:i:s') ,
 				$path ,
 				$proc_type ,
-				$bin->status
+				$status_code
 			));
 
 			if( !empty( $this->path_publish_dir ) ){

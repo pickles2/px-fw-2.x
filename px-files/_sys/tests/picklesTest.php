@@ -39,67 +39,6 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
-	 * パブリッシュしてみるテスト
-	 */
-	public function testStandardPublish(){
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/?PX=publish.run' ,
-		] );
-		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
-		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
-
-		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page1/template.html' );
-		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
-		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力A』から出力されています。</p>', '/').'/s', $page_src ), 1 );
-
-		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page3/3.html' );
-		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
-		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力B』から出力されています。</p>', '/').'/s', $page_src ), 1 );
-
-		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html' ) );
-		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
-
-		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
-
-	}
-
-	/**
-	 * キャッシュを削除してみるテスト
-	 */
-	public function testStandardClearcache(){
-		// トップページを実行
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/' ,
-		] );
-		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
-		$this->assertTrue( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
-		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/sitemap.array' ) );
-
-		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
-		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
-	}
-
-	/**
 	 * アプリケーションロックのテスト
 	 */
 	public function testAppLock(){
@@ -173,11 +112,96 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 
+	/**
+	 * パブリッシュしてみるテスト
+	 */
+	public function testStandardPublish(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page1/template.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力A』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page3/3.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力B』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test2/test2.inc' ) );
+
+		// ログファイルを確認
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
+		$publish_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' );
+		$this->assertEquals( $publish_log[0][0], 'datetime' );
+		$this->assertEquals( $publish_log[0][1], 'path' );
+		$this->assertEquals( $publish_log[0][2], 'proc_type' );
+		$this->assertEquals( $publish_log[0][3], 'status_code' );
+		$this->assertNull( $publish_log[0][4] );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
+		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
+		$this->assertEquals( $alert_log[0][0], 'datetime' );
+		$this->assertEquals( $alert_log[0][1], 'path' );
+		$this->assertEquals( $alert_log[0][2], 'error_message' );
+		$this->assertNull( $alert_log[0][3] );
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	}
 
 	/**
-	 * エラー吐いてないか確認しとく
+	 * キャッシュを削除してみるテスト
+	 * @depends testStandardPublish
 	 */
-	public function common_error( $output ){
+	public function testStandardClearcache(){
+		// トップページを実行
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/sitemap.array' ) );
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+
+
+
+
+
+	/**
+	 * PHPがエラー吐いてないか確認しておく。
+	 */
+	private function common_error( $output ){
 		if( preg_match('/'.preg_quote('Fatal', '/').'/si', $output) ){ return false; }
 		if( preg_match('/'.preg_quote('Warning', '/').'/si', $output) ){ return false; }
 		if( preg_match('/'.preg_quote('Notice', '/').'/si', $output) ){ return false; }
