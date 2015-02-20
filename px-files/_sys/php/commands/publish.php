@@ -294,13 +294,6 @@ function cont_EditPublishTargetPathApply(formElm){
 		print $this->cli_report();
 		print '------------'."\n";
 
-		$this->log(array(
-			'* datetime' ,
-			'* path' ,
-			'* proc_type' ,
-			'* status code'
-		));
-
 		while(1){
 			flush();
 			foreach( $this->paths_queue as $path=>$val ){break;}
@@ -328,7 +321,7 @@ function cont_EditPublishTargetPathApply(formElm){
 					) );
 					$bin = json_decode($bin);
 					if( !is_object($bin) ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'unknown server error' ));
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown server error.' ));
 					}elseif( $bin->status >= 500 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
 					}elseif( $bin->status >= 400 ){
@@ -350,6 +343,8 @@ function cont_EditPublishTargetPathApply(formElm){
 						}
 					}elseif( $bin->status >= 100 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
+					}else{
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
 					}
 
 					break;
@@ -413,6 +408,15 @@ function cont_EditPublishTargetPathApply(formElm){
 	 */
 	private function log( $row ){
 		$path_logfile = $this->path_tmp_publish.'publish_log.csv';
+		if( !is_file( $path_logfile ) ){
+			error_log( $this->px->fs()->mk_csv( array(array(
+				'datetime' ,
+				'path' ,
+				'proc_type' ,
+				'status_code'
+			)) ), 3, $path_logfile );
+			clearstatcache();
+		}
 		return error_log( $this->px->fs()->mk_csv( array($row) ), 3, $path_logfile );
 	}
 
@@ -423,6 +427,14 @@ function cont_EditPublishTargetPathApply(formElm){
 	 */
 	private function alert_log( $row ){
 		$path_logfile = $this->path_tmp_publish.'alert_log.csv';
+		if( !is_file( $path_logfile ) ){
+			error_log( $this->px->fs()->mk_csv( array(array(
+				'datetime' ,
+				'path' ,
+				'error_message'
+			)) ), 3, $path_logfile );
+			clearstatcache();
+		}
 		return error_log( $this->px->fs()->mk_csv( array($row) ), 3, $path_logfile );
 	}
 
