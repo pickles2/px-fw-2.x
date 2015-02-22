@@ -279,10 +279,17 @@ function cont_EditPublishTargetPathApply(formElm){
 			print $this->cli_footer();
 			exit;
 		}
+		print "\n";
+		print "\n";
 
+		print '============'."\n";
+		print '## Clearing caches'."\n";
+		print "\n";
 		$this->clearcache();
-		print '------------'."\n";
+		print "\n";
 
+		print '============'."\n";
+		print '## Making list'."\n";
 		print "\n";
 		print '-- making list by Sitemap'."\n";
 		$this->make_list_by_sitemap();
@@ -290,9 +297,11 @@ function cont_EditPublishTargetPathApply(formElm){
 		print '-- making list by Directory Scan'."\n";
 		$this->make_list_by_dir_scan();
 		print "\n";
-		print '------------'."\n";
+		print '============'."\n";
+		print '## Start publishing'."\n";
+		print "\n";
 		print $this->cli_report();
-		print '------------'."\n";
+		print "\n";
 
 		while(1){
 			flush();
@@ -392,13 +401,16 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 
 		print "\n";
+		print '============'."\n";
 		print 'done.'."\n";
 		print "\n";
 
 		if( !empty( $this->path_publish_dir ) ){
 			// パブリッシュ先ディレクトリを同期
 			print "\n";
-			print '-- syncing to publish dir...'."\n";
+			print '============'."\n";
+			print '## Sync to publish directory.'."\n";
+			print "\n";
 			$this->px->fs()->sync_dir(
 				$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$this->path_region ,
 				$this->path_publish_dir.$this->path_docroot.$this->path_region
