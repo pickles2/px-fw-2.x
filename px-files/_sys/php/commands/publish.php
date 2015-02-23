@@ -401,13 +401,9 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 
 		print "\n";
-		print '============'."\n";
-		print 'done.'."\n";
-		print "\n";
 
 		if( !empty( $this->path_publish_dir ) ){
 			// パブリッシュ先ディレクトリを同期
-			print "\n";
 			print '============'."\n";
 			print '## Sync to publish directory.'."\n";
 			print "\n";
@@ -416,6 +412,9 @@ function cont_EditPublishTargetPathApply(formElm){
 				$this->path_publish_dir.$this->path_docroot.$this->path_region
 			);
 		}
+		print "\n";
+		print '============'."\n";
+		print '## done.'."\n";
 		print "\n";
 
 		$this->unlock();//ロック解除
