@@ -562,6 +562,9 @@ function cont_EditPublishTargetPathApply(formElm){
 			// 処理済み
 			return false;
 		}
+		if( preg_match( '/\/$/', $path ) ){
+			$path .= $this->px->get_directory_index_primary();
+		}
 		$this->paths_queue[$path] = true;
 		print 'added queue - "'.$path.'"'."\n";
 		return true;

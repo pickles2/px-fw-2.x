@@ -32,6 +32,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
+
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
@@ -122,6 +123,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 			'/?PX=publish.run' ,
 		] );
 		clearstatcache();
+
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
@@ -136,6 +138,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/a.html' ) );
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test2/test2.inc' ) );
