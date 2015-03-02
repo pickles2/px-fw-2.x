@@ -545,6 +545,9 @@ function cont_EditPublishTargetPathApply(formElm){
 	 */
 	private function add_queue( $path ){
 		$path = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path, $this->path_docroot ) );
+		if( preg_match( '/\/$/', $path ) ){
+			$path .= $this->px->get_directory_index_primary();
+		}
 
 		if( $this->px->is_ignore_path( $path ) ){
 			// 対象外
@@ -561,9 +564,6 @@ function cont_EditPublishTargetPathApply(formElm){
 		if( array_key_exists($path, $this->paths_done) ){
 			// 処理済み
 			return false;
-		}
-		if( preg_match( '/\/$/', $path ) ){
-			$path .= $this->px->get_directory_index_primary();
 		}
 		$this->paths_queue[$path] = true;
 		print 'added queue - "'.$path.'"'."\n";
