@@ -561,7 +561,7 @@ class pickles{
 	public function get_contents_manifesto(){
 		$px = $this;
 		$rtn = '';
-		$realpath = $this->get_path_docroot().$this->href( $this->conf()->contents_manifesto );
+		$realpath = $this->get_path_docroot().$this->href( @$this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
 		}

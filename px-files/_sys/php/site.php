@@ -572,13 +572,13 @@ class site{
 				$before_page_info['id'] = $path;
 				$page_info['id'] = $path;
 			}
-		}elseif(!is_null($this->sitemap_id_map[$path])){
+		}elseif(!@is_null($this->sitemap_id_map[$path])){
 			//既存ページをページIDで指定されていたら
 			$before_page_info['id'] = $path;
 		}else{
 			// 既存ページをパスで指定されていたら
 			$before_page_info['path'] = $path;
-			if( !strlen($page_info['id']) ){
+			if( !@strlen($page_info['id']) ){
 				// ページIDが未定義なら、動的に発行する
 				$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 			}
