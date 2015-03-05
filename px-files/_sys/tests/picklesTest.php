@@ -91,7 +91,6 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * $px->site()->set_page_info() を実行してみるテスト
 	 */
 	public function testStandardSetPageInfo(){
-		// トップページを実行
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
@@ -99,8 +98,21 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		] );
 		clearstatcache();
 
+		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( 'naked', $output );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/site/no_page.html' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 'no_page.html', $output );
 
 		// 後始末
 		$output = $this->passthru( [

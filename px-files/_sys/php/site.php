@@ -605,7 +605,7 @@ class site{
 			$tmp_array[$key] = $val;
 		}
 
-		if( !strlen( $tmp_array['title'] ) ){
+		if( !@strlen( $tmp_array['title'] ) ){
 			$tmp_array['title'] = $tmp_array['path'];
 		}
 		if( is_null( $tmp_array['id'] ) ){
