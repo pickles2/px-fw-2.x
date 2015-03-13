@@ -31,6 +31,29 @@
 						<nav class="theme_common_navi">
 <?= $theme->mk_shoulder_menu() ?>
 						</nav>
+						<nav class="theme_common_navi">
+<?php
+
+	$pager_filter = true;
+	$page_next = $px->site()->get_next(null, array('filter'=>$pager_filter));
+	$page_prev = $px->site()->get_prev(null, array('filter'=>$pager_filter));
+	$src_prev_next = '';
+	if($page_next!==false || $page_prev!==false){
+		$src_prev_next .= '<div class="theme_prevnext">'."\n";
+		$src_prev_next .= '	<ul>'."\n";
+		if($page_prev!==false){
+			$src_prev_next .= '<li>'.$px->mk_link($page_prev,array('label'=>'<前ページ','current'=>false)).'</li>'."\n";
+		}
+		if($page_next!==false){
+			$src_prev_next .= '<li>'.$px->mk_link($page_next,array('label'=>'次ページ>','current'=>false)).'</li>'."\n";
+		}
+		$src_prev_next .= '	</ul>'."\n";
+		$src_prev_next .= '</div>'."\n";
+	}
+	print $src_prev_next;
+?>
+						</nav>
+
 					</div>
 				</div><!-- /.row -->
 			</div><!-- /.container -->

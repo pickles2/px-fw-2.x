@@ -1019,7 +1019,7 @@ class site{
 	 * @param array $opt オプション(省略可)
 	 * <dl>
 	 *   <dt>$opt['filter'] (初期値: `true`)</dt>
-	 *     <dd>フィルターの有効/無効を切り替えます。`true` のとき有効、`false`のとき無効となります。フィルターが有効な場合、エイリアスが除外され、さらにその次のページを探します。</dd>
+	 *     <dd>フィルターの有効/無効を切り替えます。`true` のとき有効、`false`のとき無効となります。フィルターが有効な場合、リストフラグが降りているページとエイリアスが除外され、さらにその次のページを探します。</dd>
 	 *   <dt>$opt['skip_children'] (初期値: `false`)</dt>
 	 *     <dd>子供をスキップするか。`true` のときスキップ、`false`のとき子供も対象とします。これは内部で再帰的に実行する際の無限ループを避けるためのフラグとして設けられました。通常はこれを指定する必要はありません。</dd>
 	 * </dl>
@@ -1068,7 +1068,8 @@ class site{
 		// フィルター検証
 		if( $filter===true &&
 			(
-				$this->get_path_type($this->get_page_info($fin, 'path')) == 'alias' // <- エイリアスはとばす (ループが起きるので)
+				!$this->get_page_info($fin, 'list_flg') // <- リストフラグが降りてたら飛ばす
+				|| $this->get_path_type($this->get_page_info($fin, 'path')) == 'alias' // <- エイリアスはとばす (ループが起きるので)
 			)
 		){
 			return $this->get_next($fin, $opt);
@@ -1084,7 +1085,7 @@ class site{
 	 * @param array $opt オプション(省略可)
 	 * <dl>
 	 *   <dt>$opt['filter'] (初期値: `true`)</dt>
-	 *     <dd>フィルターの有効/無効を切り替えます。`true` のとき有効、`false`のとき無効となります。フィルターが有効な場合、エイリアスが除外され、さらにその前のページを探します。</dd>
+	 *     <dd>フィルターの有効/無効を切り替えます。`true` のとき有効、`false`のとき無効となります。フィルターが有効な場合、リストフラグが降りているページとエイリアスが除外され、さらにその前のページを探します。</dd>
 	 * </dl>
 	 * @return string|bool ページID。存在しない場合は `false`を返します。
 	 */
@@ -1134,7 +1135,8 @@ class site{
 		// フィルター検証
 		if( $filter===true &&
 			(
-				$this->get_path_type($this->get_page_info($fin, 'path')) == 'alias' // <- エイリアスはとばす (ループが起きるので)
+				!$this->get_page_info($fin, 'list_flg') // <- リストフラグが降りてたら飛ばす
+				|| $this->get_path_type($this->get_page_info($fin, 'path')) == 'alias' // <- エイリアスはとばす (ループが起きるので)
 			)
 		){
 			return $this->get_prev($fin, $opt);
