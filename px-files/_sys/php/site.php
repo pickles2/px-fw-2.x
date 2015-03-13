@@ -466,7 +466,7 @@ class site{
 	 */
 	public function get_page_info( $path, $key = null ){
 		if( is_null($path) ){ return null; }
-		if( array_key_exists($path, $this->sitemap_id_map) && !is_null($this->sitemap_id_map[$path]) ){
+		if( @array_key_exists($path, $this->sitemap_id_map) && !@is_null($this->sitemap_id_map[$path]) ){
 			//ページIDで指定された場合、パスに置き換える
 			$path = $this->sitemap_id_map[$path];
 		}
