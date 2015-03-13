@@ -26,7 +26,8 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		] );
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>このページは /index.html です。</p>', '/').'/s', $output) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<h2>テストページ</h2><p>このページは /index.html です。</p>', '/').'/s', $output) );
+		$this->assertEquals( 0, preg_match('/'.preg_quote('<span id="hash_', '/').'/s', $output) );
 
 		// 後始末
 		$output = $this->passthru( [

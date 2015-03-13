@@ -1,1 +1,1 @@
-test2.inc
+<!-- test2.inc -->
