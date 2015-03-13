@@ -156,6 +156,17 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/a.html' ) );
 
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html' ) );
+		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html');
+		// var_dump( $fileSrc );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $fileSrc ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote(htmlspecialchars('<php_output>'), '/').'/s', $fileSrc ), 1 );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html' ) );
+		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html');
+		// var_dump( $fileSrc );
+		$this->assertEquals( $fileSrc, '<'.'?= htmlspecialchars(\'<php_output>\'); ?'.'>' );
+
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test2/test2.inc' ) );
 

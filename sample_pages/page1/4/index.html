@@ -4,7 +4,14 @@
 <?php
 	print '<p>'.htmlspecialchars($px->site()->get_path_param('')).'</p>'."\n";
 
+	$px->add_relatedlink('./test1/');
+	$px->add_relatedlink('./test2/');
 	$px->add_relatedlink('./test1.html');
 	$px->add_relatedlink('./test2.html');
 	$px->add_relatedlink('./test3.html');
 ?>
+
+<ul>
+	<li><a href="<?= $px->href('/sample_pages/page1/4/test1/index.html'); ?>">test1</a></li>
+	<li><a href="<?= $px->href('/sample_pages/page1/4/test2/index.html'); ?>" target="_blank">test2</a></li>
+</ul>

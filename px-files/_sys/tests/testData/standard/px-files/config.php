@@ -58,6 +58,8 @@ return call_user_func( function(){
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
 
+		'/dynamicPath/test2_direct/*' => 'direct' ,
+
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
 		'*.css' => 'css' ,

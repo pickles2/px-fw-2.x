@@ -59,6 +59,7 @@ return call_user_func( function(){
 		'*/.gitignore' => 'ignore' ,
 
 		'/sample_pages/phpdoc/*' => 'direct' ,
+		'/sample_pages/page1/4/test2/*' => 'direct' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,

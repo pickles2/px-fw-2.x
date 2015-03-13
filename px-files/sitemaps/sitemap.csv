@@ -13,6 +13,7 @@
 "/sample_pages/page1/3.html",,,"Markdown記法",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page1/popup.html",,,"ポップアップページ",,,,,"/sample_pages/",1,"popup",,"sample, サンプル","このページはPxFWのサンプルコードとして予め用意されたものです。サンプルが不要であれば、sample_pagesディレクトリとともに削除してください。",
 "/sample_pages/page1/4/{*}",,,"ダイナミックパス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
+"/sample_pages/page1/4/test1/",,,"test1",,,,,"/sample_pages/>/sample_pages/page1/4/{*}",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page1/template.html","/sample_pages/templates.ignore/template.html",,"共通点コンテンツからの出力A",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "alias:/sample_pages/page2/",,,"サンプルページ2へのエイリアス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page2/",,,"サンプルページ2",,,,,,1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",1

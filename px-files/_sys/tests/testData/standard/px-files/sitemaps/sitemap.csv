@@ -5,6 +5,7 @@
 "/site/set_page_info.html",,,"$site->set_page_info()",,,,,,1,,,"","",1
 "/contents/path_files_cache.html",,,"$px->path_files_cache()",,,,,,1,,,"","",1
 "/dynamicPath/{*}",,,"Dynamic Path",,,,,,1,,,"","",1
+"/dynamicPath/test1/",,,"dynamicPath/test1",,,,,"/dynamicPath/{*}",1,,,"","",
 "/sample_pages/",,,"サンプルページ1",,,,,,1,,,"","",1
 "/sample_pages/fess/",,,"FESSドキュメント",,,,,"/sample_pages/",1,,,"","",
 "/sample_pages/fess/units/",,,"ユニットモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",
