@@ -53,6 +53,12 @@ class pickles{
 	private $response_status = 200;
 
 	/**
+	 * 応答ステータスメッセージ
+	 * @access private
+	 */
+	private $response_message = 'OK';
+
+	/**
 	 * Pickles のバージョン情報を取得する。
 	 * 
 	 * <pre> [バージョン番号のルール]
@@ -216,6 +222,7 @@ class pickles{
 			case 'json':
 				$json = new \stdClass;
 				$json->status = $this->get_status();
+				$json->message = $this->get_status_message();
 				$json->relatedlinks = $this->relatedlinks;
 				$json->body_base64 = base64_encode($this->bowl()->pull());
 				print json_encode($json);
@@ -476,18 +483,26 @@ class pickles{
 
 	/**
 	 * get response status
-	 * @param int ステータスコード
+	 * @return int ステータスコード
 	 */
 	public function get_status(){
 		return $this->response_status;
 	}
+	/**
+	 * get response message
+	 * @return int ステータスメッセージ
+	 */
+	public function get_status_message(){
+		return $this->response_message;
+	}
 
 	/**
 	 * set response status
-	 * @param int $code ステータスコード
+	 * @param int $code ステータスコード (100〜599の間の数値)
+	 * @param string $message メッセージ
 	 * @return bool 成功時 true, 失敗時 false
 	 */
-	public function set_status($code){
+	public function set_status($code, $message = null){
 		$code = intval($code);
 		if( strlen( $code ) != 3 ){
 			return false;
@@ -496,12 +511,17 @@ class pickles{
 			return false;
 		}
 		$this->response_status = intval($code);
-		switch( $this->response_status ){
-			case 200: @header('HTTP/1.1 '.$this->response_status.' OK'); break;
-			case 403: @header('HTTP/1.1 '.$this->response_status.' Forbidden'); break;
-			case 404: @header('HTTP/1.1 '.$this->response_status.' NotFound'); break;
-			default:  @header('HTTP/1.1 '.$this->response_status.''); break;
+		if( !strlen($message) ){
+			switch( $this->response_status ){
+				case 200: $message = 'OK'; break;
+				case 403: $message = 'Forbidden'; break;
+				case 404: $message = 'NotFound'; break;
+				default:break;
+			}
 		}
+		$this->response_message = $message;
+
+		@header('HTTP/1.1 '.$this->response_status.' '.$this->response_message);
 		return true;
 	}
 
@@ -747,7 +767,7 @@ class pickles{
 	 * @param array $options options: [as string] Link label, [as function] callback function, [as array] Any options.
 	 * <dl>
 	 *   <dt>mixed $options['label']</dt>
-	 *     <dd>リンクのラベルを変更します。文字列か、またはコールバック関数(PxFW 1.0.4 以降)が利用できます。</dd>
+	 *     <dd>リンクのラベルを変更します。文字列か、またはコールバック関数が利用できます。</dd>
 	 *   <dt>bool $options['current']</dt>
 	 *     <dd><code>true</code> または <code>false</code> を指定します。<code>class="current"</code> を強制的に付加または削除します。このオプションが指定されない場合は、自動的に選択されます。</dd>
 	 *   <dt>bool $options['no_escape']</dt>

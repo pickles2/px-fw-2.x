@@ -340,14 +340,15 @@ function cont_EditPublishTargetPathApply(formElm){
 					) );
 					$bin = json_decode($bin);
 					$status_code = $bin->status;
+					$status_message = $bin->message;
 					if( !is_object($bin) ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown server error.' ));
 					}elseif( $bin->status >= 500 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}elseif( $bin->status >= 400 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}elseif( $bin->status >= 300 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}elseif( $bin->status >= 200 ){
 						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
 						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
@@ -362,7 +363,7 @@ function cont_EditPublishTargetPathApply(formElm){
 							}
 						}
 					}elseif( $bin->status >= 100 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status ));
+						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}else{
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
 					}
@@ -374,7 +375,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				@date('Y-m-d H:i:s') ,
 				$path ,
 				$proc_type ,
-				$status_code
+				$status_code ,
+				$status_message
 			));
 
 			if( !empty( $this->path_publish_dir ) ){
@@ -435,7 +437,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				'datetime' ,
 				'path' ,
 				'proc_type' ,
-				'status_code'
+				'status_code' ,
+				'status_message'
 			)) ), 3, $path_logfile );
 			clearstatcache();
 		}
