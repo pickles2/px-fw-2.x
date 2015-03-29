@@ -47,6 +47,11 @@ class pickles{
 	private $relatedlinks = array();
 
 	/**
+	 * エラーメッセージ情報
+	 */
+	private $errors = array();
+
+	/**
 	 * 応答ステータスコード
 	 * @access private
 	 */
@@ -206,12 +211,6 @@ class pickles{
 
 
 
-		// relatedlinks
-		if( count($this->relatedlinks) ){
-			@header('X-PXFW-RELATEDLINK: '.implode(',',$this->relatedlinks).'');
-		}
-
-
 		// funcs: Before output
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_output, $this );
 
@@ -224,6 +223,7 @@ class pickles{
 				$json->status = $this->get_status();
 				$json->message = $this->get_status_message();
 				$json->relatedlinks = $this->relatedlinks;
+				$json->errors = $this->errors;
 				$json->body_base64 = base64_encode($this->bowl()->pull());
 				print json_encode($json);
 				break;
@@ -526,6 +526,17 @@ class pickles{
 	}
 
 	/**
+	 * エラーメッセージを送信する
+	 * @param $message string エラーメッセージ
+	 * @return bool true
+	 */
+	public function error( $message = null ){
+		@array_push( $this->errors , $message );
+		@header('X-PXFW-ERROR: '.$message.'', false);
+		return true;
+	}
+
+	/**
 	 * 拡張ヘッダ X-PXFW-RELATEDLINK にリンクを追加する。
 	 * 
 	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` は、サイトマップや物理ディレクトリから発見できないファイルを、PxFWのパブリッシュツールに知らせます。
@@ -541,6 +552,8 @@ class pickles{
 			return false;
 		}
 		array_push( $this->relatedlinks , $path );
+		@header('X-PXFW-RELATEDLINK: '.$path.'', false);
+
 		return true;
 	}
 

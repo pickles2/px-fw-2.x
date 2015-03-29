@@ -312,6 +312,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
 			$proc_type = $this->px->get_path_proc_type( $path );
 			$status_code = null;
+			$status_message = null;
+			$errors = array();
 			switch( $proc_type ){
 				case 'direct':
 					// direct
@@ -341,6 +343,7 @@ function cont_EditPublishTargetPathApply(formElm){
 					$bin = json_decode($bin);
 					$status_code = $bin->status;
 					$status_message = $bin->message;
+					$errors = $bin->errors;
 					if( !is_object($bin) ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown server error.' ));
 					}elseif( $bin->status >= 500 ){
@@ -368,15 +371,28 @@ function cont_EditPublishTargetPathApply(formElm){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
 					}
 
+					// エラーメッセージを alert_log に追記
+					if( is_array( $bin->errors ) && count( $bin->errors ) ){
+						foreach( $bin->errors as $tmp_error_row ){
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, $tmp_error_row ));
+						}
+					}
+
 					break;
 			}
 
+			$str_errors = '';
+			if( is_array($errors) && count($errors) ){
+				$str_errors .= count($errors).' errors: ';
+				$str_errors .= implode(', ', $errors).';';
+			}
 			$this->log(array(
 				@date('Y-m-d H:i:s') ,
 				$path ,
 				$proc_type ,
 				$status_code ,
-				$status_message
+				$status_message ,
+				$str_errors
 			));
 
 			if( !empty( $this->path_publish_dir ) ){
@@ -438,7 +454,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				'path' ,
 				'proc_type' ,
 				'status_code' ,
-				'status_message'
+				'status_message' ,
+				'errors'
 			)) ), 3, $path_logfile );
 			clearstatcache();
 		}

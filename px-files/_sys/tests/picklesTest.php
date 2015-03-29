@@ -178,13 +178,14 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $publish_log[0][2], 'proc_type' );
 		$this->assertEquals( $publish_log[0][3], 'status_code' );
 		$this->assertEquals( $publish_log[0][4], 'status_message' );
-		$this->assertNull( $publish_log[0][5] );
+		$this->assertEquals( $publish_log[0][5], 'errors' );
+		$this->assertNull( @$publish_log[0][6] );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
 		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
 		$this->assertEquals( $alert_log[0][0], 'datetime' );
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
-		$this->assertNull( $alert_log[0][3] );
+		$this->assertNull( @$alert_log[0][3] );
 
 		// 後始末
 		// $this->assertTrue( false );
