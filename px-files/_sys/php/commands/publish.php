@@ -341,12 +341,16 @@ function cont_EditPublishTargetPathApply(formElm){
 						$path ,
 					) );
 					$bin = json_decode($bin);
-					$status_code = $bin->status;
-					$status_message = $bin->message;
-					$errors = $bin->errors;
 					if( !is_object($bin) ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown server error.' ));
-					}elseif( $bin->status >= 500 ){
+						$bin = new \stdClass;
+						$bin->status = 500;
+						$bin->message = 'Unknown server error';
+						$bin->errors = ['Unknown server error.'];
+					}
+					$status_code = @$bin->status;
+					$status_message = @$bin->message;
+					$errors = @$bin->errors;
+					if( $bin->status >= 500 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}elseif( $bin->status >= 400 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));

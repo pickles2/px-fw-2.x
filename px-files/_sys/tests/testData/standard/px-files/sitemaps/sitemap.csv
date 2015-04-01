@@ -6,12 +6,9 @@
 "/contents/path_files_cache.html",,,"$px->path_files_cache()",,,,,,1,,,"","",1
 "/dynamicPath/{*}",,,"Dynamic Path",,,,,,1,,,"","",1
 "/dynamicPath/test1/",,,"dynamicPath/test1",,,,,"/dynamicPath/{*}",1,,,"","",
+"/errors/",,,"errors",,,,,"",1,,,"","",
+"/errors/server_side_unknown_error.html",,,"unknown error",,,,,"/errors/",1,,,"","",
 "/sample_pages/",,,"サンプルページ1",,,,,,1,,,"","",1
-"/sample_pages/fess/",,,"FESSドキュメント",,,,,"/sample_pages/",1,,,"","",
-"/sample_pages/fess/units/",,,"ユニットモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",
-"/sample_pages/fess/parts/",,,"パーツモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",
-"/sample_pages/fess/statics/",,,"スタティックモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",
-"/sample_pages/fess/boxes/",,,"ボックスモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,"","",
 "/sample_pages/page1/1.html",,,"ページタイトル","ページタイトル(パンくずのラベル)","ページタイトル
 (H1見出しのラベル)","ページタイトル(リンクのラベル)",,"/sample_pages/",1,,,"","",
 "/sample_pages/page1/2.html",,,"PHPコード埋め込み",,,,,"/sample_pages/",1,,,"","",

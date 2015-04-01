@@ -137,6 +137,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		] );
 		clearstatcache();
 
+		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
@@ -173,6 +174,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// ログファイルを確認
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
 		$publish_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' );
+		// var_dump($publish_log);
 		$this->assertEquals( $publish_log[0][0], 'datetime' );
 		$this->assertEquals( $publish_log[0][1], 'path' );
 		$this->assertEquals( $publish_log[0][2], 'proc_type' );
@@ -181,11 +183,21 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $publish_log[0][5], 'errors' );
 		$this->assertNull( @$publish_log[0][6] );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
+		foreach( $publish_log as $publish_log_row ){
+			if( $publish_log_row[1] == '/errors/server_side_unknown_error.html' ){
+				$this->assertEquals( $publish_log_row[4], 'Unknown server error' );
+				$this->assertEquals( $publish_log_row[5], '1 errors: Unknown server error.;' );
+			}
+		}
+
 		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
+		// var_dump($alert_log);
 		$this->assertEquals( $alert_log[0][0], 'datetime' );
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
 		$this->assertNull( @$alert_log[0][3] );
+		$this->assertEquals( $alert_log[1][2], 'status: 500 Unknown server error' );
+		$this->assertEquals( $alert_log[2][2], 'Unknown server error.' );
 
 		// 後始末
 		// $this->assertTrue( false );
