@@ -18,7 +18,7 @@ class encodingconverter{
 	 * Starting function
 	 * @param object $px Picklesオブジェクト
 	 */
-	public static function exec( $px ){
+	public static function exec( $px, $options = array() ){
 		$me = new self( $px );
 		$px->bowl()->each( array($me, 'apply') );
 	}

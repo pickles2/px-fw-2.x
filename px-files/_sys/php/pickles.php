@@ -254,10 +254,20 @@ class pickles{
 			if( is_string($func_list) ){
 				$fnc_name = $func_list;
 				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				preg_match( '/^(.*?)(?:\\((.*)\\))?$/', $fnc_name, $matched );
+				$fnc_name = @$matched[1];
+				$option_value = @$matched[2];
+				unset($matched);
+				if( strlen( $option_value ) ){
+					$option_value = json_decode( $option_value );
+				}
+				// var_dump($fnc_name);
+				// var_dump($option_value);
 				$this->proc_num ++;
 				if( @!strlen($this->proc_id) ){
 					$this->proc_id = $this->proc_type.'_'.$this->proc_num;
 				}
+				array_push( $param_arr, $option_value );
 				call_user_func_array( $fnc_name, $param_arr);
 				$this->proc_id = null;
 
