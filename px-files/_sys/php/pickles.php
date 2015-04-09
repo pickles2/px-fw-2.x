@@ -927,7 +927,7 @@ class pickles{
 	 */
 	public function get_path_docroot(){
 		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
-		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( './' ) );
+		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
 		$rtn = $this->fs->normalize_path($rtn);
 		return $rtn;
