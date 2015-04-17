@@ -14,61 +14,49 @@
 
 <h2>次のステップ</h2>
 
-<div class="cols unit">
-	<div class="cols-col cols-1of3"><div class="cols-pad">
-		<h3>サイトマップを編集します</h3>
-		<p>
-			はじめに、サイト全体の構造をサイトマップに登録します。1行が1ページで表現されるCSV形式のファイルです。<br />
-		</p>
-		<p>
-			サイトマップCSVは次のパスに置かれています。<br />
-		</p>
-		<div class="code"><pre><code>./.pickles/sitemaps/</code></pre></div>
+<h3>サイトマップを編集します</h3>
+<p>
+	はじめに、サイト全体の構造をサイトマップに登録します。1行が1ページで表現されるCSV形式のファイルです。<br />
+</p>
+<p>
+	サイトマップCSVは次のパスに置かれています。<br />
+</p>
+<pre><code>./.pickles/sitemaps/</code></pre>
 
-	</div></div>
-	<div class="cols-col cols-1of3"><div class="cols-pad">
-		<h3>テーマを編集します</h3>
-		<p>
-			テーマは、コンテンツエリア以外のHTMLソースを生成するPHPテンプレートです。<br />
-			次のパスに置かれています。<br />
-		</p>
-		<div class="code"><pre><code>./.pickles/themes/</code></pre></div>
+<h3>テーマを編集します</h3>
+<p>
+	テーマは、コンテンツエリア以外のHTMLソースを生成するPHPテンプレートです。<br />
+	次のパスに置かれています。<br />
+</p>
+<pre><code>./.pickles/themes/</code></pre>
 
-	</div></div>
-	<div class="cols-col cols-1of3 cols-last"><div class="cols-pad">
-		<h3>コンテンツを編集します</h3>
-		<p>
-			コンテンツは、コンテンツエリアのソースだけが記述されたシンプルなHTMLファイルです。<br />
-			サイトマップの path 欄に登録したパスにHTMLファイルを作成してください。<br />
-		</p>
-		<p>
-			あなたがいま見ているこのページは、テキストエディタで <code>/index.html</code> を開くとソースを確認できます。<br />
-			このページも、削除や上書きしてあなたのサイトのトップページに置き換えてください。<br />
-		</p>
-	</div></div>
-</div><!-- / .cols -->
+<h3>コンテンツを編集します</h3>
+<p>
+	コンテンツは、コンテンツエリアのソースだけが記述されたシンプルなHTMLファイルです。<br />
+	サイトマップの path 欄に登録したパスにHTMLファイルを作成してください。<br />
+</p>
+<p>
+	あなたがいま見ているこのページは、テキストエディタで <code>/index.html</code> を開くとソースを確認できます。<br />
+	このページも、削除や上書きしてあなたのサイトのトップページに置き換えてください。<br />
+</p>
 
-<h3>パブリッシュします</h3>
+<h4>パブリッシュします</h4>
 <p>
 	サイトができあがったら、そのまま静的なHTMLに書き出すことができます。<br />
 	次のコマンドで、パブリッシュを実行します。<br />
 </p>
 
-<div class="unit">
-	<div class="code"><pre><code>$ php ./.px_execute.php /?PX=publish.run
-</code></pre></div>
-</div>
+<pre><code>$ php ./.px_execute.php /?PX=publish.run
+</code></pre>
+
 <p>
 	しばらくすると、次のパスに、静的なHTMLファイルが生成されます。<br />
 </p>
-<div class="unit">
-	<div class="code"><pre><code>./.pickles/_sys/ram/publish/
-</code></pre></div>
-</div>
+<pre><code>./.pickles/_sys/ram/publish/
+</code></pre>
 
+<h3>PXコマンドに関する注意事項</h3>
 
-<div class="attention_box">
-	<p class="attention_box-heading">PXコマンドに関する注意事項</p>
 
 	<p>
 		PXコマンドは、Pickles 2 を便利に使うためのさまざまな機能を提供します(例：パブリッシュ機能 <a href="?PX=publish">?PX=publish</a>)。PXコマンドはサーバー内部の情報にアクセスしたり、サーバー上のデータを書き換えるインターフェイスを提供する場合があるため、<strong>第3者にアクセスされると大変キケンです</strong>。<br />
@@ -76,11 +64,9 @@
 	</p>
 	<ul>
 		<li>ウェブ制作環境として利用する場合、利用基本認証やIP制限などの処理を施し、一般のユーザーがアクセスできない場所に設置してください。</li>
-		<li>または、Pickles 2 上に構築したウェブアプリケーションをサービスとして公開する場合、設定ファイル (<code>./.pickles/config.php</code>) の <code>$conf-&gt;allow_pxcommands</code> の値を <code>0</code> に設定し、PXコマンド機能を無効にしてください。<br />
-			<div class="code"><pre><code>$conf-&gt;allow_pxcommands = 0; // PX Commands の実行を許可
-</code></pre></div>
+		<li>または、Pickles 2 上に構築したウェブアプリケーションをサービスとして公開する場合、設定ファイル (<code>./px-files/config.php</code>) の <code>$conf-&gt;allow_pxcommands</code> の値を <code>0</code> に設定し、PXコマンド機能を無効にしてください。<br />
+			<pre><code>$conf-&gt;allow_pxcommands = 0; // PX Commands の実行を許可
+</code></pre>
 		</li>
 	</ul>
-
-</div><!-- /.attention_box -->
 

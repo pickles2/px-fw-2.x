@@ -1,12 +1,6 @@
 "*path","*content","*id","*title","*title_breadcrumb","*title_h1","*title_label","*title_full","*logical_path","*list_flg","*layout","*orderby","*keywords","*description","*category_top_flg"
 "/",,,"ホーム",,,,,,1,"top",,,,
 "/sample_pages/",,,"サンプルページ1",,,,,,1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",1
-"/sample_pages/fess/",,,"FESSスタイルガイド",,,,,"/sample_pages/",1,,,,,
-"/sample_pages/fess/units/",,,"ユニットモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,,,
-"/sample_pages/fess/parts/",,,"パーツモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,,,
-"/sample_pages/fess/statics/",,,"スタティックモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,,,
-"/sample_pages/fess/boxes/",,,"ボックスモジュール",,,,,"/sample_pages/>/sample_pages/fess/",1,,,,,
-"/sample_pages/bootstrap/",,,"Bootstrapスタイルガイド",,,,,"/sample_pages/",1,,,,,
 "/sample_pages/page1/1.html",,,"ページタイトル","ページタイトル(パンくずのラベル)","ページタイトル
 (H1見出しのラベル)","ページタイトル(リンクのラベル)",,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page1/2.html",,,"PHPコード埋め込み",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",

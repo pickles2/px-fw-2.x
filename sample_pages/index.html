@@ -6,37 +6,13 @@
 <!-- autoindex -->
 
 
-<h2>composer のインストール</h2>
-
-<p>
-	Pickles 2 のインストールは、composer を使用します。<br />
-	<code>composer</code> のインストールについて詳しくは <a href="https://getcomposer.org/doc/00-intro.md" target="_blank">https://getcomposer.org/doc/00-intro.md</a> を参照してください。<br />
-</p>
-
-
-<h3>Mac OSX</h3>
-<p>
-	Mac の方は、次のコマンドでグローバルインストールできます。<br />
-</p>
-
-<div class="unit">
-	<div class="code"><pre><code>$ curl -sS https://getcomposer.org/installer | php
-$ mv composer.phar /usr/local/bin/composer
-</code></pre></div>
-</div>
-
-<h3>Windows</h3>
-<p>
-	Windows の方は、GUIインストーラ <a href="https://getcomposer.org/Composer-Setup.exe">Composer-Setup.exe</a> が用意されていますので、これを使うのがおすすめです。<br />
-</p>
-
 
 
 <h2>サイトマップCSV</h2>
 <p>
 	これらのサンプルコードは、サイトマップCSVに定義されています。サイトマップCSVは次のパスに配置されています。<br />
 </p>
-<ul><li><code>./.pickles/sitemaps/sitemap.csv</code></li></ul>
+<ul><li><code>./px-files/sitemaps/sitemap.csv</code></li></ul>
 <p>
 	このファイル3行目以降は、サンプルページについて定義しています。<br />
 </p>
@@ -45,15 +21,6 @@ $ mv composer.phar /usr/local/bin/composer
 	サイトマップの値を変更してみながら、画面の変化を観察すると、より理解しやすいと思います。<br />
 </p>
 
-<h2>コーディング規則 と ドキュメントモジュール定義</h2>
-<p>
-	Pickles Framework では、 <a href="https://github.com/tomk79/FESS" target="_blank">FESS</a> が規定するコーディング規則およびドキュメントモジュール定義を利用しています。詳しい内容は次のページに同梱していますので、参照してみてください。<br />
-</p>
-<ul>
-	<li><?= $px->mk_link( './fess/' ) ?></li>
-</ul>
-
-
 
 <h2>HTMLコンテンツの書き方</h2>
 
@@ -61,13 +28,12 @@ $ mv composer.phar /usr/local/bin/composer
 	コンテンツエリアのみHTMLを書くようにします。<br />
 </p>
 
-<div class="unit">
-	<div class="code"><pre><code>&lt;p&gt;
+<pre><code>&lt;p&gt;
 	コンテンツ本文のHTML部分。&lt;br /&gt;
 &lt;/p&gt;
-</code></pre></div>
-</div>
+</code></pre>
 
+<h3>コンテンツにスタイルシートを追加する</h3>
 <p>
 	コンテンツに特有のCSSを書きたい場合など、headセクション内にコードを出力したい場合があります。<br />
 </p>
@@ -75,8 +41,7 @@ $ mv composer.phar /usr/local/bin/composer
 	そのような場合は、次の例のように、<code>$px-&gt;bowl()-&gt;send( $html, 'head' )</code> にコードを渡してください。<br />
 </p>
 
-<div class="unit">
-	<div class="code"><pre><code>&lt;?php ob_start(); ?&gt;
+<pre><code>&lt;?php ob_start(); ?&gt;
 &lt;style type=&quot;text/css&quot;&gt;
 .cont_exam{
 	font-size:90%;
@@ -85,8 +50,7 @@ $ mv composer.phar /usr/local/bin/composer
 &lt;/style&gt;
 &lt;?php $px-&gt;bowl()-&gt;send( ob_get_clean(), 'head' ); ?&gt;
 
-&lt;p&gt;
+&lt;p class=&quot;cont_exam&quot;&gt;
 	コンテンツ本文のHTML部分。&lt;br /&gt;
 &lt;/p&gt;
-</code></pre></div>
-</div>
+</code></pre>
