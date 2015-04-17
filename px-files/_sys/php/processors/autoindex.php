@@ -106,13 +106,16 @@ class autoindex{
 		}
 		set_time_limit(30);
 
+		$style_ul = 'margin:0; padding:0 0 0 2em;';
+		$style_li = 'list-style-type:disc; display:list-item;';
+
 		$anchorlinks = '';
 		$topheadlevel = 2;
 		$headlevel = $topheadlevel;
 		if( count( $index ) ){
-			$anchorlinks .= '<!-- autoindex -->'."\n";
-			$anchorlinks .= '<div class="anchor_links">'."\n";
-			$anchorlinks .= '<p class="anchor_links-heading">目次</p>';
+			$anchorlinks .= '<!-- == autoindex == -->'."\n";
+			$anchorlinks .= '<div style="margin:2em 5%; border:1px solid #bbb; padding:1em; background:rgba(124, 124, 124, 0.05); color:#333; border-radius:5px;">'."\n";
+			$anchorlinks .= '<div style="margin:0; padding:0; text-align:center; font-weight:bold;">INDEX</div>';
 			foreach($index as $key=>$row){
 				$csa = $row['headlevel'] - $headlevel;
 				$nextLevel = @$index[$key+1]['headlevel'];
@@ -124,26 +127,26 @@ class autoindex{
 				if( $csa>0 ){
 					#	いま下がるとき
 					if( $key == 0 ){
-						$anchorlinks .= '<ul><li>';
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
 					}
 					for( $i = $csa; $i>0; $i -- ){
-						$anchorlinks .= '<ul><li>';
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
 					}
 				}elseif( $csa<0 ){
 					#	いま上がるとき
 					if( $key == 0 ){
-						$anchorlinks .= '<ul><li>';
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
 					}
 					for( $i = $csa; $i<0; $i ++ ){
 						$anchorlinks .= '</li></ul>';
 					}
-					$anchorlinks .= '</li><li>';
+					$anchorlinks .= '</li><li style="'.$style_li.'">';
 				}else{
 					#	いま現状維持
 					if( $key == 0 ){
-						$anchorlinks .= '<ul>';
+						$anchorlinks .= '<ul style="'.$style_ul.'">';
 					}
-					$anchorlinks .= '<li>';
+					$anchorlinks .= '<li style="'.$style_li.'">';
 				}
 				$anchorlinks .= '<a href="#'.htmlspecialchars($row['anch']).'">'.($row['label']).'</a>';
 				if( is_null($nsa) ){
@@ -167,8 +170,8 @@ class autoindex{
 				$anchorlinks .= '</li></ul>'."\n";
 				$headlevel --;
 			}
-			$anchorlinks .= '</div><!-- /.anchor_links -->'."\n";
-			$anchorlinks .= '<!-- / autoindex -->'."\n";
+			$anchorlinks .= '</div>'."\n";
+			$anchorlinks .= '<!-- / == autoindex == -->'."\n";
 		}
 
 		$content = preg_replace( '/'.$this->func_data_memos.'/s' , $anchorlinks , $content );
