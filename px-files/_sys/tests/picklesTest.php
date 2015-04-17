@@ -208,6 +208,71 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
+	}//testStandardPublish()
+
+	/**
+	 * 文字コード・改行コード変換テスト
+	 */
+	public function testEncodingConverter(){
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote('<meta charset="Shift_JIS" />', '/').'/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 1 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('SJIS-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/common/test.css' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote('@charset "EUC-JP"', '/').'/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\n/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r/s', $output ), 0 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('eucJP-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/common/test.js' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\r/s', $output ), 1 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('utf-8'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/encodingconverter/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/encodingconverter/caches/p/' ) );
+
 	}
 
 	/**

@@ -15,20 +15,62 @@ class encodingconverter{
 	private $px;
 
 	/**
+	 * 出力エンコード
+	 */
+	private $output_encoding;
+
+	/**
+	 * 出力改行コード
+	 */
+	private $output_eol_coding;
+
+	/**
 	 * Starting function
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options オプション
+	 * <dl>
+	 * <dt>$options->output_encoding</dt>
+	 * 	<dd>出力エンコーディング。<code>mb_convert_encoding()</code> が取り扱えるエンコード名で指定します。</dd>
+	 * <dt>$options->output_eol_coding</dt>
+	 * 	<dd>出力改行コード。文字列で、<code>crlf</code>、<code>cr</code>、または <code>lf</code> のいずれかで指定します。</dd>
+	 * </dl>
+	 * 
+	 * 省略時は、`$px->conf()` から、同名の値を参照します。
+	 * 
+	 * どちらにも設定がない場合、encodingconverter は変換を実行しません。
 	 */
-	public static function exec( $px, $options = array() ){
-		$me = new self( $px );
+	public static function exec( $px, $options = null ){
+		$me = new self( $px, $options );
 		$px->bowl()->each( array($me, 'apply') );
 	}
 
 	/**
 	 * constructor
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options オプション
+	 * 
+	 * `exec()` が受け取った値が転送されます。
 	 */
-	public function __construct( $px ){
+	public function __construct( $px, $options = null ){
 		$this->px = $px;
+
+		if( is_object($options) ){
+			if( strlen(@$options->output_encoding) ){
+				$this->output_encoding = $options->output_encoding;
+			}
+			if( strlen(@$options->output_eol_coding) ){
+				$this->output_eol_coding = $options->output_eol_coding;
+			}
+		}
+
+		// オプションなしの場合、$px->conf() を参照
+		if( !strlen($this->output_encoding) ){
+			$this->output_encoding = @$this->px->conf()->output_encoding;
+		}
+		if( !strlen($this->output_eol_coding) ){
+			$this->output_eol_coding = @$this->px->conf()->output_eol_coding;
+		}
+
 	}
 
 	/**
@@ -38,8 +80,8 @@ class encodingconverter{
 	 */
 	public function apply($src){
 
-		if( @strlen( $this->px->conf()->output_encoding ) ){
-			$output_encoding = $this->px->conf()->output_encoding;
+		if( @strlen( $this->output_encoding ) ){
+			$output_encoding = $this->output_encoding;
 			if( !strlen($output_encoding) ){ $output_encoding = 'UTF-8'; }
 
 			//出力ソースの文字コード変換(HTML)
@@ -48,19 +90,18 @@ class encodingconverter{
 			$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
 			$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
 			$src = $this->px->convert_encoding( $src, $output_encoding );
-
 		}
 
-		if( @strlen( $this->px->conf()->output_eol_coding ) ){
+		if( @strlen( $this->output_eol_coding ) ){
 			//出力ソースの改行コード変換
 			$eol_code = "\r\n";
-			switch( strtolower( $this->px->conf()->output_eol_coding ) ){
+			switch( strtolower( $this->output_eol_coding ) ){
 				case 'cr':     $eol_code = "\r"; break;
 				case 'lf':     $eol_code = "\n"; break;
 				case 'crlf':
 				default:       $eol_code = "\r\n"; break;
 			}
-			$src = preg_replace('/\r\n|\r|\n/si',$eol_code,$src);
+			$src = preg_replace('/\r\n|\r|\n/si', $eol_code, $src);
 		}
 
 		return $src;

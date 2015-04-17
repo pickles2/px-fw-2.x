@@ -95,7 +95,7 @@ class pickles{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.6-nb';
+		return '2.0.7-nb';
 	}
 
 	/**
@@ -254,10 +254,20 @@ class pickles{
 			if( is_string($func_list) ){
 				$fnc_name = $func_list;
 				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				preg_match( '/^(.*?)(?:\\((.*)\\))?$/', $fnc_name, $matched );
+				$fnc_name = @$matched[1];
+				$option_value = @$matched[2];
+				unset($matched);
+				if( strlen( $option_value ) ){
+					$option_value = json_decode( $option_value );
+				}
+				// var_dump($fnc_name);
+				// var_dump($option_value);
 				$this->proc_num ++;
 				if( @!strlen($this->proc_id) ){
 					$this->proc_id = $this->proc_type.'_'.$this->proc_num;
 				}
+				array_push( $param_arr, $option_value );
 				call_user_func_array( $fnc_name, $param_arr);
 				$this->proc_id = null;
 
@@ -917,7 +927,7 @@ class pickles{
 	 */
 	public function get_path_docroot(){
 		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
-		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( './' ) );
+		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
 		$rtn = $this->fs->normalize_path($rtn);
 		return $rtn;

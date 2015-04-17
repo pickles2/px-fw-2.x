@@ -12,6 +12,8 @@
 <?php } ?>
 
 
+<!-- autoindex -->
+
 <h2>次のステップ</h2>
 
 <h3>サイトマップを編集します</h3>
@@ -40,7 +42,7 @@
 	このページも、削除や上書きしてあなたのサイトのトップページに置き換えてください。<br />
 </p>
 
-<h4>パブリッシュします</h4>
+<h3>パブリッシュします</h3>
 <p>
 	サイトができあがったら、そのまま静的なHTMLに書き出すことができます。<br />
 	次のコマンドで、パブリッシュを実行します。<br />
@@ -55,18 +57,22 @@
 <pre><code>./.pickles/_sys/ram/publish/
 </code></pre>
 
-<h3>PXコマンドに関する注意事項</h3>
 
-
-	<p>
-		PXコマンドは、Pickles 2 を便利に使うためのさまざまな機能を提供します(例：パブリッシュ機能 <a href="?PX=publish">?PX=publish</a>)。PXコマンドはサーバー内部の情報にアクセスしたり、サーバー上のデータを書き換えるインターフェイスを提供する場合があるため、<strong>第3者にアクセスされると大変キケンです</strong>。<br />
-		Pickles 2 をインターネット上のサーバーで動かす場合には、次のことに注意してください。<br />
-	</p>
-	<ul>
-		<li>ウェブ制作環境として利用する場合、利用基本認証やIP制限などの処理を施し、一般のユーザーがアクセスできない場所に設置してください。</li>
-		<li>または、Pickles 2 上に構築したウェブアプリケーションをサービスとして公開する場合、設定ファイル (<code>./px-files/config.php</code>) の <code>$conf-&gt;allow_pxcommands</code> の値を <code>0</code> に設定し、PXコマンド機能を無効にしてください。<br />
-			<pre><code>$conf-&gt;allow_pxcommands = 0; // PX Commands の実行を許可
+<h2>PXコマンドに関する注意事項</h2>
+<p>
+	PXコマンドは、Pickles 2 を便利に使うためのさまざまな機能を提供します(例：パブリッシュ機能 <a href="?PX=publish">?PX=publish</a>)。PXコマンドはサーバー内部の情報にアクセスしたり、サーバー上のデータを書き換えるインターフェイスを提供する場合があるため、<strong>第3者にアクセスされると大変キケンです</strong>。<br />
+	Pickles 2 をインターネット上のサーバーで動かす場合には、次のことに注意してください。<br />
+</p>
+<ul>
+	<li>ウェブ制作環境として利用する場合、利用基本認証やIP制限などの処理を施し、一般のユーザーがアクセスできない場所に設置してください。</li>
+	<li>または、Pickles 2 上に構築したウェブアプリケーションをサービスとして公開する場合、設定ファイル (<code>./px-files/config.php</code>) の <code>$conf-&gt;allow_pxcommands</code> の値を <code>0</code> に設定し、PXコマンド機能を無効にしてください。<br />
+		<pre><code>$conf-&gt;allow_pxcommands = 0; // PX Commands の実行を許可
 </code></pre>
-		</li>
-	</ul>
+	</li>
+</ul>
+
+
+<h2>APIドキュメント (phpdoc)</h2>
+<p>Pickle2 のPHPコードから生成した <a href="./sample_pages/phpdoc/" target="_blank">APIドキュメント</a> を参照してください。</p>
+
 
