@@ -107,7 +107,7 @@ return call_user_func( function(){
 		'picklesFramework2\processors\autoindex\autoindex::exec' ,
 
 		// テーマ
-		'theme'=>'picklesFramework2\theme::exec' , 
+		'theme'=>'picklesFramework2\theme\theme::exec' , 
 
 		// Apache互換のSSIの記述を解決する
 		'picklesFramework2\processors\ssi\ssi::exec' ,

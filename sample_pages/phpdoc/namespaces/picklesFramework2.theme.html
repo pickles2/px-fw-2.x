@@ -21,55 +21,7 @@
     <script src="../js/jquery.smooth-scroll.js"></script>
     <script src="../js/prism.min.js"></script>
     <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-        <script type="text/javascript">
-        function loadExternalCodeSnippets() {
-            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
-                var src = pre.getAttribute('data-src');
-                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
-                var language = 'php';
-
-                var code = document.createElement('code');
-                code.className = 'language-' + language;
-
-                pre.textContent = '';
-
-                code.textContent = 'Loading…';
-
-                pre.appendChild(code);
-
-                var xhr = new XMLHttpRequest();
-
-                xhr.open('GET', src, true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
-
-                        if (xhr.status < 400 && xhr.responseText) {
-                            code.textContent = xhr.responseText;
-
-                            Prism.highlightElement(code);
-                        }
-                        else if (xhr.status >= 400) {
-                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                        }
-                        else {
-                            code.textContent = '✖ Error: File does not exist or is empty';
-                        }
-                    }
-                };
-
-                xhr.send(null);
-            });
-        }
-
-        $(document).ready(function(){
-            loadExternalCodeSnippets();
-        });
-        $('#source-view').on('shown', function () {
-            loadExternalCodeSnippets();
-        })
-    </script>
-
+    
     <link rel="shortcut icon" href="../images/favicon.ico"/>
     <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
     <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
@@ -145,28 +97,28 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-775283580"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1728111850"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-775283580" class="accordion-body collapse in">
+            <div id="namespace-1728111850" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-852796132"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1643960605"></a>
                                 <a href="../namespaces/picklesFramework2.html" style="margin-left: 30px; padding-left: 0">picklesFramework2</a>
             </div>
-            <div id="namespace-852796132" class="accordion-body collapse ">
+            <div id="namespace-1643960605" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-287811738"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1225651644"></a>
                                 <a href="../namespaces/picklesFramework2.commands.html" style="margin-left: 30px; padding-left: 0">commands</a>
             </div>
-            <div id="namespace-287811738" class="accordion-body collapse ">
+            <div id="namespace-1225651644" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -185,19 +137,19 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1042201739"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1810380980"></a>
                                 <a href="../namespaces/picklesFramework2.processors.html" style="margin-left: 30px; padding-left: 0">processors</a>
             </div>
-            <div id="namespace-1042201739" class="accordion-body collapse ">
+            <div id="namespace-1810380980" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-857781116"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1295452529"></a>
                                 <a href="../namespaces/picklesFramework2.processors.autoindex.html" style="margin-left: 30px; padding-left: 0">autoindex</a>
             </div>
-            <div id="namespace-857781116" class="accordion-body collapse ">
+            <div id="namespace-1295452529" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -212,10 +164,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-458349289"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2075576683"></a>
                                 <a href="../namespaces/picklesFramework2.processors.encodingconverter.html" style="margin-left: 30px; padding-left: 0">encodingconverter</a>
             </div>
-            <div id="namespace-458349289" class="accordion-body collapse ">
+            <div id="namespace-2075576683" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -230,10 +182,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1659797273"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1060797760"></a>
                                 <a href="../namespaces/picklesFramework2.processors.md.html" style="margin-left: 30px; padding-left: 0">md</a>
             </div>
-            <div id="namespace-1659797273" class="accordion-body collapse ">
+            <div id="namespace-1060797760" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -248,10 +200,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1388466948"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1743218958"></a>
                                 <a href="../namespaces/picklesFramework2.processors.scss.html" style="margin-left: 30px; padding-left: 0">scss</a>
             </div>
-            <div id="namespace-1388466948" class="accordion-body collapse ">
+            <div id="namespace-1743218958" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -266,10 +218,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-38446113"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-758110970"></a>
                                 <a href="../namespaces/picklesFramework2.processors.ssi.html" style="margin-left: 30px; padding-left: 0">ssi</a>
             </div>
-            <div id="namespace-38446113" class="accordion-body collapse ">
+            <div id="namespace-758110970" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -292,10 +244,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1151936661"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1933972346"></a>
                                 <a href="../namespaces/picklesFramework2.theme.html" style="margin-left: 30px; padding-left: 0">theme</a>
             </div>
-            <div id="namespace-1151936661" class="accordion-body collapse ">
+            <div id="namespace-1933972346" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -323,10 +275,10 @@
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1846763871"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-723305458"></a>
                                 <a href="../namespaces/tomk79.html" style="margin-left: 30px; padding-left: 0">tomk79</a>
             </div>
-            <div id="namespace-1846763871" class="accordion-body collapse ">
+            <div id="namespace-723305458" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -352,38 +304,39 @@
     <section class="row-fluid">
         <div class="span10 offset2">
             <div class="row-fluid">
-                <div class="span8 content file">
+                <div class="span8 content namespace">
                     <nav>
-                                                                    </nav>
+                                                <a href="../namespaces/picklesFramework2.html">\picklesFramework2</a>
+                                            </nav>
+                    <h1><small>\picklesFramework2</small>theme</h1>
 
-                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
-                    <h1><small>px-files/_sys/php/commands</small>phpinfo.php</h1>
-                    <p><em>PX Commands &quot;phpinfo&quot;</em></p>
                     
-
                     
                     
                                         <h2>Classes</h2>
                     <table class="table table-hover">
                                             <tr>
-                            <td><a href="../classes/picklesFramework2.commands.phpinfo.html">phpinfo</a></td>
-                            <td><em>PX Commands &quot;phpinfo&quot;</em></td>
+                            <td><a href="../classes/picklesFramework2.theme.theme.html">theme</a></td>
+                            <td><em>theme &quot;pickles&quot; class</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/picklesFramework2.theme.theme_top.html">theme_top</a></td>
+                            <td><em>theme &quot;pickles&quot; class</em></td>
                         </tr>
                                         </table>
                                     </div>
 
                 <aside class="span4 detailsbar">
                     <dl>
-                                                    <dt>Package</dt>
-                            <dd><div class="namespace-wrapper">\Default</div></dd>
-                        
-                        
+                        <dt>Namespace hierarchy</dt>
+                        <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                            
+                                    <div class="namespace-wrapper"><a href="../namespaces/default.html">\</a></div>
+                                                            
+                                    <div class="namespace-wrapper"><a href="../namespaces/picklesFramework2.html">\picklesFramework2</a></div>
+                                                                                        <div class="namespace-wrapper">\picklesFramework2\theme</div>
+                        </dd>
                     </dl>
-                    <h2>Tags</h2>
-                    <table class="table table-condensed">
-                                                    <tr><td colspan="2"><em>None found</em></td></tr>
-                                            </table>
-
                 </aside>
             </div>
 
@@ -391,16 +344,6 @@
             
         </div>
     </section>
-
-    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="source-view-label"></h3>
-        </div>
-        <div class="modal-body">
-            <pre data-src="../files/px-files/_sys/php/commands/phpinfo.php.txt" class="language-php line-numbers"></pre>
-        </div>
-    </div>
 
     <footer class="row-fluid">
         <section class="span10 offset2">
