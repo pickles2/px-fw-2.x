@@ -114,7 +114,7 @@ class autoindex{
 		$headlevel = $topheadlevel;
 		if( count( $index ) ){
 			$anchorlinks .= '<!-- == autoindex == -->'."\n";
-			$anchorlinks .= '<div style="margin:2em 5%; border:1px solid #bbb; padding:1em; background:rgba(124, 124, 124, 0.05); color:#333; border-radius:5px;">'."\n";
+			$anchorlinks .= '<div style="margin:2em 5%; border:1px solid #bbb; padding:1em; background:rgba(124, 124, 124, 0.05); border-radius:5px;">'."\n";
 			$anchorlinks .= '<div style="margin:0; padding:0; text-align:center; font-weight:bold;">INDEX</div>';
 			foreach($index as $key=>$row){
 				$csa = $row['headlevel'] - $headlevel;
