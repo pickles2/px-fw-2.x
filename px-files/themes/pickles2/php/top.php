@@ -8,10 +8,15 @@ namespace picklesFramework2\theme;
  * theme "pickles" class
  */
 class theme_top{
+	/**
+	 * objects
+	 */
 	private $px, $theme;
 
 	/**
-	 * コンストラクタ
+	 * constructor
+	 * @param object $px $px object
+	 * @param object $theme $theme object
 	 */
 	public function __construct( $px, $theme ){
 		$this->px = $px;
@@ -23,7 +28,8 @@ class theme_top{
 
 
 	/**
-	 * カラースキームを返す
+	 * カラースキームを取得
+	 * @return array カラースキーム
 	 */
 	public function get_color_scheme(){
 		$colors = array();
@@ -52,6 +58,8 @@ class theme_top{
 
 	/**
 	 * PxFWのSVGロゴソースを返す。
+	 * @param array $opt オプション
+	 * @return string SVGソース
 	 */
 	public function create_src_pxfw_logo_svg($opt = array()){
 		$colors = $this->get_color_scheme();
@@ -65,6 +73,11 @@ class theme_top{
 
 	/**
 	 * リンクアイコンのSVGロゴソースを返す。
+	 * @param array $type アイコンの種類
+	 * 
+	 * blank, download, pdf, up, down, back, icon(default) のいずれかを指定。
+	 * @param array $opt オプション
+	 * @return string SVGソース
 	 */
 	public function create_src_link_icon_uri($type, $opt = array()){
 		$colors = $this->get_color_scheme();
@@ -144,6 +157,8 @@ class theme_top{
 
 	/**
 	 * welcomeイメージのソースを返す。
+	 * @param array $opt オプション
+	 * @return string SVGソース
 	 */
 	public function create_src_welcome_svg($opt = array()){
 		$colors = $this->get_color_scheme();
@@ -159,6 +174,7 @@ class theme_top{
 
 	/**
 	 * セットアップを検証する
+	 * @return array エラーの一覧。エラーがない場合は、空白の配列 `array()` が返ります。
 	 */
 	public function setup_test(){
 		$errors = array();
@@ -192,6 +208,8 @@ class theme_top{
 
 	/**
 	 * セットアップ検証結果を表示する
+	 * @param array $errors `setup_test()` が返したエラー一覧
+	 * @return string HTMLソース
 	 */
 	public function mk_setup_test( $errors = array() ){
 		// 結果のエラーメッセージ(または成功メッセージ)を生成して返す。

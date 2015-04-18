@@ -8,12 +8,24 @@ namespace picklesFramework2\theme;
  * theme "pickles" class
  */
 class theme{
+	/**
+	 * objects
+	 */
 	private $px;
+
+	/**
+	 * テーマテンプレートの格納先パス
+	 */
 	private $path_tpl;
+
+	/**
+	 * current_page_info
+	 */
 	private $page;
 
 	/**
 	 * constructor
+	 * @param object $px $px object
 	 */
 	public function __construct($px){
 		$this->px = $px;
@@ -31,6 +43,8 @@ class theme{
 
 	/**
 	 * entry method
+	 * @param object $px $px object
+	 * @return bool true
 	 */
 	public static function exec( $px ){
 		$theme = new self($px);
@@ -41,6 +55,8 @@ class theme{
 
 	/**
 	 * bind content to theme
+	 * @param object $px $px object
+	 * @return string HTML Source code
 	 */
 	private function bind( $px ){
 		$theme = $this;
@@ -53,6 +69,7 @@ class theme{
 
 	/**
 	 * グローバルナビを自動生成する
+	 * @return string HTML Source code
 	 */
 	public function mk_global_menu(){
 		$global_menu = $this->px->site()->get_global_menu();
@@ -72,6 +89,7 @@ class theme{
 	}
 	/**
 	 * ショルダーナビを自動生成する
+	 * @return string HTML Source code
 	 */
 	public function mk_shoulder_menu(){
 		$shoulder_menu = $this->px->site()->get_shoulder_menu();
@@ -112,6 +130,7 @@ class theme{
 
 	/**
 	 * グローバルナビを自動生成する
+	 * @return string HTML Source code
 	 */
 	public function mk_megafooter_menu(){
 		$global_menu = $this->px->site()->get_global_menu();
@@ -140,6 +159,7 @@ class theme{
 
 	/**
 	 * パンくずを自動生成する
+	 * @return string HTML Source code
 	 */
 	public function mk_breadcrumb(){
 		$breadcrumb = $this->px->site()->get_breadcrumb_array();
