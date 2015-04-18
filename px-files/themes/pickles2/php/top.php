@@ -28,9 +28,12 @@ class theme_top{
 	public function get_color_scheme(){
 		$colors = array();
 		$colors['main'] = '#00a0e6';
-		$hsb = $this->theme->color_hex2hsb( $colors['main'] );
-
-		$colors['thin'] = $this->theme->color_hsb2hex($hsb['h'], $hsb['s']-($hsb['s']/4*3), $hsb['b']+((100-$hsb['b'])/4*3));
+		$hsb = [
+			"h"=>198,
+			"s"=>100,
+			"b"=>90
+		];
+		$colors['thin'] = "#bae5f8";
 
 		$colors['link'] = $colors['main'];
 		$colors['text'] = '#333';
