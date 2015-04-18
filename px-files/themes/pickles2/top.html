@@ -87,26 +87,29 @@
 		</div><!-- /.theme_welcome -->
 		<div class="theme_mainblock">
 			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="contents">
+				<div class="contents">
 <?= $px->bowl()->pull() ?>
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<nav class="theme_common_navi">
-<?= $theme->mk_global_menu() ?>
-						</nav>
-						<nav class="theme_common_navi">
-<?= $theme->mk_shoulder_menu() ?>
-						</nav>
-					</div>
-				</div><!-- /.row -->
+				</div>
 			</div><!-- /.container -->
 		</div><!-- /.theme_mainblock -->
 		<footer class="theme_footer">
 			<div class="container">
-				<p style="text-align:center;">Pickles Framework is made by &copy;Tomoya Koyanagi.</p>
+				<nav class="theme_megafooter_navi">
+<?= $theme->mk_megafooter_menu() ?>
+				</nav>
+			</div>
+			<div class="container theme_footer_shouldernavi">
+<?php
+	$shoulder_menu = $px->site()->get_shoulder_menu();
+	echo( '<ul>' );
+	foreach( $shoulder_menu as $page_id ){
+		echo( '<li>'.$px->mk_link( $page_id ).'</li>' );
+	}
+	echo( '</ul>' );
+?>
+			</div>
+			<div class="container">
+				<p style="text-align:center;">Pickles 2 is made by Tomoya Koyanagi.</p>
 			</div>
 		</footer>
 	</body>

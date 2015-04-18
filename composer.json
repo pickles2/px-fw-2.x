@@ -35,7 +35,7 @@
             "px-files/_sys/php/processors/autoindex.php",
             "px-files/_sys/php/processors/encodingconverter.php",
             "px-files/_sys/php/processors/ssi.php",
-            "px-files/theme/php/theme.php"
+            "px-files/themes/pickles2/php/theme.php"
         ]
     }
 }

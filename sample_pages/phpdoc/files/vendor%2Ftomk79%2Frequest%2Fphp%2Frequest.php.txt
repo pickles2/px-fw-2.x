@@ -223,7 +223,7 @@ class request{
 	 */
 	public function get_param( $key ){
 		if( !array_key_exists($key, $this->param) ){ return null; }
-		return $this->param[$key];
+		return @$this->param[$key];
 	}//get_param()
 
 	/**
@@ -297,7 +297,7 @@ class request{
 	 * @return mixed クッキーの値
 	 */
 	public function get_cookie( $key ){
-		return	$_COOKIE[$key];
+		return	@$_COOKIE[$key];
 	}//get_cookie()
 
 	/**
@@ -411,7 +411,7 @@ class request{
 	public function get_session( $key ){
 		if( @!is_array( $_SESSION ) ){ return null; }
 		if( @!array_key_exists($key, $_SESSION) ){ return null; }
-		return $_SESSION[$key];
+		return @$_SESSION[$key];
 	}//get_session()
 
 	/**

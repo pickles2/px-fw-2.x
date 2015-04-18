@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
+<?php include(__DIR__.'/inc/headsection.inc'); ?>
+<?= $px->bowl()->pull('head') ?>
+<style>
+
+</style>
+	</head>
+	<body>
+		<header class="theme_header" id="page_top">
+			<div class="container">
+				<p class="theme_si"><a href="<?= htmlspecialchars($px->href('')); ?>"><?= htmlspecialchars( $px->conf()->name ) ?></a></p>
+				<div class="theme_shouldernavi">
+<?php
+	$shoulder_menu = $px->site()->get_shoulder_menu();
+	echo( '<ul>' );
+	foreach( $shoulder_menu as $page_id ){
+		echo( '<li>'.$px->mk_link( $page_id ).'</li>' );
+	}
+	echo( '</ul>' );
+?>
+				</div>
+				<div class="theme_globalnavi">
+<?php
+	$global_menu = $px->site()->get_global_menu();
+	echo( '<ul>' );
+	foreach( $global_menu as $page_id ){
+		echo( '<li>'.$px->mk_link( $page_id ).'</li>' );
+	}
+	echo( '</ul>' );
+?>
+
+				</div>
+			</div>
+		</header>
+		<div class="theme_mainblock">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="theme_breadcrumb"><?= $theme->mk_breadcrumb() ?></div>
+						<h1><?= preg_replace('/\r\n|\r|\n/s', '<br />', htmlspecialchars($px->site()->get_current_page_info( 'title_h1' )) ); ?></h1>
+						<div class="contents">
+<?= $px->bowl()->pull() ?>
+						</div>
+						<div class="theme_breadcrumb"><?= $theme->mk_breadcrumb() ?></div>
+					</div>
+					<div class="col-sm-3">
+						<nav class="theme_common_navi">
+<?php
+	$category_top_id = $px->site()->get_category_top();
+?>
+							<p><a href="<?= htmlspecialchars( $px->href($category_top_id) ) ?>"><?= htmlspecialchars($px->site()->get_page_info($category_top_id, 'title_label')) ?></a></p>
+<?= $theme->mk_sub_menu( $category_top_id ) ?>
+						</nav>
+					</div>
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.theme_mainblock -->
+		<footer class="theme_footer">
+			<div class="container">
+				<nav class="theme_megafooter_navi">
+<?= $theme->mk_megafooter_menu() ?>
+				</nav>
+			</div>
+			<div class="container theme_footer_shouldernavi">
+<?php
+	$shoulder_menu = $px->site()->get_shoulder_menu();
+	echo( '<ul>' );
+	echo( '<li>'.$px->mk_link( '', array('current'=>false) ).'</li>' );
+	foreach( $shoulder_menu as $page_id ){
+		echo( '<li>'.$px->mk_link( $page_id ).'</li>' );
+	}
+	echo( '</ul>' );
+?>
+			</div>
+			<div class="container">
+				<p style="text-align:center;">Pickles 2 is made by Tomoya Koyanagi.</p>
+			</div>
+		</footer>
+	</body>
+</html>
