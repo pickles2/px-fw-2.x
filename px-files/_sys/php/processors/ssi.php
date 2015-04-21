@@ -20,7 +20,7 @@ class ssi{
 	 */
 	public static function exec( $px ){
 		$me = new self( $px );
-		$keys = $px->bowl()->each( array($me, 'apply') );
+		$px->bowl()->each( array($me, 'apply') );
 	}
 
 	/**

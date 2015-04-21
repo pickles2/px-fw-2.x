@@ -1016,6 +1016,32 @@ class pickles{
 		return $rtn;
 	}//realpath_files_cache()
 
+
+	/**
+	 * コンテンツ別の非公開キャッシュディレクトリのサーバー内部パスを得る。
+	 * 
+	 * @param string $localpath_resource ローカルリソースのパス
+	 * @return string コンテンツ別の非公開キャッシュのサーバー内部パス
+	 */
+	public function realpath_files_private_cache( $localpath_resource = null ){
+		$tmp_page_info = $this->site()->get_current_page_info();
+		$path_content = $tmp_page_info['content'];
+		if( is_null($path_content) ){
+			$path_content = $this->req()->get_request_file_path();
+		}
+		unset($tmp_page_info);
+
+		$path_original = $this->get_path_controot().$path_content;
+		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
+		$rtn = $this->get_path_homedir().'/_sys/ram/caches/c'.$path_content;
+		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
+		$this->fs()->mkdir_r( dirname( $rtn ) );
+
+		$rtn = $this->fs()->normalize_path( $rtn );
+		$rtn = $this->fs()->get_realpath( $rtn );
+		return $rtn;
+	}//realpath_files_private_cache()
+
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。
 	 * 

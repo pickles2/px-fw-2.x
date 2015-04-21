@@ -23,7 +23,7 @@ class ext{
 			$src = $scss->compile( $src );
 			chdir( $tmp_current_dir );
 
-			$src = $px->bowl()->replace( $src, $key );
+			$px->bowl()->replace( $src, $key );
 		}
 
 		return true;

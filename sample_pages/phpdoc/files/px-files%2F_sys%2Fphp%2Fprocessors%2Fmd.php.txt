@@ -20,7 +20,7 @@ class ext{
 
 			$src = \Michelf\MarkdownExtra::defaultTransform($src);
 
-			$src = $px->bowl()->replace( $src, $key );
+			$px->bowl()->replace( $src, $key );
 		}
 
 		return true;
