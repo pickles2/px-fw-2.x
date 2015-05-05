@@ -64,8 +64,9 @@ $ php ".\vendor\phpunit\phpunit\phpunit" picklesTest ".\px-files\_sys\tests\pick
 
 ### ドキュメント出力 - phpDocumentor
 
+```
 $ php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title "Pickles Framework 2.x API Document" -d "./px-files/_sys/php/","./px-files/themes/" -f "./vendor/tomk79/filesystem/php/filesystem.php","./vendor/tomk79/request/php/request.php" -t "./sample_pages/phpdoc/"
-
+```
 
 
 
