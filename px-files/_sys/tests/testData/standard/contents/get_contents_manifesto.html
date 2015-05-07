@@ -8,6 +8,6 @@ $px->site()->set_page_info(
 
 ?>
 <pre><?php
-$path_a = $px->realpath_files_private_cache('/a.html');
+$path_a = $px->get_contents_manifesto();
 print $path_a."\n";
 ?></pre>

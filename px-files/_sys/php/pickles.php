@@ -122,6 +122,14 @@ class pickles{
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
 
+		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
+			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
+				dirname(realpath($_SERVER['SCRIPT_FILENAME'])) !== realpath('./')
+			){
+				$_SERVER['SCRIPT_FILENAME'] = realpath($_SERVER['PWD'].'/'.$_SERVER['SCRIPT_FILENAME']);
+			}
+		}
+
 		// load Config
 		$this->path_homedir = $path_homedir;
 		if( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.json') ){
@@ -897,7 +905,7 @@ class pickles{
 
 	/**
 	 * コンテンツルートディレクトリのパス(=install path) を取得する
-	 * @return string コンテンツディレクトリのパス
+	 * @return string コンテンツディレクトリのパス(HTTPクライアントから見た場合のパス)
 	 */
 	public function get_path_controot(){
 		static $rtn;

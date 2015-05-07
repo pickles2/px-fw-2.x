@@ -8,6 +8,6 @@ $px->site()->set_page_info(
 
 ?>
 <pre><?php
-$path_a = $px->realpath_files_private_cache('/a.html');
-print $path_a."\n";
+$path_a = $px->get_path_docroot('/a.html');
+print $path_a;
 ?></pre>

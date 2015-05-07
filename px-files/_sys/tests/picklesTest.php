@@ -127,6 +127,61 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * 遠いディレクトリからコマンドラインで実行してみるテスト
+	 */
+	public function testStandardCmdExecByFarDirectory(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/contents/get_path_docroot.html' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+
+		$cd = realpath('.');
+		chdir(__DIR__.'/');
+		$output = $this->passthru( [
+			'php',
+			'./testData/standard/.px_execute.php' ,
+			'/contents/get_path_docroot.html' ,
+		] );
+		clearstatcache();
+		chdir($cd);
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/standard/');
+		$output = $this->passthru( [
+			'php',
+			'./.px_execute.php' ,
+			'/contents/get_path_docroot.html' ,
+		] );
+		clearstatcache();
+		chdir($cd);
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+
+	/**
 	 * パブリッシュしてみるテスト
 	 */
 	public function testStandardPublish(){

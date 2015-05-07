@@ -5,6 +5,9 @@
 "/site/set_page_info.html",,,"$site->set_page_info()",,,,,,1,,,"","",1
 "/contents/path_files_cache.html",,,"$px->path_files_cache()",,,,,,1,,,"","",1
 "/contents/path_files_private_cache.html",,,"$px->path_files_private_cache()",,,,,,1,,,"","",1
+"/contents/path_plugin_files.html",,,"$px->path_plugin_files()",,,,,,1,,,"","",1
+"/contents/get_contents_manifesto.html",,,"$px->get_contents_manifesto()",,,,,,1,,,"","",1
+"/contents/get_path_docroot.html",,,"$px->get_path_docroot()",,,,,,1,,,"","",1
 "/dynamicPath/{*}",,,"Dynamic Path",,,,,,1,,,"","",1
 "/dynamicPath/test1/",,,"dynamicPath/test1",,,,,"/dynamicPath/{*}",1,,,"","",
 "/errors/",,,"errors",,,,,"",1,,,"","",
