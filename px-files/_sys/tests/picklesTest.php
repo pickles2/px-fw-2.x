@@ -139,7 +139,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
 		$cd = realpath('.');
 		chdir(__DIR__.'/');
@@ -153,7 +153,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
 		$cd = realpath('.');
 		chdir(__DIR__.'/testData/standard/');
@@ -167,7 +167,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( '<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/' ) ).'</pre>', $output );
+		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
 
 		// 後始末
