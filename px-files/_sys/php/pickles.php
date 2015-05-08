@@ -123,16 +123,20 @@ class pickles{
 		$this->set_status(200);// 200 OK
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
+			// commandline only
 			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
 				dirname(realpath($_SERVER['SCRIPT_FILENAME'])) !== realpath('./')
 			){
 				if( array_key_exists( 'PWD' , $_SERVER ) ){
 					$_SERVER['SCRIPT_FILENAME'] = realpath($_SERVER['PWD'].'/'.$_SERVER['SCRIPT_FILENAME']);
 				}else{
+					// for Windows
+					// .px_execute.php で chdir(__DIR__) されていることが前提。
 					$_SERVER['SCRIPT_FILENAME'] = realpath('./'.basename($_SERVER['SCRIPT_FILENAME']));
 				}
 			}
 		}
+		chdir( dirname($_SERVER['SCRIPT_FILENAME']) );
 
 		// load Config
 		$this->path_homedir = $path_homedir;
