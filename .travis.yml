@@ -8,7 +8,7 @@ php:
 #   - command1
 
 before_script:
-  - php composer.phar install
+  - composer install
 
 script:
   - phpunit "./px-files/_sys/tests/"
