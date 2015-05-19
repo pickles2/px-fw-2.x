@@ -1,0 +1,7 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="default">
+			<directory>px-files/_sys/tests/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

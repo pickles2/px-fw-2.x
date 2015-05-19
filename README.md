@@ -55,13 +55,13 @@ $ chmod -R 777 ./caches
 
 ```
 $ cd {$documentRoot}
-$ ./vendor/phpunit/phpunit/phpunit "./px-files/_sys/tests/"
+$ ./vendor/phpunit/phpunit/phpunit
 ```
 
 for Windows.
 
 ```
-$ php ".\vendor\phpunit\phpunit\phpunit" ".\px-files\_sys\tests\"
+$ php ".\vendor\phpunit\phpunit\phpunit"
 ```
 
 ### ドキュメント出力 - phpDocumentor

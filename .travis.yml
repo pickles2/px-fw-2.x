@@ -10,7 +10,7 @@ before_script:
   - composer install
 
 script:
-  - ./vendor/phpunit/phpunit/phpunit "./px-files/_sys/tests/"
+  - ./vendor/phpunit/phpunit/phpunit
 
 notifications:
   emails:
