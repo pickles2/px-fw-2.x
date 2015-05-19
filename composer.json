@@ -12,7 +12,7 @@
     "repositories": [
     ],
     "require": {
-        "php": ">=5.3.0" ,
+        "php": ">=5.4.0" ,
         "tomk79/filesystem": "1.*",
         "tomk79/request": "0.1.*",
         "michelf/php-markdown": "1.4.*",
