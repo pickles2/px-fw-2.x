@@ -1,0 +1,21 @@
+language: php
+php:
+  - "5.5"
+  - "5.4"
+  - "5.3"
+
+before_install:
+  - command1
+  - command2
+
+before_script:
+  - php composer.phar install
+
+script:
+  - phpunit "./px-files/_sys/tests/"
+
+notifications:
+  emails:
+    - tomk79@gmail.com
+  on_success: always
+  on_failure: always

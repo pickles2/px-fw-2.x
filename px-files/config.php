@@ -44,6 +44,7 @@ return call_user_func( function(){
 		// パターンは先頭から検索され、はじめにマッチした設定を採用する。
 		// ワイルドカードとして "*"(アスタリスク) を使用可。
 		'/.htaccess' => 'ignore' ,
+		'/.travis.yml' => 'ignore' ,
 		'/.px_execute.php' => 'ignore' ,
 		'/px-files/*' => 'ignore' ,
 		'*.ignore/*' => 'ignore' ,
