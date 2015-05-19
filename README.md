@@ -1,7 +1,7 @@
 PxFW-2.x
 =========
 
-[![Build Status](https://secure.travis-ci.org/tomk79/PxFW-2.x.png?branch=master]](https://travis-ci.org/tomk79/PxFW-2.x)
+[![Build Status](https://secure.travis-ci.org/tomk79/PxFW-2.x.png?branch=master]](https://travis-ci.org/tomk79/PxFW-2.x)<br />
 [![Build Status](https://secure.travis-ci.org/tomk79/PxFW-2.x.png?branch=develop)]](https://travis-ci.org/tomk79/PxFW-2.x)
 
 Pickles Framework(PxFW) は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。<br />
