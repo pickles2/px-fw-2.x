@@ -38,10 +38,10 @@ $ chmod -R 777 ./caches
 ## システム要件 - System Requirement
 
 - Linux系サーバ または Windowsサーバ
-- Apache1.3以降
+- Apache
   - mod_rewrite が利用可能であること
   - .htaccess が利用可能であること
-- PHP5.3以上
+- PHP 5.4 以上
   - mb_string が有効に設定されていること
   - safe_mode が無効に設定されていること
 

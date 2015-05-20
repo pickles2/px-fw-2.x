@@ -127,6 +127,308 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * /?PX=api.get.* から値を取得するテスト
+	 */
+	public function testPxApiGetAnything(){
+
+		// -------------------
+		// api.get.vertion
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.version' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta)[0-9]+)?(?:\-nb)?$/s', json_decode($output)) );
+
+
+		// -------------------
+		// api.get.config
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.config' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output->name, 'Pickles 2' );
+		$this->assertEquals( $output->path_controot, '/' );
+
+
+		// -------------------
+		// api.get.sitemap
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.sitemap' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->{"/dynamicPath/{*}"}->title, 'Dynamic Path' );
+		$this->assertNull( $output->{"alias21:/sample_pages/page2/index.html"}->content );
+		$this->assertEquals( $output->{"alias21:/sample_pages/page2/index.html"}->title, 'サンプルページ2へのエイリアス' );
+		$this->assertEquals( $output->{"/sample_pages/help/index.html"}->id, ':auto_page_id.29' );
+
+		// -------------------
+		// api.get.page_info
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page2/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/aaaaa.html') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/dynamicPath/{*}' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/test1/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/dynamicPath/test1/index.html' );
+
+
+		// -------------------
+		// api.get.path_homedir
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.path_homedir' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
+
+
+		// -------------------
+		// api.get.path_controot
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.path_controot' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/' );
+
+
+		// -------------------
+		// api.get.path_docroot
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.path_docroot' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
+
+
+		// -------------------
+		// api.get.domain
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.domain' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, null );
+
+
+		// -------------------
+		// api.get.directory_index
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.directory_index' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output[0], 'index.html' );
+
+		// -------------------
+		// api.get.directory_index_primary
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.directory_index_primary' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'index.html' );
+
+
+		// -------------------
+		// api.get.path_proc_type
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page2/?PX=api.get.path_proc_type' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'html' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.path_proc_type&path='.urlencode('/sample_pages/page2/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'html' );
+
+
+		// -------------------
+		// api.get.is_ignore_path
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.is_ignore_path&path='.urlencode('/sample_pages/page2/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertFalse( $output );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.is_ignore_path&path='.urlencode('/vendor/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertTrue( $output );
+
+
+
+		// -------------------
+		// api.get.href
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('/sample_pages/page2/index.html') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/sample_pages/page2/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/dynamicPath/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}?a=b') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/dynamicPath/?a=b' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}?a=b#testAnch') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/dynamicPath/?a=b#testAnch' );
+
+
+
+
+
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}//testPxApiGetAnything();
+
+
+	/**
 	 * 遠いディレクトリからコマンドラインで実行してみるテスト
 	 */
 	public function testStandardCmdExecByFarDirectory(){
@@ -182,7 +484,76 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * 文字コード・改行コード変換テスト
+	 */
+	public function testEncodingConverter(){
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote('<meta charset="Shift_JIS" />', '/').'/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 1 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('SJIS-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/common/test.css' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote('@charset "EUC-JP"', '/').'/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\n/s', $output ), 1 );
+		$this->assertEquals( preg_match( '/\r/s', $output ), 0 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('eucJP-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
+			'/common/test.js' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\n/s', $output ), 0 );
+		$this->assertEquals( preg_match( '/\r/s', $output ), 1 );
+		// var_dump(mb_detect_encoding($output, $detect_order));
+		$this->assertEquals( @strtolower('utf-8'), @strtolower(mb_detect_encoding($output, $detect_order)) );
+
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/encodingconverter/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/encodingconverter/caches/p/' ) );
+
+	}
+
+	/**
 	 * パブリッシュしてみるテスト
+	 * @depends testStandardSetPageInfo
+	 * @depends testPxApiGetAnything
+	 * @depends testStandardCmdExecByFarDirectory
+	 * @depends testEncodingConverter
 	 */
 	public function testStandardPublish(){
 		$output = $this->passthru( [
@@ -270,73 +641,9 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	}//testStandardPublish()
 
-	/**
-	 * 文字コード・改行コード変換テスト
-	 */
-	public function testEncodingConverter(){
-		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
-
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/' ,
-		] );
-		clearstatcache();
-
-		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( preg_match( '/'.preg_quote('<meta charset="Shift_JIS" />', '/').'/s', $output ), 1 );
-		$this->assertEquals( preg_match( '/\r\n/s', $output ), 1 );
-		// var_dump(mb_detect_encoding($output, $detect_order));
-		$this->assertEquals( @strtolower('SJIS-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
-
-
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/common/test.css' ,
-		] );
-		clearstatcache();
-
-		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( preg_match( '/'.preg_quote('@charset "EUC-JP"', '/').'/s', $output ), 1 );
-		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
-		$this->assertEquals( preg_match( '/\n/s', $output ), 1 );
-		$this->assertEquals( preg_match( '/\r/s', $output ), 0 );
-		// var_dump(mb_detect_encoding($output, $detect_order));
-		$this->assertEquals( @strtolower('eucJP-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
-
-
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/common/test.js' ,
-		] );
-		clearstatcache();
-
-		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
-		$this->assertEquals( preg_match( '/\n/s', $output ), 0 );
-		$this->assertEquals( preg_match( '/\r/s', $output ), 1 );
-		// var_dump(mb_detect_encoding($output, $detect_order));
-		$this->assertEquals( @strtolower('utf-8'), @strtolower(mb_detect_encoding($output, $detect_order)) );
-
-
-		// 後始末
-		// $this->assertTrue( false );
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/encodingconverter/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( !is_dir( __DIR__.'/testData/encodingconverter/caches/p/' ) );
-
-	}
 
 	/**
-	 * キャッシュを削除してみるテスト
+	 * キャッシュを削除するテスト
 	 * @depends testStandardPublish
 	 */
 	public function testStandardClearcache(){

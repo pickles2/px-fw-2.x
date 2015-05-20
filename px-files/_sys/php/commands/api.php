@@ -390,6 +390,46 @@ class api{
 				$val = $this->px->site()->get_sitemap();
 				print $this->data_convert( $val );
 				break;
+			case 'page_info':
+				$val = $this->px->site()->get_page_info($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'path_homedir':
+				$val = $this->px->get_path_homedir();
+				print $this->data_convert( $val );
+				break;
+			case 'path_controot':
+				$val = $this->px->get_path_controot();
+				print $this->data_convert( $val );
+				break;
+			case 'path_docroot':
+				$val = $this->px->get_path_docroot();
+				print $this->data_convert( $val );
+				break;
+			case 'domain':
+				$val = $this->px->get_domain();
+				print $this->data_convert( $val );
+				break;
+			case 'directory_index':
+				$val = $this->px->get_directory_index();
+				print $this->data_convert( $val );
+				break;
+			case 'directory_index_primary':
+				$val = $this->px->get_directory_index_primary();
+				print $this->data_convert( $val );
+				break;
+			case 'path_proc_type':
+				$val = $this->px->get_path_proc_type($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'is_ignore_path':
+				$val = $this->px->is_ignore_path($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'href':
+				$val = $this->px->href($this->px->req()->get_param('linkto'));
+				print $this->data_convert( $val );
+				break;
 			// case 'sitemap_definition':
 			// 	$val = $this->px->site()->get_sitemap_definition();
 			// 	print $this->data_convert( $val );

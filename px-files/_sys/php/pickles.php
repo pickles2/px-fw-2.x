@@ -435,7 +435,10 @@ class pickles{
 		}
 		$path = $this->fs()->get_realpath( '/'.$path );
 		if( is_dir('./'.$path) ){
-			$path .= '/';
+			$path .= '/'.$this->get_directory_index_primary();
+		}
+		if( preg_match('/(?:\/|\\\\)$/', $path) ){
+			$path .= $this->get_directory_index_primary();
 		}
 		$path = $this->fs()->normalize_path($path);
 
