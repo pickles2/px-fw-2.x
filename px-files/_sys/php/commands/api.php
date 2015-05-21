@@ -53,6 +53,10 @@ class api{
 				//各種情報の取得
 				$this->api_get();
 				break;
+			case 'is':
+				//各種情報の評価
+				$this->api_is();
+				break;
 			// case 'dlfile':
 			// 	//ファイルダウンロード
 			// 	$this->api_dlfile();
@@ -374,6 +378,53 @@ class api{
 	 * 
 	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
 	 * 
+	 * <dl>
+	 * 	<dt>PX=api.get.version</dt>
+	 * 		<dd>Pickles Framework のバージョン番号を取得します。</dd>
+	 * 	<dt>PX=api.get.config</dt>
+	 * 		<dd>設定オブジェクトを取得します。</dd>
+	 * 
+	 * 	<dt>PX=api.get.sitemap</dt>
+	 * 		<dd>サイトマップ全体の配列を取得します。</dd>
+	 * 	<dt>PX=api.get.page_info&path={$path}</dt>
+	 * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.parent</dt>
+	 * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.children</dt>
+	 * 		<dd><code>$px->site()->get_children()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.bros</dt>
+	 * 		<dd><code>$px->site()->get_bros()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.bros_next</dt>
+	 * 		<dd><code>$px->site()->get_bros_next()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.bros_prev</dt>
+	 * 		<dd><code>$px->site()->get_bros_prev()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.next</dt>
+	 * 		<dd><code>$px->site()->get_next()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.prev</dt>
+	 * 		<dd><code>$px->site()->get_prev()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.breadcrumb_array</dt>
+	 * 		<dd><code>$px->site()->get_breadcrumb_array()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.dynamic_path_info&path={$path}</dt>
+	 * 		<dd><code>$px->site()->get_dynamic_path_info({$path})</code> の返却値を取得します。</dd>
+	 * 
+	 * 	<dt>PX=api.get.path_homedir</dt>
+	 * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_controot</dt>
+	 * 		<dd><code>$px->get_path_controot()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_docroot</dt>
+	 * 		<dd><code>$px->get_path_docroot()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.domain</dt>
+	 * 		<dd><code>$px->get_domain()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.directory_index</dt>
+	 * 		<dd><code>$px->get_directory_index()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.directory_index_primary</dt>
+	 * 		<dd><code>$px->get_directory_index_primary()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_proc_type</dt>
+	 * 		<dd><code>$px->get_path_proc_type()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.href&linkto={$path_linkto}</dt>
+	 * 		<dd><code>$px->href({$path_linkto})</code> の返却値を取得します。</dd>
+	 * </dl>
+	 * 
 	 * @return void
 	 */
 	private function api_get(){
@@ -392,6 +443,42 @@ class api{
 				break;
 			case 'page_info':
 				$val = $this->px->site()->get_page_info($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'parent':
+				$val = $this->px->site()->get_parent();
+				print $this->data_convert( $val );
+				break;
+			case 'children':
+				$val = $this->px->site()->get_children();
+				print $this->data_convert( $val );
+				break;
+			case 'bros':
+				$val = $this->px->site()->get_bros();
+				print $this->data_convert( $val );
+				break;
+			case 'bros_next':
+				$val = $this->px->site()->get_bros_next();
+				print $this->data_convert( $val );
+				break;
+			case 'bros_prev':
+				$val = $this->px->site()->get_bros_prev();
+				print $this->data_convert( $val );
+				break;
+			case 'next':
+				$val = $this->px->site()->get_next();
+				print $this->data_convert( $val );
+				break;
+			case 'prev':
+				$val = $this->px->site()->get_prev();
+				print $this->data_convert( $val );
+				break;
+			case 'breadcrumb_array':
+				$val = $this->px->site()->get_breadcrumb_array();
+				print $this->data_convert( $val );
+				break;
+			case 'dynamic_path_info':
+				$val = $this->px->site()->get_dynamic_path_info($this->px->req()->get_param('path'));
 				print $this->data_convert( $val );
 				break;
 			case 'path_homedir':
@@ -419,21 +506,50 @@ class api{
 				print $this->data_convert( $val );
 				break;
 			case 'path_proc_type':
-				$val = $this->px->get_path_proc_type($this->px->req()->get_param('path'));
-				print $this->data_convert( $val );
-				break;
-			case 'is_ignore_path':
-				$val = $this->px->is_ignore_path($this->px->req()->get_param('path'));
+				$val = $this->px->get_path_proc_type();
 				print $this->data_convert( $val );
 				break;
 			case 'href':
 				$val = $this->px->href($this->px->req()->get_param('linkto'));
 				print $this->data_convert( $val );
 				break;
-			// case 'sitemap_definition':
-			// 	$val = $this->px->site()->get_sitemap_definition();
-			// 	print $this->data_convert( $val );
-			// 	break;
+			default:
+				print $this->data_convert( array('result'=>0) );
+				break;
+		}
+		exit;
+	}
+
+	/**
+	 * [API] api.is.*
+	 * 
+	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
+	 * 
+	 * <dl>
+	 * 	<dt>PX=api.is.match_dynamic_path&path={$path}</dt>
+	 * 		<dd><code>$px->site()->is_match_dynamic_path({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.is.page_in_breadcrumb&path={$path}</dt>
+	 * 		<dd><code>$px->site()->is_page_in_breadcrumb({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.is.ignore_path&path={$path}</dt>
+	 * 		<dd><code>$px->is_ignore_path({$path})</code> の返却値を取得します。</dd>
+	 * </dl>
+	 * 
+	 * @return void
+	 */
+	private function api_is(){
+		switch( $this->command[2] ){
+			case 'match_dynamic_path':
+				$val = $this->px->site()->is_match_dynamic_path($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'page_in_breadcrumb':
+				$val = $this->px->site()->is_page_in_breadcrumb($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'ignore_path':
+				$val = $this->px->is_ignore_path($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
 			default:
 				print $this->data_convert( array('result'=>0) );
 				break;

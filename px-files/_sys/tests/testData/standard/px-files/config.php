@@ -6,7 +6,7 @@ return call_user_func( function(){
 
 	// project
 	$conf->name = 'Pickles 2'; // サイト名
-	$conf->domain = null; // ドメイン
+	$conf->domain = 'pickles2.pxt.jp'; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 
 	// paths
