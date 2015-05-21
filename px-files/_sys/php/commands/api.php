@@ -413,6 +413,18 @@ class api{
 	 * 		<dd><code>$px->get_path_controot()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.path_docroot</dt>
 	 * 		<dd><code>$px->get_path_docroot()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_content</dt>
+	 * 		<dd><code>$px->get_path_content()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_files&path={$path}</dt>
+	 * 		<dd><code>$px->path_files({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.realpath_files&path={$path}</dt>
+	 * 		<dd><code>$px->realpath_files({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.path_files_cache&path={$path}</dt>
+	 * 		<dd><code>$px->path_files_cache({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.realpath_files_cache&path={$path}</dt>
+	 * 		<dd><code>$px->realpath_files_cache({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.realpath_files_private_cache&path={$path}</dt>
+	 * 		<dd><code>$px->realpath_files_private_cache({$path})</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.domain</dt>
 	 * 		<dd><code>$px->get_domain()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.directory_index</dt>
@@ -491,6 +503,30 @@ class api{
 				break;
 			case 'path_docroot':
 				$val = $this->px->get_path_docroot();
+				print $this->data_convert( $val );
+				break;
+			case 'path_content':
+				$val = $this->px->get_path_content();
+				print $this->data_convert( $val );
+				break;
+			case 'path_files':
+				$val = $this->px->path_files($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'realpath_files':
+				$val = $this->px->realpath_files($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'path_files_cache':
+				$val = $this->px->path_files_cache($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'realpath_files_cache':
+				$val = $this->px->realpath_files_cache($this->px->req()->get_param('path'));
+				print $this->data_convert( $val );
+				break;
+			case 'realpath_files_private_cache':
+				$val = $this->px->realpath_files_private_cache($this->px->req()->get_param('path'));
 				print $this->data_convert( $val );
 				break;
 			case 'domain':
