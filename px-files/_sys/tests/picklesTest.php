@@ -466,7 +466,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output, '/index_files/' );
 
-		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files&path='.urlencode('dummypath/sample.png')] );
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
@@ -483,7 +483,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/') );
 
-		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files&path='.urlencode('dummypath/sample.png')] );
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
@@ -500,7 +500,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output, '/caches/c/index_files/' );
 
-		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache&path='.urlencode('dummypath/sample.png')] );
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
@@ -517,7 +517,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/') );
 
-		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache&path='.urlencode('dummypath/sample.png')] );
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
@@ -534,7 +534,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/') );
 
-		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache&path='.urlencode('dummypath/sample.png')] );
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
