@@ -305,6 +305,9 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		while(1){
 			flush();
+			if( !count( $this->paths_queue ) ){
+				break;
+			}
 			foreach( $this->paths_queue as $path=>$val ){break;}
 			print '------------'."\n";
 			print $path."\n";

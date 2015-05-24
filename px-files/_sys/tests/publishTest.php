@@ -159,6 +159,33 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * パブリッシュの対象が0件の場合のテスト
+	 * @depends testBefore
+	 */
+	public function testNothingToPublish(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/nothing/to/publish/?PX=publish.run' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	}//testNothingToPublish()
+
+
+	/**
 	 * パブリッシュディレクトリのテスト
 	 */
 	public function testPublishDirectoryTest(){
