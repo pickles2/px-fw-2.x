@@ -1,7 +1,9 @@
 <phpunit>
 	<testsuites>
-		<testsuite name="default">
-			<directory>px-files/_sys/tests/</directory>
+		<testsuite>
+			<file>px-files/_sys/tests/picklesTest.php</file>
+			<file>px-files/_sys/tests/apiTest.php</file>
+			<file>px-files/_sys/tests/publishTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

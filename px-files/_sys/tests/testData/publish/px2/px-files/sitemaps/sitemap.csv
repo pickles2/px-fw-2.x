@@ -1,0 +1,5 @@
+"*path","*content","*id","*title","*title_breadcrumb","*title_h1","*title_label","*title_full","*logical_path","*list_flg","*layout","*orderby","*keywords","*description","*category_top_flg"
+"/",,,"HOME",,,,,,1,"top",,,,
+"/path_ignored/testpage.html",,,"Ignored",,,,,,1,,,"","",1
+"/update_sync_test/stay.html",,,"stay",,,,,,1,,,"","",1
+"/update_sync_test/new.html",,,"new",,,,,,1,,,"","",1

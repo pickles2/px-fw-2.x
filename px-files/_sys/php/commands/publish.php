@@ -429,9 +429,10 @@ function cont_EditPublishTargetPathApply(formElm){
 			print '============'."\n";
 			print '## Sync to publish directory.'."\n";
 			print "\n";
-			$this->px->fs()->sync_dir(
-				$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$this->path_region ,
-				$this->path_publish_dir.$this->path_docroot.$this->path_region
+			$this->sync_dir(
+				$this->path_tmp_publish.'/htdocs'.$this->path_docroot ,
+				$this->path_publish_dir.$this->path_docroot ,
+				$this->path_region
 			);
 		}
 		print "\n";
@@ -444,6 +445,132 @@ function cont_EditPublishTargetPathApply(formElm){
 		print $this->cli_footer();
 		exit;
 	}
+
+	/**
+	 * ディレクトリを同期する。
+	 * 
+	 * @param string $path_sync_from 同期元のルートディレクトリ
+	 * @param string $path_sync_to 同期先のルートディレクトリ
+	 * @param string $path_region ルート以下のパス
+	 * @return bool 常に `true` を返します。
+	 */
+	private function sync_dir( $path_sync_from , $path_sync_to, $path_region ){
+		$this->sync_dir_copy_r( $path_sync_from , $path_sync_to, $path_region );
+		$this->sync_dir_compare_and_cleanup( $path_sync_to , $path_sync_from, $path_region );
+		return true;
+	}//sync_dir()
+
+	/**
+	 * ディレクトリを複製する(下層ディレクトリも全てコピー)
+	 * 
+	 * ただし、ignore指定されているパスに対しては操作を行わない。
+	 * 
+	 * @param string $from コピー元ファイルのパス
+	 * @param string $to コピー先のパス
+	 * @param string $path_region ルート以下のパス
+	 * @param int $perm 保存するファイルに与えるパーミッション
+	 * @return bool 成功時に `true`、失敗時に `false` を返します。
+	 */
+	private function sync_dir_copy_r( $from, $to, $path_region, $perm = null ){
+		$from = $this->px->fs()->localize_path($from);
+		$to   = $this->px->fs()->localize_path($to  );
+		$path_region = $this->px->fs()->localize_path($path_region);
+
+		$result = true;
+
+		if( @is_file( $from.$path_region ) ){
+			if( $this->px->fs()->mkdir_r( dirname( $to.$path_region ) ) ){
+				if( $this->px->is_ignore_path( $path_region ) ){
+					// ignore指定されているパスには、操作しない。
+				}else{
+					if( !$this->px->fs()->copy( $from.$path_region , $to.$path_region , $perm ) ){
+						$result = false;
+					}
+				}
+			}else{
+				$result = false;
+			}
+		}elseif( @is_dir( $from.$path_region ) ){
+			if( !@is_dir( $to.$path_region ) ){
+				if( $this->px->is_ignore_path( $path_region ) ){
+					// ignore指定されているパスには、操作しない。
+				}else{
+					if( !$this->px->fs()->mkdir_r( $to.$path_region ) ){
+						$result = false;
+					}
+				}
+			}
+			$itemlist = $this->px->fs()->ls( $from.$path_region );
+			foreach( $itemlist as $Line ){
+				if( $Line == '.' || $Line == '..' ){ continue; }
+				if( @is_dir( $from.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
+					if( @is_file( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
+						continue;
+					}elseif( !@is_dir( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
+						if( $this->px->is_ignore_path( $path_region ) ){
+							// ignore指定されているパスには、操作しない。
+						}else{
+							if( !$this->px->fs()->mkdir_r( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
+								$result = false;
+							}
+						}
+					}
+					if( !$this->sync_dir_copy_r( $from , $to, $path_region.DIRECTORY_SEPARATOR.$Line , $perm ) ){
+						$result = false;
+					}
+					continue;
+				}elseif( @is_file( $from.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
+					if( !$this->sync_dir_copy_r( $from, $to, $path_region.DIRECTORY_SEPARATOR.$Line , $perm ) ){
+						$result = false;
+					}
+					continue;
+				}
+			}
+		}
+
+		return $result;
+	}//sync_dir_copy_r()
+
+	/**
+	 * ディレクトリの内部を比較し、$comparisonに含まれない要素を$targetから削除する。
+	 *
+	 * ただし、ignore指定されているパスに対しては操作を行わない。
+	 * 
+	 * @param string $target クリーニング対象のディレクトリパス
+	 * @param string $comparison 比較するディレクトリのパス
+	 * @param string $path_region ルート以下のパス
+	 * @return bool 成功時 `true`、失敗時 `false` を返します。
+	 */
+	private function sync_dir_compare_and_cleanup( $target , $comparison, $path_region ){
+		if( is_null( $comparison ) || is_null( $target ) ){ return false; }
+
+		$target = $this->px->fs()->localize_path($target);
+		$comparison = $this->px->fs()->localize_path($comparison);
+		$path_region = $this->px->fs()->localize_path($path_region);
+
+		if( !@file_exists( $comparison.$path_region ) && @file_exists( $target.$path_region ) ){
+			if( $this->px->is_ignore_path( $path_region ) ){
+				// ignore指定されているパスには、操作しない。
+				return true;
+			}
+			$this->px->fs()->rm( $target.$path_region );
+			return true;
+		}
+
+		if( @is_dir( $target.$path_region ) ){
+			$flist = $this->px->fs()->ls( $target.$path_region );
+		}else{
+			return true;
+		}
+
+		foreach ( $flist as $Line ){
+			if( $Line == '.' || $Line == '..' ){ continue; }
+			$this->sync_dir_compare_and_cleanup( $target , $comparison, $path_region.DIRECTORY_SEPARATOR.$Line );
+		}
+
+		return true;
+	}//sync_dir_compare_and_cleanup()
+
 
 	/**
 	 * パブリッシュログ
