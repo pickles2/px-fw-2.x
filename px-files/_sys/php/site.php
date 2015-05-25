@@ -967,7 +967,8 @@ class site{
 			if(is_null($bros[$i])){
 				return false;
 			}
-			if($filter===false || $this->get_page_info($bros[$i], 'layout') != 'popup' && $this->get_path_type($this->get_page_info($bros[$i], 'path')) != 'alias' ){
+
+			if($filter===false || strpos( $this->get_page_info($bros[$i], 'layout') , 'popup' ) !== 0 && $this->get_path_type($this->get_page_info($bros[$i], 'path')) != 'alias' ){
 				return $bros[$i];
 			}
 		}
@@ -1005,7 +1006,8 @@ class site{
 			if(is_null($bros[$i])){
 				return false;
 			}
-			if($filter===false || $this->get_page_info($bros[$i], 'layout') != 'popup' && $this->get_path_type( $this->get_page_info($bros[$i], 'path') ) != 'alias' ){
+
+			if($filter===false || strpos( $this->get_page_info($bros[$i], 'layout') , 'popup' ) !== 0 && $this->get_path_type( $this->get_page_info($bros[$i], 'path') ) != 'alias' ){
 				return $bros[$i];
 			}
 		}
@@ -1060,7 +1062,7 @@ class site{
 
 		// 除外条件 検証
 		if(
-			$this->get_page_info($fin, 'layout') == 'popup' // <- popupはとばす (行き止まりができるので)
+			strpos( $this->get_page_info($fin, 'layout') , 'popup' ) === 0 // <- popupはとばす (行き止まりができるので) 'popup' で始まるlayoutは、ポップアップとして扱う。
 		){
 			return $this->get_next($fin, $opt);
 		}
@@ -1127,7 +1129,7 @@ class site{
 
 		// 除外条件 検証
 		if(
-			$this->get_page_info($fin, 'layout') == 'popup' // <- popupはとばす (行き止まりができるので)
+			strpos( $this->get_page_info($fin, 'layout') , 'popup' ) === 0 // <- popupはとばす (行き止まりができるので) 'popup' で始まるlayoutは、ポップアップとして扱う。
 		){
 			return $this->get_prev($fin, $opt);
 		}
