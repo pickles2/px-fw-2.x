@@ -5,7 +5,7 @@ return call_user_func( function(){
 	$conf = new stdClass;
 
 	// project
-	$conf->name = 'PxFW-2.x'; // サイト名
+	$conf->name = 'Pickles Framework 2'; // サイト名
 	$conf->domain = null; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 
