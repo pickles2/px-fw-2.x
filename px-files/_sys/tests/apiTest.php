@@ -180,6 +180,30 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output[5], ':auto_page_id.21' );
 		$this->assertEquals( count($output), 6 );
 
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			'/bros3/?PX=api.get.children' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output[0], 'Bros3-2' );
+		$this->assertEquals( $output[2], 'Bros3-6' );
+		$this->assertEquals( count($output), 3 );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			'/bros3/?PX=api.get.children&filter=false' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output[0], 'Bros3-2' );
+		$this->assertEquals( $output[4], 'Bros3-6' );
+		$this->assertEquals( count($output), 5 );
+
 
 		// -------------------
 		// api.get.bros
@@ -194,6 +218,30 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output[0], ':auto_page_id.16' );
 		$this->assertEquals( $output[5], ':auto_page_id.21' );
 		$this->assertEquals( count($output), 6 );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			'/bros3/3.html?PX=api.get.bros' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output[0], 'Bros3-2' );
+		$this->assertEquals( $output[2], 'Bros3-6' );
+		$this->assertEquals( count($output), 3 );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			'/bros3/3.html?PX=api.get.bros&filter=false' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output[0], 'Bros3-2' );
+		$this->assertEquals( $output[4], 'Bros3-6' );
+		$this->assertEquals( count($output), 5 );
 
 
 		// -------------------
@@ -552,6 +600,10 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
+		] );
 	}//testPxApiGetAnything();
 
 

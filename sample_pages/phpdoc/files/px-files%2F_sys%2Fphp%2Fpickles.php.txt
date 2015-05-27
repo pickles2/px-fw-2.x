@@ -863,7 +863,7 @@ class pickles{
 			$is_current = true;
 		}
 		$is_popup = false;
-		if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){
+		if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){ // <- 'popup' で始まるlayoutは、ポップアップとして扱う。
 			$is_popup = true;
 		}
 		$label = (!is_null($label)?$label:$href); // labelがnullの場合、リンク先をラベルとする

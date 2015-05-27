@@ -602,6 +602,8 @@ class filesystem{
 	 * @return string 拡張子
 	 */
 	public function get_extension( $path ){
+		$path = preg_replace('/\#.*$/si', '', $path);
+		$path = preg_replace('/\?.*$/si', '', $path);
 		return pathinfo( $path , PATHINFO_EXTENSION );
 	}
 

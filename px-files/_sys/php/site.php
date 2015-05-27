@@ -130,6 +130,7 @@ class site{
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
+		$tmp_sitemap_definition = array();
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
 			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
 				continue;

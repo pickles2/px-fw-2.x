@@ -390,17 +390,17 @@ class api{
 	 * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.parent</dt>
 	 * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.children</dt>
+	 * 	<dt>PX=api.get.children&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_children()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.bros</dt>
+	 * 	<dt>PX=api.get.bros&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_bros()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.bros_next</dt>
+	 * 	<dt>PX=api.get.bros_next&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_bros_next()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.bros_prev</dt>
+	 * 	<dt>PX=api.get.bros_prev&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_bros_prev()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.next</dt>
+	 * 	<dt>PX=api.get.next&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_next()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.prev</dt>
+	 * 	<dt>PX=api.get.prev&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_prev()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.breadcrumb_array</dt>
 	 * 		<dd><code>$px->site()->get_breadcrumb_array()</code> の返却値を取得します。</dd>
@@ -440,6 +440,24 @@ class api{
 	 * @return void
 	 */
 	private function api_get(){
+		$sitemap_filter_options = function($px, $cmd=null){
+			$options = array();
+			$options['filter'] = $px->req()->get_param('filter');
+			if( strlen($options['filter']) ){
+				switch( $options['filter'] ){
+					case 'true':
+					case '1':
+						$options['filter'] = true;
+						break;
+					case 'false':
+					case '0':
+						$options['filter'] = false;
+						break;
+				}
+			}
+			return $options;
+		};
+
 		switch( $this->command[2] ){
 			case 'version':
 				$val = $this->px->get_version();
@@ -462,27 +480,27 @@ class api{
 				print $this->data_convert( $val );
 				break;
 			case 'children':
-				$val = $this->px->site()->get_children();
+				$val = $this->px->site()->get_children(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'bros':
-				$val = $this->px->site()->get_bros();
+				$val = $this->px->site()->get_bros(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'bros_next':
-				$val = $this->px->site()->get_bros_next();
+				$val = $this->px->site()->get_bros_next(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'bros_prev':
-				$val = $this->px->site()->get_bros_prev();
+				$val = $this->px->site()->get_bros_prev(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'next':
-				$val = $this->px->site()->get_next();
+				$val = $this->px->site()->get_next(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'prev':
-				$val = $this->px->site()->get_prev();
+				$val = $this->px->site()->get_prev(null, $sitemap_filter_options($this->px, $this->command[2]));
 				print $this->data_convert( $val );
 				break;
 			case 'breadcrumb_array':

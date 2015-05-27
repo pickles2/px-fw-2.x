@@ -8,6 +8,11 @@ class prevnextTest extends PHPUnit_Framework_TestCase{
 	public function setup(){
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
+
+		// 前処理
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
+		] );
 	}
 
 
@@ -41,6 +46,27 @@ class prevnextTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, 'Bros-2-2-3-4-deep' );
+
+		// list_flg がないページ
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/2.html?PX=api.get.next' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-4' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/4.html?PX=api.get.prev' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-2' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/2.html?PX=api.get.next&filter=false' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-3' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/4.html?PX=api.get.prev&filter=false' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-3' );
 
 		// スキップするテスト
 		// popup と alias
@@ -123,6 +149,27 @@ class prevnextTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertFalse( $output );
+
+		// list_flg がない兄弟ページ
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/2.html?PX=api.get.bros_next' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-4' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/4.html?PX=api.get.bros_prev' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-2' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/2.html?PX=api.get.bros_next&filter=false' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-3' );
+
+		$output = $this->passthru( [ 'php', __DIR__.'/testData/prevnext/.px_execute.php', '/bros3/4.html?PX=api.get.bros_prev&filter=false' ] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output, 'Bros3-3' );
 
 		// スキップするテスト
 		// popup と alias
