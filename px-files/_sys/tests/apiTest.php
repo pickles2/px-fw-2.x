@@ -325,6 +325,28 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->path_original, '/dynamicPath/{*}' );
 		$this->assertEquals( $output->id, ':auto_page_id.11' );
 
+		// -------------------
+		// api.get.bind_dynamic_path_param
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/?PX=api.get.bind_dynamic_path_param&path='.urlencode('/dynamicPath/{*}').'&param='.urlencode(json_encode([''=>'abc.html'])) ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/dynamicPath/abc.html' );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/?PX=api.get.bind_dynamic_path_param&path='.urlencode('/dynamicPath/id_{$id}/name_{$name}/{*}').'&param='.urlencode(json_encode([''=>'abc.html','id'=>'id','name'=>'name'])) ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/dynamicPath/id_id/name_name/abc.html' );
+
 
 		// -------------------
 		// api.get.path_homedir

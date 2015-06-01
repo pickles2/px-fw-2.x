@@ -406,6 +406,8 @@ class api{
 	 * 		<dd><code>$px->site()->get_breadcrumb_array()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.dynamic_path_info&path={$path}</dt>
 	 * 		<dd><code>$px->site()->get_dynamic_path_info({$path})</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.bind_dynamic_path_param&path={$path}&param={$param}</dt>
+	 * 		<dd><code>$px->site()->bind_dynamic_path_param({$path}, {$param})</code> の返却値を取得します。<code>{$param}</code> には、パラメータのキーと値の組を必要分格納したオブジェクトをJSON形式の文字列で指定します。</dd>
 	 * 
 	 * 	<dt>PX=api.get.path_homedir</dt>
 	 * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
@@ -510,6 +512,13 @@ class api{
 			case 'dynamic_path_info':
 				$val = $this->px->site()->get_dynamic_path_info($this->px->req()->get_param('path'));
 				print $this->data_convert( $val );
+				break;
+			case 'bind_dynamic_path_param':
+				$param = $this->px->req()->get_param('param');
+				$param = @json_decode( $param, true );
+				$val = $this->px->site()->bind_dynamic_path_param($this->px->req()->get_param('path'), $param);
+				print $this->data_convert( $val );
+				unset($param);
 				break;
 			case 'path_homedir':
 				$val = $this->px->get_path_homedir();
