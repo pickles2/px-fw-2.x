@@ -19,7 +19,8 @@ branches:
 # fix lineendings in Windows
 init:
   - git config --global core.autocrlf input
-
+  - git config --global user.name "Tomoya Koyanagi"
+  - git config --global user.email tomk79@gmail.com
 
 # # what combinations to test
 # environment:
