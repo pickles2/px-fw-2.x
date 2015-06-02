@@ -49,9 +49,9 @@ install:
   # - SET PATH=C:\tools\mysql\current\bin\;%PATH%
 
   # Set bash.
-  - cinst mingw-get
-  - set PATH=%PATH%;C:\MinGW\msys\1.0\bin;C:\MinGW\bin
-  - mingw-get install mingw-developer-toolkit
+  # - cinst mingw-get
+  # - set PATH=%PATH%;C:\MinGW\msys\1.0\bin;C:\MinGW\bin
+  # - mingw-get install mingw-developer-toolkit
 
   ## Set PHP.
   - cinst php
