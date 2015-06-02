@@ -76,7 +76,7 @@ install:
   - echo mbstring.internal_encoding = UTF-8 >> php.ini
 
   - php -v
-  - php -r "phpinfo();"
+  # - php -r "phpinfo();"
 
   ## Set Composer.
   - cd C:\projects\PxFW-2.x
@@ -85,12 +85,12 @@ install:
   - php composer.phar install
 
 
-test_script:
+build_script:
   - cmd: php vendor\phpunit\phpunit\phpunit.php
 
 
 
-build: off
+test: off
 deploy: off
 
 
