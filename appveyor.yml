@@ -36,8 +36,8 @@ init:
 #     - nodejs_version: "0.10"
 #     - nodejs_version: "2"
 
-services:
-  - iis  
+# services:
+#   - iis  
 
 # Get the latest stable version of Node 0.STABLE.latest
 # Install scripts. (runs after repo cloning)
@@ -72,16 +72,18 @@ install:
   - echo mbstring.http_output = pass >> php.ini
   - echo mbstring.internal_encoding = UTF-8 >> php.ini
 
+  - php -v
+  - php -r "phpinfo();"
+
   ## Set Composer.
   - cd C:\projects\PxFW-2.x
   - php -r "readfile('https://getcomposer.org/installer');" | php
+  - php composer.phar --version
   - php composer.phar install
 
 
 test_script:
-  - cmd: php -v
-  - cmd: php composer.phar -v
-  - cmd: php ./vendor/phpunit/phpunit/phpunit
+  - cmd: php vendor\phpunit\phpunit\phpunit.php
 
 
 

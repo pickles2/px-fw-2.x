@@ -1,4 +1,35 @@
-# Pickles Framework 2 [![Build Status - master](https://secure.travis-ci.org/tomk79/PxFW-2.x.png?branch=master)](https://travis-ci.org/tomk79/PxFW-2.x) [![Build Status - develop](https://secure.travis-ci.org/tomk79/PxFW-2.x.png?branch=develop)](https://travis-ci.org/tomk79/PxFW-2.x)
+# Pickles Framework 2
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Linux, OS X</th>
+      <th>Windows</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>master</td>
+      <td align="center">
+        <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=master"></a>
+      </td>
+      <td align="center">
+        <a href="https://ci.appveyor.com/project/tomk79/pxfw-2-x"><img src="https://ci.appveyor.com/api/projects/status/1c0h0ubfype38xnn/branch/master?svg=true"></a>
+      </td>
+    </tr>
+    <tr>
+      <td>develop</td>
+      <td align="center">
+        <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=develop"></a>
+      </td>
+      <td align="center">
+        <a href="https://ci.appveyor.com/project/tomk79/pxfw-2-x"><img src="https://ci.appveyor.com/api/projects/status/1c0h0ubfype38xnn/branch/develop?svg=true"></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
 Pickles Framework(PxFW) は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。<br />
 データベース不要、PHPが動くサーバーに手軽に導入でき、プロトタイプ制作を中心に進めるような柔軟な制作スタイルを実現します。

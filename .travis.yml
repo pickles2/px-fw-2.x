@@ -4,6 +4,10 @@ php:
   - "5.5"
   - "5.4"
 
+os:
+  - linux
+  - osx
+
 before_install:
   - composer selfupdate
 
