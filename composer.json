@@ -9,7 +9,7 @@
             "email": "tomk79@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "repositories": [
     ],
