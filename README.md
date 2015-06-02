@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th></th>
-      <th>Linux, OS X</th>
+      <th>Linux</th>
       <th>Windows</th>
     </tr>
   </thead>
