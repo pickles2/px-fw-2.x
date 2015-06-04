@@ -12,7 +12,7 @@ clone_folder: C:\projects\PxFW-2.x
 
 # environments
 environment:
-  my_variable:
+  oauthtoken:
     secure: L7aFaHhJkScePf7T8vMrHn3xtwObmwfSjy36tXMOpb7qY8LXpSeieA6xx1oKiBk9
 
 # branches
