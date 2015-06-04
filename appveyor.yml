@@ -94,7 +94,7 @@ install:
 
 build_script:
   - php composer.phar install
-  - php vendor\phpunit\phpunit\phpunit.php
+  - php vendor\phpunit\phpunit\phpunit
 
 
 
