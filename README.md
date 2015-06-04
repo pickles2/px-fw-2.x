@@ -10,7 +10,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>master</td>
+      <th>master</th>
       <td align="center">
         <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=master"></a>
       </td>
@@ -19,7 +19,7 @@
       </td>
     </tr>
     <tr>
-      <td>develop</td>
+      <th>develop</th>
       <td align="center">
         <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=develop"></a>
       </td>
