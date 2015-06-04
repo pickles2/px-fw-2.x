@@ -10,6 +10,11 @@ version: "{build}-{branch}"
 # Set a known clone folder
 clone_folder: C:\projects\PxFW-2.x
 
+# environments
+environment:
+  my_variable:
+    secure: L7aFaHhJkScePf7T8vMrHn3xtwObmwfSjy36tXMOpb7qY8LXpSeieA6xx1oKiBk9
+
 # branches
 branches:
   only:
@@ -83,6 +88,8 @@ install:
   - cd C:\projects\PxFW-2.x
   - php -r "readfile('https://getcomposer.org/installer');" | php
   - php composer.phar --version
+  - php composer.phar config -g github-oauth.github.com %oauthtoken%
+
 
 
 build_script:
