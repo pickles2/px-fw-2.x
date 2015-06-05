@@ -27,37 +27,9 @@ init:
   - git config --global user.name "Tomoya Koyanagi"
   - git config --global user.email tomk79@gmail.com
 
-# # what combinations to test
-# environment:
-#   matrix:
-#     # Node.js
-#     - nodejs_version: "0.10"
-#     - nodejs_version: "0.12"
-#     # io.js
-#     - nodejs_version: "2"
 
-# matrix:
-#   fast_finish: true
-#   allow_failures:
-#     - nodejs_version: "0.10"
-#     - nodejs_version: "2"
-
-# services:
-#   - iis  
-
-# Get the latest stable version of Node 0.STABLE.latest
-# Install scripts. (runs after repo cloning)
+# Install scripts
 install:
-  # # Set MySQL.
-  # - cp tests/my.cnf c:\
-  # - cinst mysql
-  # - SET PATH=C:\tools\mysql\current\bin\;%PATH%
-
-  # Set bash.
-  # - cinst mingw-get
-  # - set PATH=%PATH%;C:\MinGW\msys\1.0\bin;C:\MinGW\bin
-  # - mingw-get install mingw-developer-toolkit
-
   ## Set PHP.
   - cinst php
   - SET PATH=C:\tools\php\;%PATH%
@@ -82,7 +54,7 @@ install:
 
   - php -v
   - where php
-  # - php -r "phpinfo();"
+
 
   ## Set Composer.
   - cd C:\projects\PxFW-2.x
@@ -94,7 +66,7 @@ install:
 
 build_script:
   - php composer.phar install
-  - php vendor\phpunit\phpunit\phpunit
+  - php composer.phar test
 
 
 
@@ -107,6 +79,4 @@ notifications:
   - provider: Email
     to:
       - tomk79@gmail.com
-    # subject: 'Build {{status}}'                  # optional
-    # message: "{{message}}, {{commitId}}, ..."    # optional
     on_build_status_changed: true
