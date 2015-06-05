@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ```
 $ cd {$documentRoot}
-$ composer test
+$ php vendor/phpunit/phpunit/phpunit
 ```
 
 
