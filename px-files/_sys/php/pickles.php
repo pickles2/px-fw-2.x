@@ -127,7 +127,7 @@ class pickles{
 			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
 				dirname(realpath($_SERVER['SCRIPT_FILENAME'])) !== realpath('./')
 			){
-				if( array_key_exists( 'PWD' , $_SERVER ) ){
+				if( array_key_exists( 'PWD' , $_SERVER ) && is_file($_SERVER['PWD'].'/'.$_SERVER['SCRIPT_FILENAME']) ){
 					$_SERVER['SCRIPT_FILENAME'] = realpath($_SERVER['PWD'].'/'.$_SERVER['SCRIPT_FILENAME']);
 				}else{
 					// for Windows
