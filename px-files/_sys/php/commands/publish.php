@@ -304,6 +304,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		print "\n";
 
 		while(1){
+			set_time_limit(5*60);
 			flush();
 			if( !count( $this->paths_queue ) ){
 				break;
@@ -432,6 +433,7 @@ function cont_EditPublishTargetPathApply(formElm){
 			print '============'."\n";
 			print '## Sync to publish directory.'."\n";
 			print "\n";
+			set_time_limit(30*60);
 			$this->sync_dir(
 				$this->path_tmp_publish.'/htdocs'.$this->path_docroot ,
 				$this->path_publish_dir.$this->path_docroot ,
