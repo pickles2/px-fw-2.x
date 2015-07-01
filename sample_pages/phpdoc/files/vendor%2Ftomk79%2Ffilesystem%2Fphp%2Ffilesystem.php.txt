@@ -413,10 +413,12 @@ class filesystem{
 	 * このメソッドは、PHPの `realpath()` と異なり、存在しないパスも絶対パスに変換します。
 	 * 
 	 * @param string $path 対象のパス
-	 * @param string $cd カレントディレクトリパス。実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。省略時、カレントディレクトリを自動採用します。
+	 * @param string $cd カレントディレクトリパス。
+	 * 実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。
+	 * 省略時、カレントディレクトリを自動採用します。
 	 * @return string 絶対パス
 	 */
-	public function get_realpath( $path, $cd = null ){
+	public function get_realpath( $path, $cd = '.' ){
 		$is_dir = false;
 		if( preg_match( '/(\/|\\\\)+$/s', $path ) ){
 			$is_dir = true;
@@ -486,10 +488,12 @@ class filesystem{
 	 * パス情報を受け取り、ドットスラッシュから始まる相対絶対パスに変換して返します。
 	 * 
 	 * @param string $path 対象のパス
-	 * @param string $cd カレントディレクトリパス。実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。省略時、カレントディレクトリを自動採用します。
+	 * @param string $cd カレントディレクトリパス。
+	 * 実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。
+	 * 省略時、カレントディレクトリを自動採用します。
 	 * @return string 相対パス
 	 */
-	public function get_relatedpath( $path, $cd = null ){
+	public function get_relatedpath( $path, $cd = '.' ){
 		$is_dir = false;
 		if( preg_match( '/(\/|\\\\)+$/s', $path ) ){
 			$is_dir = true;
@@ -501,8 +505,10 @@ class filesystem{
 		}elseif( $this->is_file($cd) ){
 			$cd = realpath(dirname($cd));
 		}
-		$normalize = function( $tmp_path ){
-			$tmp_path = $this->localize_path( $tmp_path );
+		$path = $this->get_realpath($path, $cd);
+
+		$normalize = function( $tmp_path, $fs ){
+			$tmp_path = $fs->localize_path( $tmp_path );
 			$preg_dirsep = preg_quote(DIRECTORY_SEPARATOR, '/');
 			if( DIRECTORY_SEPARATOR == '\\' ){
 				$tmp_path = preg_replace( '/^[a-zA-Z]\:/s', '', $tmp_path );
@@ -518,8 +524,8 @@ class filesystem{
 			return $tmp_path;
 		};
 
-		$cd = $normalize($cd);
-		$path = $normalize($path);
+		$cd = $normalize($cd, $this);
+		$path = $normalize($path, $this);
 
 		$rtn = array();
 		while( 1 ){

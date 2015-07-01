@@ -172,7 +172,7 @@ class site{
 					continue;
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
-					$tmp_array[$defrow['key']] = $row[$defrow['num']];
+					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
 				}
 				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , $tmp_array['path'] ) ){
 					// 不正な形式のチェック
