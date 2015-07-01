@@ -318,6 +318,7 @@ function cont_EditPublishTargetPathApply(formElm){
 			$status_code = null;
 			$status_message = null;
 			$errors = array();
+			$microtime = microtime(true);
 			switch( $proc_type ){
 				case 'direct':
 					// direct
@@ -400,7 +401,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				$proc_type ,
 				$status_code ,
 				$status_message ,
-				$str_errors
+				$str_errors,
+				microtime(true)-$microtime
 			));
 
 			if( !empty( $this->path_publish_dir ) ){
@@ -591,7 +593,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				'proc_type' ,
 				'status_code' ,
 				'status_message' ,
-				'errors'
+				'errors' ,
+				'proc_microtime'
 			)) ), 3, $path_logfile );
 			clearstatcache();
 		}
