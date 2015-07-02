@@ -402,6 +402,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				$status_code ,
 				$status_message ,
 				$str_errors,
+				@filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path),
 				microtime(true)-$microtime
 			));
 
@@ -594,6 +595,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				'status_code' ,
 				'status_message' ,
 				'errors' ,
+				'filesize',
 				'proc_microtime'
 			)) ), 3, $path_logfile );
 			clearstatcache();
