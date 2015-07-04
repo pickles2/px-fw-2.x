@@ -494,19 +494,22 @@ class pickles{
 		}
 		switch( strtolower( $extension ) ){
 			case 'css':
-				@header('Content-type: text/css; charset='.$output_encoding);//デフォルトのヘッダー
+				@header('Content-type: text/css; charset='.$output_encoding);
 				break;
 			case 'js':
-				@header('Content-type: text/javascript; charset='.$output_encoding);//デフォルトのヘッダー
+				@header('Content-type: text/javascript; charset='.$output_encoding);
 				break;
 			case 'html':
 			case 'htm':
-				@header('Content-type: text/html; charset='.$output_encoding);//デフォルトのヘッダー
+				@header('Content-type: text/html; charset='.$output_encoding);
 				break;
-			case 'txt':
-			case 'text':
-				@header('Content-type: text/plain; charset='.$output_encoding);//デフォルトのヘッダー
-				break;
+			case 'png': @header('Content-type: image/png'); break;
+			case 'gif': @header('Content-type: image/gif'); break;
+			case 'jpg':case 'jpeg':case 'jpe': @header('Content-type: image/jpeg'); break;
+			case 'svg':case 'svgz': @header('Content-type: image/svg+xml'); break;
+			case 'txt':case 'text':
+			default:
+				@header('Content-type: text/plain; charset='.$output_encoding); break;
 		}
 		return ;
 	}
@@ -613,9 +616,13 @@ class pickles{
 			$px->bowl()->send('<p>404 - File not found.</p>');
 			return true;
 		}
-		ob_start();
-		include( './'.$px->get_path_content() );
-		$src = ob_get_clean();
+		if( $px->proc_type === 'direct' ){
+			$src = $px->fs()->read_file( './'.$px->get_path_content() );
+		}else{
+			ob_start();
+			include( './'.$px->get_path_content() );
+			$src = ob_get_clean();
+		}
 		$px->bowl()->send($src);
 		return true;
 	}
