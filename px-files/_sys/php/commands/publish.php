@@ -681,9 +681,13 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		$realpath = $this->px->fs()->get_realpath('./'.$path);
 		$ls = $this->px->fs()->ls( $realpath );
-		if( $this->px->is_ignore_path( './'.$path ) ){
-			return true;
-		}
+		// ↓ `/index.html` がignoreされている場合に、
+		// 　ディレクトリスキャンがキャンセルされてしまう問題があり、
+		// 　ここでの評価はしないことにした。
+		// 　※add_queue()で評価しているので、結果問題なし。
+		// if( $this->px->is_ignore_path( './'.$path ) ){
+		// 	return true;
+		// }
 		foreach( $ls as $basename ){
 			if( $this->px->fs()->is_dir( $realpath.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
