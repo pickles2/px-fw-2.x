@@ -59,6 +59,7 @@ return call_user_func( function(){
 		'*/.gitignore' => 'ignore' ,
 
 		'/path_ignored/*' => 'ignore' ,
+		'/files_ignored/index.html' => 'ignore' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,

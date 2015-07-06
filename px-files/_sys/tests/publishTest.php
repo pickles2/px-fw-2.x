@@ -214,6 +214,11 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/path_ignored/testpage.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/path_ignored/untouchable.html' ) );
 
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/files_ignored/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/files_ignored/not_ignored.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/not_ignored.html' ) );
+
 
 
 
