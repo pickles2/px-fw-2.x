@@ -151,10 +151,10 @@ class pickles{
 		require_once(__DIR__.'/bowl.php');
 		$this->bowl = new bowl();
 
-		// Apply command-line option "-c"
+		// Apply command-line option "--config"
 		$req = new \tomk79\request();
-		if( strlen(@$req->get_cli_option( '-c' )) ){
-			$this->conf = (object) array_merge((array) $this->conf, (array) json_decode($req->get_cli_option( '-c' )));
+		if( strlen(@$req->get_cli_option( '--config' )) ){
+			$this->conf = (object) array_merge((array) $this->conf, (array) json_decode($req->get_cli_option( '--config' )));
 		}
 
 		// make instance $fs

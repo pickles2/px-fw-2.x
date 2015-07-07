@@ -339,12 +339,26 @@ function cont_EditPublishTargetPathApply(formElm){
 				default:
 					// pickles execute
 					print $ext.' -> '.$proc_type."\n";
-					$bin = $this->passthru( array(
-						$this->px->conf()->commands->php ,
-						$_SERVER['SCRIPT_FILENAME'] ,
-						'-o' , 'json' ,// output as JSON
-						$path ,
-					) );
+					$php_command = array();
+					array_push( $php_command, $this->px->conf()->commands->php );
+					if( strlen(@$this->px->req()->get_cli_option( '-c' )) ){
+						$php_command = array_merge(
+							$php_command,
+							array(
+								'-c', @$this->px->req()->get_cli_option( '-c' ),// ← php.ini のパス
+							)
+						);
+					}
+					$php_command = array_merge(
+						$php_command,
+						array(
+							$_SERVER['SCRIPT_FILENAME'] ,
+							'-o' , 'json' ,// output as JSON
+							$path ,
+						)
+					);
+
+					$bin = $this->passthru( $php_command );
 					$bin = json_decode($bin);
 					if( !is_object($bin) ){
 						$bin = new \stdClass;

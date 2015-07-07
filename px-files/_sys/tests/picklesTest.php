@@ -200,7 +200,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'-c', json_encode(array(
+			'--config', json_encode(array(
 				'name'=>'overRide sitename',
 				'commands'=>array(
 					'php'=>'/path/to/command/php',
@@ -222,7 +222,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'-c', json_encode(array(
+			'--config', json_encode(array(
 				'name'=>'overRide sitename',
 				'commands'=>array(),//← commonds->* ではなく、commands自体が置き換えられる。
 			)) ,
