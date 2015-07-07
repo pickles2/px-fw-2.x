@@ -179,6 +179,77 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * コンフィグ項目をコマンドラインオプションで上書きするテスト
+	 */
+	public function testOverrideConfig(){
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.config' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output->name, 'Pickles 2' );
+		$this->assertEquals( $output->path_controot, '/' );
+		$this->assertEquals( $output->commands->php, 'php' );
+		$this->assertNull( @$output->commands->dummy );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'-c', json_encode(array(
+				'name'=>'overRide sitename',
+				'commands'=>array(
+					'php'=>'/path/to/command/php',
+					'dummy'=>'/path/to/command/dummy',
+				),
+			)) ,
+			'/?PX=api.get.config' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output->name, 'overRide sitename' );
+		$this->assertEquals( $output->path_controot, '/' );
+		$this->assertEquals( $output->commands->php, '/path/to/command/php' );
+		$this->assertEquals( $output->commands->dummy, '/path/to/command/dummy' );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'-c', json_encode(array(
+				'name'=>'overRide sitename',
+				'commands'=>array(),//← commonds->* ではなく、commands自体が置き換えられる。
+			)) ,
+			'/?PX=api.get.config' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		$this->assertEquals( $output->name, 'overRide sitename' );
+		$this->assertEquals( $output->path_controot, '/' );
+		$this->assertNull( @$output->commands->php );
+		$this->assertNull( @$output->commands->dummy );
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+
+	/**
 	 * 文字コード・改行コード変換テスト
 	 */
 	public function testEncodingConverter(){
