@@ -192,50 +192,37 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
-		$this->assertEquals( $output->name, 'Pickles 2' );
-		$this->assertEquals( $output->path_controot, '/' );
 		$this->assertEquals( $output->commands->php, 'php' );
 		$this->assertNull( @$output->commands->dummy );
 
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'--config', json_encode(array(
-				'name'=>'overRide sitename',
-				'commands'=>array(
-					'php'=>'/path/to/command/php',
-					'dummy'=>'/path/to/command/dummy',
-				),
-			)) ,
+			'--command-php', '/path/to/command/php',
+			'-c', '/path/to/file/php.ini',
 			'/?PX=api.get.config' ,
 		] );
 		clearstatcache();
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
-		$this->assertEquals( $output->name, 'overRide sitename' );
-		$this->assertEquals( $output->path_controot, '/' );
 		$this->assertEquals( $output->commands->php, '/path/to/command/php' );
-		$this->assertEquals( $output->commands->dummy, '/path/to/command/dummy' );
-
+		$this->assertEquals( $output->path_phpini, '/path/to/file/php.ini' );
 
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'--config', json_encode(array(
-				'name'=>'overRide sitename',
-				'commands'=>array(),//← commonds->* ではなく、commands自体が置き換えられる。
-			)) ,
+			'--command-php', 'C:\path\to\command\php.exe',
+			'-c', 'C:\path\to\file\php.ini',
 			'/?PX=api.get.config' ,
 		] );
 		clearstatcache();
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
-		$this->assertEquals( $output->name, 'overRide sitename' );
-		$this->assertEquals( $output->path_controot, '/' );
-		$this->assertNull( @$output->commands->php );
-		$this->assertNull( @$output->commands->dummy );
+		$this->assertEquals( $output->commands->php, 'C:\path\to\command\php.exe' );
+		$this->assertEquals( $output->path_phpini, 'C:\path\to\file\php.ini' );
+
 
 
 		// 後始末

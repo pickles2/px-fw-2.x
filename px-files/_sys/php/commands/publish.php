@@ -341,11 +341,11 @@ function cont_EditPublishTargetPathApply(formElm){
 					print $ext.' -> '.$proc_type."\n";
 					$php_command = array();
 					array_push( $php_command, $this->px->conf()->commands->php );
-					if( strlen(@$this->px->req()->get_cli_option( '-c' )) ){
+					if( strlen(@$this->px->conf()->path_phpini) ){
 						$php_command = array_merge(
 							$php_command,
 							array(
-								'-c', @$this->px->req()->get_cli_option( '-c' ),// ← php.ini のパス
+								'-c', @$this->px->conf()->path_phpini,// ← php.ini のパス
 							)
 						);
 					}

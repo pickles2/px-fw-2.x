@@ -34,6 +34,7 @@ return call_user_func( function(){
 	// commands
 	$conf->commands = new stdClass;
 	$conf->commands->php = 'php';
+	$conf->path_phpini = null; // php.ini のパス。主にパブリッシュ時のサブクエリで使用する。
 
 	// processor
 	$conf->paths_proc_type = array(
