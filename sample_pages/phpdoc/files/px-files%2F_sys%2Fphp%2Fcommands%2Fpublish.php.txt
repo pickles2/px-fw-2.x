@@ -339,12 +339,26 @@ function cont_EditPublishTargetPathApply(formElm){
 				default:
 					// pickles execute
 					print $ext.' -> '.$proc_type."\n";
-					$bin = $this->passthru( array(
-						$this->px->conf()->commands->php ,
-						$_SERVER['SCRIPT_FILENAME'] ,
-						'-o' , 'json' ,// output as JSON
-						$path ,
-					) );
+					$php_command = array();
+					array_push( $php_command, $this->px->conf()->commands->php );
+					if( strlen(@$this->px->conf()->path_phpini) ){
+						$php_command = array_merge(
+							$php_command,
+							array(
+								'-c', @$this->px->conf()->path_phpini,// ← php.ini のパス
+							)
+						);
+					}
+					$php_command = array_merge(
+						$php_command,
+						array(
+							$_SERVER['SCRIPT_FILENAME'] ,
+							'-o' , 'json' ,// output as JSON
+							$path ,
+						)
+					);
+
+					$bin = $this->passthru( $php_command );
 					$bin = json_decode($bin);
 					if( !is_object($bin) ){
 						$bin = new \stdClass;
@@ -402,6 +416,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				$status_code ,
 				$status_message ,
 				$str_errors,
+				@filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path),
 				microtime(true)-$microtime
 			));
 
@@ -594,6 +609,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				'status_code' ,
 				'status_message' ,
 				'errors' ,
+				'filesize',
 				'proc_microtime'
 			)) ), 3, $path_logfile );
 			clearstatcache();
@@ -679,9 +695,13 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		$realpath = $this->px->fs()->get_realpath('./'.$path);
 		$ls = $this->px->fs()->ls( $realpath );
-		if( $this->px->is_ignore_path( './'.$path ) ){
-			return true;
-		}
+		// ↓ `/index.html` がignoreされている場合に、
+		// 　ディレクトリスキャンがキャンセルされてしまう問題があり、
+		// 　ここでの評価はしないことにした。
+		// 　※add_queue()で評価しているので、結果問題なし。
+		// if( $this->px->is_ignore_path( './'.$path ) ){
+		// 	return true;
+		// }
 		foreach( $ls as $basename ){
 			if( $this->px->fs()->is_dir( $realpath.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
