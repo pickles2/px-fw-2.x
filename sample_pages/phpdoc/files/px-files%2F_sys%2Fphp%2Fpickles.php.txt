@@ -6,7 +6,7 @@ namespace picklesFramework2;
 
 /**
  * pickles2 core class
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pickles{
@@ -64,43 +64,30 @@ class pickles{
 	private $response_message = 'OK';
 
 	/**
-	 * Pickles のバージョン情報を取得する。
-	 * 
-	 * <pre> [バージョン番号のルール]
-	 *    基本
-	 *      メジャーバージョン番号.マイナーバージョン番号.リリース番号
-	 *        例：1.0.0
-	 *        例：1.8.9
-	 *        例：12.19.129
-	 *      - 大規模な仕様の変更や追加を伴う場合にはメジャーバージョンを上げる。
-	 *      - 小規模な仕様の変更や追加の場合は、マイナーバージョンを上げる。
-	 *      - バグ修正、ドキュメント、コメント修正等の小さな変更は、リリース番号を上げる。
-	 *    開発中プレビュー版
-	 *      基本バージョンの後ろに、alpha(=α版)またはbeta(=β版)を付加し、その連番を記載する。
-	 *        例：1.0.0-alpha1 ←最初のα版
-	 *        例：1.0.0-beta12 ←12回目のβ版
-	 *      開発中およびリリースバージョンの順序は次の通り
-	 *        1.0.0-alpha1 -> 1.0.0-alpha2 -> 1.0.0-beta1 ->1.0.0-beta2 -> 1.0.0 ->1.0.1-alpha1 ...
-	 *    ナイトリービルド
-	 *      ビルドの手順はないので正確には "ビルド" ではないが、
-	 *      バージョン番号が振られていない、開発途中のリビジョンを
-	 *      ナイトリービルドと呼ぶ。
-	 *      ナイトリービルドの場合、バージョン情報は、
-	 *      ひとつ前のバージョン文字列の末尾に、'-nb' を付加する。
-	 *        例：1.0.0-beta12-nb (=1.0.0-beta12リリース後のナイトリービルド)
-	 *      普段の開発においてコミットする場合、
-	 *      必ずこの get_version() がこの仕様になっていることを確認すること。
-	 * </pre>
-	 * 
+	 * Pickles Framework のバージョン番号を取得する。
+	 *
+	 * Pickles Framework のバージョン番号はこのメソッドにハードコーディングされます。
+	 *
+	 * バージョン番号発行の規則は、 Semantic Versioning 2.0.0 仕様に従います。
+	 * - [Semantic Versioning(英語原文)](http://semver.org/)
+	 * - [セマンティック バージョニング(日本語)](http://semver.org/lang/ja/)
+	 *
+	 * *[ナイトリービルド]*<br />
+	 * バージョン番号が振られていない、開発途中のリビジョンを、ナイトリービルドと呼びます。<br />
+	 * ナイトリービルドの場合、バージョン番号は、次のリリースが予定されているバージョン番号に、
+	 * ビルドメタデータ `+nb` を付加します。
+	 * 通常は、プレリリース記号 `alpha` または `beta` を伴うようにします。
+	 * - 例：1.0.0-beta.12+nb (=1.0.0-beta.12リリース前のナイトリービルド)
+	 *
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.11-nb';
+		return '2.0.12-alpha+nb';
 	}
 
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param string $path_homedir Pickles のホームディレクトリのパス
 	 */
 	public function __construct( $path_homedir ){
@@ -263,7 +250,7 @@ class pickles{
 
 	/**
 	 * call plugin functions
-	 * 
+	 *
 	 * @param mixed $func_list List of plugins function
 	 * @return bool 成功時 `true`、失敗時 `false`
 	 */
@@ -384,7 +371,7 @@ class pickles{
 
 	/**
 	 * directory_index(省略できるファイル名) の一覧を得る。
-	 * 
+	 *
 	 * @return array ディレクトリインデックスの一覧
 	 */
 	public function get_directory_index(){
@@ -406,7 +393,7 @@ class pickles{
 
 	/**
 	 * directory_index のいずれかにマッチするためのpregパターン式を得る。
-	 * 
+	 *
 	 * @param string $delimiter pregパターンのデリミタ。省略時は `/` (`preg_quote()` の実装に従う)。
 	 * @return string pregパターン
 	 */
@@ -421,7 +408,7 @@ class pickles{
 
 	/**
 	 * 最も優先されるインデックスファイル名を得る。
-	 * 
+	 *
 	 * @return string 最も優先されるインデックスファイル名
 	 */
 	public function get_directory_index_primary(){
@@ -580,11 +567,11 @@ class pickles{
 
 	/**
 	 * 拡張ヘッダ X-PXFW-RELATEDLINK にリンクを追加する。
-	 * 
+	 *
 	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` は、サイトマップや物理ディレクトリから発見できないファイルを、PxFWのパブリッシュツールに知らせます。
-	 * 
+	 *
 	 * 通常、PxFWのパブリッシュツールは 動的に生成されたページなどを知ることができず、パブリッシュされません。このメソッドを通じて、明示的に知らせる必要があります。
-	 * 
+	 *
 	 * @param string $path リンクのパス
 	 * @return bool 正常時 `true`、失敗した場合 `false`
 	 */
@@ -655,7 +642,7 @@ class pickles{
 
 	/**
 	 * 実行者がパブリッシュツールかどうか調べる
-	 * 
+	 *
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
@@ -672,32 +659,32 @@ class pickles{
 
 	/**
 	 * リンク先のパスを生成する。
-	 * 
+	 *
 	 * 引数には、リンク先のパス、またはページIDを受け取り、
 	 * 完成されたリンク先情報(aタグのhref属性にそのまま適用できる状態)にして返します。
-	 * 
+	 *
 	 * Pickles Framework がドキュメントルート直下にインストールされていない場合、インストールパスを追加した値を返します。
-	 * 
+	 *
 	 * `http://` などスキーマから始まる情報を受け取ることもできます。
-	 * 
+	 *
 	 * 実装例：
 	 * <pre>&lt;?php
 	 * // パスを指定する例
 	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
-	 * 
+	 *
 	 * // ページIDを指定する例
 	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('A-00') ).'&quot;&gt;リンク&lt;/a&gt;';
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * インストールパスがドキュメントルートではない場合の例:
 	 * <pre>&lt;?php
 	 * // インストールパスが &quot;/installpath/&quot; の場合
 	 * print '&lt;a href=&quot;'.htmlspecialchars( $px-&gt;href('/aaa/bbb.html') ).'&quot;&gt;リンク&lt;/a&gt;';
 	 *     // &quot;/installpath/aaa/bbb.html&quot; が返されます。
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * @param string $linkto リンク先の パス または ページID
-	 * 
+	 *
 	 * @return string href属性値
 	 */
 	public function href( $linkto ){
@@ -772,19 +759,19 @@ class pickles{
 
 	/**
 	 * リンクタグ(aタグ)を生成する。
-	 * 
+	 *
 	 * リンク先の パス または ページID を受け取り、aタグを生成して返します。リンク先は、`href()` メソッドを通して調整されます。
-	 * 
+	 *
 	 * このメソッドは、受け取ったパス(またはページID)をもとに、サイトマップからページ情報を取得し、aタグを自動補完します。
 	 * 例えば、パンくず情報をもとに `class="current"` を付加したり、ページタイトルをラベルとして採用します。
-	 * 
+	 *
 	 * この動作は、引数 `$options` に値を指定して変更することができます。
-	 * 
+	 *
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * // ページ /aaa/bbb.html へのリンクを生成
 	 * print $px-&gt;mk_link('/aaa/bbb.html');
-	 * 
+	 *
 	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
 	 * print $px-&gt;mk_link('/aaa/bbb.html', array(
 	 *     'label'=>'<span>リンクラベル</span>', //リンクラベルを文字列で指定
@@ -793,10 +780,10 @@ class pickles{
 	 *     'current'=>true //カレント表示にする
 	 * ));
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * 第2引数に文字列または関数としてリンクラベルを渡す方法もあります。
 	 * この場合、その他のオプションは第3引数に渡すことができます。
-	 * 
+	 *
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * // ページ /aaa/bbb.html へのリンクをオプション付きで生成
@@ -809,10 +796,10 @@ class pickles{
 	 *   )
 	 * );
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * リンクのラベルはコールバック関数でも指定できます。
 	 * コールバック関数には、リンク先のページ情報を格納した連想配列が引数として渡されます。
-	 * 
+	 *
 	 * 実装例:
 	 * <pre>&lt;?php
 	 * //リンクラベルをコールバック関数で指定
@@ -821,7 +808,7 @@ class pickles{
 	 *   function($page_info){return htmlspecialchars($page_info['title_label']);}
 	 * );
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * @param string $linkto リンク先のパス。PxFWのインストールパスを基点にした絶対パスで指定。
 	 * @param array $options options: [as string] Link label, [as function] callback function, [as array] Any options.
 	 * <dl>
@@ -835,7 +822,7 @@ class pickles{
 	 *     <dd>スタイルシートの クラス名 を文字列または配列で指定します。</dd>
 	 * </dl>
 	 * 第2引数にリンクラベルを直接指定することもできます。この場合、オプション配列は第3引数に指定します。
-	 * 
+	 *
 	 * @return string HTMLソース(aタグ)
 	 */
 	public function mk_link( $linkto, $options = array() ){
@@ -971,7 +958,7 @@ class pickles{
 
 	/**
 	 * ローカルリソースディレクトリのパスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースの実際の絶対パス
 	 */
@@ -995,7 +982,7 @@ class pickles{
 
 	/**
 	 * ローカルリソースディレクトリのサーバー内部パスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースのサーバー内部パス
 	 */
@@ -1008,7 +995,7 @@ class pickles{
 
 	/**
 	 * ローカルリソースのキャッシュディレクトリのパスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのパス
 	 */
@@ -1042,7 +1029,7 @@ class pickles{
 
 	/**
 	 * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのサーバー内部パス
 	 */
@@ -1055,7 +1042,7 @@ class pickles{
 
 	/**
 	 * コンテンツ別の非公開キャッシュディレクトリのサーバー内部パスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string コンテンツ別の非公開キャッシュのサーバー内部パス
 	 */
@@ -1080,7 +1067,7 @@ class pickles{
 
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string 公開キャッシュのパス
 	 */
@@ -1107,7 +1094,7 @@ class pickles{
 
 	/**
 	 * プラグイン別公開キャッシュのサーバー内部パスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
@@ -1119,7 +1106,7 @@ class pickles{
 
 	/**
 	 * プラグイン別プライベートキャッシュのサーバー内部パスを得る。
-	 * 
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
@@ -1145,7 +1132,7 @@ class pickles{
 
 	/**
 	 * テキストを、指定の文字セットに変換する
-	 * 
+	 *
 	 * @param mixed $text テキスト
 	 * @param string $encode 変換後の文字セット。省略時、`mb_internal_encoding()` から取得
 	 * @param string $encodefrom 変換前の文字セット。省略時、自動検出
@@ -1193,7 +1180,7 @@ class pickles{
 
 	/**
 	 * アプリケーションロックする。
-	 * 
+	 *
 	 * @param string $app_name アプリケーションロック名
 	 * @param int $expire 有効時間(秒) (省略時: 60秒)
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
@@ -1230,7 +1217,7 @@ class pickles{
 
 	/**
 	 * アプリケーションロックされているか確認する。
-	 * 
+	 *
 	 * @param string $app_name アプリケーションロック名
 	 * @param int $expire 有効時間(秒) (省略時: 60秒)
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
@@ -1254,7 +1241,7 @@ class pickles{
 
 	/**
 	 * アプリケーションロックを解除する。
-	 * 
+	 *
 	 * @param string $app_name アプリケーションロック名
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
@@ -1269,7 +1256,7 @@ class pickles{
 
 	/**
 	 * アプリケーションロックファイルの更新日を更新する。
-	 * 
+	 *
 	 * @param string $app_name アプリケーションロック名
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
