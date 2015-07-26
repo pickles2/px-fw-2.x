@@ -349,6 +349,14 @@ function cont_EditPublishTargetPathApply(formElm){
 							)
 						);
 					}
+					if( strlen(@$this->px->req()->get_cli_option( '-d' )) ){
+						$php_command = array_merge(
+							$php_command,
+							array(
+								'-d', @$this->px->req()->get_cli_option( '-d' ),// ← php.ini definition
+							)
+						);
+					}
 					$php_command = array_merge(
 						$php_command,
 						array(
@@ -470,7 +478,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * ディレクトリを同期する。
-	 * 
+	 *
 	 * @param string $path_sync_from 同期元のルートディレクトリ
 	 * @param string $path_sync_to 同期先のルートディレクトリ
 	 * @param string $path_region ルート以下のパス
@@ -484,9 +492,9 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * ディレクトリを複製する(下層ディレクトリも全てコピー)
-	 * 
+	 *
 	 * ただし、ignore指定されているパスに対しては操作を行わない。
-	 * 
+	 *
 	 * @param string $from コピー元ファイルのパス
 	 * @param string $to コピー先のパス
 	 * @param string $path_region ルート以下のパス
@@ -557,7 +565,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * ディレクトリの内部を比較し、$comparisonに含まれない要素を$targetから削除する。
 	 *
 	 * ただし、ignore指定されているパスに対しては操作を行わない。
-	 * 
+	 *
 	 * @param string $target クリーニング対象のディレクトリパス
 	 * @param string $comparison 比較するディレクトリのパス
 	 * @param string $path_region ルート以下のパス
@@ -785,7 +793,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * パブリッシュをロックする。
-	 * 
+	 *
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	private function lock(){
@@ -820,7 +828,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * パブリッシュがロックされているか確認する。
-	 * 
+	 *
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	private function is_locked(){
@@ -842,7 +850,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * パブリッシュロックを解除する。
-	 * 
+	 *
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	private function unlock(){
@@ -856,7 +864,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * パブリッシュロックファイルの更新日を更新する。
-	 * 
+	 *
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	private function touch_lockfile(){
