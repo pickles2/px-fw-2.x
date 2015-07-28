@@ -24,10 +24,23 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<h2>テストページ</h2><p>このページは /index.html です。</p>', '/').'/s', $output) );
 		$this->assertEquals( 0, preg_match('/'.preg_quote('<span id="hash_', '/').'/s', $output) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = Asia/Tokyo</p>', '/').'/s', $output) );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/prevnext/.px_execute.php' ,
+			'/' ,
+		] );
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = UTC</p>', '/').'/s', $output) );
 
 		// 後始末
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
 		] );
 
 		clearstatcache();

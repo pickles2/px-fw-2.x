@@ -107,11 +107,6 @@ class pickles{
 			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
 		@header_remove('X-Powered-By');
-		try {
-			date_default_timezone_get();
-		} catch (Exception $e) {
-			date_default_timezone_set("Asia/Tokyo");
-		}
 		$this->set_status(200);// 200 OK
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
@@ -138,6 +133,10 @@ class pickles{
 			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
 		$this->conf = json_decode( json_encode( $this->conf ) );
+
+		if ( @strlen($this->conf->default_timezone) ) {
+			@date_default_timezone_set($this->conf->default_timezone);
+		}
 
 		// make instance $bowl
 		require_once(__DIR__.'/bowl.php');

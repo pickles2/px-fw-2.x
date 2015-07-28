@@ -30,6 +30,7 @@ return call_user_func( function(){
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
 	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
+	$conf->default_timezone = 'Asia/Tokyo';
 
 	// commands
 	$conf->commands = new stdClass;
@@ -107,7 +108,7 @@ return call_user_func( function(){
 		'picklesFramework2\processors\autoindex\autoindex::exec' ,
 
 		// テーマ
-		'theme'=>'picklesFramework2\theme\theme::exec' , 
+		'theme'=>'picklesFramework2\theme\theme::exec' ,
 
 		// Apache互換のSSIの記述を解決する
 		'picklesFramework2\processors\ssi\ssi::exec' ,
