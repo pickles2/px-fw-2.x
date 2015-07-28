@@ -107,6 +107,11 @@ class pickles{
 			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
 		@header_remove('X-Powered-By');
+		try {
+			date_default_timezone_get();
+		} catch (Exception $e) {
+			date_default_timezone_set("Asia/Tokyo");
+		}
 		$this->set_status(200);// 200 OK
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
