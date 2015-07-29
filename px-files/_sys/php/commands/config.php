@@ -63,9 +63,13 @@ print $this->mk_config_unit('path_controot', 'コンテンツルートのパス'
 print $this->mk_config_unit('path_top', 'トップページのパス', 'string');
 print $this->mk_config_unit('path_publish_dir', 'パブリッシュ先ディレクトリのパス', 'string');
 print $this->mk_config_unit('public_cache_dir', '公開キャッシュディレクトリのパス', 'string');
+print $this->mk_config_unit('path_files', 'リソースディレクトリのパス', 'string');
 print $this->mk_config_unit('contents_manifesto', 'コンテンツマニフェストのパス', 'string');
 print $this->mk_config_unit('directory_index', 'ディレクトリインデックス', 'array');
 print $this->mk_config_unit('commands', 'コマンド', 'hash');
+print $this->mk_config_unit('path_phpini', 'php.ini のパス', 'string');
+print $this->mk_config_unit('allow_pxcommands', 'PXコマンドを許可', 'bool');
+print $this->mk_config_unit('default_timezone', 'タイムゾーン設定', 'string');
 ?>
 </table>
 <h2>filesystem</h2>
@@ -85,7 +89,6 @@ print $this->mk_config_unit('output_eol_coding', '出力時の改行コード', 
 <?php
 print $this->mk_config_unit('session_name', 'セッション名', 'string');
 print $this->mk_config_unit('session_expire', 'セッション有効期限', 'int');
-print $this->mk_config_unit('allow_pxcommands', 'PXコマンドを許可', 'bool');
 ?>
 </table>
 
@@ -144,7 +147,7 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'hash');
 
 	/**
 	 * コンフィグ項目1件を出力する。
-	 * 
+	 *
 	 * @param string $key コンフィグのキー
 	 * @param string $label コンフィグラベル
 	 * @param string $type 値に期待される型
@@ -252,9 +255,9 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'hash');
 
 	/**
 	 * HTML特殊文字をエスケープする。
-	 * 
+	 *
 	 * このメソッドは改行コードを改行タグ `<br />` に変換します。
-	 * 
+	 *
 	 * @param string $txt 文字列
 	 * @return string HTML特殊文字がエスケープされた文字列
 	 */

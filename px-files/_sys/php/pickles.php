@@ -137,6 +137,9 @@ class pickles{
 		if ( @strlen($this->conf->default_timezone) ) {
 			@date_default_timezone_set($this->conf->default_timezone);
 		}
+		if ( !@strlen($this->conf->path_files) ) {
+			$this->conf->path_files = '{$dirname}/{$filename}_files/';
+		}
 
 		// make instance $bowl
 		require_once(__DIR__.'/bowl.php');
@@ -974,8 +977,19 @@ class pickles{
 		}
 		unset($tmp_page_info);
 
-		$rtn = $path_content;
-		$rtn = $this->fs()->get_realpath( $this->fs()->trim_extension($rtn).'_files/'.$localpath_resource );
+		$rtn = $this->conf->path_files;
+		$data = array(
+			'dirname'=>dirname($path_content),
+			'filename'=>basename($this->fs()->trim_extension($path_content)),
+			'ext'=>strtolower($this->fs()->get_extension($path_content)),
+		);
+		$rtn = str_replace( '{$dirname}', $data['dirname'], $rtn );
+		$rtn = str_replace( '{$filename}', $data['filename'], $rtn );
+		$rtn = str_replace( '{$ext}', $data['ext'], $rtn );
+		$rtn = preg_replace( '/^\/*/', '/', $rtn );
+		$rtn = preg_replace( '/\/*$/', '', $rtn ).'/';
+
+		$rtn = $rtn.$localpath_resource;
 		if( $this->fs()->is_dir('./'.$rtn) ){
 			$rtn .= '/';
 		}

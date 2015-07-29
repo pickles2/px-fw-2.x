@@ -10,6 +10,7 @@
 "/sample_pages/page1/4/test1/",,,"test1",,,,,"/sample_pages/>/sample_pages/page1/4/{*}",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page1/template.html","/sample_pages/templates.ignore/template.html",,"共通点コンテンツからの出力A",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page1/5.html",,,"ステータスコードにメッセージを送信",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
+"/sample_pages/page1/6.html",,,"リソースパス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "alias:/sample_pages/page2/",,,"サンプルページ2へのエイリアス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",
 "/sample_pages/page2/",,,"サンプルページ2",,,,,,1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",1
 "/sample_pages/page2/1.htm",,,"サンプル2-1",,,,,"/sample_pages/page2/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",

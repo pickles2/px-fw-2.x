@@ -13,6 +13,7 @@ return call_user_func( function(){
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
+	$conf->path_files = '{$dirname}/{$filename}_files/'; // リソースディレクトリ(各コンテンツに対して1:1で関連付けられる)のパス
 	$conf->contents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
 
 	// directory index
