@@ -13,6 +13,8 @@ return call_user_func( function(){
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
+	clearstatcache();
+	$conf->path_files = trim(file_get_contents(__DIR__.'/config_ex/path_files.txt'));
 	$conf->ontents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
 
 	// directory index

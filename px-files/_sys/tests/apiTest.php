@@ -730,6 +730,59 @@ class apiTest extends PHPUnit_Framework_TestCase{
 	}//testPxApiIsAnything();
 
 
+	/**
+	 * dataProvidor: ディレクトリ一覧
+	 */
+	public function confPathFilesProvider(){
+		return array(
+			array('common-ext-dot', '/common/{$dirname}/{$filename}.{$ext}.files/',                  '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
+			array('noslashes',      'common/{$dirname}/{$filename}.{$ext}.files',                    '/abc/def.html', '/sample_image.png', '/common/abc/def.html.files/sample_image.png'),
+			array('manyslashes',    '/////common/////{$dirname}////{$filename}.{$ext}.files///////', '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
+			array('default',        '{$dirname}/{$filename}_files/',                                 '/',             '/sample_image.png', '/index_files/sample_image.png'),
+		);
+	}
+
+
+	/**
+	 * $conf->path_cache を変更して値の変化を確認するテスト
+	 * @depends testPxApiGetAnything
+	 * @depends testPxApiIsAnything
+	 * @dataProvider confPathFilesProvider
+	 */
+	public function testConfPathCache($test_name, $conf_path_files, $page_path, $resource_path, $result){
+
+		// -------------------
+		// api.get.path_files
+		clearstatcache();
+		$this->fs->save_file( __DIR__.'/testData/standard/px-files/config_ex/path_files.txt', $conf_path_files );
+		clearstatcache();
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.path_files&path_resource='.urlencode($resource_path)] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, $result );
+
+		// -------------------
+		// api.get.realpath_files
+		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.realpath_files&path_resource='.urlencode($resource_path)] );
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, $this->fs->get_realpath(__DIR__.'/testData/standard'.$result) );
+
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertFalse( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertFalse( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}//testConfPathCache();
+
+
 
 
 
