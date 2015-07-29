@@ -768,7 +768,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		// var_dump($output);
-		$this->assertEquals( $output, $this->fs->get_realpath(__DIR__.'/testData/standard'.$result) );
+		$this->assertEquals( $this->fs->get_realpath(realpath('/').$output), $this->fs->get_realpath(__DIR__.'/testData/standard'.$result) );
 
 
 
