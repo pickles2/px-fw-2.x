@@ -1,7 +1,7 @@
 <?php
 /**
  * tomk79/filesystem
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 
@@ -9,7 +9,7 @@ namespace tomk79;
 
 /**
  * tomk79/filesystem core class
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class filesystem{
@@ -25,7 +25,7 @@ class filesystem{
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * @param object $conf 設定オブジェクト
 	 */
 	public function __construct($conf=null){
@@ -42,7 +42,7 @@ class filesystem{
 
 	/**
 	 * 書き込み/上書きしてよいアイテムか検証する。
-	 * 
+	 *
 	 * @param string $path 検証対象のパス
 	 * @return bool 書き込み可能な場合 `true`、不可能な場合に `false` を返します。
 	 */
@@ -56,7 +56,7 @@ class filesystem{
 
 	/**
 	 * 読み込んでよいアイテムか検証する。
-	 * 
+	 *
 	 * @param string $path 検証対象のパス
 	 * @return bool 読み込み可能な場合 `true`、不可能な場合に `false` を返します。
 	 */
@@ -67,7 +67,7 @@ class filesystem{
 
 	/**
 	 * ファイルが存在するかどうか調べる。
-	 * 
+	 *
 	 * @param string $path 検証対象のパス
 	 * @return bool ファイルが存在する場合 `true`、存在しない場合、またはディレクトリが存在する場合に `false` を返します。
 	 */
@@ -78,7 +78,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリが存在するかどうか調べる。
-	 * 
+	 *
 	 * @param string $path 検証対象のパス
 	 * @return bool ディレクトリが存在する場合 `true`、存在しない場合、またはファイルが存在する場合に `false` を返します。
 	 */
@@ -89,7 +89,7 @@ class filesystem{
 
 	/**
 	 * ファイルまたはディレクトリが存在するかどうか調べる。
-	 * 
+	 *
 	 * @param string $path 検証対象のパス
 	 * @return bool ファイルまたはディレクトリが存在する場合 `true`、存在しない場合に `false` を返します。
 	 */
@@ -100,7 +100,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリを作成する。
-	 * 
+	 *
 	 * @param string $dirpath 作成するディレクトリのパス
 	 * @param int $perm 作成するディレクトリに与えるパーミッション
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
@@ -121,7 +121,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリを作成する(上層ディレクトリも全て作成)
-	 * 
+	 *
 	 * @param string $dirpath 作成するディレクトリのパス
 	 * @param int $perm 作成するディレクトリに与えるパーミッション
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
@@ -156,11 +156,11 @@ class filesystem{
 
 	/**
 	 * ファイルやディレクトリを中身ごと完全に削除する。
-	 * 
+	 *
 	 * このメソッドは、ファイルやシンボリックリンクも削除します。
 	 * ディレクトリを削除する場合は、中身ごと完全に削除します。
 	 * シンボリックリンクは、その先を追わず、シンボリックリンク本体のみを削除します。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
@@ -194,10 +194,10 @@ class filesystem{
 
 	/**
 	 * ディレクトリを削除する。
-	 * 
+	 *
 	 * このメソッドはディレクトリを削除します。
 	 * 中身のない、空のディレクトリ以外は削除できません。
-	 * 
+	 *
 	 * @param string $path 対象ディレクトリのパス
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
@@ -228,10 +228,10 @@ class filesystem{
 
 	/**
 	 * ディレクトリを再帰的に削除する。
-	 * 
+	 *
 	 * このメソッドはディレクトリを再帰的に削除します。
 	 * 中身のない、空のディレクトリ以外は削除できません。
-	 * 
+	 *
 	 * @param string $path 対象ディレクトリのパス
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
@@ -269,10 +269,10 @@ class filesystem{
 
 	/**
 	 * ファイルを上書き保存する。
-	 * 
+	 *
 	 * このメソッドは、`$filepath` にデータを保存します。
 	 * もともと保存されていた内容は破棄され、新しいデータで上書きします。
-	 * 
+	 *
 	 * @param string $filepath 保存先ファイルのパス
 	 * @param string $content 保存する内容
 	 * @param int $perm 保存するファイルに与えるパーミッション
@@ -322,7 +322,7 @@ class filesystem{
 
 	/**
 	 * ファイルの中身を文字列として取得する。
-	 * 
+	 *
 	 * @param string $path ファイルのパス
 	 * @return string ファイル `$path` の内容
 	 */
@@ -333,14 +333,14 @@ class filesystem{
 
 	/**
 	 * ファイルの更新日時を比較する。
-	 * 
+	 *
 	 * @param string $path_a 比較対象A
 	 * @param string $path_b 比較対象B
-	 * @return bool|null 
+	 * @return bool|null
 	 * `$path_a` の方が新しかった場合に `true`、
 	 * `$path_b` の方が新しかった場合に `false`、
 	 * 同時だった場合に `null` を返します。
-	 * 
+	 *
 	 * いずれか一方、または両方のファイルが存在しない場合、次のように振る舞います。
 	 * - 両方のファイルが存在しない場合 = `null`
 	 * - $path_a が存在せず、$path_b は存在する場合 = `false`
@@ -407,11 +407,11 @@ class filesystem{
 
 	/**
 	 * 絶対パスを得る。
-	 * 
+	 *
 	 * パス情報を受け取り、スラッシュから始まるサーバー内部絶対パスに変換して返します。
-	 * 
+	 *
 	 * このメソッドは、PHPの `realpath()` と異なり、存在しないパスも絶対パスに変換します。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @param string $cd カレントディレクトリパス。
 	 * 実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。
@@ -484,9 +484,9 @@ class filesystem{
 
 	/**
 	 * 相対パスを得る。
-	 * 
+	 *
 	 * パス情報を受け取り、ドットスラッシュから始まる相対絶対パスに変換して返します。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @param string $cd カレントディレクトリパス。
 	 * 実在する有効なディレクトリのパス、または絶対パスの表現で指定される必要があります。
@@ -557,66 +557,76 @@ class filesystem{
 
 	/**
 	 * パス情報を得る。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return array パス情報
 	 */
 	public function pathinfo( $path ){
-		$path = $this->localize_path($path);
+		if(strpos($path,'#')!==false){ list($path, $hash) = @explode( '#', $path, 2 ); }
+		if(strpos($path,'?')!==false){ list($path, $query) = @explode( '?', $path, 2 ); }
 
 		$pathinfo = pathinfo( $path );
 		$pathinfo['filename'] = $this->trim_extension( $pathinfo['basename'] );
+		$pathinfo['extension'] = $this->get_extension( $pathinfo['basename'] );
+		$pathinfo['query'] = (@strlen($query) ? '?'.$query : null);
+		$pathinfo['hash'] = (@strlen($hash) ? '#'.$hash : null);
 		return $pathinfo;
 	}
 
 	/**
 	 * パス情報から、ファイル名を取得する。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return string 抜き出されたファイル名
 	 */
 	public function get_basename( $path ){
-		return pathinfo( $path , PATHINFO_BASENAME );
+		$path = pathinfo( $path , PATHINFO_BASENAME );
+		if( !strlen($path) ){$path = null;}
+		return $path;
 	}
 
 	/**
 	 * パス情報から、拡張子を除いたファイル名を取得する。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return string 拡張子が除かれたパス
 	 */
 	public function trim_extension( $path ){
 		$pathinfo = pathinfo( $path );
-		$RTN = preg_replace( '/\.'.preg_quote( $pathinfo['extension'], '/' ).'$/' , '' , $path );
+		$RTN = preg_replace( '/\.'.preg_quote( @$pathinfo['extension'], '/' ).'$/' , '' , $path );
 		return $RTN;
 	}
 
 	/**
 	 * ファイル名を含むパス情報から、ファイルが格納されているディレクトリ名を取得する。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return string 親ディレクトリのパス
 	 */
 	public function get_dirpath( $path ){
-		return pathinfo( $path , PATHINFO_DIRNAME );
+		$path = pathinfo( $path , PATHINFO_DIRNAME );
+		if( !strlen($path) ){$path = null;}
+		return $path;
 	}
 
 	/**
 	 * パス情報から、拡張子を取得する。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return string 拡張子
 	 */
 	public function get_extension( $path ){
 		$path = preg_replace('/\#.*$/si', '', $path);
 		$path = preg_replace('/\?.*$/si', '', $path);
-		return pathinfo( $path , PATHINFO_EXTENSION );
+		$path = pathinfo( $path , PATHINFO_EXTENSION );
+		if(!strlen($path)){$path = null;}
+		return $path;
 	}
 
 
 	/**
 	 * CSVファイルを読み込む。
-	 * 
+	 *
 	 * @param string $path 対象のCSVファイルのパス
 	 * @param array $options オプション
 	 * - delimiter = 区切り文字(省略時、カンマ)
@@ -659,9 +669,9 @@ class filesystem{
 
 	/**
 	 * 配列をCSV形式に変換する。
-	 * 
+	 *
 	 * 改行コードはLFで出力されます。
-	 * 
+	 *
 	 * @param array $array 2次元配列
 	 * @param array $options オプション
 	 * - charset = 文字セット(省略時、UTF-8)
@@ -697,7 +707,7 @@ class filesystem{
 
 	/**
 	 * ファイルを複製する。
-	 * 
+	 *
 	 * @param string $from コピー元ファイルのパス
 	 * @param string $to コピー先のパス
 	 * @param int $perm 保存するファイルに与えるパーミッション
@@ -729,7 +739,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリを複製する(下層ディレクトリも全てコピー)
-	 * 
+	 *
 	 * @param string $from コピー元ファイルのパス
 	 * @param string $to コピー先のパス
 	 * @param int $perm 保存するファイルに与えるパーミッション
@@ -784,7 +794,7 @@ class filesystem{
 
 	/**
 	 * パーミッションを変更する。
-	 * 
+	 *
 	 * @param string $filepath 対象のパス
 	 * @param int $perm 保存するファイルに与えるパーミッション
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
@@ -807,7 +817,7 @@ class filesystem{
 
 	/**
 	 * パーミッション情報を調べ、3桁の数字で返す。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return int|bool 成功時に 3桁の数字、失敗時に `false` を返します。
 	 */
@@ -825,7 +835,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリにあるファイル名のリストを配列で返す。
-	 * 
+	 *
 	 * @param string $path 対象ディレクトリのパス
 	 * @return array|bool 成功時にファイルまたはディレクトリ名の一覧を格納した配列、失敗時に `false` を返します。
 	 */
@@ -886,7 +896,7 @@ class filesystem{
 
 	/**
 	 * ディレクトリを同期する。
-	 * 
+	 *
 	 * @param string $path_sync_from 同期元ディレクトリ
 	 * @param string $path_sync_to 同期先ディレクトリ
 	 * @return bool 常に `true` を返します。
@@ -899,7 +909,7 @@ class filesystem{
 
 	/**
 	 * 指定されたディレクトリ以下の、全ての空っぽのディレクトリを削除する。
-	 * 
+	 *
 	 * @param string $path ディレクトリパス
 	 * @param array $options オプション
 	 * @return bool 成功時 `true`、失敗時 `false` を返します。
@@ -1050,7 +1060,7 @@ class filesystem{
 
 	/**
 	 * サーバがUNIXパスか調べる。
-	 * 
+	 *
 	 * @return bool UNIXパスなら `true`、それ以外なら `false` を返します。
 	 */
 	public function is_unix(){
@@ -1062,7 +1072,7 @@ class filesystem{
 
 	/**
 	 * サーバがWindowsパスか調べる。
-	 * 
+	 *
 	 * @return bool Windowsパスなら `true`、それ以外なら `false` を返します。
 	 */
 	public function is_windows(){
@@ -1075,9 +1085,9 @@ class filesystem{
 
 	/**
 	 * パスを正規化する。
-	 * 
+	 *
 	 * 受け取ったパスを、スラッシュ区切りの表現に正規化します。
-	 * 
+	 *
 	 * @param string $path 正規化するパス
 	 * @return string 正規化されたパス
 	 */
@@ -1093,10 +1103,10 @@ class filesystem{
 
 	/**
 	 * パスをOSの標準的な表現に変換する。
-	 *  
+	 *
 	 * 受け取ったパスを、OSの標準的な表現に変換します。
 	 * - スラッシュとバックスラッシュの違いを吸収し、`DIRECTORY_SEPARATOR` に置き換えます。
-	 * 
+	 *
 	 * @param string $path ローカライズするパス
 	 * @return string ローカライズされたパス
 	 */
@@ -1116,7 +1126,7 @@ class filesystem{
 
 	/**
 	 * 受け取ったテキストを、ファイルシステムエンコードに変換する。
-	 * 
+	 *
 	 * @param mixed $text テキスト
 	 * @return string 文字セット変換後のテキスト
 	 */
@@ -1138,7 +1148,7 @@ class filesystem{
 
 	/**
 	 * 受け取ったテキストを、ファイルシステムエンコードに変換する。
-	 * 
+	 *
 	 * @param mixed $text テキスト
 	 * @param string $to_encoding 文字セット(省略時、内部文字セット)
 	 * @param string $from_encoding 変換前の文字セット
@@ -1180,7 +1190,7 @@ class filesystem{
 
 	/**
 	 * 受け取ったテキストを、指定の改行コードに変換する。
-	 * 
+	 *
 	 * @param mixed $text テキスト
 	 * @param string $crlf 改行コード名。CR|LF(default)|CRLF
 	 * @return string 改行コード変換後のテキスト
@@ -1221,3 +1231,4 @@ class filesystem{
 	}
 
 }
+
