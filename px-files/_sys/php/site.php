@@ -1,21 +1,21 @@
 <?php
 /**
  * class site
- * 
+ *
  * Pickles2 のコアオブジェクトの1つ `$site` のオブジェクトクラスを定義します。
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 namespace picklesFramework2;
 
 /**
  * Site and page Manager
- * 
+ *
  * Pickles2 のコアオブジェクトの1つ `$site` のオブジェクトクラスです。
  * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
- * 
+ *
  * メソッド `$px->site()` を通じてアクセスします。
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class site{
@@ -47,15 +47,36 @@ class site{
 	 * ダイナミックパスパラメータ
 	 */
 	private $dynamic_path_param = array();
+	/**
+	 * PDOインスタンス
+	 * $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータベース。
+	 */
+	private $pdo;
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
 		$this->conf = $this->px->conf();
+
+		$this->pdo = false;//初期化
+		if( class_exists('\\PDO') ){
+			$tmp_path_cache = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
+			$this->px->fs()->mkdir( $tmp_path_cache );
+			$tmp_path_cache = realpath($tmp_path_cache).DIRECTORY_SEPARATOR;
+			clearstatcache();
+			$this->pdo = new \PDO(
+				'sqlite:'.$tmp_path_cache.'sitemap.sqlite',
+				null, null,
+				array(
+					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+				)
+			);
+			unset($tmp_path_cache);
+		}
 
 		//サイトマップCSVを読み込む
 		$this->load_sitemap_csv();
@@ -74,7 +95,7 @@ class site{
 
 	/**
 	 * ダイナミックパスからパラメータを受け取る。
-	 * 
+	 *
 	 * @param string $key ダイナミックパスパラメータ名
 	 * @return string ダイナミックパスパラメータ値
 	 */
@@ -84,7 +105,7 @@ class site{
 
 	/**
 	 * ダイナミックパスからのパラメータをセットする。
-	 * 
+	 *
 	 * @param string $key ダイナミックパスパラメータ名
 	 * @param string $val ダイナミックパスパラメータ値
 	 * @return bool 常に `true`
@@ -96,16 +117,16 @@ class site{
 
 	/**
 	 * サイトマップCSVを読み込む。
-	 * 
+	 *
 	 * サイトマップディレクトリに格納されたサイトマップCSV (`./_PX/sitemaps/*.csv`) を読み込み、パースします。
-	 * 
+	 *
 	 * この処理は、サイトマップの行数や階層構造によっては、重い処理になります。
 	 * そのため、このメソッドは、パースした後の配列情報をキャッシュディレクトリ(`./_PX/caches/sitemaps/`)にキャッシュし、
 	 * 次回以降はキャッシュを読み込むことで重い処理を回避します。
-	 * 
+	 *
 	 * このキャッシュは、キャッシュファイルのタイムスタンプより新しいCSVを発見するか、
 	 * `?PX=clearcache` によりキャッシュがクリアされると、次回アクセス時に再生成されます。
-	 * 
+	 *
 	 * @return bool 常に `true`
 	 */
 	private function load_sitemap_csv(){
@@ -117,6 +138,21 @@ class site{
 			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
 			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
 			return true;
+		}
+
+		if( $this->pdo !== false ){
+			// SQLiteキャッシュのテーブルを作成する
+			ob_start();
+?>
+CREATE TABLE sitemap(
+	id             TEXT UNIQUE,
+	path           TEXT UNIQUE,
+	parent_page_id TEXT,
+	orderby        INTEGER,
+	list_flg       INTEGER
+);
+<?php
+			$result = $this->pdo->query(ob_get_clean());
 		}
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
@@ -276,10 +312,45 @@ class site{
 		});
 
 		//  ページツリー情報を構成
+		if( $this->pdo !== false ){
+			// INSERT文をストア
+			ob_start(); ?>
+INSERT INTO sitemap(
+	id,
+	path,
+	parent_page_id,
+	orderby,
+	list_flg
+)VALUES(
+	:id,
+	:path,
+	:parent_page_id,
+	:orderby,
+	:list_flg
+);
+<?php
+			$sth = $this->pdo->prepare( ob_get_clean() );
+		}
 		$this->sitemap_page_tree = array();
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
 			set_time_limit(30);//タイマー延命
-			$this->get_children( $tmp_path );
+			if( $this->pdo !== false ){
+				$parent_page_id = explode('>', $tmp_page_info['logical_path']);
+				$parent_page_id = $parent_page_id[count($parent_page_id)-1];
+				if(is_null(@$this->sitemap_id_map[$parent_page_id])){
+					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
+					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
+				}
+				$sth->execute(array(
+					':id'=>$tmp_page_info['id'],
+					':path'=>$tmp_page_info['path'],
+					':parent_page_id'=>$parent_page_id,
+					':orderby'=>$tmp_page_info['orderby'],
+					':list_flg'=>$tmp_page_info['list_flg'],
+				));
+			}else{
+				$this->get_children( $tmp_path );
+			}
 			// $this->get_children( $tmp_path, array('filter'=>true) );
 			// $this->get_children( $tmp_path, array('filter'=>false) );//list_flgを無視して、全員持ってくる
 		}
@@ -302,16 +373,17 @@ class site{
 
 	/**
 	 * サイトマップキャッシュが読み込み可能か調べる。
-	 * 
+	 *
 	 * @return bool 読み込み可能な場合に `true`、読み込みできない場合に `false` を返します。
 	 */
 	private function is_sitemap_cache(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		if(
-			!is_file($path_sitemap_cache_dir.'sitemap.array') || 
-			!is_file($path_sitemap_cache_dir.'sitemap_id_map.array') || 
-			!is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array')
+			!is_file($path_sitemap_cache_dir.'sitemap.array') ||
+			!is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ||
+			!is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') ||
+			!is_file($path_sitemap_cache_dir.'sitemap_page_tree.array')
 		){
 			return false;
 		}
@@ -325,7 +397,7 @@ class site{
 
 	/**
 	 * サイトマップ配列を取得する。
-	 * 
+	 *
 	 * @return array 全ページが含まれたサイトマップ配列
 	 */
 	public function get_sitemap(){
@@ -334,7 +406,7 @@ class site{
 
 	/**
 	 * 親ページのIDを取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return string|bool 親ページを見つけた場合に、そのページID。見つからない場合には `false` を返します。
 	 */
@@ -358,10 +430,10 @@ class site{
 
 	/**
 	 * 所属するカテゴリトップページのIDを取得する。
-	 * 
+	 *
 	 * ページ `$path` の親ページをたどり、初めに `category_top_flg` が立っているページを、
 	 * 自身が所属するカテゴリのトップページとみなし、そのページIDを返します。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return string カテゴリトップページのページID
 	 */
@@ -395,13 +467,13 @@ class site{
 
 	/**
 	 * グローバルメニューのページID一覧を取得する。
-	 * 
+	 *
 	 * サイトマップ配列から、次の条件に当てはまるページをグローバルメニューとして抽出します。
-	 * 
+	 *
 	 * - トップページ直下にある。
 	 * - かつ、`list_flg` が立っている。
 	 * - かつ、`category_top_flg` が立っている。
-	 * 
+	 *
 	 * @return array ページの一覧
 	 */
 	public function get_global_menu(){
@@ -417,15 +489,15 @@ class site{
 
 	/**
 	 * ショルダーメニューのページID一覧を取得する。
-	 * 
+	 *
 	 * サイトマップ配列から、次の条件に当てはまるページをショルダーメニューとして抽出します。
-	 * 
+	 *
 	 * - トップページ直下にある。
 	 * - かつ、`list_flg` が立っている。
 	 * - かつ、`category_top_flg` が立っていない。
-	 * 
+	 *
 	 * このメソッドは、PxFW 1.0.4 で追加されました。
-	 * 
+	 *
 	 * @return array ページの一覧
 	 */
 	public function get_shoulder_menu(){
@@ -441,18 +513,18 @@ class site{
 
 	/**
 	 * ページ情報を取得する。
-	 * 
+	 *
 	 * このメソッドは、指定したページの情報を連想配列で返します。対象のページは第1引数にパスまたはページIDで指定します。
-	 * 
+	 *
 	 * カレントページの情報を取得する場合は、代わりに `$px->site()->get_current_page_info()` が使用できます。
-	 * 
+	 *
 	 * パスで指定したページの情報を取得する例 :
 	 * <pre>&lt;?php
 	 * // ページ &quot;/aaa/bbb.html&quot; のページ情報を得る
 	 * $page_info = $px-&gt;site()-&gt;get_page_info('/aaa/bbb.html');
 	 * var_dump( $page_info );
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * ページIDで指定したページの情報を取得する例 :
 	 * <pre>&lt;?php
 	 * // トップページのページ情報を得る
@@ -460,7 +532,7 @@ class site{
 	 * $page_info = $px-&gt;site()-&gt;get_page_info('');
 	 * var_dump( $page_info );
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * @param string $path 取得するページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param string $key 取り出す単一要素のキー。省略時はすべての要素を含む連想配列が返されます。省略可。
 	 * @return mixed 単一ページ情報を格納する連想配列、`$key` が指定された場合は、その値のみ。
@@ -534,7 +606,7 @@ class site{
 
 	/**
 	 * ページ情報をセットする。
-	 * 
+	 *
 	 * @param string $path セットするページのパス または ページID。
 	 * @param array $page_info セットするページ情報を格納する連想配列。
 	 * @return bool 常に `true`
@@ -634,7 +706,7 @@ class site{
 
 	/**
 	 * ページIDからページ情報を得る。
-	 * 
+	 *
 	 * @param string $page_id 取得するページのページID
 	 * @return array ページ情報を格納する連想配列
 	 */
@@ -644,7 +716,7 @@ class site{
 
 	/**
 	 * パスからページIDを得る。
-	 * 
+	 *
 	 * @param string $path 取得するページのパス
 	 * @return string `$path` に対応するページID
 	 */
@@ -655,7 +727,7 @@ class site{
 
 	/**
 	 * ページIDからパスを得る。
-	 * 
+	 *
 	 * @param string $page_id 取得するページのページID
 	 * @return string `$page_id` に対応するパス
 	 */
@@ -668,14 +740,14 @@ class site{
 
 	/**
 	 * 現在のページの情報を得る。
-	 * 
+	 *
 	 * 例：
 	 * <pre>&lt;?php
 	 * // カレントページのページ情報を得る
 	 * $page_info = $px-&gt;site()-&gt;get_current_page_info();
 	 * var_dump( $page_info );
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * @param string $key 取り出す情報のキー
 	 * @return array カレントページのページ情報を格納する連想配列
 	 */
@@ -690,7 +762,7 @@ class site{
 
 	/**
 	 * 現在のページの情報をセットする。
-	 * 
+	 *
 	 * @param array $page_info セットするページ情報を格納する連想配列。
 	 * @return bool 常に `true`
 	 */
@@ -701,7 +773,7 @@ class site{
 
 	/**
 	 * パスがダイナミックパスにマッチするか調べる。
-	 * 
+	 *
 	 * @param string $path 調べる対象のパス文字列
 	 * @return bool マッチするダイナミックパスが見つかったら `true`、なければ `false` を返します。
 	 */
@@ -717,7 +789,7 @@ class site{
 
 	/**
 	 * ダイナミックパス情報を得る。
-	 * 
+	 *
 	 * @param string $path 対象のパス
 	 * @return string|bool 見つかった場合に、ダイナミックパスを、見つからない場合に `false` を返します。
 	 */
@@ -766,9 +838,9 @@ class site{
 
 	/**
 	 * 子階層のページの一覧を取得する。
-	 * 
+	 *
 	 * このメソッドは、指定したページの子階層のページの一覧を返します。`$path` を省略した場合は、カレントページのパスを起点に一覧を抽出します。
-	 * 
+	 *
 	 * カレントページの子階層のリンクを作成する例 :
 	 * <pre>&lt;?php
 	 * // カレントページの子階層のリンクを作成する
@@ -779,7 +851,7 @@ class site{
 	 * }
 	 * print '&lt;/ul&gt;';
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * カレントページの子階層のリンクを、list_flg を無視してすべて表示する例 :
 	 * <pre>&lt;?php
 	 * // カレントページの子階層のリンクを作成する
@@ -791,7 +863,7 @@ class site{
 	 * }
 	 * print '&lt;/ul&gt;';
 	 * ?&gt;</pre>
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * <dl>
@@ -834,32 +906,19 @@ class site{
 		// }
 		// unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
 
-		foreach( $this->get_sitemap() as $row ){
-			if( !strlen($row['id']) ){
-				continue;
-			}
-			// if($filter){
-			// 	if( !$row['list_flg'] ){
-			// 		continue;
-			// 	}
-			// }
 
-			// $target_layer = '';
-			$parent_page_id = '';
-			if( strlen( trim($row['id']) ) ){
-				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
-				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
-				$parent_page_id = trim($tmp_page_info['id']);
-
-				// foreach( $tmp_breadcrumb as $tmp_path ){
-				// 	if( !strlen($tmp_path) ){continue;}
-				// 	$tmp_page_info = $this->get_page_info( trim($tmp_path) );
-				// 	$target_layer .= '>'.$tmp_page_info['id'];
-				// }
-			}
-			unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
-
-			if( $page_info['id'] == $parent_page_id ){
+		if( $this->pdo !== false ){
+			// PDO+SQLiteの処理
+			// INSERT文をストア
+			$sth = $this->pdo->prepare(
+				'SELECT * FROM sitemap WHERE id != \'\' AND parent_page_id = :parent_page_id ;'
+			);
+			$sth->execute(array(
+				':parent_page_id'=>$page_info['id'],
+			));
+			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
+			// var_dump($results);
+			foreach( $results as $row ){
 				if(@strlen($row['orderby'])){
 					array_push( $tmp_children_orderby_manual , $row['id'] );
 				}else{
@@ -870,6 +929,43 @@ class site{
 						array_push( $tmp_children_orderby_listed_manual , $row['id'] );
 					}else{
 						array_push( $tmp_children_orderby_listed_auto , $row['id'] );
+					}
+				}
+			}
+
+		}else{
+			// 非PDO+SQLiteの処理
+			foreach( $this->get_sitemap() as $row ){
+				if( !strlen($row['id']) ){
+					continue;
+				}
+				// if($filter){
+				// 	if( !$row['list_flg'] ){
+				// 		continue;
+				// 	}
+				// }
+
+				// $target_layer = '';
+				$parent_page_id = '';
+				if( strlen( trim($row['id']) ) ){
+					$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
+					$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
+					$parent_page_id = trim($tmp_page_info['id']);
+				}
+				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
+
+				if( $page_info['id'] == $parent_page_id ){
+					if(@strlen($row['orderby'])){
+						array_push( $tmp_children_orderby_manual , $row['id'] );
+					}else{
+						array_push( $tmp_children_orderby_auto , $row['id'] );
+					}
+					if( $row['list_flg'] ){
+						if(@strlen($row['orderby'])){
+							array_push( $tmp_children_orderby_listed_manual , $row['id'] );
+						}else{
+							array_push( $tmp_children_orderby_listed_auto , $row['id'] );
+						}
 					}
 				}
 			}
@@ -894,7 +990,7 @@ class site{
 
 	/**
 	 * ページ情報の配列を並び替える。
-	 * 
+	 *
 	 * @param string $a 比較対象1のページID
 	 * @param string $b 比較対象2のページID
 	 * @return int 並び順の前後関係 (`1`|`0`|`-1`)
@@ -918,7 +1014,7 @@ class site{
 
 	/**
 	 * 同じ階層のページの一覧を取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * @return array ページの一覧
@@ -939,7 +1035,7 @@ class site{
 
 	/**
 	 * 同じ階層の次のページのIDを取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * @return string|bool ページID。存在しない場合は `false`を返します。
@@ -978,7 +1074,7 @@ class site{
 
 	/**
 	 * 同じ階層の前のページのIDを取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * @return string|bool ページID。存在しない場合は `false`を返します。
@@ -1017,7 +1113,7 @@ class site{
 
 	/**
 	 * 次のページのIDを取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * <dl>
@@ -1083,7 +1179,7 @@ class site{
 
 	/**
 	 * 前のページのIDを取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param array $opt オプション(省略可)
 	 * <dl>
@@ -1150,7 +1246,7 @@ class site{
 
 	/**
 	 * パンくず配列を取得する。
-	 * 
+	 *
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return array 親ページまでのパンくず階層をあらわす配列。自身を含まない。$pathがトップページを示す場合は、空の配列。
 	 */
@@ -1174,7 +1270,7 @@ class site{
 
 	/**
 	 * ページが、パンくず内に存在しているか調べる。
-	 * 
+	 *
 	 * @param string $page_path 調べる対象のページのパス、またはID。
 	 * @param string $path 起点とするページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return bool 存在している場合に `true`、存在しない場合に `false` を返します。
@@ -1199,7 +1295,7 @@ class site{
 
 	/**
 	 * パス文字列を受け取り、種類を判定する。
-	 * 
+	 *
 	 * @param string $path 調べるパス
 	 * @return string|bool 判定結果。
 	 * - `javascript:` から始まる場合 => 'javascript'
@@ -1248,7 +1344,7 @@ class site{
 
 	/**
 	 * 変数を受け取り、PHPのシンタックスに変換する。
-	 * 
+	 *
 	 * @param mixed $value 値
 	 * @param array $options オプション
 	 * <dl>
@@ -1338,7 +1434,7 @@ class site{
 
 	/**
 	 * 変数をPHPのソースコードに変換する。
-	 * 
+	 *
 	 * `include()` に対してそのままの値を返す形になるよう変換する。
 	 *
 	 * @param mixed $value 値
