@@ -152,7 +152,8 @@ CREATE TABLE sitemap(
 	list_flg       INTEGER
 );
 <?php
-			$result = $this->pdo->query(ob_get_clean());
+			$result = @$this->pdo->query(ob_get_clean());
+			$result = @$this->pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 		}
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
