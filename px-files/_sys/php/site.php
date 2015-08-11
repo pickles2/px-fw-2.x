@@ -68,13 +68,18 @@ class site{
 			$this->px->fs()->mkdir( $tmp_path_cache );
 			$tmp_path_cache = realpath($tmp_path_cache).DIRECTORY_SEPARATOR;
 			clearstatcache();
-			$this->pdo = new \PDO(
-				'sqlite:'.$tmp_path_cache.'sitemap.sqlite',
-				null, null,
-				array(
-					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
-				)
-			);
+			try {
+				$this->pdo = new \PDO(
+					'sqlite:'.$tmp_path_cache.'sitemap.sqlite',
+					null, null,
+					array(
+						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+					)
+				);
+			} catch (Exception $e) {
+				$this->pdo = false;
+			}
+
 			unset($tmp_path_cache);
 		}
 
