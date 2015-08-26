@@ -5,9 +5,6 @@
 		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->bowl()->pull('head') ?>
-<style>
-
-</style>
 	</head>
 	<body>
 		<header class="theme_header" id="page_top">
@@ -80,5 +77,6 @@
 				<p style="text-align:center;">Pickles 2 is made by Tomoya Koyanagi.</p>
 			</div>
 		</footer>
+<?= $px->bowl()->pull('foot') ?>
 	</body>
 </html>
