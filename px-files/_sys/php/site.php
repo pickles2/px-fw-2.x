@@ -168,7 +168,7 @@ CREATE TABLE sitemap(
 		// $path_top の設定値をチューニング
 		$path_top = $this->conf->path_top;
 		if(!strlen( $path_top )){ $path_top = '/'; }
-		$path_top = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
+		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
@@ -230,7 +230,7 @@ CREATE TABLE sitemap(
 					default:
 						// スラ止のパスに index.html を付加する。
 						// ただし、JS、アンカー、外部リンクには適用しない。
-						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
+						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
 				if( !strlen( $tmp_array['id'] ) ){
@@ -288,9 +288,9 @@ CREATE TABLE sitemap(
 				if( !strlen( $tmp_array['content'] ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
-					$tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
+					// $tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
 				}
-				$tmp_array['content'] = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $tmp_array['content'] );//index.htmlを付加する。
+				$tmp_array['content'] = preg_replace( '/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content'] );//index.htmlを付加する。
 				if( preg_match( '/^alias\:/s' , $tmp_array['path'] ) ){
 					//エイリアスの値調整
 					$tmp_array['content'] = null;
@@ -344,7 +344,7 @@ INSERT INTO sitemap(
 				$parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$parent_page_id = $parent_page_id[count($parent_page_id)-1];
 				if(is_null(@$this->sitemap_id_map[$parent_page_id])){
-					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/si' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
+					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
 					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
 				}
 				$sth->execute(array(
@@ -562,7 +562,15 @@ INSERT INTO sitemap(
 		$tmp_path = $path;
 		if( !array_key_exists($path, $this->sitemap_id_map) || is_null( $this->sitemap_array[$path] ) ){
 			foreach( $this->px->get_directory_index() as $index_file_name ){
-				$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/si','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
+				switch( $this->get_path_type($path) ){
+					case 'full_url':
+					case 'javascript':
+					case 'anchor':
+						break;
+					default:
+						$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/s','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
+						break;
+				}
 				if( !is_null( @$this->sitemap_array[$tmp_path] ) ){
 					break;
 				}
@@ -589,13 +597,12 @@ INSERT INTO sitemap(
 				break;
 			default:
 				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
+				if( is_null( @$this->sitemap_array[$path] ) ){
+					//  サイトマップにズバリなければ、
+					//  引数からパラメータを外したパスだけで再検索
+					$path = @$parsed_url['path'];
+				}
 				break;
-		}
-
-		if( is_null( @$this->sitemap_array[$path] ) ){
-			//  サイトマップにズバリなければ、
-			//  引数からパラメータを外したパスだけで再検索
-			$path = @$parsed_url['path'];
 		}
 
 		$rtn = @$this->sitemap_array[$path];
@@ -624,9 +631,15 @@ INSERT INTO sitemap(
 			$path = $this->px->req()->get_request_file_path();
 			$path_type = $this->get_path_type($path);
 		}
-		if( is_string( $path_type ) ){
-			//  $path がスラドメされている場合に index.html を付加
-			$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
+		switch( $path_type ){
+			case 'full_url':
+			case 'javascript':
+			case 'anchor':
+				break;
+			default:
+				//  $path がスラドメされている場合に index.html を付加
+				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
+				break;
 		}
 
 		$before_page_info = $this->get_page_info( $path );
@@ -838,7 +851,7 @@ INSERT INTO sitemap(
 			continue;
 		}
 		unset($dynamic_path , $tmp_matched);
-		$path = preg_replace('/\/$/si','/'.$this->px->get_directory_index_primary(),$path); // index.htmlをつける
+		$path = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(),$path); // index.htmlをつける
 		return $path;
 	}//bind_dynamic_path_param()
 
@@ -1337,6 +1350,9 @@ INSERT INTO sitemap(
 		} else if( preg_match( '/\{(?:\$|\*)(?:[a-zA-Z0-9\_\-]*)\}/' , $path ) ) {
 			//  {$xxxx} または {*xxxx} を含む場合(ダイナミックパス)
 			$path_type = 'dynamic';
+		} else if( preg_match( '/^\/\//' , $path ) ) {
+			//  //から始まる場合
+			$path_type = 'full_url';
 		} else if( preg_match( '/^\//' , $path ) ) {
 			//  /から始まる場合
 			$path_type = 'normal';

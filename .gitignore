@@ -5,3 +5,4 @@ scss_cache
 composer.lock
 /px-files/_sys/ram/
 /caches/
+.~*.csv#

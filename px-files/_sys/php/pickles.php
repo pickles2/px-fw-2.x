@@ -745,21 +745,20 @@ class pickles{
 			default:
 				// index.htmlを省略
 				$path = preg_replace('/\/'.$this->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);
+				if( preg_match( '/^\\//' , $path ) ){
+					//  スラッシュから始まる絶対パスの場合、
+					//  インストールパスを起点としたパスに書き変えて返す。
+					// $path = preg_replace( '/^\/+/' , '' , $path );
+					$path = preg_replace('/\/$/', '', $this->get_path_controot()).$path;
+				}
+				$parsed_url_fin = parse_url($path);
+				$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
+
+				// パラメータを、引数の生の状態に戻す。
+				$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
+				$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'?'.@$parsed_url_fin['fragment']:''));
 				break;
 		}
-
-		if( preg_match( '/^\\//' , $path ) ){
-			//  スラッシュから始まる絶対パスの場合、
-			//  インストールパスを起点としたパスに書き変えて返す。
-			$path = preg_replace( '/^\/+/' , '' , $path );
-			$path = $this->get_path_controot().$path;
-		}
-
-		// パラメータを、引数の生の状態に戻す。
-		$parsed_url_fin = parse_url($path);
-		$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
-		$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
-		$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'?'.@$parsed_url_fin['fragment']:''));
 
 		return $path;
 	}//href()
