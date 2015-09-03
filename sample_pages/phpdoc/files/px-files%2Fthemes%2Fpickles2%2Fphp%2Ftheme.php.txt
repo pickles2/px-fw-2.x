@@ -109,7 +109,7 @@ class theme{
 	}
 	/**
 	 * 指定されたページの小階層のメニューを展開する
-	 * 
+	 *
 	 * @param string $parent_page_id 親ページのページID
 	 * @return string ページリストのHTMLソース
 	 */
@@ -120,7 +120,9 @@ class theme{
 			$rtn .= '<ul>'."\n";
 			foreach( $children as $child ){
 				$rtn .= '<li>'.$this->px->mk_link( $child );
-				$rtn .= $this->mk_sub_menu( $child );//←再帰的呼び出し
+				if( $this->px->site()->is_page_in_breadcrumb($child) ){//←カレントページ以外の下層は辿らない
+					$rtn .= $this->mk_sub_menu( $child );//←再帰的呼び出し
+				}
 				$rtn .= '</li>'."\n";
 			}
 			$rtn .= '</ul>'."\n";
@@ -174,3 +176,4 @@ class theme{
 	}
 
 }
+
