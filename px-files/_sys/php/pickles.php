@@ -994,6 +994,7 @@ class pickles{
 		}
 		$rtn = $this->href( $rtn );
 		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		return $rtn;
 	}//path_files()
 
@@ -1040,6 +1041,7 @@ class pickles{
 		}
 
 		$rtn = $this->fs()->normalize_path($rtn);
+		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		$this->add_relatedlink($rtn);
 		return $rtn;
 	}//path_files_cache()
@@ -1078,6 +1080,7 @@ class pickles{
 		$this->fs()->mkdir_r( dirname( $rtn ) );
 
 		$rtn = $this->fs()->normalize_path( $rtn );
+		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		$rtn = $this->fs()->get_realpath( $rtn );
 		return $rtn;
 	}//realpath_files_private_cache()
@@ -1105,6 +1108,7 @@ class pickles{
 			$this->fs()->mkdir_r( dirname($this->get_path_docroot().$rtn) );
 		}
 		$rtn = $this->fs()->normalize_path($rtn);
+		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		$this->add_relatedlink($rtn);
 		return $rtn;
 	}
