@@ -178,7 +178,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output[0], ':auto_page_id.16' );
 		$this->assertEquals( $output[5], ':auto_page_id.21' );
-		$this->assertEquals( count($output), 6 );
+		$this->assertEquals( count($output), 7 );
 
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
@@ -217,7 +217,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output[0], ':auto_page_id.16' );
 		$this->assertEquals( $output[5], ':auto_page_id.21' );
-		$this->assertEquals( count($output), 6 );
+		$this->assertEquals( count($output), 7 );
 
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
@@ -567,11 +567,65 @@ class apiTest extends PHPUnit_Framework_TestCase{
 			'/?PX=api.get.href&linkto='.urlencode('/sample_pages/page2/index.html') ,
 		] );
 		clearstatcache();
-
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( $output, '/sample_pages/page2/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('/sample_pages/page3/index.html?a=b#anch') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '/sample_pages/page3/?a=b#anch' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('pickles2.pxt.jp_1') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('pickles2.pxt.jp_2') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, '//pickles2.pxt.jp/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('http://pickles2.pxt.jp/') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.href&linkto='.urlencode('http://pickles2.pxt.jp/?a=b#anch') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'http://pickles2.pxt.jp/?a=b#anch' );
 
 		$output = $this->passthru( [
 			'php',
