@@ -82,7 +82,7 @@ class pickles{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.13-alpha+nb';
+		return '2.0.13';
 	}
 
 	/**
