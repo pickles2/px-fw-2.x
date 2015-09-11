@@ -72,7 +72,8 @@ $ chmod -R 777 ./caches
   - mod_rewrite が利用可能であること
   - .htaccess が利用可能であること
 - PHP 5.4 以上
-  - mb_string が有効に設定されていること
+  - mbstring が有効に設定されていること
+  - PDO SQLiteドライバー (PDO_SQLITE) が有効に設定されていること
   - safe_mode が無効に設定されていること
 
 
@@ -105,5 +106,3 @@ MIT License
 - (C)Tomoya Koyanagi <tomk79@gmail.com>
 - website: <http://www.pxt.jp/>
 - Twitter: @tomk79 <http://twitter.com/tomk79/>
-
-
