@@ -18,7 +18,9 @@ class ext{
 		foreach( $px->bowl()->get_keys() as $key ){
 			$src = $px->bowl()->pull( $key );
 
-			$src = \Michelf\MarkdownExtra::defaultTransform($src);
+			if($key != 'head' && $key != 'foot'){
+				$src = \Michelf\MarkdownExtra::defaultTransform($src);
+			}
 
 			$px->bowl()->replace( $src, $key );
 		}
