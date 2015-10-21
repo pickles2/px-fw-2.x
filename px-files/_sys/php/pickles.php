@@ -220,7 +220,8 @@ class pickles{
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			$this->set_status(403);// 403 Forbidden
-			$this->bowl()->send('<p>ignore path</p>');
+			print 'ignored path';
+			exit;
 		}else{
 			self::exec_content( $this );
 		}
