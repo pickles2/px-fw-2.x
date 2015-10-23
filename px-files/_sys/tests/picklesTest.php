@@ -134,6 +134,32 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 	}
 
+	/**
+	 * $px->mk_link() を実行してみるテスト
+	 */
+	public function testStandardMkLink(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/mk_link/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( '<a href="/" class="current">&lt;HOME&gt;</a><a href="/" class="current"><link0></a><a href="/" class="current"><link1></a><a href="/" class="current"><link2></a><a href="/" class="current">&lt;link3&gt;</a>', $output );
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
 
 
 	/**

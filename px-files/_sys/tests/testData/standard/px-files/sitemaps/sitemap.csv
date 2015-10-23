@@ -1,5 +1,5 @@
 "*path","*content","*id","*title","*title_breadcrumb","*title_h1","*title_label","*title_full","*logical_path","*list_flg","*layout","*orderby","*keywords","*description","*category_top_flg"
-"/",,,"ホーム",,,,,,1,"top",,,,
+"/",,,"<HOME>",,,,,,1,"top",,,,
 "/applock/lock.html",,,"applock test (lock)",,,,,,1,,,"","",1
 "/applock/unlock.html",,,"applock test (unlock)",,,,,,1,,,"","",1
 "/site/set_page_info.html",,,"$site->set_page_info()",,,,,,1,,,"","",1

@@ -1,0 +1,6 @@
+<?php $px->site()->set_page_info(null, array("layout"=>"naked")); ?>
+<?php print $px->mk_link('/'); ?>
+<?php print $px->mk_link('/', '<link0>'); ?>
+<?php print $px->mk_link('/', array("label"=>"<link1>")); ?>
+<?php print $px->mk_link('/', array("label"=>"<link2>","no_escape"=>true)); ?>
+<?php print $px->mk_link('/', array("label"=>"<link3>","no_escape"=>false)); ?>

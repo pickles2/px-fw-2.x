@@ -824,7 +824,7 @@ class pickles{
 	 *   <dt>bool $options['current']</dt>
 	 *     <dd><code>true</code> または <code>false</code> を指定します。<code>class="current"</code> を強制的に付加または削除します。このオプションが指定されない場合は、自動的に選択されます。</dd>
 	 *   <dt>bool $options['no_escape']</dt>
-	 *     <dd><code>true</code> または <code>false</code> を指定します。この値が <code>true</code> の場合、リンクラベルに含まれるHTML特殊文字が自動的にエスケープされます。デフォルトは、<code>true</code>、<code>$options['label']</code>が指定された場合は自動的に <code>false</code> になります。</dd>
+	 *     <dd><code>true</code> または <code>false</code> を指定します。この値が <code>false</code> の場合、リンクラベルに含まれるHTML特殊文字が自動的にエスケープされます。デフォルトは、<code>false</code>、<code>$options['label']</code>が指定された場合は自動的に <code>true</code> になります。</dd>
 	 *   <dt>mixed $options['class']</dt>
 	 *     <dd>スタイルシートの クラス名 を文字列または配列で指定します。</dd>
 	 * </dl>
