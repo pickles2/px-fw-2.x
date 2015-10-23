@@ -82,7 +82,7 @@ class pickles{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.14-alpha+nb';
+		return '2.0.14';
 	}
 
 	/**
@@ -220,7 +220,8 @@ class pickles{
 
 		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			$this->set_status(403);// 403 Forbidden
-			$this->bowl()->send('<p>ignore path</p>');
+			print 'ignored path';
+			exit;
 		}else{
 			self::exec_content( $this );
 		}

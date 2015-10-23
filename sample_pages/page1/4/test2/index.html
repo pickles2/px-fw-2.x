@@ -1,12 +1,17 @@
 <!doctype html>
 <html>
 	<head>
+		<meta charset="UTF-8" />
 		<title>test2</title>
 	</head>
 	<body>
 <p>test2/index.html</p>
 
-<?= htmlspecialchars('<php_output>'); ?>
+<p>このコンテンツは、<code>direct</code> 指定されたパスにあります。</p>
+<p><code>direct</code> 指定されたHTMLでは、PHPのコードは処理されません。</p>
+<?= htmlspecialchars('<!-- php_output -->'); ?>
 
+<hr />
+<p><a href="sample.php">sample.php</a></p>
 	</body>
 </html>
