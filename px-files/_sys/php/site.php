@@ -882,7 +882,11 @@ INSERT INTO sitemap(
 
 
 	/**
-	 * 特定ページの role を取得する
+	 * role を取得する
+	 *
+	 * ページ `$path` の role ページを探し、ページIDを返します。
+	 * roleページが更にroleを持つ場合、再帰的に検索します。
+	 *
 	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return string role の ページID
 	 */
@@ -910,7 +914,12 @@ INSERT INTO sitemap(
 	}
 
 	/**
-	 * 特定ページの Actor のページID一覧を取得する
+	 * Actor のページID一覧を取得する
+	 *
+	 * ページ `$path` を role として持つページ(=Actor)のページIDの一覧を取得して返します。
+	 * この一覧に、`$path` 自身は含まれません。
+	 * Actor がない場合、空の配列が返されます。
+	 *
 	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @return array Actor のページIDを格納する配列
 	 */
