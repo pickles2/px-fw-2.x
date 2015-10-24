@@ -153,6 +153,7 @@ CREATE TABLE sitemap(
 	id             TEXT UNIQUE,
 	path           TEXT UNIQUE,
 	parent_page_id TEXT,
+	role         TEXT,
 	orderby        INTEGER,
 	list_flg       INTEGER
 );
@@ -216,7 +217,7 @@ CREATE TABLE sitemap(
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
 				}
-				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , $tmp_array['path'] ) ){
+				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
 					// 不正な形式のチェック
 					continue;
 				}
@@ -325,12 +326,14 @@ INSERT INTO sitemap(
 	id,
 	path,
 	parent_page_id,
+	role,
 	orderby,
 	list_flg
 )VALUES(
 	:id,
 	:path,
 	:parent_page_id,
+	:role,
 	:orderby,
 	:list_flg
 );
@@ -347,12 +350,15 @@ INSERT INTO sitemap(
 					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
 					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
 				}
+
+				// var_dump($role_id);
 				$sth->execute(array(
-					':id'=>$tmp_page_info['id'],
-					':path'=>$tmp_page_info['path'],
+					':id'=>@$tmp_page_info['id'],
+					':path'=>@$tmp_page_info['path'],
 					':parent_page_id'=>$parent_page_id,
-					':orderby'=>$tmp_page_info['orderby'],
-					':list_flg'=>$tmp_page_info['list_flg'],
+					':role'=>@$this->get_role($tmp_page_info['id']),
+					':orderby'=>@$tmp_page_info['orderby'],
+					':list_flg'=>@$tmp_page_info['list_flg'],
 				));
 			}else{
 				$this->get_children( $tmp_path );
@@ -606,16 +612,25 @@ INSERT INTO sitemap(
 		}
 
 		$rtn = @$this->sitemap_array[$path];
+		if( @strlen( $rtn['role'] ) ){
+			// $args[0] = $rtn['role'];
+			$tmp_rtn = $this->get_page_info( $this->get_role( $rtn['id'] ) );
+			$tmp_rtn['id'] = $rtn['id'];
+			$tmp_rtn['path'] = $rtn['path'];
+			$tmp_rtn['content'] = $rtn['content'];
+			$tmp_rtn['role'] = $rtn['role'];
+			$rtn = $tmp_rtn;
+		}
 		if( !is_array($rtn) ){ return null; }
 		if( !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
 		if( count($args) >= 2 ){
-			$rtn = $rtn[$args[1]];
+			$rtn = @$rtn[$args[1]];
 		}
 		return $rtn;
-	}
+	}// get_page_info()
 
 	/**
 	 * ページ情報をセットする。
@@ -740,8 +755,13 @@ INSERT INTO sitemap(
 	 * @return string `$path` に対応するページID
 	 */
 	public function get_page_id_by_path( $path ){
-		$page_info = $this->get_page_info($path);
-		return $page_info['id'];
+		if( !@is_null($this->sitemap_array[$path]) ){
+			return $this->sitemap_array[$path]['id'];
+		}
+		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
+			return $this->sitemap_array[$this->sitemap_id_map[$path]]['id'];
+		}
+		return null;
 	}
 
 	/**
@@ -751,8 +771,13 @@ INSERT INTO sitemap(
 	 * @return string `$page_id` に対応するパス
 	 */
 	public function get_page_path_by_id( $page_id ){
-		$page_info = $this->get_page_info($page_id);
-		return $page_info['path'];
+		if( !@is_null($this->sitemap_array[$path]) ){
+			return $this->sitemap_array[$path]['path'];
+		}
+		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
+			return $this->sitemap_array[$this->sitemap_id_map[$path]]['path'];
+		}
+		return null;
 	}
 
 
@@ -855,6 +880,83 @@ INSERT INTO sitemap(
 		return $path;
 	}//bind_dynamic_path_param()
 
+
+	/**
+	 * role を取得する
+	 *
+	 * ページ `$path` の role ページを探し、ページIDを返します。
+	 * roleページが更にroleを持つ場合、再帰的に検索します。
+	 *
+	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
+	 * @return string role の ページID
+	 */
+	public function get_role( $path = null ){
+		if( is_null( $path ) ){
+			$path = $this->px->req()->get_request_file_path();
+		}
+		$id = $this->get_page_id_by_path( $path );
+		$page_info = @$this->sitemap_array[$this->sitemap_id_map[$id]];
+
+		if( !@strlen($page_info['role']) ){
+			return null;
+		}
+
+		$rtn = $this->get_page_id_by_path( @$page_info['role'] );
+		for($i=0; $i<20; $i++){
+			if(!@strlen( $this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] )){
+				break;
+			}
+			$rtn = $this->get_page_id_by_path( @$this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] );
+			break;
+		}
+
+		return $rtn;
+	}
+
+	/**
+	 * Actor のページID一覧を取得する
+	 *
+	 * ページ `$path` を role として持つページ(=Actor)のページIDの一覧を取得して返します。
+	 * この一覧に、`$path` 自身は含まれません。
+	 * Actor がない場合、空の配列が返されます。
+	 *
+	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
+	 * @return array Actor のページIDを格納する配列
+	 */
+	public function get_actors( $path = null ){
+		if( is_null( $path ) ){
+			$path = $this->px->req()->get_request_file_path();
+		}
+		$page_info = $this->get_page_info( $path );
+		$rtn = array();
+
+		if( $this->pdo !== false ){
+			// PDO+SQLiteの処理
+			// INSERT文をストア
+			$sth = $this->pdo->prepare(
+				'SELECT * FROM sitemap WHERE id != \'\' AND role = :role ;'
+			);
+			$sth->execute(array(
+				':role'=>$page_info['id'],
+			));
+			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
+			foreach( $results as $row ){
+				array_push($rtn, $row['id']);
+			}
+
+		}else{
+			// 非PDO+SQLiteの処理
+			foreach( $this->get_sitemap() as $row ){
+				if( !@strlen($row['role']) ){continue;}
+				if( $page_info['id'] == $this->get_role($row['id']) ){
+					array_push($rtn, $row['id']);
+				}
+			}
+		}
+
+		return $rtn;
+	}
+
 	/**
 	 * 子階層のページの一覧を取得する。
 	 *
@@ -914,30 +1016,24 @@ INSERT INTO sitemap(
 		$tmp_children_orderby_listed_manual = array();
 		$tmp_children_orderby_listed_auto = array();
 
-		// $current_layer = '';
-		// if( strlen( trim($page_info['id']) ) ){
-		// 	$tmp_breadcrumb = explode( '>', $page_info['logical_path'].'>'.$page_info['id'] );
-		// 	foreach( $tmp_breadcrumb as $tmp_path ){
-		// 		if( !strlen($tmp_path) ){continue;}
-		// 		$tmp_page_info = $this->get_page_info( trim($tmp_path) );
-		// 		$current_layer .= '>'.$tmp_page_info['id'];
-		// 	}
-		// }
-		// unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
-
 
 		if( $this->pdo !== false ){
 			// PDO+SQLiteの処理
 			// INSERT文をストア
+			$tmpWhere = 'parent_page_id = '.json_encode($page_info['id']);
+			$actors = $this->get_actors( $page_info['id'] );
+			foreach( $actors as $actor ){
+				$tmpWhere .= ' OR parent_page_id = '.json_encode($actor);
+			}
 			$sth = $this->pdo->prepare(
-				'SELECT * FROM sitemap WHERE id != \'\' AND parent_page_id = :parent_page_id ;'
+				'SELECT * FROM sitemap WHERE id != \'\' AND ('.$tmpWhere.') ;'
 			);
-			$sth->execute(array(
-				':parent_page_id'=>$page_info['id'],
-			));
+			$sth->execute(array());
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 			// var_dump($results);
 			foreach( $results as $row ){
+				if(@strlen($row['role'])){continue;}//役者はリストされない。
+
 				if(@strlen($row['orderby'])){
 					array_push( $tmp_children_orderby_manual , $row['id'] );
 				}else{
@@ -954,26 +1050,33 @@ INSERT INTO sitemap(
 
 		}else{
 			// 非PDO+SQLiteの処理
+			$actors = $this->get_actors( $page_info['id'] );
+
 			foreach( $this->get_sitemap() as $row ){
-				if( !strlen($row['id']) ){
+				if(@strlen($row['role'])){continue;}//役者はリストされない。
+
+				if( !strlen( trim($row['id']) ) ){
 					continue;
 				}
-				// if($filter){
-				// 	if( !$row['list_flg'] ){
-				// 		continue;
-				// 	}
-				// }
 
 				// $target_layer = '';
 				$parent_page_id = '';
-				if( strlen( trim($row['id']) ) ){
-					$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
-					$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
-					$parent_page_id = trim($tmp_page_info['id']);
+				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
+				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
+				$parent_page_id = trim($tmp_page_info['id']);
+				$parent_page_role = $this->get_role($parent_page_id);
+				if( !is_null($parent_page_role) ){
+					$parent_page_id = $parent_page_role;
 				}
 				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
 
+				if( $page_info['id'] != $parent_page_id && array_search( $parent_page_id, $actors ) === false ){
+					continue;
+				}
+
 				if( $page_info['id'] == $parent_page_id ){
+					if(@strlen($row['role'])){continue;}//役者はリストされない。
+
 					if(@strlen($row['orderby'])){
 						array_push( $tmp_children_orderby_manual , $row['id'] );
 					}else{
@@ -1298,6 +1401,13 @@ INSERT INTO sitemap(
 		if( is_null($path) ){
 			$path = $this->px->req()->get_request_file_path();
 		}
+		for($i=0; $i<20; $i ++){
+			if(strlen($this->get_page_info($path,'role'))){
+				$path = $this->get_page_info($this->get_page_info($path,'role'),'path');
+				continue;
+			}
+			break;
+		}
 		$breadcrumb = $this->get_breadcrumb_array($path);
 		$current_page_id = $this->get_page_id_by_path($path);
 		$target_page_id = $this->get_page_id_by_path($page_path);
@@ -1305,7 +1415,15 @@ INSERT INTO sitemap(
 			return true;
 		}
 		foreach( $breadcrumb as $row ){
-			if( $target_page_id == $this->get_page_id_by_path($row) ){
+			$row_id = $this->get_page_id_by_path($row);
+			for($i=0; $i<20; $i ++){
+				if(strlen($this->get_page_info($row_id,'role'))){
+					$row_id = $this->get_page_info($this->get_page_info($row_id,'role'),'id');
+					continue;
+				}
+				break;
+			}
+			if( $target_page_id == $row_id ){
 				return true;
 			}
 		}
