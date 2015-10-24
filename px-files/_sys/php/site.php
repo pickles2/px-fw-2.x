@@ -351,12 +351,12 @@ INSERT INTO sitemap(
 					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
 				}
 				$sth->execute(array(
-					':id'=>$tmp_page_info['id'],
-					':path'=>$tmp_page_info['path'],
+					':id'=>@$tmp_page_info['id'],
+					':path'=>@$tmp_page_info['path'],
 					':parent_page_id'=>$parent_page_id,
-					':role'=>$tmp_page_info['role'],
-					':orderby'=>$tmp_page_info['orderby'],
-					':list_flg'=>$tmp_page_info['list_flg'],
+					':role'=>@$tmp_page_info['role'],
+					':orderby'=>@$tmp_page_info['orderby'],
+					':list_flg'=>@$tmp_page_info['list_flg'],
 				));
 			}else{
 				$this->get_children( $tmp_path );
@@ -625,7 +625,7 @@ INSERT INTO sitemap(
 		if( !strlen( @$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
 		if( count($args) >= 2 ){
-			$rtn = $rtn[$args[1]];
+			$rtn = @$rtn[$args[1]];
 		}
 		return $rtn;
 	}// get_page_info()

@@ -60,6 +60,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 			'/applock/lock.html' ,
 		] );
 		clearstatcache();
+		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/applock/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/applock/testAppLock.lock.txt' ) );
