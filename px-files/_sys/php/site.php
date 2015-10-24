@@ -947,7 +947,7 @@ INSERT INTO sitemap(
 		}else{
 			// 非PDO+SQLiteの処理
 			foreach( $this->get_sitemap() as $row ){
-
+				if( !@strlen($row['role']) ){continue;}
 				if( $page_info['id'] == $this->get_role($row['id']) ){
 					array_push($rtn, $row['id']);
 				}
@@ -1020,12 +1020,15 @@ INSERT INTO sitemap(
 		if( $this->pdo !== false ){
 			// PDO+SQLiteの処理
 			// INSERT文をストア
+			$tmpWhere = 'parent_page_id = '.json_encode($page_info['id']);
+			$actors = $this->get_actors( $page_info['id'] );
+			foreach( $actors as $actor ){
+				$tmpWhere .= ' OR parent_page_id = '.json_encode($actor);
+			}
 			$sth = $this->pdo->prepare(
-				'SELECT * FROM sitemap WHERE id != \'\' AND parent_page_id = :parent_page_id ;'
+				'SELECT * FROM sitemap WHERE id != \'\' AND ('.$tmpWhere.') ;'
 			);
-			$sth->execute(array(
-				':parent_page_id'=>$page_info['id'],
-			));
+			$sth->execute(array());
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 			// var_dump($results);
 			foreach( $results as $row ){
@@ -1047,26 +1050,29 @@ INSERT INTO sitemap(
 
 		}else{
 			// 非PDO+SQLiteの処理
+			$actors = $this->get_actors( $page_info['id'] );
+
 			foreach( $this->get_sitemap() as $row ){
 				if(@strlen($row['role'])){continue;}//役者はリストされない。
 
-				if( !strlen($row['id']) ){
+				if( !strlen( trim($row['id']) ) ){
 					continue;
 				}
-				// if($filter){
-				// 	if( !$row['list_flg'] ){
-				// 		continue;
-				// 	}
-				// }
 
 				// $target_layer = '';
 				$parent_page_id = '';
-				if( strlen( trim($row['id']) ) ){
-					$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
-					$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
-					$parent_page_id = trim($tmp_page_info['id']);
+				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
+				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
+				$parent_page_id = trim($tmp_page_info['id']);
+				$parent_page_role = $this->get_role($parent_page_id);
+				if( !is_null($parent_page_role) ){
+					$parent_page_id = $parent_page_role;
 				}
 				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
+
+				if( $page_info['id'] != $parent_page_id && array_search( $parent_page_id, $actors ) === false ){
+					continue;
+				}
 
 				if( $page_info['id'] == $parent_page_id ){
 					if(@strlen($row['role'])){continue;}//役者はリストされない。
