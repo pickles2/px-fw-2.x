@@ -153,6 +153,7 @@ CREATE TABLE sitemap(
 	id             TEXT UNIQUE,
 	path           TEXT UNIQUE,
 	parent_page_id TEXT,
+	role         TEXT,
 	orderby        INTEGER,
 	list_flg       INTEGER
 );
@@ -216,7 +217,7 @@ CREATE TABLE sitemap(
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
 				}
-				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , $tmp_array['path'] ) ){
+				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
 					// 不正な形式のチェック
 					continue;
 				}
@@ -325,12 +326,14 @@ INSERT INTO sitemap(
 	id,
 	path,
 	parent_page_id,
+	role,
 	orderby,
 	list_flg
 )VALUES(
 	:id,
 	:path,
 	:parent_page_id,
+	:role,
 	:orderby,
 	:list_flg
 );
@@ -351,6 +354,7 @@ INSERT INTO sitemap(
 					':id'=>$tmp_page_info['id'],
 					':path'=>$tmp_page_info['path'],
 					':parent_page_id'=>$parent_page_id,
+					':role'=>$tmp_page_info['role'],
 					':orderby'=>$tmp_page_info['orderby'],
 					':list_flg'=>$tmp_page_info['list_flg'],
 				));
@@ -606,6 +610,15 @@ INSERT INTO sitemap(
 		}
 
 		$rtn = @$this->sitemap_array[$path];
+		if( !is_null( @$this->sitemap_array[$rtn['role']] ) ){
+			// $args[0] = $rtn['role'];
+			$tmp_rtn = call_user_func_array( array($this, 'get_page_info'), array($rtn['role']) );
+			$tmp_rtn['id'] = $rtn['id'];
+			$tmp_rtn['path'] = $rtn['path'];
+			$tmp_rtn['content'] = $rtn['content'];
+			$tmp_rtn['role'] = $rtn['role'];
+			$rtn = $tmp_rtn;
+		}
 		if( !is_array($rtn) ){ return null; }
 		if( !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
 		if( !strlen( @$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
@@ -615,7 +628,7 @@ INSERT INTO sitemap(
 			$rtn = $rtn[$args[1]];
 		}
 		return $rtn;
-	}
+	}// get_page_info()
 
 	/**
 	 * ページ情報をセットする。
@@ -938,6 +951,8 @@ INSERT INTO sitemap(
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 			// var_dump($results);
 			foreach( $results as $row ){
+				if(@strlen($row['role'])){continue;}//役者はリストされない。
+
 				if(@strlen($row['orderby'])){
 					array_push( $tmp_children_orderby_manual , $row['id'] );
 				}else{
@@ -955,6 +970,8 @@ INSERT INTO sitemap(
 		}else{
 			// 非PDO+SQLiteの処理
 			foreach( $this->get_sitemap() as $row ){
+				if(@strlen($row['role'])){continue;}//役者はリストされない。
+
 				if( !strlen($row['id']) ){
 					continue;
 				}
@@ -974,6 +991,8 @@ INSERT INTO sitemap(
 				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
 
 				if( $page_info['id'] == $parent_page_id ){
+					if(@strlen($row['role'])){continue;}//役者はリストされない。
+
 					if(@strlen($row['orderby'])){
 						array_push( $tmp_children_orderby_manual , $row['id'] );
 					}else{
@@ -1298,6 +1317,13 @@ INSERT INTO sitemap(
 		if( is_null($path) ){
 			$path = $this->px->req()->get_request_file_path();
 		}
+		for($i=0; $i<20; $i ++){
+			if(strlen($this->get_page_info($path,'role'))){
+				$path = $this->get_page_info($this->get_page_info($path,'role'),'path');
+				continue;
+			}
+			break;
+		}
 		$breadcrumb = $this->get_breadcrumb_array($path);
 		$current_page_id = $this->get_page_id_by_path($path);
 		$target_page_id = $this->get_page_id_by_path($page_path);
@@ -1305,7 +1331,15 @@ INSERT INTO sitemap(
 			return true;
 		}
 		foreach( $breadcrumb as $row ){
-			if( $target_page_id == $this->get_page_id_by_path($row) ){
+			$row_id = $this->get_page_id_by_path($row);
+			for($i=0; $i<20; $i ++){
+				if(strlen($this->get_page_info($row_id,'role'))){
+					$row_id = $this->get_page_info($this->get_page_info($row_id,'role'),'id');
+					continue;
+				}
+				break;
+			}
+			if( $target_page_id == $row_id ){
 				return true;
 			}
 		}
