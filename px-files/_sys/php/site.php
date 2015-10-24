@@ -350,11 +350,13 @@ INSERT INTO sitemap(
 					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
 					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
 				}
+
+				// var_dump($role_id);
 				$sth->execute(array(
 					':id'=>@$tmp_page_info['id'],
 					':path'=>@$tmp_page_info['path'],
 					':parent_page_id'=>$parent_page_id,
-					':role'=>@$tmp_page_info['role'],
+					':role'=>@$this->get_role($tmp_page_info['id']),
 					':orderby'=>@$tmp_page_info['orderby'],
 					':list_flg'=>@$tmp_page_info['list_flg'],
 				));
@@ -610,9 +612,9 @@ INSERT INTO sitemap(
 		}
 
 		$rtn = @$this->sitemap_array[$path];
-		if( !is_null( @$this->sitemap_array[$rtn['role']] ) ){
+		if( @strlen( $rtn['role'] ) ){
 			// $args[0] = $rtn['role'];
-			$tmp_rtn = call_user_func_array( array($this, 'get_page_info'), array($rtn['role']) );
+			$tmp_rtn = $this->get_page_info( $this->get_role( $rtn['id'] ) );
 			$tmp_rtn['id'] = $rtn['id'];
 			$tmp_rtn['path'] = $rtn['path'];
 			$tmp_rtn['content'] = $rtn['content'];
@@ -753,8 +755,13 @@ INSERT INTO sitemap(
 	 * @return string `$path` に対応するページID
 	 */
 	public function get_page_id_by_path( $path ){
-		$page_info = $this->get_page_info($path);
-		return $page_info['id'];
+		if( !@is_null($this->sitemap_array[$path]) ){
+			return $this->sitemap_array[$path]['id'];
+		}
+		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
+			return $this->sitemap_array[$this->sitemap_id_map[$path]]['id'];
+		}
+		return null;
 	}
 
 	/**
@@ -764,8 +771,13 @@ INSERT INTO sitemap(
 	 * @return string `$page_id` に対応するパス
 	 */
 	public function get_page_path_by_id( $page_id ){
-		$page_info = $this->get_page_info($page_id);
-		return $page_info['path'];
+		if( !@is_null($this->sitemap_array[$path]) ){
+			return $this->sitemap_array[$path]['path'];
+		}
+		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
+			return $this->sitemap_array[$this->sitemap_id_map[$path]]['path'];
+		}
+		return null;
 	}
 
 
@@ -868,6 +880,74 @@ INSERT INTO sitemap(
 		return $path;
 	}//bind_dynamic_path_param()
 
+
+	/**
+	 * 特定ページの role を取得する
+	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
+	 * @return string role の ページID
+	 */
+	public function get_role( $path = null ){
+		if( is_null( $path ) ){
+			$path = $this->px->req()->get_request_file_path();
+		}
+		$id = $this->get_page_id_by_path( $path );
+		$page_info = @$this->sitemap_array[$this->sitemap_id_map[$id]];
+
+		if( !@strlen($page_info['role']) ){
+			return null;
+		}
+
+		$rtn = $this->get_page_id_by_path( @$page_info['role'] );
+		for($i=0; $i<20; $i++){
+			if(!@strlen( $this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] )){
+				break;
+			}
+			$rtn = $this->get_page_id_by_path( @$this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] );
+			break;
+		}
+
+		return $rtn;
+	}
+
+	/**
+	 * 特定ページの Actor のページID一覧を取得する
+	 * @param string $path ページのパス または ページID。省略時、カレントページから自動的に取得します。
+	 * @return array Actor のページIDを格納する配列
+	 */
+	public function get_actors( $path = null ){
+		if( is_null( $path ) ){
+			$path = $this->px->req()->get_request_file_path();
+		}
+		$page_info = $this->get_page_info( $path );
+		$rtn = array();
+
+		if( $this->pdo !== false ){
+			// PDO+SQLiteの処理
+			// INSERT文をストア
+			$sth = $this->pdo->prepare(
+				'SELECT * FROM sitemap WHERE id != \'\' AND role = :role ;'
+			);
+			$sth->execute(array(
+				':role'=>$page_info['id'],
+			));
+			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
+			foreach( $results as $row ){
+				array_push($rtn, $row['id']);
+			}
+
+		}else{
+			// 非PDO+SQLiteの処理
+			foreach( $this->get_sitemap() as $row ){
+
+				if( $page_info['id'] == $this->get_role($row['id']) ){
+					array_push($rtn, $row['id']);
+				}
+			}
+		}
+
+		return $rtn;
+	}
+
 	/**
 	 * 子階層のページの一覧を取得する。
 	 *
@@ -926,17 +1006,6 @@ INSERT INTO sitemap(
 		$tmp_children_orderby_auto = array();
 		$tmp_children_orderby_listed_manual = array();
 		$tmp_children_orderby_listed_auto = array();
-
-		// $current_layer = '';
-		// if( strlen( trim($page_info['id']) ) ){
-		// 	$tmp_breadcrumb = explode( '>', $page_info['logical_path'].'>'.$page_info['id'] );
-		// 	foreach( $tmp_breadcrumb as $tmp_path ){
-		// 		if( !strlen($tmp_path) ){continue;}
-		// 		$tmp_page_info = $this->get_page_info( trim($tmp_path) );
-		// 		$current_layer .= '>'.$tmp_page_info['id'];
-		// 	}
-		// }
-		// unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
 
 
 		if( $this->pdo !== false ){
