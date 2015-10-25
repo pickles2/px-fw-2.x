@@ -12,19 +12,19 @@
     <tr>
       <th>master</th>
       <td align="center">
-        <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=master"></a>
+        <a href="https://travis-ci.org/pickles2/px-fw-2.x"><img src="https://secure.travis-ci.org/pickles2/px-fw-2.x.svg?branch=master"></a>
       </td>
       <td align="center">
-        <a href="https://ci.appveyor.com/project/tomk79/pxfw-2-x"><img src="https://ci.appveyor.com/api/projects/status/1c0h0ubfype38xnn/branch/master?svg=true"></a>
+        <a href="https://ci.appveyor.com/project/tomk79/px-fw-2-x"><img src="https://ci.appveyor.com/api/projects/status/bq8v3bgfrhbvr6rv/branch/master?svg=true"></a>
       </td>
     </tr>
     <tr>
       <th>develop</th>
       <td align="center">
-        <a href="https://travis-ci.org/tomk79/PxFW-2.x"><img src="https://secure.travis-ci.org/tomk79/PxFW-2.x.svg?branch=develop"></a>
+        <a href="https://travis-ci.org/pickles2/px-fw-2.x"><img src="https://secure.travis-ci.org/pickles2/px-fw-2.x.svg?branch=develop"></a>
       </td>
       <td align="center">
-        <a href="https://ci.appveyor.com/project/tomk79/pxfw-2-x"><img src="https://ci.appveyor.com/api/projects/status/1c0h0ubfype38xnn/branch/develop?svg=true"></a>
+        <a href="https://ci.appveyor.com/project/tomk79/px-fw-2-x"><img src="https://ci.appveyor.com/api/projects/status/bq8v3bgfrhbvr6rv/branch/develop?svg=true"></a>
       </td>
     </tr>
   </tbody>
@@ -34,7 +34,7 @@
 Pickles Framework(PxFW) は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。<br />
 データベース不要、PHPが動くサーバーに手軽に導入でき、プロトタイプ制作を中心に進めるような柔軟な制作スタイルを実現します。
 
-PxFW-2.x は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
+Pickles2 は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
 主な改善点は次の通りです。
 
 - `composer` からインストールできるようになりました。
@@ -47,11 +47,11 @@ PxFW-2.x は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
 ## インストール手順 - Install
 
 
-Pickles Framework 2.x はラッパーである [Pickles 2](https://github.com/tomk79/pickles2) からの利用をおすすめします。
+Pickles Framework 2.x はラッパーである [Pickles 2](https://github.com/pickles2/pickles2) からの利用をおすすめします。
 
 ```
 $ cd {$documentRoot}
-$ composer create-project tomk79/pickles2 ./ dev-master
+$ composer create-project pickles2/pickles2 ./ dev-master
 ```
 
 `.px_execute.php` の置かれたディレクトリがドキュメントルートになるよう、ウェブサーバーを設定してください。
