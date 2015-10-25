@@ -63,7 +63,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->{"/dynamicPath/{*}"}->title, 'Dynamic Path' );
 		$this->assertNull( $output->{"alias21:/sample_pages/page2/index.html"}->content );
 		$this->assertEquals( $output->{"alias21:/sample_pages/page2/index.html"}->title, 'サンプルページ2へのエイリアス' );
-		$this->assertEquals( $output->{"/sample_pages/help/index.html"}->id, ':auto_page_id.29' );
+		$this->assertEquals( $output->{"/sample_pages/help/index.html"}->id, 'help' );
 
 		// -------------------
 		// api.get.page_info
@@ -165,6 +165,53 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.22' );
 
+		// actor機能に関連する get_parent() のテスト
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page3/2-child.html?PX=api.get.parent' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'role-page' );
+
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page3/2-actor2-child.html?PX=api.get.parent' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'actor2' );
+
+
+		// -------------------
+		// api.get.actors
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page3/2.html?PX=api.get.actors' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, array('actor1','actor2') );
+
+
+		// -------------------
+		// api.get.role
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page3/2-actor1.html?PX=api.get.role' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'role-page' );
+
 
 		// -------------------
 		// api.get.children
@@ -203,6 +250,17 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output[0], 'Bros3-2' );
 		$this->assertEquals( $output[4], 'Bros3-6' );
 		$this->assertEquals( count($output), 5 );
+
+		// actor機能に関連する get_children() のテスト
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page3/2.html?PX=api.get.children' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, array('role-page-child', 'actor2-child') );
 
 
 		// -------------------

@@ -33,7 +33,7 @@ class api{
 
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
@@ -89,9 +89,9 @@ class api{
 
 	/**
 	 * ホームページを表示する。
-	 * 
+	 *
 	 * HTMLを標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 * 
+	 *
 	 * @return void
 	 */
 	private function homepage(){
@@ -101,9 +101,9 @@ class api{
 
 	/**
 	 * エラーメッセージを表示する。
-	 * 
+	 *
 	 * HTMLを標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 * 
+	 *
 	 * @return void
 	 */
 	private function error(){
@@ -136,9 +136,9 @@ class api{
 
 	// /**
 	//  * [API] api.dlfile.config
-	//  * 
+	//  *
 	//  * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	//  * 
+	//  *
 	//  * @return void
 	//  */
 	// private function api_dlfile(){
@@ -166,9 +166,9 @@ class api{
 
 	// /**
 	//  * [API] api.ulfile.*
-	//  * 
+	//  *
 	//  * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	//  * 
+	//  *
 	//  * @return void
 	//  */
 	// private function api_ulfile(){
@@ -200,9 +200,9 @@ class api{
 
 	// /**
 	//  * [API] api.ls.config
-	//  * 
+	//  *
 	//  * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	//  * 
+	//  *
 	//  * @return void
 	//  */
 	// private function api_ls(){
@@ -281,9 +281,9 @@ class api{
 
 	// /**
 	//  * [API] api.delete.*
-	//  * 
+	//  *
 	//  * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	//  * 
+	//  *
 	//  * @return void
 	//  */
 	// private function api_delete(){
@@ -329,9 +329,9 @@ class api{
 
 	// /**
 	//  * ダウン・アップロードファイルのパスを得る。
-	//  * 
+	//  *
 	//  * api.ulfile, api.dlfile が使用します。
-	//  * 
+	//  *
 	//  * @return string|null パラメータ `path` が示すファイルの絶対パス。`path` が不正な形式の場合には `null` を返します。
 	//  */
 	// private function get_target_file_path(){
@@ -375,21 +375,25 @@ class api{
 
 	/**
 	 * [API] api.get.*
-	 * 
+	 *
 	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 * 
+	 *
 	 * <dl>
 	 * 	<dt>PX=api.get.version</dt>
 	 * 		<dd>Pickles Framework のバージョン番号を取得します。</dd>
 	 * 	<dt>PX=api.get.config</dt>
 	 * 		<dd>設定オブジェクトを取得します。</dd>
-	 * 
+	 *
 	 * 	<dt>PX=api.get.sitemap</dt>
 	 * 		<dd>サイトマップ全体の配列を取得します。</dd>
 	 * 	<dt>PX=api.get.page_info&path={$path}</dt>
 	 * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.parent</dt>
 	 * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.actors</dt>
+	 * 		<dd><code>$px->site()->get_actors()</code> の返却値を取得します。</dd>
+	 * 	<dt>PX=api.get.role</dt>
+	 * 		<dd><code>$px->site()->get_role()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.children&filter={$filter}</dt>
 	 * 		<dd><code>$px->site()->get_children()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.bros&filter={$filter}</dt>
@@ -408,7 +412,7 @@ class api{
 	 * 		<dd><code>$px->site()->get_dynamic_path_info({$path})</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.bind_dynamic_path_param&path={$path}&param={$param}</dt>
 	 * 		<dd><code>$px->site()->bind_dynamic_path_param({$path}, {$param})</code> の返却値を取得します。<code>{$param}</code> には、パラメータのキーと値の組を必要分格納したオブジェクトをJSON形式の文字列で指定します。</dd>
-	 * 
+	 *
 	 * 	<dt>PX=api.get.path_homedir</dt>
 	 * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
 	 * 	<dt>PX=api.get.path_controot</dt>
@@ -438,7 +442,7 @@ class api{
 	 * 	<dt>PX=api.get.href&linkto={$path_linkto}</dt>
 	 * 		<dd><code>$px->href({$path_linkto})</code> の返却値を取得します。</dd>
 	 * </dl>
-	 * 
+	 *
 	 * @return void
 	 */
 	private function api_get(){
@@ -479,6 +483,14 @@ class api{
 				break;
 			case 'parent':
 				$val = $this->px->site()->get_parent();
+				print $this->data_convert( $val );
+				break;
+			case 'actors':
+				$val = $this->px->site()->get_actors();
+				print $this->data_convert( $val );
+				break;
+			case 'role':
+				$val = $this->px->site()->get_role();
 				print $this->data_convert( $val );
 				break;
 			case 'children':
@@ -585,9 +597,9 @@ class api{
 
 	/**
 	 * [API] api.is.*
-	 * 
+	 *
 	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 * 
+	 *
 	 * <dl>
 	 * 	<dt>PX=api.is.match_dynamic_path&path={$path}</dt>
 	 * 		<dd><code>$px->site()->is_match_dynamic_path({$path})</code> の返却値を取得します。</dd>
@@ -596,7 +608,7 @@ class api{
 	 * 	<dt>PX=api.is.ignore_path&path={$path}</dt>
 	 * 		<dd><code>$px->is_ignore_path({$path})</code> の返却値を取得します。</dd>
 	 * </dl>
-	 * 
+	 *
 	 * @return void
 	 */
 	private function api_is(){
@@ -622,9 +634,9 @@ class api{
 
 	// /**
 	//  * [API] api.hash
-	//  * 
+	//  *
 	//  * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	//  * 
+	//  *
 	//  * @return void
 	//  */
 	// private function api_hash(){
@@ -650,9 +662,9 @@ class api{
 	// }
 	// /**
 	//  * ディレクトリ内のファイルの一覧とそのMD5ハッシュ値を再帰的に標準出力する。
-	//  * 
+	//  *
 	//  * [API] api.hash 内で使用します。
-	//  * 
+	//  *
 	//  * @param string $base_dir ベースディレクトリのパス
 	//  * @param string $local_path ベースディレクトリ以下のパス
 	//  * @return void
@@ -678,7 +690,7 @@ class api{
 
 	/**
 	 * データを自動的に加工して返す。
-	 * 
+	 *
 	 * @param mixed $val 加工するデータ
 	 * @return string 加工されたテキストデータ
 	 */
@@ -710,7 +722,7 @@ class api{
 
 	/**
 	 * データをXMLに加工して返す。
-	 * 
+	 *
 	 * @param mixed $val 加工するデータ
 	 * @return string 加工されたテキストデータ
 	 */
@@ -720,7 +732,7 @@ class api{
 
 	/**
 	 * データをJSONに加工して返す。
-	 * 
+	 *
 	 * @param mixed $val 加工するデータ
 	 * @return string 加工されたテキストデータ
 	 */
@@ -731,7 +743,7 @@ class api{
 
 	/**
 	 * データをJSONPに加工して返す。
-	 * 
+	 *
 	 * @param mixed $val 加工するデータ
 	 * @return string 加工されたテキストデータ
 	 */
@@ -748,7 +760,7 @@ class api{
 
 	/**
 	 * 変数をXML構造に変換する
-	 * 
+	 *
 	 * @param mixed $value 値
 	 * @param array $options オプション
 	 * <dl>
