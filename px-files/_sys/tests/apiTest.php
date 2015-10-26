@@ -156,6 +156,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->title, 'サンプル3-2-actor1' );
 		$this->assertEquals( $output->title_breadcrumb, 'サンプル3-2' );
 		$this->assertEquals( $output->title_h1, 'sample3-2-actor1' );
+		$this->assertEquals( $output->logical_path, '/sample_pages/page3/' );
 
 		$output = $this->passthru( [
 			'php',
@@ -170,6 +171,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->title, 'サンプル3-2-actor2' );
 		$this->assertEquals( $output->title_breadcrumb, 'sample3-2-actor2' );
 		$this->assertEquals( $output->title_h1, 'sample3-2-actor1' );
+		$this->assertEquals( $output->logical_path, '/sample_pages/page3/' );
 
 
 		// -------------------

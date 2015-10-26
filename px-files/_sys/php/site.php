@@ -546,8 +546,9 @@ INSERT INTO sitemap(
 	 * ?&gt;</pre>
 	 *
 	 * 取得対象のページがアクター(role値が設定されている場合にアクターと判定される)だった場合、
-	 * id, path, content, role 列を除く全ての列が、roleページの情報で初期化され、
-	 * アクター側に値がある項目のみ、アクター側の値で上書きされます。
+	 * 返却値は一旦ロールページの情報で初期化され、アクター側に値がある項目のみ、アクター側の値で上書きされます。
+	 * ただし、id, path, content, role 列はアクター側の値が、
+	 * logical_path 列はロール側の値が、それぞれ強制的に採用されます。
 	 *
 	 * @param string $path 取得するページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param string $key 取り出す単一要素のキー。省略時はすべての要素を含む連想配列が返されます。省略可。
@@ -621,6 +622,10 @@ INSERT INTO sitemap(
 			$tmp_page_info_original = $rtn;
 			$rtn = $this->get_page_info( $tmp_page_info_original['role'] );
 			foreach($tmp_page_info_original as $tmpKey=>$tmpVal){
+				if($tmpKey == 'logical_path'){
+					// これらの値はrole側の値を強制採用
+					continue;
+				}
 				if(strlen($tmpVal)){
 					$rtn[$tmpKey] = $tmpVal;
 				}
