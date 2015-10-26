@@ -27,8 +27,8 @@
 "/sample_pages/page3/1.html",,,"サンプル3-1",,,,,"/sample_pages/page3/",1
 "/sample_pages/page3/2.html",,"role-page","サンプル3-2",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page3/2-child.html",,"role-page-child","サンプル3-2-child",,,,,"/sample_pages/page3/>/sample_pages/page3/2.html",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
-"/sample_pages/page3/2-actor1.html",,"actor1","サンプル3-2-actor1",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"role-page"
-"/sample_pages/page3/2-actor2.html",,"actor2","サンプル3-2-actor2",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"/sample_pages/page3/2-actor1.html"
+"/sample_pages/page3/2-actor1.html",,"actor1","サンプル3-2-actor1",,"sample3-2-actor1",,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"role-page"
+"/sample_pages/page3/2-actor2.html",,"actor2","サンプル3-2-actor2","sample3-2-actor2",,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"/sample_pages/page3/2-actor1.html"
 "/sample_pages/page3/2-actor2-child.html",,"actor2-child","サンプル3-2-actor2-child",,,,,"/sample_pages/page3/>/sample_pages/page3/2-actor2.html",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page3/3.html","/templates.ignore/template.html",,"共通点コンテンツからの出力B",,,,,"/sample_pages/page3/",1
 "/sample_pages/help/",,"help","ヘルプ",,,,,,1,,,"","",

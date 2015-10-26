@@ -142,6 +142,35 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/test1/index.html' );
 
+		// actor 機能に関連するテスト
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page3/2-actor1.html') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/sample_pages/page3/2-actor1.html' );
+		$this->assertEquals( $output->title, 'サンプル3-2-actor1' );
+		$this->assertEquals( $output->title_breadcrumb, 'サンプル3-2' );
+		$this->assertEquals( $output->title_h1, 'sample3-2-actor1' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page3/2-actor2.html') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/sample_pages/page3/2-actor2.html' );
+		$this->assertEquals( $output->title, 'サンプル3-2-actor2' );
+		$this->assertEquals( $output->title_breadcrumb, 'sample3-2-actor2' );
+		$this->assertEquals( $output->title_h1, 'sample3-2-actor1' );
+
 
 		// -------------------
 		// api.get.parent
@@ -382,6 +411,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->path, '/dynamicPath/' );
 		$this->assertEquals( $output->path_original, '/dynamicPath/{*}' );
 		$this->assertEquals( $output->id, ':auto_page_id.11' );
+
 
 		// -------------------
 		// api.get.bind_dynamic_path_param

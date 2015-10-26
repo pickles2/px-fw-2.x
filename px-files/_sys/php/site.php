@@ -545,6 +545,10 @@ INSERT INTO sitemap(
 	 * var_dump( $page_info );
 	 * ?&gt;</pre>
 	 *
+	 * 取得対象のページがアクター(role値が設定されている場合にアクターと判定される)だった場合、
+	 * id, path, content, role 列を除く全ての列が、roleページの情報で初期化され、
+	 * アクター側に値がある項目のみ、アクター側の値で上書きされます。
+	 *
 	 * @param string $path 取得するページのパス または ページID。省略時、カレントページから自動的に取得します。
 	 * @param string $key 取り出す単一要素のキー。省略時はすべての要素を含む連想配列が返されます。省略可。
 	 * @return mixed 単一ページ情報を格納する連想配列、`$key` が指定された場合は、その値のみ。
@@ -614,12 +618,18 @@ INSERT INTO sitemap(
 		$rtn = @$this->sitemap_array[$path];
 		if( @strlen( $rtn['role'] ) ){
 			// $args[0] = $rtn['role'];
-			$tmp_rtn = $this->get_page_info( $this->get_role( $rtn['id'] ) );
-			$tmp_rtn['id'] = $rtn['id'];
-			$tmp_rtn['path'] = $rtn['path'];
-			$tmp_rtn['content'] = $rtn['content'];
-			$tmp_rtn['role'] = $rtn['role'];
-			$rtn = $tmp_rtn;
+			$tmp_page_info_original = $rtn;
+			$rtn = $this->get_page_info( $tmp_page_info_original['role'] );
+			foreach($tmp_page_info_original as $tmpKey=>$tmpVal){
+				if(strlen($tmpVal)){
+					$rtn[$tmpKey] = $tmpVal;
+				}
+			}
+			$rtn['id'] = $tmp_page_info_original['id'];
+			$rtn['path'] = $tmp_page_info_original['path'];
+			$rtn['content'] = $tmp_page_info_original['content'];
+			$rtn['role'] = $tmp_page_info_original['role'];
+			unset($tmp_page_info_original, $tmpKey, $tmpVal);
 		}
 		if( !is_array($rtn) ){ return null; }
 		if( !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }

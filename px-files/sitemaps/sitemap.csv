@@ -23,8 +23,8 @@
 "/sample_pages/page3/1.html",,,"サンプル3-1",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page3/2.html",,"role-page","サンプル3-2",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page3/2-child.html",,,"サンプル3-2-child",,,,,"/sample_pages/page3/>/sample_pages/page3/2.html",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
-"/sample_pages/page3/2-actor1.html",,,"サンプル3-2-actor1",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"role-page"
-"/sample_pages/page3/2-actor2.html",,,"サンプル3-2-actor2",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"/sample_pages/page3/2-actor1.html"
+"/sample_pages/page3/2-actor1.html",,,"サンプル3-2-actor1",,"サンプル3-2-actor1(h1)",,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"role-page"
+"/sample_pages/page3/2-actor2.html",,,"サンプル3-2-actor2","サンプル3-2-actor2(breadcrumb)",,"サンプル3-2-actor2(label)","サンプル3-2-actor2(full)","/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,"/sample_pages/page3/2-actor1.html"
 "/sample_pages/page3/2-actor2-child.html",,,"サンプル3-2-actor2-child",,,,,"/sample_pages/page3/>/sample_pages/page3/2-actor2.html",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page3/3.html","/sample_pages/templates.ignore/template.html",,"共通点コンテンツからの出力B",,,,,"/sample_pages/page3/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/help/",,,"ヘルプ",,,,,,1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
