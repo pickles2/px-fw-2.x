@@ -123,7 +123,6 @@ class px{
 				}
 			}
 		}
-		chdir( dirname($_SERVER['SCRIPT_FILENAME']) );
 
 		// load Config
 		$this->path_homedir = $path_homedir;

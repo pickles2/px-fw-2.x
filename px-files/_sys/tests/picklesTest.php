@@ -12,9 +12,38 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
-	 * 普通に実行してみるテスト
+	 * 普通にインスタンス化して実行してみるテスト
 	 */
 	public function testStandard(){
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/standard/');
+
+		$px = new picklesFramework2\px('./px-files/');
+		$toppage_info = $px->site()->get_page_info('');
+		// var_dump($toppage_info);
+		$this->assertEquals( $toppage_info['title'], '<HOME>' );
+		$this->assertEquals( $toppage_info['path'], '/index.html' );
+
+		chdir($cd);
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
+		] );
+
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	}
+
+	/**
+	 * 普通にコマンドラインから実行してみるテスト
+	 */
+	public function testCLIStandard(){
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
