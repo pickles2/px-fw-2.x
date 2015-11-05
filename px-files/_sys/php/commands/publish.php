@@ -683,6 +683,10 @@ function cont_EditPublishTargetPathApply(formElm){
 		$sitemap = $this->px->site()->get_sitemap();
 		foreach( $sitemap as $page_info ){
 			$href = $this->px->href( $page_info['path'] );
+			if( preg_match('/^(?:[a-zA-Z0-9]+\:)?\/\//', $href) ){
+				// プロトコル名、またはドメイン名から始まるリンク先はスキップ
+				continue;
+			}
 			$href = preg_replace( '/\/$/s', '/'.$this->px->get_directory_index_primary(), $href );
 			$href = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $href );
 			$this->add_queue( $href );
