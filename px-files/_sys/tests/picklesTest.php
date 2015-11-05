@@ -25,23 +25,25 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
 
 		chdir($cd);
+		$px->site()->__destruct();
+		$px = null;
+		unset($px);
 
 		// 後始末
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
-		] );
-
 		clearstatcache();
+		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 
 	}
 
 	/**
 	 * 普通にコマンドラインから実行してみるテスト
+	 * @depends testStandard
 	 */
 	public function testCLIStandard(){
 		$output = $this->passthru( [
@@ -75,11 +77,13 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 
 	}
 
 	/**
 	 * アプリケーションロックのテスト
+	 * @depends testCLIStandard
 	 */
 	public function testAppLock(){
 		// ロックする
@@ -129,6 +133,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	/**
 	 * $px->site()->set_page_info() を実行してみるテスト
+	 * @depends testCLIStandard
 	 */
 	public function testStandardSetPageInfo(){
 		$output = $this->passthru( [
@@ -166,6 +171,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	/**
 	 * $px->mk_link() を実行してみるテスト
+	 * @depends testCLIStandard
 	 */
 	public function testStandardMkLink(){
 		$output = $this->passthru( [
@@ -194,6 +200,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	/**
 	 * 遠いディレクトリからコマンドラインで実行してみるテスト
+	 * @depends testCLIStandard
 	 */
 	public function testStandardCmdExecByFarDirectory(){
 		$output = $this->passthru( [
@@ -249,6 +256,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	/**
 	 * コンフィグ項目をコマンドラインオプションで上書きするテスト
+	 * @depends testCLIStandard
 	 */
 	public function testOverrideConfig(){
 
@@ -310,6 +318,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 	/**
 	 * 文字コード・改行コード変換テスト
+	 * @depends testCLIStandard
 	 */
 	public function testEncodingConverter(){
 		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
@@ -394,6 +403,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * @return string コマンドの標準出力値
 	 */
 	private function passthru( $ary_command ){
+		set_time_limit(60*10);
 		$cmd = array();
 		foreach( $ary_command as $row ){
 			$param = '"'.addslashes($row).'"';
@@ -403,6 +413,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		ob_start();
 		passthru( $cmd );
 		$bin = ob_get_clean();
+		set_time_limit(30);
 		return $bin;
 	}
 

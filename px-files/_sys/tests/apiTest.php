@@ -949,6 +949,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 	 * @return string コマンドの標準出力値
 	 */
 	private function passthru( $ary_command ){
+		set_time_limit(60*10);
 		$cmd = array();
 		foreach( $ary_command as $row ){
 			$param = '"'.addslashes($row).'"';
@@ -958,6 +959,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		ob_start();
 		passthru( $cmd );
 		$bin = ob_get_clean();
+		set_time_limit(30);
 		return $bin;
 	}
 

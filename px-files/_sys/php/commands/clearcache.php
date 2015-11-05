@@ -104,16 +104,42 @@ class clearcache{
 			}
 			if( $this->px->fs()->is_dir($path.$localpath.$basename) ){
 				$count += $this->cleanup_dir( $path, $localpath.$basename.DIRECTORY_SEPARATOR );
-				$this->px->fs()->rmdir($path.$localpath.$basename);
-				print 'rmdir '.$this->px->fs()->get_realpath( $path.$localpath.$basename )."\n";
+
+				$i = 0;
+				print 'rmdir '.$this->px->fs()->get_realpath( $path.$localpath.$basename );
+				while(1){
+					$i ++;
+					if( $this->px->fs()->rmdir($path.$localpath.$basename) ){
+						break;
+					}
+					if($i > 5){
+						print ' [FAILED]';
+						break;
+					}
+					sleep(1);
+				}
+				print "\n";
 				$count ++;
+
 			}else{
 				clearstatcache();
 				if( $this->px->fs()->get_realpath($path.$localpath.$basename) == $this->path_lockfile ){
 					// パブリッシュロックファイルは消さない
 				}else{
-					$this->px->fs()->rm($path.$localpath.$basename);
-					print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename )."\n";
+					$i = 0;
+					print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename );
+					while(1){
+						$i ++;
+						if( $this->px->fs()->rm($path.$localpath.$basename) ){
+							break;
+						}
+						if($i > 5){
+							print ' [FAILED]';
+							break;
+						}
+						sleep(1);
+					}
+					print "\n";
 					$count ++;
 				}
 			}
