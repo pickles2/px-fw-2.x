@@ -55,7 +55,7 @@ class site{
 
 	/**
 	 * コンストラクタ
-	 *
+	 * 
 	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
@@ -96,6 +96,17 @@ class site{
 				break;
 			}
 		}
+	}
+
+	/**
+	 * デストラクタ
+	 * @return null
+	 */
+	public function __destruct(){
+		$this->pdo = null;
+			// Windows環境では、PDOが有効なあいだ、SQLiteのDBファイルを排他的に開いたままブロックしてしまう。
+			// これが原因で、テスト時にclearcacheがDBファイルの削除に失敗するエラーが起きていた。
+			// デストラクタで明示的にPDOを破棄することで解決。(テストスクリプトから明示的に __destruct() をコールしないと排他ロックは解除されない)
 	}
 
 	/**
