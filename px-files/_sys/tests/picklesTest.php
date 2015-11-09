@@ -1,6 +1,6 @@
 <?php
 /**
- * test for tomk79\PxFW-2.x
+ * test for pickles2/px-fw-2.x
  */
 class picklesTest extends PHPUnit_Framework_TestCase{
 	private $fs;
@@ -8,6 +8,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	public function setup(){
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
+		require_once(__DIR__.'/libs/simple_html_dom.php');
 	}
 
 
@@ -30,9 +31,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		unset($px);
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
@@ -46,33 +45,23 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * @depends testStandard
 	 */
 	public function testCLIStandard(){
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/' ,
-		] );
+		$output = $this->px_execute( '/standard/.px_execute.php', '/' );
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<h2>テストページ</h2><p>このページは /index.html です。</p>', '/').'/s', $output) );
 		$this->assertEquals( 0, preg_match('/'.preg_quote('<span id="hash_', '/').'/s', $output) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = Asia/Tokyo</p>', '/').'/s', $output) );
 
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/prevnext/.px_execute.php' ,
-			'/' ,
-		] );
+
+		$output = $this->px_execute( '/prevnext/.px_execute.php', '/' );
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = UTC</p>', '/').'/s', $output) );
 
+
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
-		] );
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$output = $this->px_execute( '/prevnext/.px_execute.php', '/?PX=clearcache' );
 
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
@@ -122,9 +111,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/applock/testAppLock.lock.txt' ) );
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
@@ -160,10 +147,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 'no_page.html', $output );
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -174,12 +158,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * @depends testCLIStandard
 	 */
 	public function testStandardMkLink(){
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/mk_link/' ,
-		] );
-		clearstatcache();
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/mk_link/'
+		);
 
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
@@ -187,10 +169,56 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+	/**
+	 * ダイナミックパスを実行してみるテスト
+	 * @depends testCLIStandard
+	 */
+	public function testStandardDynamicPath(){
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/dynamicPath/'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$html = $this->simple_html_dom_parse($output);
+		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
+
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/dynamicPath/test1.html'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$html = $this->simple_html_dom_parse($output);
+		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
+
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/dynamicPath/dummy_file_name.html'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$html = $this->simple_html_dom_parse($output);
+		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
+
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/dynamicPath---/test1.html'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$html = $this->simple_html_dom_parse($output);
+		$this->assertFalse( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class );
+
+
+		// 後始末
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -244,10 +272,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -306,10 +331,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -323,13 +345,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	public function testEncodingConverter(){
 		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
 
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/' ,
-		] );
-		clearstatcache();
-
+		$output = $this->px_execute(
+			'/encodingconverter/.px_execute.php',
+			'/'
+		);
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( preg_match( '/'.preg_quote('<meta charset="Shift_JIS" />', '/').'/s', $output ), 1 );
@@ -338,13 +357,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( @strtolower('SJIS-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
 
 
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/common/test.css' ,
-		] );
-		clearstatcache();
-
+		$output = $this->px_execute(
+			'/encodingconverter/.px_execute.php',
+			'/common/test.css'
+		);
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( preg_match( '/'.preg_quote('@charset "EUC-JP"', '/').'/s', $output ), 1 );
@@ -355,13 +371,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( @strtolower('eucJP-win'), @strtolower(mb_detect_encoding($output, $detect_order)) );
 
 
-		$output = $this->passthru( [
-			'php',
-			__DIR__.'/testData/encodingconverter/.px_execute.php' ,
-			'/common/test.js' ,
-		] );
-		clearstatcache();
-
+		$output = $this->px_execute(
+			'/encodingconverter/.px_execute.php',
+			'/common/test.js'
+		);
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertEquals( preg_match( '/\r\n/s', $output ), 0 );
@@ -373,10 +386,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
-			'php', __DIR__.'/testData/encodingconverter/.px_execute.php', '/?PX=clearcache'
-		] );
-		clearstatcache();
+		$output = $this->px_execute( '/encodingconverter/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/encodingconverter/caches/p/' ) );
 
@@ -396,6 +406,38 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		return true;
 	}
 
+
+	/**
+	 * HTMLコードを受け取り、Simple HTML DOM Parser オブジェクトを返す
+	 * @param string $src_html HTMLコード
+	 * @return object Simple HTML DOM Parser オブジェクト
+	 */
+	private function simple_html_dom_parse( $src_html ){
+		$simple_html_dom = \picklesFramework2\tests\str_get_html(
+			$src_html ,
+			true, // $lowercase
+			true, // $forceTagsClosed
+			DEFAULT_TARGET_CHARSET, // $target_charset
+			false, // $stripRN
+			DEFAULT_BR_TEXT, // $defaultBRText
+			DEFAULT_SPAN_TEXT // $defaultSpanText
+		);
+		return $simple_html_dom;
+	}
+
+	/**
+	 * `.px_execute.php` を実行し、標準出力値を返す
+	 * @param string $path_entry_script エントリースクリプトのパス(testData起点)
+	 * @param string $command コマンド(例: `/?PX=clearcache`)
+	 * @return string コマンドの標準出力値
+	 */
+	private function px_execute( $path_entry_script, $command ){
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/'.$path_entry_script, $command
+		] );
+		clearstatcache();
+		return $output;
+	}
 
 	/**
 	 * コマンドを実行し、標準出力値を返す
