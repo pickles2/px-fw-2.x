@@ -293,6 +293,9 @@ class px{
 
 	/**
 	 * get $fs
+	 *
+	 * `$fs`(class [tomk79\filesystem](tomk79.filesystem.html))のインスタンスを返します。
+	 *
 	 * @see https://github.com/tomk79/filesystem
 	 * @return object $fs オブジェクト
 	 */
@@ -302,6 +305,9 @@ class px{
 
 	/**
 	 * get $req
+	 *
+	 * `$req`(class [tomk79\request](tomk79.request.html))のインスタンスを返します。
+	 *
 	 * @see https://github.com/tomk79/request
 	 * @return object $req オブジェクト
 	 */
@@ -311,6 +317,9 @@ class px{
 
 	/**
 	 * get $site
+	 *
+	 * `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを返します。
+	 *
 	 * @return object $site オブジェクト
 	 */
 	public function site(){
@@ -327,6 +336,9 @@ class px{
 
 	/**
 	 * get $bowl
+	 *
+	 * `$bowl`(class [picklesFramework2\bowl](picklesFramework2.bowl.html))のインスタンスを返します。
+	 *
 	 * @return object $bowl オブジェクト
 	 */
 	public function bowl(){

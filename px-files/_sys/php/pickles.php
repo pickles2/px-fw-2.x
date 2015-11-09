@@ -7,6 +7,9 @@ namespace picklesFramework2;
 /**
  * pickles2 entry and controller class
  *
+ * このクラスは、Pickles2 のエントリースクリプト(通常は `.px_execute.php`)から呼び出され、インスタンス化されます。
+ * `$px` (class [picklesFramework2\px](picklesFramework2.px.html))を生成し、実行し、標準出力してスクリプトを終了するまでの一連の処理を、すべてコンストラクタの中で実行します。
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pickles{
