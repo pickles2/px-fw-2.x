@@ -55,7 +55,7 @@ class site{
 
 	/**
 	 * コンストラクタ
-	 * 
+	 *
 	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct( $px ){
@@ -781,13 +781,8 @@ INSERT INTO sitemap(
 	 * @return string `$path` に対応するページID
 	 */
 	public function get_page_id_by_path( $path ){
-		if( !@is_null($this->sitemap_array[$path]) ){
-			return $this->sitemap_array[$path]['id'];
-		}
-		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
-			return $this->sitemap_array[$this->sitemap_id_map[$path]]['id'];
-		}
-		return null;
+		$page_info = $this->get_page_info($path);
+		return $page_info['id'];
 	}
 
 	/**
@@ -797,13 +792,8 @@ INSERT INTO sitemap(
 	 * @return string `$page_id` に対応するパス
 	 */
 	public function get_page_path_by_id( $page_id ){
-		if( !@is_null($this->sitemap_array[$path]) ){
-			return $this->sitemap_array[$path]['path'];
-		}
-		if( !@is_null($this->sitemap_array[$this->sitemap_id_map[$path]]) ){
-			return $this->sitemap_array[$this->sitemap_id_map[$path]]['path'];
-		}
-		return null;
+		$page_info = $this->get_page_info($page_id);
+		return $page_info['path'];
 	}
 
 
