@@ -430,7 +430,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 			if( !empty( $this->path_publish_dir ) ){
 				// パブリッシュ先ディレクトリに都度コピー
-				if( $this->px->fs()->is_file( $this->path_publish_dir.$this->path_docroot.$path ) ){
+				if( $this->px->fs()->is_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ){
 					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$this->path_docroot.$path ) );
 					$this->px->fs()->copy(
 						$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ,

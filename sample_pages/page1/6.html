@@ -1,6 +1,7 @@
 
 <p><img src="<?= htmlspecialchars( $px->path_files('sampleimage.png') ) ?>" alt="image sample" /></p>
 
+<?php if( !$px->is_publish_tool() ){?>
 <dl>
     <dt>path_files</dt>
         <dd><?= htmlspecialchars( $px->path_files('sampleimage.png') ) ?></dd>
@@ -12,4 +13,5 @@
         <dd><?= htmlspecialchars( $px->realpath_files_cache('sampleimage.png') ) ?></dd>
     <dt>realpath_files_private_cache</dt>
         <dd><?= htmlspecialchars( $px->realpath_files_private_cache('sampleimage.png') ) ?></dd>
-</di>
+</dl>
+<?php } ?>
