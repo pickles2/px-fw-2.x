@@ -430,7 +430,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 			if( !empty( $this->path_publish_dir ) ){
 				// パブリッシュ先ディレクトリに都度コピー
-				if( $this->px->fs()->is_file( $this->path_publish_dir.$this->path_docroot.$path ) ){
+				if( $this->px->fs()->is_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ){
 					$this->px->fs()->mkdir_r( dirname( $this->path_publish_dir.$this->path_docroot.$path ) );
 					$this->px->fs()->copy(
 						$this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ,
@@ -682,6 +682,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	private function make_list_by_sitemap(){
 		$sitemap = $this->px->site()->get_sitemap();
 		foreach( $sitemap as $page_info ){
+			set_time_limit(30);
 			$href = $this->px->href( $page_info['path'] );
 			if( preg_match('/^(?:[a-zA-Z0-9]+\:)?\/\//', $href) ){
 				// プロトコル名、またはドメイン名から始まるリンク先はスキップ
@@ -715,6 +716,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		// 	return true;
 		// }
 		foreach( $ls as $basename ){
+			set_time_limit(30);
 			if( $this->px->fs()->is_dir( $realpath.$basename ) ){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{

@@ -237,6 +237,16 @@ class px{
 	}
 
 	/**
+	 * デストラクタ
+	 * @return null
+	 */
+	public function __destruct(){
+		if(is_callable(array($this->site(),'__destruct'))){
+			$this->site()->__destruct();
+		}
+	}
+
+	/**
 	 * call plugin functions
 	 *
 	 * @param mixed $func_list List of plugins function

@@ -26,8 +26,8 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
 
 		chdir($cd);
-		$px->site()->__destruct();
-		$px = null;
+		// $px->__destruct();
+		// $px = null;
 		unset($px);
 
 		// 後始末
