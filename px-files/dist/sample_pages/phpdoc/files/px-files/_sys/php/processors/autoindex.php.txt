@@ -1,0 +1,182 @@
+<?php
+/**
+ * PX Commands "autoindex"
+ */
+namespace picklesFramework2\processors\autoindex;
+
+/**
+ * PX Commands "autoindex"
+ */
+class autoindex{
+
+	/**
+	 * Picklesオブジェクト
+	 */
+	private $px;
+
+	/**
+	 * 機能別に値を記憶する領域
+	 */
+	private $func_data_memos = '\\<\\!\\-\\-\\s*autoindex\\s*\\-\\-\\>';
+
+	/**
+	 * extensions function
+	 * @param object $px Picklesオブジェクト
+	 */
+	public static function exec( $px ){
+		$autoindex = new self( $px );
+
+		//  autoindex
+		if( strlen( $autoindex->func_data_memos ) ){
+			$px->bowl()->each( array($autoindex, 'apply_autoindex') );
+		}
+
+		return true;
+	}
+
+	/**
+	 * constructor
+	 * @param object $px Picklesオブジェクト
+	 */
+	public function __construct( $px ){
+		$this->px = $px;
+	}
+
+
+	/**
+	 * ページ内の目次をソースに反映する。
+	 * 
+	 * マーク文字列 `<!-- autoindex -->` を、自動生成した目次に置き換えます。
+	 * 目次は、`<hx>` タグを検出し、自動的に生成されます。
+	 * 
+	 * マーク文字列が検出されない場合は、何も行わず処理をスキップします。
+	 * 
+	 * @param string $content 予告状態の コンテンツ HTMLソース
+	 * 
+	 * @return string 目次が反映されたHTMLソース
+	 */
+	public function apply_autoindex( $content ){
+		if( !preg_match( '/'.$this->func_data_memos.'/s', $content ) ){
+			// アンカーリンクが使われてなかったら、処理しない。
+			return $content;
+		}
+
+		$tmp_cont = $content;
+		$content = '';
+		$index = array();
+		$indexCounter = array();
+		$i = 0;
+		while( 1 ){
+			set_time_limit(60*30);
+			if( !preg_match( '/^(.*?)(<\!\-\-(?:.*?)\-\->|<script(?:\s.*?)?>(?:.*?)<\/script>|<h([2-6])(?:\s.*?)?>(.*?)<\/h\3>)(.*)$/is' , $tmp_cont , $matched ) ){
+				$content .= $tmp_cont;
+				break;
+			}
+			$i ++;
+			$tmp = array();
+			$tmp['label'] = $matched[4];
+			$tmp['label'] = strip_tags( $tmp['label'] );//ラベルからHTMLタグを除去
+			// IDに含められない文字をアンダースコアに変換;
+			$label_for_anch = $tmp['label'];
+			$label_for_anch = preg_replace('/[ #%]/', '_', $label_for_anch);
+			$label_for_anch = preg_replace('/[\[\{\<]/', '(', $label_for_anch);
+			$label_for_anch = preg_replace('/[\]\}\>]/', ')', $label_for_anch);
+			$tmp['anch'] = 'hash_'.($label_for_anch);
+			if(array_key_exists($tmp['anch'], $indexCounter) && $indexCounter[$tmp['anch']]){
+				$indexCounter[$tmp['anch']] ++;
+				$tmp['anch'] = 'hash_'.$indexCounter[$tmp['anch']].'_'.($label_for_anch);
+			}else{
+				$indexCounter[$tmp['anch']] = 1;
+			}
+
+			$tmp['headlevel'] = intval($matched[3]);
+			if( $tmp['headlevel'] ){# 引っかかったのが見出しの場合
+				array_push( $index , $tmp );
+			}
+
+			$content .= $matched[1];
+			if( $tmp['headlevel'] ){# 引っかかったのが見出しの場合
+				#$content .= $this->back2top();
+				$content .= '<span';
+				$content .= ' id="'.htmlspecialchars($tmp['anch']).'"';
+				$content .= '></span>';
+			}
+			$content .= $matched[2];
+			$tmp_cont = $matched[5];
+		}
+		set_time_limit(30);
+
+		$style_ul = 'margin:0; padding:0 0 0 2em;';
+		$style_li = 'list-style-type:disc; display:list-item;';
+
+		$anchorlinks = '';
+		$topheadlevel = 2;
+		$headlevel = $topheadlevel;
+		if( count( $index ) ){
+			$anchorlinks .= '<!-- == autoindex == -->'."\n";
+			$anchorlinks .= '<div style="margin:2em 5%; border:1px solid #bbb; padding:1em; background:rgba(124, 124, 124, 0.05); border-radius:5px;">'."\n";
+			$anchorlinks .= '<div style="margin:0; padding:0; text-align:center; font-weight:bold;">INDEX</div>';
+			foreach($index as $key=>$row){
+				$csa = $row['headlevel'] - $headlevel;
+				$nextLevel = @$index[$key+1]['headlevel'];
+				$nsa = null;
+				if( strlen( $nextLevel ) ){
+					$nsa = $nextLevel - $row['headlevel'];
+				}
+				$headlevel = $row['headlevel'];
+				if( $csa>0 ){
+					#	いま下がるとき
+					if( $key == 0 ){
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+					}
+					for( $i = $csa; $i>0; $i -- ){
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+					}
+				}elseif( $csa<0 ){
+					#	いま上がるとき
+					if( $key == 0 ){
+						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+					}
+					for( $i = $csa; $i<0; $i ++ ){
+						$anchorlinks .= '</li></ul>';
+					}
+					$anchorlinks .= '</li><li style="'.$style_li.'">';
+				}else{
+					#	いま現状維持
+					if( $key == 0 ){
+						$anchorlinks .= '<ul style="'.$style_ul.'">';
+					}
+					$anchorlinks .= '<li style="'.$style_li.'">';
+				}
+				$anchorlinks .= '<a href="#'.htmlspecialchars($row['anch']).'">'.($row['label']).'</a>';
+				if( is_null($nsa) ){
+					break;
+				}elseif( $nsa>0 ){
+					#	つぎ下がるとき
+					// for( $i = $nsa; $i>0; $i -- ){
+					// 	$anchorlinks .= '</li></ul></li>';
+					// }
+				}elseif( $nsa<0 ){
+					#	つぎ上がるとき
+					for( $i = $nsa; $i<0; $i ++ ){
+						// $anchorlinks .= '</li></ul>'."\n";
+					}
+				}else{
+					#	つぎ現状維持
+					$anchorlinks .= '</li>'."\n";
+				}
+			}
+			while($headlevel >= $topheadlevel){
+				$anchorlinks .= '</li></ul>'."\n";
+				$headlevel --;
+			}
+			$anchorlinks .= '</div>'."\n";
+			$anchorlinks .= '<!-- / == autoindex == -->'."\n";
+		}
+
+		$content = preg_replace( '/'.$this->func_data_memos.'/s' , $anchorlinks , $content );
+		return $content;
+	}//apply_autoindex();
+
+}
+
