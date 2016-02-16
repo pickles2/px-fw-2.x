@@ -295,7 +295,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		$this->make_list_by_sitemap();
 		print "\n";
 		print '-- making list by Directory Scan'."\n";
-		$this->make_list_by_dir_scan();
+		$this->make_list_by_dir_scan( $this->get_region_root_path() );
 		print "\n";
 		print '============'."\n";
 		print '## Start publishing'."\n";
@@ -698,6 +698,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	/**
 	 * make list by directory scan
 	 * @param string $path パス
+	 * @return bool 常に真
 	 */
 	private function make_list_by_dir_scan( $path = null ){
 		$process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
@@ -708,6 +709,9 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		$realpath = $this->px->fs()->get_realpath('./'.$path);
 		$ls = $this->px->fs()->ls( $realpath );
+		if( !is_array($ls) ){
+			$ls = array();
+		}
 		// ↓ `/index.html` がignoreされている場合に、
 		// 　ディレクトリスキャンがキャンセルされてしまう問題があり、
 		// 　ここでの評価はしないことにした。
@@ -735,6 +739,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	/**
 	 * add queue
 	 * @param string $path 対象のパス
+	 * @return bool 真偽
 	 */
 	private function add_queue( $path ){
 		$path = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path, $this->path_docroot ) );
@@ -766,6 +771,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	/**
 	 * パブリッシュ範囲内か調べる
 	 * @param string $path 対象のパス
+	 * @return bool 真偽
 	 */
 	private function is_region_path( $path ){
 		$path = $this->px->fs()->get_realpath( '/'.$path );
@@ -778,6 +784,21 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 		return false;
 	}// is_region_path()
+
+
+	/**
+	 * パブリッシュ範囲のルートパスを得る
+	 * @return string パブリッシュ範囲のルートパス
+	 */
+	private function get_region_root_path(){
+		$path = $this->px->fs()->get_realpath( '/'.$this->path_region );
+		$path = $this->px->fs()->normalize_path($path);
+		while( !$this->px->fs()->is_dir('./'.$path) ){
+			$path = dirname($path).'/';
+		}
+		// var_dump($path);
+		return $path;
+	}// get_region_root_path()
 
 
 	/**
