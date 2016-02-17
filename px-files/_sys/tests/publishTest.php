@@ -161,6 +161,42 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * パブリッシュ範囲のテスト
+	 * @depends testBefore
+	 */
+	public function testPublishRegion(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/contents/&paths_ignore[]=/contents/path_files_cache_files/test2/&paths_ignore[]=/contents/path_files_cache.html' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_plugin_files.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/get_contents_manifesto.html' ) );
+		$this->assertFalse( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_cache_files/test2/' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_cache.html' ) );
+
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	}//testPublishRegion()
+
+
+	/**
 	 * パブリッシュの対象が0件の場合のテスト
 	 * @depends testBefore
 	 */
