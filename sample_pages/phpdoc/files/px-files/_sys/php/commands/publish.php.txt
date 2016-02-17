@@ -32,7 +32,7 @@ class publish{
 	/**
 	 * パブリッシュ範囲設定
 	 */
-	private $path_region, $param_path_region;
+	private $path_region, $paths_ignore;
 
 	/**
 	 * ロックファイルの格納パス
@@ -81,6 +81,7 @@ class publish{
 		$this->domain = $px->conf()->domain;
 		$this->path_docroot = $px->conf()->path_controot;
 
+		// パブリッシュ対象範囲
 		$this->path_region = $this->px->req()->get_request_file_path();
 		$this->path_region = preg_replace('/^\/+/s','/',$this->path_region);
 		$this->path_region = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'$/s','/',$this->path_region);
@@ -98,6 +99,15 @@ class publish{
 		if( strlen( $param_path_region ) && $param_path_region != $this->path_region && $func_check_param_path( $param_path_region ) ){
 			$this->path_region = $param_path_region;
 			$this->param_path_region = $param_path_region;
+		}
+
+		// パブリッシュ対象外の範囲
+		$this->paths_ignore = $this->px->req()->get_param('paths_ignore');
+		if( is_string($this->paths_ignore) ){
+			$this->paths_ignore = array( $this->paths_ignore );
+		}
+		if( !is_array($this->paths_ignore) ){
+			$this->paths_ignore = array();
 		}
 	}
 
@@ -779,10 +789,15 @@ function cont_EditPublishTargetPathApply(formElm){
 			$path .= '/';
 		}
 		$path = $this->px->fs()->normalize_path($path);
-		if( preg_match( '/^'.preg_quote( $this->path_region, '/' ).'/s' , $path ) ){
-			return true;
+		if( !preg_match( '/^'.preg_quote( $this->path_region, '/' ).'/s' , $path ) ){
+			return false;
 		}
-		return false;
+		foreach( $this->paths_ignore as $path_ignore ){
+			if( preg_match( '/^'.preg_quote( $path_ignore, '/' ).'/s' , $path ) ){
+				return false;
+			}
+		}
+		return true;
 	}// is_region_path()
 
 
