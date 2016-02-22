@@ -258,6 +258,28 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/publish/px2/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/&paths_ignore[]=/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/new.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
+
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/path_ignored/testpage.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/path_ignored/untouchable.html' ) );
+
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/files_ignored/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/files_ignored/not_ignored.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/not_ignored.html' ) );
+
+
+
 		// 後始末
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'

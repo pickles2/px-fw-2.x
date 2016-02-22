@@ -522,6 +522,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			if( $this->px->fs()->mkdir_r( dirname( $to.$path_region ) ) ){
 				if( $this->px->is_ignore_path( $path_region ) ){
 					// ignore指定されているパスには、操作しない。
+				}elseif( !$this->is_region_path( $path_region ) ){
+					// 範囲外のパスには、操作しない。
 				}else{
 					if( !$this->px->fs()->copy( $from.$path_region , $to.$path_region , $perm ) ){
 						$result = false;
@@ -534,6 +536,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			if( !@is_dir( $to.$path_region ) ){
 				if( $this->px->is_ignore_path( $path_region ) ){
 					// ignore指定されているパスには、操作しない。
+				}elseif( !$this->is_region_path( $path_region ) ){
+					// 範囲外のパスには、操作しない。
 				}else{
 					if( !$this->px->fs()->mkdir_r( $to.$path_region ) ){
 						$result = false;
@@ -547,8 +551,10 @@ function cont_EditPublishTargetPathApply(formElm){
 					if( @is_file( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
 						continue;
 					}elseif( !@is_dir( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
-						if( $this->px->is_ignore_path( $path_region ) ){
+						if( $this->px->is_ignore_path( $path_region.DIRECTORY_SEPARATOR.$Line ) ){
 							// ignore指定されているパスには、操作しない。
+						}elseif( !$this->is_region_path( $path_region.DIRECTORY_SEPARATOR.$Line ) ){
+							// 範囲外のパスには、操作しない。
 						}else{
 							if( !$this->px->fs()->mkdir_r( $to.$path_region.DIRECTORY_SEPARATOR.$Line ) ){
 								$result = false;
@@ -591,6 +597,9 @@ function cont_EditPublishTargetPathApply(formElm){
 		if( !@file_exists( $comparison.$path_region ) && @file_exists( $target.$path_region ) ){
 			if( $this->px->is_ignore_path( $path_region ) ){
 				// ignore指定されているパスには、操作しない。
+				return true;
+			}elseif( !$this->is_region_path( $path_region ) ){
+				// 範囲外のパスには、操作しない。
 				return true;
 			}
 			$this->px->fs()->rm( $target.$path_region );
