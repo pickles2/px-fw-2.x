@@ -108,9 +108,11 @@
 	echo( '</ul>' );
 ?>
 			</div>
+<?php if( @strlen($px->conf()->copyright) ){ ?>
 			<div class="container">
 				<p style="text-align:center;">&copy;<?= htmlspecialchars($px->conf()->copyright); ?>.</p>
 			</div>
+<?php } ?>
 		</footer>
 <?= $px->bowl()->pull('foot') ?>
 	</body>

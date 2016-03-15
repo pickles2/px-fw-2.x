@@ -139,6 +139,11 @@ class px{
 		if ( !@strlen($this->conf->path_files) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
+		if ( !@strlen($this->conf->copyright) ) {
+			// NOTE: 2016-03-15 $conf->copyright 追加
+			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
+			$this->conf->copyright = null;
+		}
 
 		// make instance $bowl
 		require_once(__DIR__.'/bowl.php');

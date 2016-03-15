@@ -6,6 +6,7 @@ return call_user_func( function(){
 
 	// project
 	$conf->name = 'Pickles 2'; // サイト名
+	$conf->copyright = 'Pickles 2 Project'; // コピーライト表記
 	$conf->domain = null; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 
@@ -105,7 +106,7 @@ return call_user_func( function(){
 		'picklesFramework2\processors\autoindex\autoindex::exec' ,
 
 		// テーマ
-		'theme'=>'picklesFramework2\theme\theme::exec' , 
+		'theme'=>'picklesFramework2\theme\theme::exec' ,
 
 		// Apache互換のSSIの記述を解決する
 		'picklesFramework2\processors\ssi\ssi::exec' ,
