@@ -27,7 +27,7 @@
 		<footer class="theme_footer">
 			<div class="container">
 				<p style="text-align:center;"><button onclick="window.close();return false;">close</button></p>
-				<p style="text-align:center;">&copy;Pickles 2 Project.</p>
+				<p style="text-align:center;">&copy;<?= htmlspecialchars($px->conf()->copyright); ?>.</p>
 			</div>
 		</footer>
 <?= $px->bowl()->pull('foot') ?>

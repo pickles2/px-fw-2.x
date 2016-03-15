@@ -6,6 +6,7 @@ return call_user_func( function(){
 
 	// project
 	$conf->name = 'Pickles Framework 2'; // サイト名
+	$conf->copyright = 'Pickles 2 Project'; // コピーライト表記
 	$conf->domain = null; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 
