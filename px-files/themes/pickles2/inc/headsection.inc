@@ -5,6 +5,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="keywords" content="<?= htmlspecialchars($px->site()->get_current_page_info('keywords')); ?>" />
 		<meta name="description" content="<?= htmlspecialchars($px->site()->get_current_page_info('description')); ?>" />
+<?php if( @strlen($px->conf()->copyright) ){ ?>
+		<meta name="copyright" content="&copy;<?= htmlspecialchars($px->conf()->copyright); ?>">
+<?php } ?>
 
 <?= $px->get_contents_manifesto(); ?>
 

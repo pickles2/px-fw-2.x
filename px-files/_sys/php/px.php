@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.18';
+		return '2.0.19';
 	}
 
 	/**
@@ -138,6 +138,11 @@ class px{
 		}
 		if ( !@strlen($this->conf->path_files) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
+		}
+		if ( !@strlen($this->conf->copyright) ) {
+			// NOTE: 2016-03-15 $conf->copyright 追加
+			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
+			$this->conf->copyright = null;
 		}
 
 		// make instance $bowl

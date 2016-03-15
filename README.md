@@ -51,7 +51,7 @@ Pickles Framework 2.x はラッパーである [Pickles 2](https://github.com/pi
 
 ```
 $ cd {$documentRoot}
-$ composer create-project pickles2/pickles2 ./ dev-master
+$ composer create-project pickles2/pickles2 ./
 ```
 
 `.px_execute.php` の置かれたディレクトリがドキュメントルートになるよう、ウェブサーバーを設定してください。
