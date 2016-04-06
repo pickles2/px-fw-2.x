@@ -134,10 +134,10 @@ class site{
 	/**
 	 * サイトマップCSVを読み込む。
 	 *
-	 * サイトマップディレクトリに格納されたサイトマップCSV (`./_PX/sitemaps/*.csv`) を読み込み、パースします。
+	 * サイトマップディレクトリに格納されたサイトマップCSV (`./px-files/sitemaps/*.csv`) を読み込み、パースします。
 	 *
 	 * この処理は、サイトマップの行数や階層構造によっては、重い処理になります。
-	 * そのため、このメソッドは、パースした後の配列情報をキャッシュディレクトリ(`./_PX/caches/sitemaps/`)にキャッシュし、
+	 * そのため、このメソッドは、パースした後の配列情報をキャッシュディレクトリ(`./px-files/_sys/ram/caches/sitemaps/`)にキャッシュし、
 	 * 次回以降はキャッシュを読み込むことで重い処理を回避します。
 	 *
 	 * このキャッシュは、キャッシュファイルのタイムスタンプより新しいCSVを発見するか、
@@ -200,11 +200,13 @@ CREATE TABLE sitemap(
 						continue;
 					}
 					// アスタリスク始まりでも、0行目の場合は、定義行とみなす。
-					// 定義行とみなす条件: 0行目の全セルがアスタリスク始まりであること。
-					$is_definition_row = true;
+					// 定義行とみなす条件: 0行目で、かつA列の値がアスタリスク始まりであること。
+					// ※アスタリスクで始まらない列は定義行として認めず、無視し、スキップする。
+					$is_definition_row = false;
 					foreach($row as $cell_value){
-						if( !preg_match( '/^(?:\*)/is' , $cell_value ) ){
-							$is_definition_row = false;
+						if( preg_match( '/^(?:\*)/is' , $cell_value ) ){
+							$is_definition_row = true;
+							break;
 						}
 					}
 					if( !$is_definition_row ){
@@ -213,16 +215,22 @@ CREATE TABLE sitemap(
 					$tmp_sitemap_definition = array();
 					$tmp_col_id = 'A';
 					foreach($row as $tmp_col_number=>$cell_value){
-						$cell_value = trim(preg_replace('/^\*/si', '', $cell_value));
-						$tmp_sitemap_definition[$cell_value] = array(
+						$col_name = trim( preg_replace('/^\*/si', '', $cell_value) );
+						if( $col_name == $cell_value ){
+							// アスタリスクで始まらない列は定義行として認めず、無視する。
+							$tmp_col_id++;
+							continue;
+						}
+						$tmp_sitemap_definition[$col_name] = array(
 							'num'=>$tmp_col_number,
 							'col'=>$tmp_col_id++,
-							'key'=>$cell_value,
-							'name'=>$cell_value,
+							'key'=>$col_name,
+							'name'=>$col_name,
 						);
 					}
 					unset($is_definition_row);
 					unset($cell_value);
+					unset($col_name);
 					continue;
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
@@ -260,7 +268,7 @@ CREATE TABLE sitemap(
 				}
 
 				if($this->get_path_type( $tmp_array['path'] ) == 'dynamic'){
-					//ダイナミックパスのインデックス作成
+					// ダイナミックパスのインデックス作成
 					$tmp_preg_pattern = $tmp_array['path'];
 					$preg_pattern = '';
 					while(1){

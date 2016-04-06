@@ -59,6 +59,7 @@ return call_user_func( function(){
 		'/composer.lock' => 'ignore' ,
 		'/README.md' => 'ignore' ,
 		'/vendor/*' => 'ignore' ,
+		'/tests/*' => 'ignore' ,
 		'*/.DS_Store' => 'ignore' ,
 		'*/Thumbs.db' => 'ignore' ,
 		'*/.svn/*' => 'ignore' ,

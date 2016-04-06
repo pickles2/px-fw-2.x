@@ -118,6 +118,36 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * サイトマップCSVの解釈のテスト
+	 */
+	public function testSitemap(){
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/standard/');
+
+		$px = new picklesFramework2\px('./px-files/');
+		$toppage_info = $px->site()->get_page_info('');
+		// var_dump($toppage_info);
+		$this->assertEquals( count($toppage_info), 16 );
+		$this->assertEquals( $toppage_info['title'], '<HOME>' );
+		$this->assertEquals( $toppage_info['path'], '/index.html' );
+		$this->assertNull( @$toppage_info[''] );
+		$this->assertNull( @$toppage_info['start_with_no_asterisk'] );
+
+		chdir($cd);
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 後始末
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+
+	}
+
+	/**
 	 * $px->site()->set_page_info() を実行してみるテスト
 	 * @depends testCLIStandard
 	 */
