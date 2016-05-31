@@ -95,10 +95,10 @@ $ composer run-script documentation
 ```
 
 
-
 ## ライセンス - License
 
-MIT License
+Copyright (c)2001-2016 Tomoya Koyanagi, and Pickles 2 Project<br />
+MIT License https://opensource.org/licenses/mit-license.php
 
 
 ## 作者 - Author
