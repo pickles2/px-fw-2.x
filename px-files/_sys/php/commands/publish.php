@@ -71,10 +71,10 @@ class publish{
 	public static function register( $px, $json ){
 
 		// プラグイン設定の初期化
-		if( !is_object($json) ){
+		if( !is_object(@$json) ){
 			$json = json_decode('{}');
 		}
-		if( !is_array($json->paths_ignore) ){
+		if( !is_array(@$json->paths_ignore) ){
 			$json->paths_ignore = array();
 		}
 		// var_dump($json);
@@ -858,7 +858,7 @@ function cont_EditPublishTargetPathApply(formElm){
 			}elseif(is_file($row)){
 				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
 			}
-			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
 				$rtn[$path] = true;
 				return $rtn[$path];
 			}

@@ -256,6 +256,20 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/not_ignored.html' ) );
 
 
+		// パブリッシュ対象外設定のテスト
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/no_publish/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/no_publish/not_ignore/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ignore/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ignore/index_files/no_publish.css' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ignore/index_files/no_publish.js' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ignore/index_files/no_publish.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/no_publish/ext/css.css' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/no_publish/ext/scss.css' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/scss.css.scss' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/md.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/md.html.md' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/html.html' ) );
+
 
 
 		$output = $this->passthru( [

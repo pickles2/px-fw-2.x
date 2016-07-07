@@ -96,7 +96,14 @@ return call_user_func( function(){
 		'picklesFramework2\commands\api::register' ,
 
 		// PX=publish
-		'picklesFramework2\commands\publish::register' ,
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore' => array(
+				'/no_publish/ignore/*', // <- ignore 以下全部を対象外にする。
+				'/no_publish/not_ignore/', // <- index.html にマッチしないため、パブリッシュされる。 `*` が必要。
+				'/no_publish/ext/*.html', // <- ex以下の、html を除外。 .html.md も除外される。
+				'/no_publish/ext/*.scss', // <- ex以下の、scss を除外。 .css.scss は除外されないので、これにマッチするファイルはない。
+			)
+		)).')' ,
 
 	];
 

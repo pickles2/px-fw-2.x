@@ -471,7 +471,7 @@ class px{
 			}elseif(is_file($row)){
 				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)),'/');
 			}
-			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
 				$rtn[$path] = $type;
 				return $rtn[$path];
 			}
