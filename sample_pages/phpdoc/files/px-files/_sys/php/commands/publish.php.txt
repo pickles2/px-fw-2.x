@@ -15,6 +15,11 @@ class publish{
 	private $px;
 
 	/**
+	 * プラグイン設定
+	 */
+	private $plugin_conf;
+
+	/**
 	 * サイトオブジェクト
 	 */
 	private $site;
@@ -52,26 +57,41 @@ class publish{
 	/**
 	 * Before content function
 	 * @param object $px Picklesオブジェクト
+	 * @param object $json プラグイン設定
+	 * ```
+	 * {
+	 * 	"paths_ignore": [
+	 * 		// パブリッシュ対象から常に除外するパスを設定する。
+	 * 		// (ここに設定されたパスは、動的なプレビューは可能)
+	 * 		"/sample_pages/no_publish/*"
+	 * 	]
+	 * }
+	 * ```
 	 */
-	public static function register( $px ){
-		$px->pxcmd()->register('publish', function($px){
-			$pxcmd = $px->get_px_command();
-			$self = new self( $px );
-			if( @$pxcmd[1] == 'run' ){
-				$self->exec_publish();
-			}else{
-				$self->exec_home();
-			}
-			exit;
-		});
+	public static function register( $px, $json ){
+
+		// プラグイン設定の初期化
+		if( !is_object($json) ){
+			$json = json_decode('{}');
+		}
+		if( !is_array($json->paths_ignore) ){
+			$json->paths_ignore = array();
+		}
+		// var_dump($json);
+
+		$self = new self( $px, $json );
+
+		$px->pxcmd()->register('publish', array($self, 'exec_home'));
 	}
 
 	/**
 	 * constructor
 	 * @param object $px Picklesオブジェクト
+	 * @param object $json プラグイン設定
 	 */
-	public function __construct( $px ){
+	public function __construct( $px, $json ){
 		$this->px = $px;
+		$this->plugin_conf = $json;
 
 		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' );
 		$this->path_lockfile = $this->path_tmp_publish.'applock.txt';
@@ -122,7 +142,9 @@ class publish{
 		print 'publish directory: '.$this->path_publish_dir."\n";
 		print 'domain: '.$this->domain."\n";
 		print 'docroot directory: '.$this->path_docroot."\n";
+		print 'ignore: '.join(', ', $this->plugin_conf->paths_ignore)."\n";
 		print 'region: '.$this->path_region."\n";
+		print 'ignore (tmp): '.join(', ', $this->paths_ignore)."\n";
 		print '------------'."\n";
 		flush();
 		return ob_get_clean();
@@ -151,8 +173,16 @@ class publish{
 
 	/**
 	 * execute home
+	 * @param object $px Picklesオブジェクト
 	 */
-	private function exec_home(){
+	public function exec_home( $px ){
+		$pxcmd = $this->px->get_px_command();
+		if( @$pxcmd[1] == 'run' ){
+			// 命令が publish.run の場合、実行する。
+			$this->exec_publish( $px );
+			exit;
+		}
+
 		if( $this->px->req()->is_cmd() ){
 			header('Content-type: text/plain;');
 			print $this->cli_header();
@@ -268,8 +298,9 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * execute publish
+	 * @param object $px Picklesオブジェクト
 	 */
-	private function exec_publish(){
+	private function exec_publish( $px ){
 		header('Content-type: text/plain;');
 		print $this->cli_header();
 
@@ -770,6 +801,10 @@ function cont_EditPublishTargetPathApply(formElm){
 			// 対象外
 			return false;
 		}
+		if( $this->is_ignore_path( $path ) ){
+			// パブリッシュ対象外
+			return false;
+		}
 		if( !$this->is_region_path( $path ) ){
 			// 範囲外
 			return false;
@@ -786,6 +821,51 @@ function cont_EditPublishTargetPathApply(formElm){
 		print 'added queue - "'.$path.'"'."\n";
 		return true;
 	}
+
+	/**
+	 * パブリッシュ対象か調べる
+	 * @param string $path 対象のパス
+	 * @return bool 真偽
+	 */
+	private function is_ignore_path( $path ){
+		static $rtn = array();
+		if( is_null($path) ){
+			return true;
+		}
+		$path = $this->px->fs()->get_realpath( '/'.$path );
+		if( is_dir('./'.$path) ){
+			$path .= '/'.$this->px->get_directory_index_primary();
+		}
+		if( preg_match('/(?:\/|\\\\)$/', $path) ){
+			$path .= $this->px->get_directory_index_primary();
+		}
+		$path = $this->px->fs()->normalize_path($path);
+
+		if( @is_bool($rtn[$path]) ){
+			return $rtn[$path];
+		}
+
+		foreach( $this->plugin_conf->paths_ignore as $row ){
+			if(!is_string($row)){continue;}
+			$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)), '/');
+			if( preg_match('/\*/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_quote($row,'/');
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}elseif(is_dir($row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)).'/','/');
+			}elseif(is_file($row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
+			}
+			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
+				$rtn[$path] = true;
+				return $rtn[$path];
+			}
+		}
+		$rtn[$path] = false;// <- default
+		return $rtn[$path];
+	}// is_ignore_path()
 
 	/**
 	 * パブリッシュ範囲内か調べる
