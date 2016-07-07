@@ -52,8 +52,28 @@ class publish{
 	/**
 	 * Before content function
 	 * @param object $px Picklesオブジェクト
+	 * @param object $json プラグイン設定
+	 * ```
+	 * {
+	 * 	"paths_ignore": [
+	 * 		// パブリッシュ対象から常に除外するパスを設定する。
+	 * 		// (ここに設定されたパスは、動的なプレビューは可能)
+	 * 		"/sample_pages/no_publish/*"
+	 * 	]
+	 * }
+	 * ```
 	 */
-	public static function register( $px ){
+	public static function register( $px, $json ){
+
+		// プラグイン設定の初期化
+		if( !is_object($json) ){
+			$json = json_decode('{}');
+		}
+		if( !is_array($json->paths_ignore) ){
+			$json->paths_ignore = array();
+		}
+		// var_dump($json);
+
 		$px->pxcmd()->register('publish', function($px){
 			$pxcmd = $px->get_px_command();
 			$self = new self( $px );
