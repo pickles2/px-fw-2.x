@@ -422,6 +422,30 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 
+	/**
+	 * 最小構成のサイトマップCSV
+	 * @depends testCLIStandard
+	 */
+	public function testSitemapMinimum(){
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+
+		$output = $this->px_execute(
+			'/sitemap_min/.px_execute.php',
+			'/'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->px_execute( '/sitemap_min/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/sitemap_min/caches/p/' ) );
+
+	} // testSitemapMinimum()
+
+
 
 
 
