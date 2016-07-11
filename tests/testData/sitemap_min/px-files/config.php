@@ -151,5 +151,21 @@ return call_user_func( function(){
 	];
 
 
+	// -------- PHP Setting --------
+
+	// [memory_limit]
+	// PHPのメモリの使用量の上限を設定します。
+	// 正の整数値で上限値(byte)を与えます。
+	//     例: 1000000 (1,000,000 bytes)
+	//     例: "128K" (128 kilo bytes)
+	//     例: "128M" (128 mega bytes)
+	// -1 を与えた場合、無限(システムリソースの上限まで)に設定されます。
+	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
+	// @ini_set( 'memory_limit' , -1 );
+
+	@ini_set('display_errors', 'On');
+	@ini_set('error_reporting', 32767);
+
+
 	return $conf;
 } );

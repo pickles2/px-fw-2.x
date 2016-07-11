@@ -421,7 +421,11 @@ INSERT INTO sitemap(
 		){
 			return false;
 		}
-		foreach( $this->px->fs()->ls( $path_sitemap_dir ) as $filename ){
+		$sitemap_csvs = $this->px->fs()->ls( $path_sitemap_dir );
+		if( !is_array($sitemap_csvs) ){
+			$sitemap_csvs = array();
+		}
+		foreach( $sitemap_csvs as $filename ){
 			if( $this->px->fs()->is_newer_a_than_b( $path_sitemap_dir.$filename , $path_sitemap_cache_dir.'sitemap.array' ) ){
 				return false;
 			}

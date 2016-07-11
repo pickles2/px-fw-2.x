@@ -1070,6 +1070,9 @@ class px{
 	 * @return string ローカルリソースキャッシュのパス
 	 */
 	public function path_files_cache( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$tmp_page_info = $this->site()->get_current_page_info();
 		$path_content = $tmp_page_info['content'];
 		if( is_null($path_content) ){
@@ -1105,6 +1108,9 @@ class px{
 	 * @return string ローカルリソースキャッシュのサーバー内部パス
 	 */
 	public function realpath_files_cache( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->path_files_cache( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
 		return $rtn;
@@ -1144,6 +1150,9 @@ class px{
 	 * @return string 公開キャッシュのパス
 	 */
 	public function path_plugin_files( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
 		if( !$this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
@@ -1172,6 +1181,9 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_files( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
 		return $rtn;
