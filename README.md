@@ -87,6 +87,7 @@ $ chmod -R 777 ./caches
 - `path_publish_dir` と `contents_manifesto` を設定しない場合 Notice が起こらないように変更。
 - sitemaps ディレクトリが存在しない場合に Notice が起こらないように変更。
 - サイトマップが最小構成の場合に、Noticeレベルのエラーが発生する不具合を修正。
+- その他の細かい不具合修正。
 
 ### Pickles Framework 2.0.20 (2016年4月7日)
 
