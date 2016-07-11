@@ -16,7 +16,7 @@ return call_user_func( function(){
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
 	clearstatcache();
 	$conf->path_files = trim(file_get_contents(__DIR__.'/config_ex/path_files.txt'));
-	$conf->ontents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
+	$conf->contents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
 
 	// directory index
 	$conf->directory_index = array(

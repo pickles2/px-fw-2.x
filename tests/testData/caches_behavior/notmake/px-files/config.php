@@ -12,10 +12,9 @@ return call_user_func( function(){
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
-	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
-	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
-	$conf->path_files = '{$dirname}/{$filename}_files/'; // リソースディレクトリ(各コンテンツに対して1:1で関連付けられる)のパス
-	$conf->contents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
+	// $conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
+	// $conf->public_cache_dir = null; // 公開キャッシュディレクトリ
+	// $conf->contents_manifesto = null; // Contents Manifesto のパス
 
 	// directory index
 	$conf->directory_index = array(
@@ -32,7 +31,6 @@ return call_user_func( function(){
 	$conf->session_name = 'PXSID';
 	$conf->session_expire = 1800;
 	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
-	$conf->default_timezone = 'Asia/Tokyo';
 
 	// commands
 	$conf->commands = new stdClass;
@@ -61,7 +59,8 @@ return call_user_func( function(){
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
 
-		'/dynamicPath/test2_direct/*' => 'direct' ,
+		'/path_ignored/*' => 'ignore' ,
+		'/files_ignored/index.html' => 'ignore' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
@@ -97,7 +96,14 @@ return call_user_func( function(){
 		'picklesFramework2\commands\api::register' ,
 
 		// PX=publish
-		'picklesFramework2\commands\publish::register' ,
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore' => array(
+				'/no_publish/ignore/*', // <- ignore 以下全部を対象外にする。
+				'/no_publish/not_ignore/', // <- index.html にマッチしないため、パブリッシュされる。 `*` が必要。
+				'/no_publish/ext/*.html', // <- ex以下の、html を除外。 .html.md も除外される。
+				'/no_publish/ext/*.scss', // <- ex以下の、scss を除外。 .css.scss は除外されないので、これにマッチするファイルはない。
+			)
+		)).')' ,
 
 	];
 

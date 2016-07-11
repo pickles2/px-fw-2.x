@@ -175,6 +175,9 @@ CREATE TABLE sitemap(
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
+		if( !is_array($ary_sitemap_files) ){
+			$ary_sitemap_files = array();
+		}
 		sort($ary_sitemap_files);
 
 		// $path_top の設定値をチューニング

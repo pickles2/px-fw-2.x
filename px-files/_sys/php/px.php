@@ -176,6 +176,24 @@ class px{
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 
+		// 公開キャッシュフォルダが存在しない場合、作成する
+		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
+			$this->fs->mkdir( './'.$this->conf->public_cache_dir );
+		}
+		// _sysフォルダが存在しない場合、作成する
+		foreach( array(
+			'/_sys/',
+			'/_sys/ram/',
+			'/_sys/ram/applock/',
+			'/_sys/ram/caches/',
+			'/_sys/ram/data/',
+			'/_sys/ram/publish/'
+		) as $tmp_path_sys_dir ){
+			if( strlen($this->path_homedir.$tmp_path_sys_dir) && !@is_dir( $this->path_homedir.$tmp_path_sys_dir ) ){
+				$this->fs->mkdir( $this->path_homedir.$tmp_path_sys_dir );
+			}
+		}
+
 
 		// make instance $pxcmd
 		require_once(__DIR__.'/pxcmd.php');
@@ -668,6 +686,9 @@ class px{
 	public function get_contents_manifesto(){
 		$px = $this;
 		$rtn = '';
+		if( !strlen( @$this->conf()->contents_manifesto ) ){
+			return '';
+		}
 		$realpath = $this->get_path_docroot().$this->href( @$this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
