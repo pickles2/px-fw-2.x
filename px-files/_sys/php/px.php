@@ -1064,7 +1064,12 @@ class px{
 	}//realpath_files()
 
 	/**
-	 * ローカルリソースのキャッシュディレクトリのパスを得る。
+	 * ローカルリソースのキャッシュのパスを得る。
+	 *
+	 * ローカルリソースキャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
 	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのパス
@@ -1103,6 +1108,11 @@ class px{
 
 	/**
 	 * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
+	 *
+	 * ローカルリソースキャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
 	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのサーバー内部パス
@@ -1146,6 +1156,11 @@ class px{
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。
 	 *
+	 * プラグイン別公開キャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string 公開キャッシュのパス
 	 */
@@ -1176,6 +1191,11 @@ class px{
 
 	/**
 	 * プラグイン別公開キャッシュのサーバー内部パスを得る。
+	 *
+	 * プラグイン別公開キャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
 	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string プライベートキャッシュのサーバー内部パス
