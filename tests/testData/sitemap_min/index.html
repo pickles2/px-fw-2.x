@@ -1,1 +1,4 @@
+<p><span><?= ( count( $px->site()->get_sitemap() ) == 3 ? 'success' : 'FAILED' ) ?></span></p>
 <p><span><?= ( is_null( $px->site()->get_page_info('/not_read.html') ) ? 'success' : 'FAILED' ) ?></span></p>
+<p><span><?= ( !is_null( $px->site()->get_page_info('/sitemap2.html') ) ? 'success' : 'FAILED' ) ?></span></p>
+<p><span><?= ( !is_null( $px->site()->get_page_info('/sitemap3.html') ) ? 'success' : 'FAILED' ) ?></span></p>
