@@ -194,7 +194,7 @@ CREATE TABLE sitemap(
 				// 拡張子がCSV意外のファイルは無視する
 				continue;
 			}
-			if( strpos( $basename_sitemap_csv, '.~lock.' ) === 0 && strrpos( $basename_sitemap_csv, '#' ) === strlen($basename_sitemap_csv)-strlen('#') ){
+			if( strpos( $basename_sitemap_csv, '.~lock.' ) === 0 ){
 				// Libre Office, Open Office 形式の一時ファイルを無視する
 				continue;
 			}
