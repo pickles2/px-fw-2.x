@@ -496,7 +496,6 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * @depends testCLIStandard
 	 */
 	public function testSitemapMinimum(){
-		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
 
 		$output = $this->px_execute(
 			'/sitemap_min/.px_execute.php',
@@ -504,6 +503,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		);
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/\<span\>FAILED\<\/span\>/', $output ), 0 );
 
 
 		// 後始末
