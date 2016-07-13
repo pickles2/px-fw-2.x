@@ -176,6 +176,24 @@ class px{
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 
+		// 公開キャッシュフォルダが存在しない場合、作成する
+		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
+			$this->fs->mkdir( './'.$this->conf->public_cache_dir );
+		}
+		// _sysフォルダが存在しない場合、作成する
+		foreach( array(
+			'/_sys/',
+			'/_sys/ram/',
+			'/_sys/ram/applock/',
+			'/_sys/ram/caches/',
+			'/_sys/ram/data/',
+			'/_sys/ram/publish/'
+		) as $tmp_path_sys_dir ){
+			if( strlen($this->path_homedir.$tmp_path_sys_dir) && !@is_dir( $this->path_homedir.$tmp_path_sys_dir ) ){
+				$this->fs->mkdir( $this->path_homedir.$tmp_path_sys_dir );
+			}
+		}
+
 
 		// make instance $pxcmd
 		require_once(__DIR__.'/pxcmd.php');
@@ -471,7 +489,7 @@ class px{
 			}elseif(is_file($row)){
 				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)),'/');
 			}
-			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
 				$rtn[$path] = $type;
 				return $rtn[$path];
 			}
@@ -668,6 +686,9 @@ class px{
 	public function get_contents_manifesto(){
 		$px = $this;
 		$rtn = '';
+		if( !strlen( @$this->conf()->contents_manifesto ) ){
+			return '';
+		}
 		$realpath = $this->get_path_docroot().$this->href( @$this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
@@ -1043,12 +1064,20 @@ class px{
 	}//realpath_files()
 
 	/**
-	 * ローカルリソースのキャッシュディレクトリのパスを得る。
+	 * ローカルリソースのキャッシュのパスを得る。
+	 *
+	 * ローカルリソースキャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
 	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのパス
 	 */
 	public function path_files_cache( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$tmp_page_info = $this->site()->get_current_page_info();
 		$path_content = $tmp_page_info['content'];
 		if( is_null($path_content) ){
@@ -1080,10 +1109,18 @@ class px{
 	/**
 	 * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
 	 *
+	 * ローカルリソースキャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
+	 *
 	 * @param string $localpath_resource ローカルリソースのパス
 	 * @return string ローカルリソースキャッシュのサーバー内部パス
 	 */
 	public function realpath_files_cache( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->path_files_cache( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
 		return $rtn;
@@ -1119,10 +1156,18 @@ class px{
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。
 	 *
+	 * プラグイン別公開キャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string 公開キャッシュのパス
 	 */
 	public function path_plugin_files( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
 		if( !$this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
@@ -1147,10 +1192,18 @@ class px{
 	/**
 	 * プラグイン別公開キャッシュのサーバー内部パスを得る。
 	 *
+	 * プラグイン別公開キャッシュディレクトリは、
+	 * `$conf->public_cache_dir` の設定により決定されます。
+	 *
+	 * `$conf->public_cache_dir` が設定されていない場合に `false` を返します。
+	 *
 	 * @param string $localpath_resource リソースのパス
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_files( $localpath_resource = null ){
+		if( !strlen( @$this->conf()->public_cache_dir ) ){
+			return false;
+		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
 		return $rtn;
