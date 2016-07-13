@@ -14,7 +14,7 @@ return call_user_func( function(){
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = '../published/'; // パブリッシュ先ディレクトリパス
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
-	$conf->ontents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
+	$conf->contents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
 
 	// directory index
 	$conf->directory_index = array(
@@ -96,7 +96,14 @@ return call_user_func( function(){
 		'picklesFramework2\commands\api::register' ,
 
 		// PX=publish
-		'picklesFramework2\commands\publish::register' ,
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore' => array(
+				'/no_publish/ignore/*', // <- ignore 以下全部を対象外にする。
+				'/no_publish/not_ignore/', // <- index.html にマッチしないため、パブリッシュされる。 `*` が必要。
+				'/no_publish/ext/*.html', // <- ex以下の、html を除外。 .html.md も除外される。
+				'/no_publish/ext/*.scss', // <- ex以下の、scss を除外。 .css.scss は除外されないので、これにマッチするファイルはない。
+			)
+		)).')' ,
 
 	];
 
@@ -148,6 +155,22 @@ return call_user_func( function(){
 	// funcs: Before output
 	$conf->funcs->before_output = [
 	];
+
+
+	// -------- PHP Setting --------
+
+	// [memory_limit]
+	// PHPのメモリの使用量の上限を設定します。
+	// 正の整数値で上限値(byte)を与えます。
+	//     例: 1000000 (1,000,000 bytes)
+	//     例: "128K" (128 kilo bytes)
+	//     例: "128M" (128 mega bytes)
+	// -1 を与えた場合、無限(システムリソースの上限まで)に設定されます。
+	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
+	// @ini_set( 'memory_limit' , -1 );
+
+	@ini_set('display_errors', 'On');
+	@ini_set('error_reporting', 32767);
 
 
 	return $conf;

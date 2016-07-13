@@ -1,0 +1,19 @@
+<p>このページは、パブリッシュ除外設定の対象です。</p>
+<p>動的なプレビューは可能ですが、パブリッシュされません。</p>
+
+<p>パブリッシュ除外の設定は、下記のように行います。</p>
+
+<pre><code>// funcs: Before content
+$conf->funcs->before_content = [
+
+	// PX=publish
+	'picklesFramework2\commands\publish::register('.json_encode(array(
+		'paths_ignore'=> array(
+			// パブリッシュ対象から常に除外するパスを設定する。
+			// (ここに設定されたパスは、動的なプレビューは可能)
+			'/sample_pages/no_publish/*'
+		)
+	)).')' ,
+
+];
+</code></pre>

@@ -148,6 +148,75 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * キャッシュの振る舞いのテスト1
+	 */
+	public function testCachesBehavior1(){
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/caches_behavior/make/');
+
+		$px = new picklesFramework2\px('./px-files/');
+		$toppage_info = $px->site()->get_page_info('');
+		// var_dump($toppage_info);
+		clearstatcache();
+		$this->assertTrue( is_dir( './caches/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/applock/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/caches/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/data/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/publish/' ) );
+
+		chdir($cd);
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 後始末
+		$output = $this->px_execute( '/caches_behavior/make/.px_execute.php', '/?PX=clearcache' );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/make/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/make/px-files/_sys/ram/caches/sitemaps/' ) );
+		$this->assertTrue( $this->fs->rm( __DIR__.'/testData/caches_behavior/make/caches/' ) );
+		$this->assertTrue( $this->fs->rm( __DIR__.'/testData/caches_behavior/make/px-files/_sys/' ) );
+
+	}
+
+	/**
+	 * キャッシュの振る舞いのテスト2
+	 */
+	public function testCachesBehavior2(){
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/caches_behavior/notmake/');
+
+		$px = new picklesFramework2\px('./px-files/');
+		$toppage_info = $px->site()->get_page_info('');
+		// var_dump($toppage_info);
+		clearstatcache();
+		$this->assertTrue( !is_dir( './caches/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/applock/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/caches/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/data/' ) );
+		$this->assertTrue( is_dir( './px-files/_sys/ram/publish/' ) );
+
+		chdir($cd);
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 後始末
+		$output = $this->px_execute( '/caches_behavior/notmake/.px_execute.php', '/?PX=clearcache' );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/notmake/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/notmake/px-files/_sys/ram/caches/sitemaps/' ) );
+		$this->assertTrue( $this->fs->rm( __DIR__.'/testData/caches_behavior/notmake/px-files/_sys/' ) );
+
+	}
+
+	/**
 	 * $px->site()->set_page_info() を実行してみるテスト
 	 * @depends testCLIStandard
 	 */
@@ -420,6 +489,30 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( !is_dir( __DIR__.'/testData/encodingconverter/caches/p/' ) );
 
 	}
+
+
+	/**
+	 * 最小構成のサイトマップCSV
+	 * @depends testCLIStandard
+	 */
+	public function testSitemapMinimum(){
+
+		$output = $this->px_execute(
+			'/sitemap_min/.px_execute.php',
+			'/'
+		);
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/\<span\>FAILED\<\/span\>/', $output ), 0 );
+
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->px_execute( '/sitemap_min/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/sitemap_min/caches/p/' ) );
+
+	} // testSitemapMinimum()
 
 
 

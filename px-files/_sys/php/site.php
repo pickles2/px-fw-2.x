@@ -175,6 +175,9 @@ CREATE TABLE sitemap(
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
+		if( !is_array($ary_sitemap_files) ){
+			$ary_sitemap_files = array();
+		}
 		sort($ary_sitemap_files);
 
 		// $path_top の設定値をチューニング
@@ -185,10 +188,18 @@ CREATE TABLE sitemap(
 		//  サイトマップをロード
 		$num_auto_pid = 0;
 		$tmp_sitemap_definition = array();
+		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
 			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
+				// 拡張子がCSV意外のファイルは無視する
 				continue;
 			}
+			if( strpos( $basename_sitemap_csv, '.~lock.' ) === 0 ){
+				// Libre Office, Open Office 形式の一時ファイルを無視する
+				continue;
+			}
+			// var_dump($basename_sitemap_csv);
+
 			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
 				set_time_limit(30);//タイマー延命
@@ -253,7 +264,7 @@ CREATE TABLE sitemap(
 						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
-				if( !strlen( $tmp_array['id'] ) ){
+				if( !strlen( @$tmp_array['id'] ) ){
 					//ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
 					$tmp_array['id'] = $tmp_id;
@@ -305,7 +316,7 @@ CREATE TABLE sitemap(
 					unset($tmp_path_original);
 				}
 
-				if( !strlen( $tmp_array['content'] ) ){
+				if( !strlen( @$tmp_array['content'] ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
 					// $tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
@@ -418,7 +429,11 @@ INSERT INTO sitemap(
 		){
 			return false;
 		}
-		foreach( $this->px->fs()->ls( $path_sitemap_dir ) as $filename ){
+		$sitemap_csvs = $this->px->fs()->ls( $path_sitemap_dir );
+		if( !is_array($sitemap_csvs) ){
+			$sitemap_csvs = array();
+		}
+		foreach( $sitemap_csvs as $filename ){
 			if( $this->px->fs()->is_newer_a_than_b( $path_sitemap_dir.$filename , $path_sitemap_cache_dir.'sitemap.array' ) ){
 				return false;
 			}
@@ -473,7 +488,7 @@ INSERT INTO sitemap(
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$current_page_info = $this->get_page_info($path);
-		if( $current_page_info['category_top_flg'] ){
+		if( @$current_page_info['category_top_flg'] ){
 			//  自身がカテゴリトップだった場合。
 			return $current_page_info['id'];
 		}
@@ -488,7 +503,7 @@ INSERT INTO sitemap(
 				break;
 			}
 			$page_info = $this->get_page_info($parent_pid);
-			if( $page_info['category_top_flg'] ){
+			if( @$page_info['category_top_flg'] ){
 				//  自身がカテゴリトップだった場合。
 				return $page_info['id'];
 			}
@@ -512,7 +527,7 @@ INSERT INTO sitemap(
 		$home_children = $this->get_children('', array('filter'=>true));//PxFW 1.0.4 list_flg を参照するように変更
 		foreach( $home_children as $page_id ){
 			$page_info = $this->get_page_info($page_id);
-			if(!$page_info['category_top_flg']){continue;}
+			if(!@$page_info['category_top_flg']){continue;}
 			array_push($rtn, $page_id);
 		}
 		return $rtn;
@@ -536,7 +551,7 @@ INSERT INTO sitemap(
 		$home_children = $this->get_children('', array('filter'=>true));
 		foreach( $home_children as $page_id ){
 			$page_info = $this->get_page_info($page_id);
-			if($page_info['category_top_flg']){continue;}
+			if(@$page_info['category_top_flg']){continue;}
 			array_push($rtn, $page_id);
 		}
 		return $rtn;

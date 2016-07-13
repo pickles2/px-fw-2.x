@@ -43,7 +43,7 @@ class clearcache{
 		$this->px = $px;
 		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_path_homedir().'/' );
 		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().'/' );
-		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/' );
+		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot().@$this->px->conf()->public_cache_dir.'/' );
 
 		$this->path_lockfile = $this->px->fs()->get_realpath( $this->px->get_path_homedir().'_sys/ram/publish/applock.txt' );
 	}
@@ -84,9 +84,11 @@ class clearcache{
 		print '-- cleaning "publish"'."\n";
 		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
 		print "\n";
-		print '-- cleaning "public caches"'."\n";
-		print $this->cleanup_dir( $this->path_public_caches ).' items done.'."\n";
-		print "\n";
+		if( strlen( @$this->px->conf()->public_cache_dir ) ){
+			print '-- cleaning "public caches"'."\n";
+			print $this->cleanup_dir( $this->path_public_caches ).' items done.'."\n";
+			print "\n";
+		}
 		return true;
 	}
 
@@ -153,7 +155,7 @@ class clearcache{
 
 	/**
 	 * パブリッシュがロックされているか確認する。
-	 * 
+	 *
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	private function is_publish_locked(){

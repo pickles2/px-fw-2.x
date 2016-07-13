@@ -103,7 +103,13 @@ return call_user_func( function(){
 		'picklesFramework2\commands\api::register' ,
 
 		// PX=publish
-		'picklesFramework2\commands\publish::register' ,
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore'=> array(
+				// パブリッシュ対象から常に除外するパスを設定する。
+				// (ここに設定されたパスは、動的なプレビューは可能)
+				'/sample_pages/no_publish/*'
+			)
+		)).')' ,
 
 	];
 
