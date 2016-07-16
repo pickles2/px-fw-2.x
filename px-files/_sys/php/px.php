@@ -214,14 +214,14 @@ class px{
 
 		// pass 判定されたコンテンツはこの段階で判断してレスポンスする
 		if( $this->get_path_proc_type( $this->req()->get_request_file_path() ) === 'pass' ){
-			if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
+			if( !$this->fs()->is_file( './'.$this->req()->get_request_file_path() ) ){
 				@header('Content-type: text/html;');
-				$px->set_status(404);// 404 NotFound
-				$px->bowl()->send('<p>404 - File not found.</p>');
+				$this->set_status(404);// 404 NotFound
+				$this->bowl()->send('<p>404 - File not found.</p>');
 				return;
 			}
-			$src = $px->fs()->read_file( './'.$px->get_path_content() );
-			$px->bowl()->send($src);
+			$src = $this->fs()->read_file( './'.$this->req()->get_request_file_path() );
+			$this->bowl()->send($src);
 			return;
 		}
 
