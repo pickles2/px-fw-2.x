@@ -70,7 +70,8 @@ return call_user_func( function(){
 	 * パスのパターン別に処理方法を設定します。
 	 *
 	 * - ignore = 対象外パス。Pickles 2 のアクセス可能範囲から除外します。このパスにへのアクセスは拒絶され、パブリッシュの対象からも外されます。
-	 * - direct = 物理ファイルを、そのまま無加工で出力します。 (デフォルト)
+	 * - direct = 物理ファイルを、ファイルとして読み込んだでから加工処理を通します。 (direct以外の通常の処理は、PHPファイルとして `include()` されます)
+	 * - pass = 物理ファイルを、そのまま無加工で出力します。 (デフォルト)
 	 * - その他 = extension名
 	 *
 	 * パターンは先頭から検索され、はじめにマッチした設定を採用します。
@@ -100,17 +101,17 @@ return call_user_func( function(){
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
 
-		'/sample_pages/phpdoc/*' => 'direct' ,
-		'/sample_pages/page1/4/test2/*' => 'direct' ,
+		'/sample_pages/phpdoc/*' => 'pass' ,
+		'/sample_pages/page1/4/test2/*' => 'pass' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
 		'*.css' => 'css' ,
 		'*.js' => 'js' ,
-		'*.png' => 'direct' ,
-		'*.jpg' => 'direct' ,
-		'*.gif' => 'direct' ,
-		'*.svg' => 'direct' ,
+		'*.png' => 'pass' ,
+		'*.jpg' => 'pass' ,
+		'*.gif' => 'pass' ,
+		'*.svg' => 'pass' ,
 	);
 
 

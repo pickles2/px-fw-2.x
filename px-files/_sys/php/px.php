@@ -194,6 +194,30 @@ class px{
 			}
 		}
 
+		// デフォルトの Content-type を出力
+		$this->output_content_type();
+
+
+		// ignore されたコンテンツはこの段階で判断してレスポンスする
+		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
+			$this->set_status(403);// 403 Forbidden
+			print 'ignored path';
+			exit;
+		}
+
+		// pass 判定されたコンテンツはこの段階で判断してレスポンスする
+		if( $this->get_path_proc_type( $this->req()->get_request_file_path() ) === 'pass' ){
+			if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
+				@header('Content-type: text/html;');
+				$px->set_status(404);// 404 NotFound
+				$px->bowl()->send('<p>404 - File not found.</p>');
+				return;
+			}
+			$src = $px->fs()->read_file( './'.$px->get_path_content() );
+			$px->bowl()->send($src);
+			return;
+		}
+
 
 		// make instance $pxcmd
 		require_once(__DIR__.'/pxcmd.php');
@@ -231,22 +255,13 @@ class px{
 		$this->proc_type = $ext;
 		unset($ext);
 
-		// デフォルトの Content-type を出力
-		$this->output_content_type();
-
 
 		// funcs: Before contents
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
 
 
-
-		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
-			$this->set_status(403);// 403 Forbidden
-			print 'ignored path';
-			exit;
-		}else{
-			self::exec_content( $this );
-		}
+		// execute content
+		self::exec_content( $this );
 
 
 		// funcs: process functions
@@ -454,9 +469,10 @@ class px{
 	 *
 	 * @param string $path パス
 	 * @return string 処理方法
-	 * - ignore = 対象外パス
-	 * - direct = 加工せずそのまま出力する(デフォルト)
-	 * - その他 = process名を格納して返す
+	 * - ignore = 対象外パス。Pickles 2 のアクセス可能範囲から除外します。このパスにへのアクセスは拒絶され、パブリッシュの対象からも外されます。
+	 * - direct = 物理ファイルを、ファイルとして読み込んだでから加工処理を通します。 (direct以外の通常の処理は、PHPファイルとして `include()` されます)
+	 * - pass = 物理ファイルを、そのまま無加工で出力します。 (デフォルト)
+	 * - その他 = extension名
 	 */
 	public function get_path_proc_type( $path = null ){
 		static $rtn = array();
@@ -494,7 +510,7 @@ class px{
 				return $rtn[$path];
 			}
 		}
-		$rtn[$path] = 'direct';// <- default
+		$rtn[$path] = 'pass';// <- default
 		return $rtn[$path];
 	}//get_path_proc_type();
 
@@ -664,6 +680,7 @@ class px{
 	 */
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
+			@header('Content-type: text/html;');
 			$px->set_status(404);// 404 NotFound
 			$px->bowl()->send('<p>404 - File not found.</p>');
 			return true;
