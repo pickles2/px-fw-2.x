@@ -188,10 +188,18 @@ CREATE TABLE sitemap(
 		//  サイトマップをロード
 		$num_auto_pid = 0;
 		$tmp_sitemap_definition = array();
+		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
 			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
+				// 拡張子がCSV意外のファイルは無視する
 				continue;
 			}
+			if( strpos( $basename_sitemap_csv, '.~lock.' ) === 0 ){
+				// Libre Office, Open Office 形式の一時ファイルを無視する
+				continue;
+			}
+			// var_dump($basename_sitemap_csv);
+
 			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
 				set_time_limit(30);//タイマー延命
