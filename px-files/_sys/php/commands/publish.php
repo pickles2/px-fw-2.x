@@ -775,8 +775,10 @@ function cont_EditPublishTargetPathApply(formElm){
 				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
 			}else{
 				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
-				$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
-				if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'direct' || $this->px->get_path_proc_type( $tmp_localpath ) == 'pass' ){
+				if( preg_match( '/\.'.$preg_exts.'\.'.$preg_exts.'$/is', $tmp_localpath ) ){
+					$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
+				}
+				if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'pass' ){
 					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
 				}
 				$tmp_localpath = $this->px->fs()->normalize_path( $tmp_localpath );

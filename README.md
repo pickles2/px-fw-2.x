@@ -83,6 +83,7 @@ $ chmod -R 777 ./caches
 
 - コンフィグ項目 `$conf->paths_enable_sitemap` を追加。
 - `$conf->paths_proc_type` に、新しい処理方法 pass を追加。デフォルトを pass に変更。
+- `$conf->paths_proc_type` が direct のときに、二重拡張子の処理を適用できるようになった。
 
 ### Pickles Framework 2.0.21 (2016年7月14日)
 
