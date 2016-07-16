@@ -132,6 +132,13 @@ class px{
 			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
 		$this->conf = json_decode( json_encode( $this->conf ) );
+		if( !@is_array($this->conf->paths_enable_sitemap) ){
+			// sitemap のロードを有効にするべきパス。
+			$this->conf->paths_enable_sitemap = array(
+				'*.html',
+				'*.htm',
+			);
+		}
 
 		if ( @strlen($this->conf->default_timezone) ) {
 			@date_default_timezone_set($this->conf->default_timezone);
@@ -230,19 +237,26 @@ class px{
 
 		// make instance $site
 		require_once(__DIR__.'/site.php');
-		$this->site = new site($this);
+		$is_enable_sitemap = $this->is_path_enable_sitemap( $this->req()->get_request_file_path() );
+		if( $is_enable_sitemap ){
+			$this->site = new site($this);
+		}
 
 
 
 		// execute Content
-		$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
 		$this->path_content = $this->req()->get_request_file_path();
 		$ext = $this->get_path_proc_type( $this->req()->get_request_file_path() );
-		if($ext !== 'direct'){
-			$this->path_content = $current_page_info['content'];
-			if( is_null( $this->path_content ) ){
-				$this->path_content = $this->req()->get_request_file_path();
+		if($ext !== 'direct' && $ext !== 'pass'){
+			if( $is_enable_sitemap ){
+				$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
+				$this->path_content = $current_page_info['content'];
+				if( is_null( $this->path_content ) ){
+					$this->path_content = $this->req()->get_request_file_path();
+				}
+				unset($current_page_info);
 			}
+
 			// $ext = $this->get_path_proc_type( $this->path_content );
 			foreach( array_keys( get_object_vars( $this->conf->funcs->processor ) ) as $tmp_ext ){
 				if( $this->fs()->is_file( './'.$this->path_content.'.'.$tmp_ext ) ){
@@ -467,6 +481,9 @@ class px{
 	/**
 	 * ファイルの処理方法を調べる。
 	 *
+	 * 設定値 `$conf->paths_proc_type` の連想配列にもとづいてパスを評価し、
+	 * 処理方法の種類を調べて返します。
+	 *
 	 * @param string $path パス
 	 * @return string 処理方法
 	 * - ignore = 対象外パス。Pickles 2 のアクセス可能範囲から除外します。このパスにへのアクセスは拒絶され、パブリッシュの対象からも外されます。
@@ -513,6 +530,55 @@ class px{
 		$rtn[$path] = 'pass';// <- default
 		return $rtn[$path];
 	}//get_path_proc_type();
+
+	/**
+	 * サイトマップのロードが有効なパスか調べる。
+	 *
+	 * 設定値 `$conf->paths_enable_sitemap` の配列にもとづいてパスを評価し、
+	 * サイトマップをロードするべきかどうかを判定します。
+	 *
+	 * @param string $path パス
+	 * @return bool 有効の場合 true, 無効の場合 false.
+	 */
+	public function is_path_enable_sitemap( $path = null ){
+		static $rtn = array();
+		if( is_null($path) ){
+			$path = $this->req()->get_request_file_path();
+		}
+		$path = $this->fs()->get_realpath( '/'.$path );
+		if( is_dir('./'.$path) ){
+			$path .= '/'.$this->get_directory_index_primary();
+		}
+		if( preg_match('/(?:\/|\\\\)$/', $path) ){
+			$path .= $this->get_directory_index_primary();
+		}
+		$path = $this->fs()->normalize_path($path);
+
+		if( @is_bool($rtn[$path]) ){
+			return $rtn[$path];
+		}
+
+		foreach( $this->conf->paths_enable_sitemap as $row ){
+			if(!is_string($row)){continue;}
+			$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)), '/');
+			if( preg_match('/\*/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_quote($row,'/');
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}elseif(is_dir($row)){
+				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)).'/','/');
+			}elseif(is_file($row)){
+				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)),'/');
+			}
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
+				$rtn[$path] = true;
+				return $rtn[$path];
+			}
+		}
+		$rtn[$path] = false;// <- default
+		return $rtn[$path];
+	}//is_path_enable_sitemap();
 
 	/**
 	 * 除外ファイルか調べる。
