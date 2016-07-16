@@ -106,8 +106,8 @@ return call_user_func( function(){
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
-		'*.css' => 'css' ,
-		'*.js' => 'js' ,
+		'*.css' => 'direct' ,
+		'*.js' => 'direct' ,
 		'*.png' => 'pass' ,
 		'*.jpg' => 'pass' ,
 		'*.gif' => 'pass' ,
