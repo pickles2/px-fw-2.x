@@ -274,6 +274,37 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * paths_enable_sitemap のテスト
+	 * @depends testCLIStandard
+	 */
+	public function testPathsEnableSitemap(){
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/common/styles/sitemap_loaded.css'
+		);
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match('/failed/', $output), 0 );
+
+		$output = $this->px_execute(
+			'/standard/.px_execute.php',
+			'/common/styles/sitemap_not_loaded.css'
+		);
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match('/failed/', $output), 0 );
+
+
+		// 後始末
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+	/**
 	 * ダイナミックパスを実行してみるテスト
 	 * @depends testCLIStandard
 	 */

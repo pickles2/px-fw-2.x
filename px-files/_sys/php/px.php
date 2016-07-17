@@ -240,6 +240,8 @@ class px{
 		$is_enable_sitemap = $this->is_path_enable_sitemap( $this->req()->get_request_file_path() );
 		if( $is_enable_sitemap ){
 			$this->site = new site($this);
+		}else{
+			$this->site = false;
 		}
 
 
