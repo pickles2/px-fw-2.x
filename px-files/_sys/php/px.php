@@ -834,15 +834,20 @@ class px{
 	 */
 	public function href( $linkto ){
 		$parsed_url = parse_url($linkto);
-		$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
-		if( !$tmp_page_info_by_id ){
-			$tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']);
+		if( $this->site() !== false ){
+			$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
+			if( !$tmp_page_info_by_id ){
+				$tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']);
+			}
 		}
 		$path = $linkto;
-		$path_type = $this->site()->get_path_type( $linkto );
-		if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
-			$path = @$tmp_page_info_by_id['path'];
-			$path_type = $this->site()->get_path_type( $path );
+		$path_type = false;
+		if( $this->site() !== false ){
+			$path_type = $this->site()->get_path_type( $linkto );
+			if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
+				$path = @$tmp_page_info_by_id['path'];
+				$path_type = $this->site()->get_path_type( $path );
+			}
 		}
 		unset($tmp_page_info_by_id);
 
@@ -875,7 +880,11 @@ class px{
 		}
 
 		$path = $this->fs()->normalize_path($path);
-		switch( $this->site()->get_path_type( $path ) ){
+		$path_type = false;
+		if( $this->site() !== false ){
+			$path_type = $this->site()->get_path_type( $path );
+		}
+		switch( $path_type ){
 			case 'full_url':
 			case 'javascript':
 			case 'anchor':
@@ -972,8 +981,13 @@ class px{
 	public function mk_link( $linkto, $options = array() ){
 		$parsed_url = parse_url($linkto);
 		$args = func_get_args();
-		$page_info = $this->site()->get_page_info($linkto);
-		if( !$page_info ){ $page_info = $this->site()->get_page_info(@$parsed_url['path']); }
+		$page_info = null;
+		if( $this->site() !== false ){
+			$page_info = $this->site()->get_page_info($linkto);
+			if( !$page_info ){
+				$page_info = $this->site()->get_page_info(@$parsed_url['path']);
+			}
+		}
 		$href = $this->href($linkto);
 		$hrefc = $this->href($this->req()->get_request_file_path());
 		$label = $page_info['title_label'];
@@ -1000,19 +1014,24 @@ class px{
 			}
 		}
 
-		$breadcrumb = $this->site()->get_breadcrumb_array($hrefc);
 		$is_current = false;
-		if( is_array($options) && array_key_exists('current', $options) && !is_null( $options['current'] ) ){
-			$is_current = !@empty($options['current']);
-		}elseif($href==$hrefc){
-			$is_current = true;
-		}elseif( $this->site()->is_page_in_breadcrumb($page_info['id']) ){
-			$is_current = true;
+		if( $this->site() !== false ){
+			if( is_array($options) && array_key_exists('current', $options) && !is_null( $options['current'] ) ){
+				$is_current = !@empty($options['current']);
+			}elseif($href==$hrefc){
+				$is_current = true;
+			}elseif( $this->site()->is_page_in_breadcrumb($page_info['id']) ){
+				$is_current = true;
+			}
 		}
+
 		$is_popup = false;
-		if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){ // <- 'popup' で始まるlayoutは、ポップアップとして扱う。
-			$is_popup = true;
+		if( $this->site() !== false ){
+			if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){ // <- 'popup' で始まるlayoutは、ポップアップとして扱う。
+				$is_popup = true;
+			}
 		}
+
 		$label = (!is_null($label)?$label:$href); // labelがnullの場合、リンク先をラベルとする
 
 		$classes = array();
@@ -1107,12 +1126,14 @@ class px{
 	 * @return string ローカルリソースの実際の絶対パス
 	 */
 	public function path_files( $localpath_resource = null ){
-		$tmp_page_info = $this->site()->get_current_page_info();
-		$path_content = $tmp_page_info['content'];
-		if( is_null($path_content) ){
+		if( $this->site() !== false ){
+			$tmp_page_info = $this->site()->get_current_page_info();
+			$path_content = $tmp_page_info['content'];
+			unset($tmp_page_info);
+		}
+		if( @is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
-		unset($tmp_page_info);
 
 		$rtn = $this->conf->path_files;
 		$data = array(
@@ -1164,12 +1185,14 @@ class px{
 		if( !strlen( @$this->conf()->public_cache_dir ) ){
 			return false;
 		}
-		$tmp_page_info = $this->site()->get_current_page_info();
-		$path_content = $tmp_page_info['content'];
-		if( is_null($path_content) ){
+		if( $this->site() !== false ){
+			$tmp_page_info = $this->site()->get_current_page_info();
+			$path_content = $tmp_page_info['content'];
+			unset($tmp_page_info);
+		}
+		if( @is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
-		unset($tmp_page_info);
 
 		$path_original = $this->get_path_controot().$path_content;
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
@@ -1220,12 +1243,14 @@ class px{
 	 * @return string コンテンツ別の非公開キャッシュのサーバー内部パス
 	 */
 	public function realpath_files_private_cache( $localpath_resource = null ){
-		$tmp_page_info = $this->site()->get_current_page_info();
-		$path_content = $tmp_page_info['content'];
-		if( is_null($path_content) ){
+		if( $this->site() !== false ){
+			$tmp_page_info = $this->site()->get_current_page_info();
+			$path_content = $tmp_page_info['content'];
+			unset($tmp_page_info);
+		}
+		if( @is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
-		unset($tmp_page_info);
 
 		$path_original = $this->get_path_controot().$path_content;
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
