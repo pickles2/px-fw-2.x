@@ -385,7 +385,10 @@ class px{
 	 *
 	 * `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを返します。
 	 *
-	 * @return object $site オブジェクト
+	 * `$conf->paths_enable_sitemap` の設定によって、 `$site` がロードされない場合があります。
+	 * ロードされない場合は、 `false` が返されます。
+	 *
+	 * @return object|bool `$site` オブジェクト。ロードされない場合は `false`。
 	 */
 	public function site(){
 		return $this->site;
@@ -842,12 +845,10 @@ class px{
 		}
 		$path = $linkto;
 		$path_type = false;
-		if( $this->site() !== false ){
-			$path_type = $this->site()->get_path_type( $linkto );
-			if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
-				$path = @$tmp_page_info_by_id['path'];
-				$path_type = $this->site()->get_path_type( $path );
-			}
+		$path_type = $this->get_path_type( $linkto );
+		if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
+			$path = @$tmp_page_info_by_id['path'];
+			$path_type = $this->get_path_type( $path );
 		}
 		unset($tmp_page_info_by_id);
 
@@ -880,10 +881,7 @@ class px{
 		}
 
 		$path = $this->fs()->normalize_path($path);
-		$path_type = false;
-		if( $this->site() !== false ){
-			$path_type = $this->site()->get_path_type( $path );
-		}
+		$path_type = $this->get_path_type( $path );
 		switch( $path_type ){
 			case 'full_url':
 			case 'javascript':
@@ -1393,6 +1391,64 @@ class px{
 		}
 		return $RTN;
 	}
+
+
+	/**
+	 * パス文字列を受け取り、種類を判定する。
+	 *
+	 * このメソッドは、以前は `$site` に実装されていました。
+	 * `$conf->paths_enable_sitemap` が導入され、 `$site` が存在しない場合が考慮されるようになったことにより、
+	 * `$px` に移管されました。
+	 *
+	 * @param string $path 調べるパス
+	 * @return string|bool 判定結果。
+	 * - `javascript:` から始まる場合 => 'javascript'
+	 * - `#:` から始まる場合 => 'anchor'
+	 * - `http://` などURLスキーマ名から始まる場合 => 'full_url'
+	 * - その他で `alias:` から始まる場合 => 'alias'
+	 * - `{$xxxx}` または `{*xxxx}` を含む場合 => 'dynamic'
+	 * - `/` から始まる場合 => 'normal'
+	 * - どれにも当てはまらない不明な形式の場合に、`false` を返します。
+	 */
+	public function get_path_type( $path ) {
+		if( preg_match( '/^(?:alias[0-9]*\:)?javascript\:/i' , $path ) ) {
+			//  javascript: から始まる場合
+			//  サイトマップ上での重複を許容するために、
+			//  自動的にalias扱いとなることを考慮した正規表現。
+			$path_type = 'javascript';
+		} else if( preg_match( '/^(?:alias[0-9]*\:)?\#/' , $path ) ) {
+			//  # から始まる場合
+			//  サイトマップ上での重複を許容するために、
+			//  自動的にalias扱いとなることを考慮した正規表現。
+			$path_type = 'anchor';
+		} else if( preg_match( '/^(?:alias[0-9]*\:)?[a-zA-Z0-90-9]+\:\/\//' , $path ) ) {
+			//  http:// などURLスキーマから始まる場合
+			//  サイトマップ上での重複を許容するために、
+			//  自動的にalias扱いとなることを考慮した正規表現。
+			$path_type = 'full_url';
+		} else if( preg_match( '/^alias[0-9]*\:/' , $path ) ) {
+			//  alias:から始まる場合
+			//  サイトマップデータ上でpathは一意である必要あるので、
+			//  alias と : の間に、後から連番を降られる。
+			//  このため、数字が含まれている場合を考慮した。(@tomk79)
+			$path_type = 'alias';
+		} else if( preg_match( '/\{(?:\$|\*)(?:[a-zA-Z0-9\_\-]*)\}/' , $path ) ) {
+			//  {$xxxx} または {*xxxx} を含む場合(ダイナミックパス)
+			$path_type = 'dynamic';
+		} else if( preg_match( '/^\/\//' , $path ) ) {
+			//  //から始まる場合
+			$path_type = 'full_url';
+		} else if( preg_match( '/^\//' , $path ) ) {
+			//  /から始まる場合
+			$path_type = 'normal';
+		} else {
+			//  どれにも当てはまらない場合はfalseを返す
+			$path_type = false;
+		}
+		return $path_type;
+	}//get_path_type()
+
+
 
 	/**
 	 * アプリケーションロックする。
