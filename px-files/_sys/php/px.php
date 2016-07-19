@@ -1396,19 +1396,22 @@ class px{
 	/**
 	 * パス文字列を受け取り、種類を判定する。
 	 *
+	 * 次の基準で判定されます。
+	 *
+	 * - `javascript:` から始まる場合 => 'javascript'
+	 * - `#` から始まる場合 => 'anchor'
+	 * - `http://` などURLスキーマ名から始まる場合, `//` から始まる場合 => 'full_url'
+	 * - その他で `alias:` から始まる場合 => 'alias'
+	 * - `{$xxxx}` または `{*xxxx}` を含む場合 => 'dynamic'
+	 * - `/` から始まる場合 => 'normal'
+	 * - どれにも当てはまらない不明な形式の場合に、`false` を返します。
+	 *
 	 * このメソッドは、以前は `$site` に実装されていました。
 	 * `$conf->paths_enable_sitemap` が導入され、 `$site` が存在しない場合が考慮されるようになったことにより、
 	 * `$px` に移管されました。
 	 *
 	 * @param string $path 調べるパス
-	 * @return string|bool 判定結果。
-	 * - `javascript:` から始まる場合 => 'javascript'
-	 * - `#:` から始まる場合 => 'anchor'
-	 * - `http://` などURLスキーマ名から始まる場合 => 'full_url'
-	 * - その他で `alias:` から始まる場合 => 'alias'
-	 * - `{$xxxx}` または `{*xxxx}` を含む場合 => 'dynamic'
-	 * - `/` から始まる場合 => 'normal'
-	 * - どれにも当てはまらない不明な形式の場合に、`false` を返します。
+	 * @return string|bool 判定結果
 	 */
 	public function get_path_type( $path ) {
 		if( preg_match( '/^(?:alias[0-9]*\:)?javascript\:/i' , $path ) ) {

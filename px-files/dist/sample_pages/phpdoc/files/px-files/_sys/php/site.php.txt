@@ -1473,7 +1473,7 @@ INSERT INTO sitemap(
 	 * パス文字列を受け取り、種類を判定する。
 	 *
 	 * このメソッドは、 `$conf->paths_enable_sitemap` が導入され、 `$site` が存在しない場合が考慮されるようになったことにより、
-	 * `$px` に移管されました。
+	 * `$px`(class [picklesFramework2\px](picklesFramework2.px.html#method_get_path_type)) に移管されました。
 	 *
 	 * @param string $path 調べるパス
 	 * @return string|bool 判定結果。 結果は、 `$px->get_path_type()` に依存します。
