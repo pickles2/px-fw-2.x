@@ -163,8 +163,8 @@ return call_user_func( function(){
 	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
 	// @ini_set( 'memory_limit' , -1 );
 
-	@ini_set('display_errors', 'On');
-	@ini_set('error_reporting', 32767);
+	@ini_set('display_errors', 1);
+	@ini_set('error_reporting', E_ALL);
 
 
 	return $conf;

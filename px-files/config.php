@@ -289,8 +289,8 @@ return call_user_func( function(){
 	 *
 	 * エラーメッセージは問題解決の助けになります。
 	 */
-	// @ini_set('display_errors', 'On');
-	// @ini_set('error_reporting', 32767);
+	// @ini_set('display_errors', 1);
+	// @ini_set('error_reporting', E_ALL);
 
 
 	return $conf;
