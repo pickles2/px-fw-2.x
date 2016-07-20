@@ -1,0 +1,11 @@
+/*
+-- test: <?= (is_object($px->site()) ? 'success' : 'failed') ?> --
+-- href: <?= $px->href('/hoge/fuga.gif') ?> --
+-- mk_link: <?= $px->mk_link('/hoge/fuga.gif') ?> --
+-- path_files: <?= $px->path_files('/hoge/fuga.gif') ?> --
+-- realpath_files: <?= $px->realpath_files('/hoge/fuga.gif') ?> --
+-- path_files_cache: <?= $px->path_files_cache('/hoge/fuga.gif') ?> --
+-- realpath_files_cache: <?= $px->realpath_files_cache('/hoge/fuga.gif') ?> --
+-- realpath_files_private_cache: <?= $px->realpath_files_private_cache('/hoge/fuga.gif') ?> --
+-- path_plugin_files: <?= $px->path_plugin_files('/hoge/fuga.gif') ?> --
+*/

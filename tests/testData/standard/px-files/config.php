@@ -75,6 +75,26 @@ return call_user_func( function(){
 	);
 
 
+	/**
+	 * paths_enable_sitemap
+	 *
+	 * サイトマップのロードを有効にするパスのパターンを設定します。
+	 * ワイルドカードとして "*"(アスタリスク) が使用可能です。
+	 *
+	 * サイトマップ中のページ数が増えると、サイトマップのロード自体に時間を要する場合があります。
+	 * サイトマップへのアクセスが必要ないファイルでは、この処理はスキップするほうがよいでしょう。
+	 *
+	 * 多くの場合では、 *.html と *.htm 以外ではロードする必要はありません。
+	 */
+	$conf->paths_enable_sitemap = array(
+		'*.html',
+		'*.htm',
+		'/common/styles/sitemap_loaded.*',
+	);
+
+
+
+
 	// -------- functions --------
 
 	$conf->funcs = new stdClass;
@@ -164,8 +184,8 @@ return call_user_func( function(){
 	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
 	// @ini_set( 'memory_limit' , -1 );
 
-	@ini_set('display_errors', 'On');
-	@ini_set('error_reporting', 32767);
+	@ini_set('display_errors', 1);
+	@ini_set('error_reporting', E_ALL);
 
 
 	return $conf;

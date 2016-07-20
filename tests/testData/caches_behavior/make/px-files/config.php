@@ -169,8 +169,19 @@ return call_user_func( function(){
 	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
 	// @ini_set( 'memory_limit' , -1 );
 
-	@ini_set('display_errors', 'On');
-	@ini_set('error_reporting', 32767);
+	/**
+	 * `display_errors`, `error_reporting`
+	 *
+	 * エラーを標準出力するための設定です。
+	 *
+	 * PHPの設定によっては、エラーが発生しても表示されない場合があります。
+	 * もしも、「なんか挙動がおかしいな？」と感じたら、
+	 * 必要に応じてこれらのコメントを外し、エラー出力を有効にしてみてください。
+	 *
+	 * エラーメッセージは問題解決の助けになります。
+	 */
+	@ini_set('display_errors', 1);
+	@ini_set('error_reporting', E_ALL);
 
 
 	return $conf;

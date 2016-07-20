@@ -38,12 +38,6 @@ return call_user_func( function(){
 
 	// processor
 	$conf->paths_proc_type = array(
-		// パスのパターン別に処理方法を設定
-		//     - ignore = 対象外パス
-		//     - direct = 加工せずそのまま出力する(デフォルト)
-		//     - その他 = extension 名
-		// パターンは先頭から検索され、はじめにマッチした設定を採用する。
-		// ワイルドカードとして "*"(アスタリスク) を使用可。
 		'/.htaccess' => 'ignore' ,
 		'/.px_execute.php' => 'ignore' ,
 		'/px-files/*' => 'ignore' ,
@@ -58,6 +52,9 @@ return call_user_func( function(){
 		'*/.svn/*' => 'ignore' ,
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
+
+		'/common/pass/*' => 'pass' ,
+		'/common/direct/*' => 'direct' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
@@ -126,7 +123,7 @@ return call_user_func( function(){
 	$conf->funcs->processor->js = [
 		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
 		'picklesFramework2\processors\encodingconverter\encodingconverter::exec('.json_encode([
-			'output_encoding'=>'UTF-8',
+			'output_encoding'=>'Shift_JIS',
 			'output_eol_coding'=>'cr'
 		]).')' ,
 	];
@@ -165,8 +162,8 @@ return call_user_func( function(){
 	// サイトマップやコンテンツなどで、容量の大きなデータを扱う場合に調整してください。
 	// @ini_set( 'memory_limit' , -1 );
 
-	@ini_set('display_errors', 'On');
-	@ini_set('error_reporting', 32767);
+	@ini_set('display_errors', 1);
+	@ini_set('error_reporting', E_ALL);
 
 
 	return $conf;
