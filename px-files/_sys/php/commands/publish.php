@@ -377,6 +377,7 @@ function cont_EditPublishTargetPathApply(formElm){
 					$status_code = 200;
 					break;
 
+				case 'direct':
 				default:
 					// pickles execute
 					print $ext.' -> '.$proc_type."\n";
