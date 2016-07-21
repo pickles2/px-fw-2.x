@@ -901,7 +901,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		$path = $this->px->fs()->get_realpath( '/'.$this->path_region );
 		$path = $this->px->fs()->normalize_path($path);
 		while( !$this->px->fs()->is_dir('./'.$path) ){
-			$path = dirname($path).'/';
+			$path = $this->px->fs()->normalize_path(dirname($path).'/');
 		}
 		// var_dump($path);
 		return $path;

@@ -1088,7 +1088,7 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		$rtn = dirname( $_SERVER['SCRIPT_NAME'] );
+		$rtn = $this->fs->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
 		if( $rtn != '/' ){
 			$rtn .= '/';
 		}
@@ -1135,7 +1135,7 @@ class px{
 
 		$rtn = $this->conf->path_files;
 		$data = array(
-			'dirname'=>dirname($path_content),
+			'dirname'=>$this->fs->normalize_path(dirname($path_content)),
 			'filename'=>basename($this->fs()->trim_extension($path_content)),
 			'ext'=>strtolower($this->fs()->get_extension($path_content)),
 		);
