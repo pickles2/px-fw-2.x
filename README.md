@@ -84,6 +84,7 @@ $ chmod -R 777 ./caches
 - コンフィグ項目 `$conf->paths_enable_sitemap` を追加。
 - `$conf->paths_proc_type` に、新しい処理方法 pass を追加。デフォルトを pass に変更。
 - `$conf->paths_proc_type` が direct のときに、二重拡張子の処理を適用できるようになった。
+- 他プロセスがサイトマップキャッシュを生成中にアクセスした場合にサイトマップキャッシュ生成をスキップするアプリケーションロック機能を追加。
 - Windows で Apache 上で実行する場合に、 `$px->get_path_controot()` 等のパスがずれてしまう不具合を修正。
 
 ### Pickles Framework 2.0.21 (2016年7月14日)
