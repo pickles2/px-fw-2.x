@@ -1468,7 +1468,7 @@ class px{
 			$this->fs()->mkdir_r( dirname( $lockfilepath ) );
 		}
 
-		#	PHPのFileStatusCacheをクリア
+		// PHPのFileStatusCacheをクリア
 		clearstatcache();
 
 		$i = 0;
@@ -1480,7 +1480,7 @@ class px{
 			}
 			sleep(1);
 
-			#	PHPのFileStatusCacheをクリア
+			// PHPのFileStatusCacheをクリア
 			clearstatcache();
 		}
 		$src = '';
@@ -1488,7 +1488,7 @@ class px{
 		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$RTN = $this->fs()->save_file( $lockfilepath , $src );
 		return	$RTN;
-	}//lock()
+	} // lock()
 
 	/**
 	 * アプリケーションロックされているか確認する。
@@ -1501,18 +1501,18 @@ class px{
 		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$lockfile_expire = $expire;
 
-		#	PHPのFileStatusCacheをクリア
+		// PHPのFileStatusCacheをクリア
 		clearstatcache();
 
 		if( $this->fs()->is_file($lockfilepath) ){
 			if( ( time() - filemtime($lockfilepath) ) > $lockfile_expire ){
-				#	有効期限を過ぎていたら、ロックは成立する。
+				// 有効期限を過ぎていたら、ロックは成立する。
 				return false;
 			}
 			return true;
 		}
 		return false;
-	}//is_locked()
+	} // is_locked()
 
 	/**
 	 * アプリケーションロックを解除する。
@@ -1523,11 +1523,11 @@ class px{
 	public function unlock( $app_name ){
 		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
-		#	PHPのFileStatusCacheをクリア
+		// PHPのFileStatusCacheをクリア
 		clearstatcache();
 
 		return @unlink( $lockfilepath );
-	}//unlock()
+	} // unlock()
 
 	/**
 	 * アプリケーションロックファイルの更新日を更新する。
@@ -1538,14 +1538,14 @@ class px{
 	public function touch_lockfile( $app_name ){
 		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
-		#	PHPのFileStatusCacheをクリア
+		// PHPのFileStatusCacheをクリア
 		clearstatcache();
 		if( !is_file( $lockfilepath ) ){
 			return false;
 		}
 
 		return touch( $lockfilepath );
-	}//touch_lockfile()
+	} // touch_lockfile()
 
 	/**
 	 * Pickles の SVG ロゴソースを取得する
