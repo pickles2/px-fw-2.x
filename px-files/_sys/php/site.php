@@ -143,7 +143,7 @@ class site{
 	 * このキャッシュは、キャッシュファイルのタイムスタンプより新しいCSVを発見するか、
 	 * `?PX=clearcache` によりキャッシュがクリアされると、次回アクセス時に再生成されます。
 	 *
-	 * @return bool 常に `true`
+	 * @return bool 成功時に `true`, 失敗時に `false` を返します。
 	 */
 	private function load_sitemap_csv(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
@@ -155,6 +155,31 @@ class site{
 			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
 			return true;
 		}
+
+		$i = 0;
+		clearstatcache();
+		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
+			$i ++;
+			if( $i > 10 ){
+				// 他のプロセスがサイトマップキャッシュを作成中。
+				// 10秒待って解除されなければ、true を返して終了する。
+				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
+				return false;
+				break;
+			}
+			sleep(1);
+
+			// PHPのFileStatusCacheをクリア
+			clearstatcache();
+		}
+
+		// サイトマップキャッシュ作成中のアプリケーションロック
+		$lockfile_src = '';
+		$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+		$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+		unset( $lockfile_src );
+
 
 		if( $this->pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
@@ -408,10 +433,14 @@ INSERT INTO sitemap(
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
+
+		// サイトマップキャッシュ作成中のアプリケーションロックを解除
+		$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
+
 		set_time_limit(30);//タイマーリセット
 
 		return true;
-	}//load_sitemap_csv();
+	} // load_sitemap_csv();
 
 	/**
 	 * サイトマップキャッシュが読み込み可能か調べる。
