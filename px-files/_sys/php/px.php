@@ -201,6 +201,15 @@ class px{
 			}
 		}
 
+		// 環境変数 $_SERVER['DOCUMENT_ROOT'] をセット
+		// get_path_docroot() は、$conf, $fs を参照するので、
+		// これらの初期化の後が望ましい。
+		if(  !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
+			// commandline only
+			$_SERVER['DOCUMENT_ROOT'] = $this->get_path_docroot();
+			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
+		}
+
 		// デフォルトの Content-type を出力
 		$this->output_content_type();
 

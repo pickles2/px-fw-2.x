@@ -81,7 +81,7 @@ $ chmod -R 777 ./caches
 
 ### Pickles Framework 2.0.23 (2016年??月??日)
 
-- ??????????
+- コマンドラインからの起動時にも、 `$_SERVER['DOCUMENT_ROOT']` を使用できるようになった。
 
 ### Pickles Framework 2.0.22 (2016年7月27日)
 
