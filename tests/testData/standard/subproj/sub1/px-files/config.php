@@ -8,14 +8,14 @@ return call_user_func( function(){
 	$conf->name = 'Pickles 2'; // サイト名
 	$conf->copyright = 'Pickles 2 Project'; // コピーライト表記
 	$conf->domain = 'pickles2.pxt.jp'; // ドメイン
-	$conf->path_controot = '/'; // コンテンツルートディレクトリ
+	$conf->path_controot = '/subproj/sub1/'; // コンテンツルートディレクトリ
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
 	$conf->path_publish_dir = null; // パブリッシュ先ディレクトリパス
 	$conf->public_cache_dir = '/caches/'; // 公開キャッシュディレクトリ
 	clearstatcache();
-	$conf->path_files = trim(file_get_contents(__DIR__.'/config_ex/path_files.txt'));
+	$conf->path_files = '{$dirname}/{$filename}_files/';
 	$conf->contents_manifesto = '/common/contents_manifesto.ignore.php'; // Contents Manifesto のパス
 
 	// directory index

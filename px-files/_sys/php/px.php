@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.22';
+		return '2.0.23-alpha.1+nb';
 	}
 
 	/**
@@ -199,6 +199,15 @@ class px{
 			if( strlen($this->path_homedir.$tmp_path_sys_dir) && !@is_dir( $this->path_homedir.$tmp_path_sys_dir ) ){
 				$this->fs->mkdir( $this->path_homedir.$tmp_path_sys_dir );
 			}
+		}
+
+		// 環境変数 $_SERVER['DOCUMENT_ROOT'] をセット
+		// get_path_docroot() は、$conf, $fs を参照するので、
+		// これらの初期化の後が望ましい。
+		if(  !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
+			// commandline only
+			$_SERVER['DOCUMENT_ROOT'] = $this->get_path_docroot();
+			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
 		}
 
 		// デフォルトの Content-type を出力

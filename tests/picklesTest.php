@@ -356,6 +356,48 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * $_SERVER にアクセスするテスト
+	 * @depends testCLIStandard
+	 */
+	public function testServerEnv(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote( '<p>DocumentRoot = <span>'.htmlspecialchars(realpath(__DIR__.'/testData/standard/')).'</span></p>', '/' ).'/', $output ), 1 );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/subproj/sub1/.px_execute.php' ,
+			'/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( preg_match( '/'.preg_quote( '<p>DocumentRoot = <span>'.htmlspecialchars(realpath(__DIR__.'/testData/standard/')).'</span></p>', '/' ).'/', $output ), 1 );
+
+
+		// 後始末
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+
+		$output = $this->px_execute( '/standard/subproj/sub1/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/subproj/sub1/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/subproj/sub1/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+
+	/**
 	 * 遠いディレクトリからコマンドラインで実行してみるテスト
 	 * @depends testCLIStandard
 	 */
