@@ -9,49 +9,34 @@ namespace picklesFramework2\commands;
  */
 class publish{
 
-	/**
-	 * Picklesオブジェクト
-	 */
+	/** Picklesオブジェクト */
 	private $px;
 
-	/**
-	 * プラグイン設定
-	 */
+	/** プラグイン設定 */
 	private $plugin_conf;
 
-	/**
-	 * サイトオブジェクト
-	 */
+	/** サイトオブジェクト */
 	private $site;
 
-	/**
-	 * パス設定
-	 */
+	/** パス設定 */
 	private $path_tmp_publish, $path_publish_dir, $path_docroot;
 
-	/**
-	 * ドメイン設定
-	 */
+	/** ドメイン設定 */
 	private $domain;
 
-	/**
-	 * パブリッシュ範囲設定
-	 */
-	private $path_region, $paths_ignore;
+	/** パブリッシュ範囲設定 */
+	private $paths_region = array();
 
-	/**
-	 * ロックファイルの格納パス
-	 */
+	/** パブリッシュ対象外範囲設定 */
+	private $paths_ignore = array();
+
+	/** ロックファイルの格納パス */
 	private $path_lockfile;
 
-	/**
-	 * 処理待ちのパス一覧
-	 */
+	/** 処理待ちのパス一覧 */
 	private $paths_queue = array();
 
-	/**
-	 * 処理済みのパス一覧
-	 */
+	/** 処理済みのパス一覧 */
 	private $paths_done = array();
 
 	/**
@@ -102,9 +87,9 @@ class publish{
 		$this->path_docroot = $px->conf()->path_controot;
 
 		// パブリッシュ対象範囲
-		$this->path_region = $this->px->req()->get_request_file_path();
-		$this->path_region = preg_replace('/^\/+/s','/',$this->path_region);
-		$this->path_region = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'$/s','/',$this->path_region);
+		$path_region = $this->px->req()->get_request_file_path();
+		$path_region = preg_replace('/^\/+/s','/',$path_region);
+		$path_region = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'$/s','/',$path_region);
 		$func_check_param_path = function($path){
 			if( !preg_match('/^\//', $path) ){
 				return false;
@@ -116,10 +101,10 @@ class publish{
 			return true;
 		};
 		$param_path_region = $this->px->req()->get_param('path_region');
-		if( strlen( $param_path_region ) && $param_path_region != $this->path_region && $func_check_param_path( $param_path_region ) ){
-			$this->path_region = $param_path_region;
-			$this->param_path_region = $param_path_region;
+		if( strlen( $param_path_region ) && $param_path_region != $path_region && $func_check_param_path( $param_path_region ) ){
+			$path_region = $param_path_region;
 		}
+		$this->paths_region = array( $path_region );
 
 		// パブリッシュ対象外の範囲
 		$this->paths_ignore = $this->px->req()->get_param('paths_ignore');
@@ -143,7 +128,7 @@ class publish{
 		print 'domain: '.$this->domain."\n";
 		print 'docroot directory: '.$this->path_docroot."\n";
 		print 'ignore: '.join(', ', $this->plugin_conf->paths_ignore)."\n";
-		print 'region: '.$this->path_region."\n";
+		print 'region: '.join(', ', $this->paths_region)."\n";
 		print 'ignore (tmp): '.join(', ', $this->paths_ignore)."\n";
 		print '------------'."\n";
 		flush();
@@ -267,12 +252,12 @@ function cont_EditPublishTargetPathApply(formElm){
 			<th style="word-break:break-all;">region</th>
 			<td style="word-break:break-all;">
 				<div class="cont_publish_target_path_preview">
-					<div style="word-break:break-all;"><?= htmlspecialchars($this->path_region) ?></div>
+					<div style="word-break:break-all;"><?= htmlspecialchars($this->paths_region[0]) ?></div>
 					<div class="small"><a href="javascript:cont_EditPublishTargetPath();" class="icon">変更する</a></div>
 				</div>
 				<div class="cont_publish_target_path_editor" style="display:none;">
 					<form action="?" method="get" onsubmit="cont_EditPublishTargetPathApply(this); return false;" class="inline">
-						<input type="text" name="path" size="25" style="max-width:70%;" value="<?= htmlspecialchars($this->path_region) ?>" />
+						<input type="text" name="path" size="25" style="max-width:70%;" value="<?= htmlspecialchars($this->paths_region[0]) ?>" />
 						<input type="submit" style="width:20%;" value="変更する" />
 					</form>
 				</div>
@@ -336,7 +321,9 @@ function cont_EditPublishTargetPathApply(formElm){
 		$this->make_list_by_sitemap();
 		print "\n";
 		print '-- making list by Directory Scan'."\n";
-		$this->make_list_by_dir_scan( $this->get_region_root_path() );
+		foreach( $this->get_region_root_path() as $path_region ){
+			$this->make_list_by_dir_scan( $path_region );
+		}
 		print "\n";
 		print '============'."\n";
 		print '## Start publishing'."\n";
@@ -501,11 +488,13 @@ function cont_EditPublishTargetPathApply(formElm){
 			print '## Sync to publish directory.'."\n";
 			print "\n";
 			set_time_limit(30*60);
-			$this->sync_dir(
-				$this->path_tmp_publish.'/htdocs'.$this->path_docroot ,
-				$this->path_publish_dir.$this->path_docroot ,
-				$this->path_region
-			);
+			foreach( $this->paths_region as $path_region ){
+				$this->sync_dir(
+					$this->path_tmp_publish.'/htdocs'.$this->path_docroot ,
+					$this->path_publish_dir.$this->path_docroot ,
+					$path_region
+				);
+			}
 		}
 		print "\n";
 		print '============'."\n";
@@ -881,7 +870,14 @@ function cont_EditPublishTargetPathApply(formElm){
 			$path .= '/';
 		}
 		$path = $this->px->fs()->normalize_path($path);
-		if( !preg_match( '/^'.preg_quote( $this->path_region, '/' ).'/s' , $path ) ){
+		$is_region = false;
+		foreach( $this->paths_region as $path_region ){
+			if( preg_match( '/^'.preg_quote( $path_region, '/' ).'/s' , $path ) ){
+				$is_region = true;
+				break;
+			}
+		}
+		if( !$is_region ){
 			return false;
 		}
 		foreach( $this->paths_ignore as $path_ignore ){
@@ -898,13 +894,17 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * @return string パブリッシュ範囲のルートパス
 	 */
 	private function get_region_root_path(){
-		$path = $this->px->fs()->get_realpath( '/'.$this->path_region );
-		$path = $this->px->fs()->normalize_path($path);
-		while( !$this->px->fs()->is_dir('./'.$path) ){
-			$path = $this->px->fs()->normalize_path(dirname($path).'/');
+		$rtn = array();
+		foreach( $this->paths_region as $path_region ){
+			$path = $this->px->fs()->get_realpath( '/'.$path_region );
+			$path = $this->px->fs()->normalize_path($path);
+			while( !$this->px->fs()->is_dir('./'.$path) ){
+				$path = $this->px->fs()->normalize_path(dirname($path).'/');
+			}
+			// var_dump($path);
+			array_push($rtn, $path);
 		}
-		// var_dump($path);
-		return $path;
+		return $rtn;
 	}// get_region_root_path()
 
 
