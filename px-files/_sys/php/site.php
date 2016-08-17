@@ -631,7 +631,15 @@ INSERT INTO sitemap(
 			$path = $this->px->fs()->normalize_path($path);
 			unset( $tmp_matched );
 		}
-		$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
+		switch( $this->get_path_type($path) ){
+			case 'full_url':
+			case 'javascript':
+			case 'anchor':
+				break;
+			default:
+				$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
+				break;
+		}
 
 		$tmp_path = $path;
 		if( !array_key_exists($path, $this->sitemap_id_map) || is_null( $this->sitemap_array[$path] ) ){

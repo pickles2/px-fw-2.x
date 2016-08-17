@@ -133,6 +133,26 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertNull( @$toppage_info[''] );
 		$this->assertNull( @$toppage_info['start_with_no_asterisk'] );
 
+		$page_info = $px->site()->get_page_info('pickles2.pxt.jp_1');
+		$this->assertEquals( count($page_info), 16 );
+		$this->assertEquals( $page_info['title'], 'Pickles2 Official Website(1)' );
+		$this->assertEquals( $page_info['path'], 'alias35:http://pickles2.pxt.jp/' );
+
+		$page_info = $px->site()->get_page_info('pickles2.pxt.jp_2');
+		$this->assertEquals( count($page_info), 16 );
+		$this->assertEquals( $page_info['title'], 'Pickles2 Official Website(2)' );
+		$this->assertEquals( $page_info['path'], 'alias36://pickles2.pxt.jp/' );
+
+		$page_info = $px->site()->get_page_info(':auto_page_id.37');
+		$this->assertEquals( count($page_info), 16 );
+		$this->assertEquals( $page_info['title'], 'Pickles2 Official Website(3)' );
+		$this->assertEquals( $page_info['path'], 'alias37:http://pickles2.pxt.jp/index.html' );
+
+		$page_info = $px->site()->get_page_info(':auto_page_id.38');
+		$this->assertEquals( count($page_info), 16 );
+		$this->assertEquals( $page_info['title'], 'Pickles2 Official Website(4)' );
+		$this->assertEquals( $page_info['path'], 'alias38://pickles2.pxt.jp/index.html' );
+
 		chdir($cd);
 		$px->__destruct();// <- required on Windows
 		unset($px);

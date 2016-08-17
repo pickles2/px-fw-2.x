@@ -35,4 +35,6 @@
 "/sample_pages/global_urls/",,,"サイト外URLをサイトマップに組み込む",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "http://pickles2.pxt.jp/",,"pickles2.pxt.jp_1","Pickles2 Official Website(1)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "//pickles2.pxt.jp/",,"pickles2.pxt.jp_2","Pickles2 Official Website(2)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/>pickles2.pxt.jp_1",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
+"http://pickles2.pxt.jp/index.html",,,"Pickles2 Official Website(3)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
+"//pickles2.pxt.jp/index.html",,,"Pickles2 Official Website(4)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/global_urls/fin.html",,,"最下層",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/>pickles2.pxt.jp_1>pickles2.pxt.jp_2",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
