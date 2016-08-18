@@ -1,21 +1,21 @@
 <?php
 /**
  * class pxcmd
- * 
+ *
  * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスを定義します。
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 namespace picklesFramework2;
 
 /**
  * PX Commands
- * 
+ *
  * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスです。
  * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
- * 
+ *
  * メソッド `$px->pxcmd()` を通じてアクセスします。
- * 
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pxcmd{
@@ -30,7 +30,7 @@ class pxcmd{
 
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param object $px Picklesオブジェクト
 	 */
 	public function __construct($px){
@@ -169,7 +169,7 @@ class pxcmd{
 	<body class="pxcmd">
 		<div class="pxcmd-outline">
 			<div class="pxcmd-pxfw clearfix">
-				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles (version:<?= htmlspecialchars( $this->px->get_version() ) ?>)</div>
+				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles 2 (version: <?= htmlspecialchars( $this->px->get_version() ) ?>)</div>
 				<div class="pxcmd-pxfw_r">
 <?php
 	// $pxcommands = $this->pxcommands;
