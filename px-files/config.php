@@ -149,7 +149,7 @@ return call_user_func( function(){
 	/** セッションの有効期間 */
 	$conf->session_expire = 1800;
 	/** PX Commands のウェブインターフェイスからの実行を許可 */
-	$conf->allow_pxcommands = 0;
+	$conf->allow_pxcommands = 1;
 	/** タイムゾーン */
 	$conf->default_timezone = 'Asia/Tokyo';
 

@@ -30,6 +30,9 @@ class publish{
 	/** パブリッシュ対象外範囲設定 */
 	private $paths_ignore = array();
 
+	/** キャッシュを消去しないフラグ */
+	private $flg_keep_cache = false;
+
 	/** ロックファイルの格納パス */
 	private $path_lockfile;
 
@@ -106,6 +109,9 @@ class publish{
 		}
 		$this->paths_region = array( $path_region );
 
+		// キャッシュを消去しないフラグ
+		$this->flg_keep_cache = !!$this->px->req()->get_param('keep_cache');
+
 		// パブリッシュ対象外の範囲
 		$this->paths_ignore = $this->px->req()->get_param('paths_ignore');
 		if( is_string($this->paths_ignore) ){
@@ -130,6 +136,7 @@ class publish{
 		print 'ignore: '.join(', ', $this->plugin_conf->paths_ignore)."\n";
 		print 'region: '.join(', ', $this->paths_region)."\n";
 		print 'ignore (tmp): '.join(', ', $this->paths_ignore)."\n";
+		print 'keep cache: '.($this->flg_keep_cache ? 'true' : 'false')."\n";
 		print '------------'."\n";
 		flush();
 		return ob_get_clean();
@@ -225,7 +232,8 @@ function cont_EditPublishTargetPath(){
 }
 function cont_EditPublishTargetPathApply(formElm){
 	var path = $('input[name=path]', formElm).val();
-	window.location.href = <?= json_encode($this->px->get_path_controot()) ?> + path + '?PX=publish&path_region='+encodeURIComponent(path);
+	path = path.replace( new RegExp('^\\/'), '' );
+	window.location.href = window.location.origin + "<?= $this->px->get_path_controot() ?>" + path + '?PX=publish&path_region='+encodeURIComponent(path);
 }
 </script>
 <div class="unit">
@@ -713,7 +721,78 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * clearcache
 	 */
 	private function clearcache(){
-		(new clearcache( $this->px ))->exec();
+
+		// キャッシュを消去
+		if( !$this->flg_keep_cache ){
+			(new clearcache( $this->px ))->exec();
+		}else{
+			// 一時パブリッシュディレクトリをクリーニング
+			echo '-- cleaning "publish"'."\n";
+			$this->cleanup_tmp_publish_dir( $this->path_tmp_publish );
+		}
+
+		return true;
+	}
+
+	/**
+	 * 一時パブリッシュディレクトリをクリーニング
+	 * @param string $path クリーニング対象のパス
+	 * @param string $localpath $pathの仮想のパス (再帰処理のために使用)
+	 */
+	private function cleanup_tmp_publish_dir( $path, $localpath = null ){
+		$count = 0;
+		$ls = $this->px->fs()->ls($path.$localpath);
+		foreach( $ls as $basename ){
+			if( $localpath.$basename == '.gitkeep' ){
+				continue;
+			}
+			if( $this->px->fs()->is_dir($path.$localpath.$basename) ){
+				$count += $this->cleanup_tmp_publish_dir( $path, $localpath.$basename.DIRECTORY_SEPARATOR );
+
+				$i = 0;
+				print 'rmdir '.$this->px->fs()->get_realpath( $path.$localpath.$basename );
+				while(1){
+					$i ++;
+					if( $this->px->fs()->rmdir($path.$localpath.$basename) ){
+						break;
+					}
+					if($i > 5){
+						print ' [FAILED]';
+						break;
+					}
+					sleep(1);
+				}
+				print "\n";
+				$count ++;
+
+			}else{
+				clearstatcache();
+				if( $this->px->fs()->get_realpath($path.$localpath.$basename) == $this->path_lockfile ){
+					// パブリッシュロックファイルは消さない
+				}else{
+					$i = 0;
+					print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename );
+					while(1){
+						$i ++;
+						if( $this->px->fs()->rm($path.$localpath.$basename) ){
+							break;
+						}
+						if($i > 5){
+							print ' [FAILED]';
+							break;
+						}
+						sleep(1);
+					}
+					print "\n";
+					$count ++;
+				}
+			}
+		}
+
+		if( is_null($localpath) ){
+			$this->px->fs()->save_file( $path.$localpath.'.gitkeep', '' );
+		}
+		return $count;
 	}
 
 	/**
