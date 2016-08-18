@@ -108,6 +108,13 @@ class publish{
 			$path_region = $param_path_region;
 		}
 		$this->paths_region = array( $path_region );
+		unset( $path_region, $param_path_region );
+
+		// パブリッシュ対象範囲(複数指定する場合)
+		$paths_ignore = $this->px->req()->get_param('paths_region');
+		if( is_array($paths_ignore) ){
+			$this->paths_region = array_merge( $this->paths_region, $paths_ignore );
+		}
 
 		// キャッシュを消去しないフラグ
 		$this->flg_keep_cache = !!$this->px->req()->get_param('keep_cache');
