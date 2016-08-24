@@ -306,6 +306,57 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * パブリッシュディレクトリ + 複数のパブリッシュ対象範囲 のテスト
+	 */
+	public function testPublishDirectoryMultiRegionTest(){
+		@$this->fs->rm( __DIR__.'/testData/publish/published/region/' );
+
+		// テストデータの操作をテスト
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/publish/px2/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/region/region1/&paths_region[]=/region/region3/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/publish/px2/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/region/' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
+
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
+
+	}//testPublishDirectoryMultiRegionTest()
+
+
+	/**
 	 * キャッシュを削除するテスト
 	 * @depends testBefore
 	 * @depends testStandardPublish

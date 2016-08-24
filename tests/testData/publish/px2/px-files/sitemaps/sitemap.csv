@@ -5,3 +5,6 @@
 "/files_ignored/not_ignored.html",,,"Not ignored file",,,,,,1,,,"","",1
 "/update_sync_test/stay.html",,,"stay",,,,,,1,,,"","",1
 "/update_sync_test/new.html",,,"new",,,,,,1,,,"","",1
+"/region/region1/index.html",,,"region1",,,,,,1,"naked",,"","",1
+"/region/region2/index.html",,,"region2",,,,,,1,"naked",,"","",1
+"/region/region3/index.html",,,"region3",,,,,,1,"naked",,"","",1
