@@ -534,6 +534,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * @depends testCLIStandard
 	 */
 	public function testSitemapMinimum(){
+		$path_csv = __DIR__.'/testData/sitemap_min/px-files/sitemaps/.~lock.sitemap.csv#';
+		// $path_csv = __DIR__.'/testData/sitemap_min/px-files/sitemaps/lock.sitemap.csv'; // <- テストのテスト用
+		$this->fs->save_file( $path_csv, '"* path","* title"'."\n".'"/not_read.html","NOT-READ"'."\n" );
+		$this->assertTrue( is_file($path_csv) );
 
 		$output = $this->px_execute(
 			'/sitemap_min/.px_execute.php',
@@ -545,7 +549,8 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 
 		// 後始末
-		// $this->assertTrue( false );
+		$this->fs->rm( $path_csv );
+		$this->assertFalse( is_file($path_csv) );
 		$output = $this->px_execute( '/sitemap_min/.px_execute.php', '/?PX=clearcache' );
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/sitemap_min/caches/p/' ) );
