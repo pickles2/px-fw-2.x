@@ -64,15 +64,16 @@ return call_user_func( function(){
 
 		'/subproj/*' => 'ignore' ,
 		'/dynamicPath/test2_direct/*' => 'direct' ,
+		'/pass/*' => 'pass' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,
 		'*.css' => 'css' ,
 		'*.js' => 'js' ,
-		'*.png' => 'direct' ,
-		'*.jpg' => 'direct' ,
-		'*.gif' => 'direct' ,
-		'*.svg' => 'direct' ,
+		'*.png' => 'pass' ,
+		'*.jpg' => 'pass' ,
+		'*.gif' => 'pass' ,
+		'*.svg' => 'pass' ,
 	);
 
 
