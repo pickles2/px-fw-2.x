@@ -558,6 +558,41 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	} // testSitemapMinimum()
 
 
+	/**
+	 * path_proc_type のテスト
+	 * @depends testCLIStandard
+	 */
+	public function testProcType(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/vendor/autoload.php' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( $output, 'ignored path' );
+
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/pass/pass.html' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( trim($output), 'passed file.' );
+
+
+		// 後始末
+		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	} // testProcType()
+
+
 
 
 
