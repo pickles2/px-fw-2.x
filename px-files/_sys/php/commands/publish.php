@@ -984,9 +984,13 @@ function cont_EditPublishTargetPathApply(formElm){
 		foreach( $this->paths_region as $path_region ){
 			$path = $this->px->fs()->get_realpath( '/'.$path_region );
 			$path = $this->px->fs()->normalize_path($path);
-			while( !$this->px->fs()->is_dir('./'.$path) ){
-				$path = $this->px->fs()->normalize_path(dirname($path).'/');
-			}
+			// ↓スキャンする対象が実在するディレクトリである必要はないので削除。
+			// 　実在しない場合は無視されるだけなので問題ない。
+			// 　この処理が有効だった場合、ファイル名名指しでパブリッシュしようとした場合にも、
+			// 　実在する親ディレクトリに遡ってスキャンしてしまうため、無駄に処理に時間がかかってしまっていた。
+			// while( !$this->px->fs()->is_dir('./'.$path) ){
+			// 	$path = $this->px->fs()->normalize_path(dirname($path).'/');
+			// }
 			// var_dump($path);
 			array_push($rtn, $path);
 		}
