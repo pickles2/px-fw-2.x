@@ -79,6 +79,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.25 (2016年??月??日)
+
+- ????????????????????????????
+
 ### Pickles Framework 2.0.24 (2016年9月22日)
 
 - proc_type が `pass` 、 `ignore` の場合に、 `$conf->funcs->before_sitemap`, `$conf->funcs->before_content` に設定されたPXコマンドが実行されるようになった。
