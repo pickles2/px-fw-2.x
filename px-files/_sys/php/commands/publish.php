@@ -42,6 +42,9 @@ class publish{
 	/** 処理済みのパス一覧 */
 	private $paths_done = array();
 
+	/** Extension をマッチさせる正規表現 */
+	private $preg_exts;
+
 	/**
 	 * Before content function
 	 * @param object $px Picklesオブジェクト
@@ -89,6 +92,13 @@ class publish{
 		$this->domain = $px->conf()->domain;
 		$this->path_docroot = $px->conf()->path_controot;
 
+		// Extensionをマッチさせる正規表現
+		$process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
+		foreach( $process as $key=>$val ){
+			$process[$key] = preg_quote($val);
+		}
+		$this->preg_exts = '('.implode( '|', $process ).')';
+
 		// パブリッシュ対象範囲
 		$path_region = $this->px->req()->get_request_file_path();
 		$path_region = preg_replace('/^\/+/s','/',$path_region);
@@ -111,10 +121,18 @@ class publish{
 		unset( $path_region, $param_path_region );
 
 		// パブリッシュ対象範囲(複数指定する場合)
-		$paths_ignore = $this->px->req()->get_param('paths_region');
-		if( is_array($paths_ignore) ){
-			$this->paths_region = array_merge( $this->paths_region, $paths_ignore );
+		$paths_region = $this->px->req()->get_param('paths_region');
+		if( is_array($paths_region) ){
+			$this->paths_region = array_merge( $this->paths_region, $paths_region );
 		}
+
+		// パブリッシュ範囲の指定から、2重拡張子の2つ目を削除
+		foreach( $this->paths_region as $tmp_key=>$tmp_localpath_region ){
+			if( !is_dir('./'.$tmp_localpath_region) && preg_match( '/\.'.$this->preg_exts.'\.'.$this->preg_exts.'$/is', $tmp_localpath_region ) ){
+				$this->paths_region[$tmp_key] = preg_replace( '/\.'.$this->preg_exts.'$/is', '', $tmp_localpath_region );
+			}
+		}
+		unset($tmp_localpath_region, $tmp_key);
 
 		// キャッシュを消去しないフラグ
 		$this->flg_keep_cache = !!$this->px->req()->get_param('keep_cache');
@@ -823,17 +841,39 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * make list by directory scan
-	 * @param string $path パス
+	 *
+	 * @param string $path ファイル または ディレクトリ のパス
 	 * @return bool 常に真
 	 */
 	private function make_list_by_dir_scan( $path = null ){
-		$process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
-		foreach( $process as $key=>$val ){
-			$process[$key] = preg_quote($val);
-		}
-		$preg_exts = '('.implode( '|', $process ).')';
 
 		$realpath = $this->px->fs()->get_realpath('./'.$path);
+
+		if( !file_exists( $realpath ) ){
+			// 直にファイルが存在しない場合、2重拡張子のファイルを検索
+			$tmp_process = array_keys( get_object_vars( $this->px->conf()->funcs->processor ) );
+			foreach( $tmp_process as $tmp_ext ){
+				if( $this->px->fs()->is_file( $realpath.'.'.$tmp_ext ) ){
+					$realpath = $realpath.'.'.$tmp_ext;
+					break;
+				}
+			}
+			unset($tmp_process, $tmp_ext);
+		}
+
+		if( $this->px->fs()->is_file( $realpath ) ){
+			$tmp_localpath = $this->px->fs()->get_realpath('/'.$path);
+			if( preg_match( '/\.'.$this->preg_exts.'\.'.$this->preg_exts.'$/is', $tmp_localpath ) ){
+				$tmp_localpath = preg_replace( '/\.'.$this->preg_exts.'$/is', '', $tmp_localpath );
+			}
+			if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'pass' ){
+				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path);
+			}
+			$tmp_localpath = $this->px->fs()->normalize_path( $tmp_localpath );
+			$this->add_queue( $tmp_localpath );
+			return true;
+		}
+
 		$ls = $this->px->fs()->ls( $realpath );
 		if( !is_array($ls) ){
 			$ls = array();
@@ -847,19 +887,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		// }
 		foreach( $ls as $basename ){
 			set_time_limit(30);
-			if( $this->px->fs()->is_dir( $realpath.$basename ) ){
-				$this->make_list_by_dir_scan( $path.$basename.DIRECTORY_SEPARATOR );
-			}else{
-				$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
-				if( preg_match( '/\.'.$preg_exts.'\.'.$preg_exts.'$/is', $tmp_localpath ) ){
-					$tmp_localpath = preg_replace( '/\.'.$preg_exts.'$/is', '', $tmp_localpath );
-				}
-				if( $this->px->get_path_proc_type( $tmp_localpath ) == 'ignore' || $this->px->get_path_proc_type( $tmp_localpath ) == 'pass' ){
-					$tmp_localpath = $this->px->fs()->get_realpath('/'.$path.$basename);
-				}
-				$tmp_localpath = $this->px->fs()->normalize_path( $tmp_localpath );
-				$this->add_queue( $tmp_localpath );
-			}
+			$this->make_list_by_dir_scan( $path.DIRECTORY_SEPARATOR.$basename );
 		}
 		return true;
 	}
