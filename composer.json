@@ -23,6 +23,9 @@
     ],
     "require": {
         "php": ">=5.4.0" ,
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*",
         "tomk79/filesystem": "1.*",
         "tomk79/request": "0.1.*",
         "michelf/php-markdown": "1.4.*",

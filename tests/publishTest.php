@@ -357,6 +357,61 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * ファイルを単体でパブリッシュするテスト
+	 * @depends testBefore
+	 * @depends testStandardPublish
+	 */
+	public function testStandardSingleFile(){
+
+		// pass扱いになる txt ファイルをパブリッシュ
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/common/pass_file.txt' ,
+		] );
+		// var_dump($output);
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/pass_file.txt' ) );
+
+
+		// 2重拡張子のSCSSファイルを単品パブリッシュ(2つ目の拡張子を付けてコール)
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css.scss' ,
+		] );
+		// var_dump($output);
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css' ) );
+
+
+		// 2重拡張子のSCSSファイルを単品パブリッシュ
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css' ,
+		] );
+		// var_dump($output);
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css' ) );
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+
+	/**
 	 * キャッシュを削除するテスト
 	 * @depends testBefore
 	 * @depends testStandardPublish

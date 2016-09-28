@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.23-alpha.1+nb';
+		return '2.0.25-alpha.1+nb';
 	}
 
 	/**
@@ -204,7 +204,7 @@ class px{
 		// 環境変数 $_SERVER['DOCUMENT_ROOT'] をセット
 		// get_path_docroot() は、$conf, $fs を参照するので、
 		// これらの初期化の後が望ましい。
-		if(  !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
+		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
 			$_SERVER['DOCUMENT_ROOT'] = $this->get_path_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
@@ -215,23 +215,42 @@ class px{
 
 
 		// ignore されたコンテンツはこの段階で判断してレスポンスする
-		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
-			$this->set_status(403);// 403 Forbidden
-			print 'ignored path';
-			exit;
-		}
-
+		$fnc_response_ignore = function($px){
+			if( $px->is_ignore_path( $px->req()->get_request_file_path() ) ){
+				$px->set_status(403);// 403 Forbidden
+				print 'ignored path';
+				exit;
+			}
+			return false;
+		};
 		// pass 判定されたコンテンツはこの段階で判断してレスポンスする
-		if( $this->get_path_proc_type( $this->req()->get_request_file_path() ) === 'pass' ){
-			if( !$this->fs()->is_file( './'.$this->req()->get_request_file_path() ) ){
-				@header('Content-type: text/html;');
-				$this->set_status(404);// 404 NotFound
-				$this->bowl()->send('<p>404 - File not found.</p>');
+		$fnc_response_pass = function($px){
+			if( $px->get_path_proc_type( $px->req()->get_request_file_path() ) === 'pass' ){
+				if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
+					@header('Content-type: text/html;');
+					$px->set_status(404);// 404 NotFound
+					$px->bowl()->send('<p>404 - File not found.</p>');
+					return true;
+				}
+				$src = $px->fs()->read_file( './'.$px->req()->get_request_file_path() );
+				$px->bowl()->send($src);
+				return true;
+			}
+			return false;
+		};
+
+		$pxcmd = $this->get_px_command();
+		if( is_null($pxcmd) || !count($pxcmd) ){
+			// PXコマンドが無効かつ ignore か pass の場合、
+			// この時点でレスポンスを返す。
+			if( $fnc_response_ignore($this) ){
+				// ignore のレスポンス
 				return;
 			}
-			$src = $this->fs()->read_file( './'.$this->req()->get_request_file_path() );
-			$this->bowl()->send($src);
-			return;
+			if( $fnc_response_pass($this) ){
+				// pass のレスポンス
+				return;
+			}
 		}
 
 
@@ -284,6 +303,19 @@ class px{
 
 		// funcs: Before contents
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
+
+
+		// PXコマンドが有効、かつ ignore か pass の場合、
+		// この時点でレスポンスを返す。
+		// ここまでの before sitemap, before contents でレスポンスされた場合は、ここは通らない。
+		if( $fnc_response_ignore($this) ){
+			// ignore のレスポンス
+			return;
+		}
+		if( $fnc_response_pass($this) ){
+			// pass のレスポンス
+			return;
+		}
 
 
 		// execute content
