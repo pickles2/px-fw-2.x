@@ -147,14 +147,6 @@ class site{
 	 */
 	private function load_sitemap_csv(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
-		if( $this->is_sitemap_cache() ){
-			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
-			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
-			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
-			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
-			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
-			return true;
-		}
 
 		$i = 0;
 		clearstatcache();
@@ -171,6 +163,15 @@ class site{
 
 			// PHPのFileStatusCacheをクリア
 			clearstatcache();
+		}
+
+		if( $this->is_sitemap_cache() ){
+			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
+			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
+			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
+			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
+			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
+			return true;
 		}
 
 		// サイトマップキャッシュ作成中のアプリケーションロック
