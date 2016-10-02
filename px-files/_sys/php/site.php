@@ -156,6 +156,7 @@ class site{
 				// 他のプロセスがサイトマップキャッシュを作成中。
 				// 10秒待って解除されなければ、true を返して終了する。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
+				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
 				return false;
 				break;
 			}
