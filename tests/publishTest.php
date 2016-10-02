@@ -438,7 +438,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		clearstatcache();
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertTrue( $memo_time2 - $memo_time1 >= 10 );
+		$this->assertTrue( $memo_time2 - $memo_time1 >= 2 );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
 

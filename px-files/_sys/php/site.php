@@ -152,9 +152,9 @@ class site{
 		clearstatcache();
 		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
 			$i ++;
-			if( $i > 10 ){
+			if( $i > 2 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
-				// 10秒待って解除されなければ、true を返して終了する。
+				// 2秒待って解除されなければ、true を返して終了する。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
 				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
 				return false;
