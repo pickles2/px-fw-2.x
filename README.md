@@ -82,6 +82,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.26 (2016年??月??日)
 
 - サイトマップキャッシュ生成中の2件目以降のリクエストに関するパフォーマンスが改善した。
+- 依存ライブラリ michelf/php-markdown, leafo/scssphp のバージョンを更新。
 
 ### Pickles Framework 2.0.25 (2016年9月28日)
 
