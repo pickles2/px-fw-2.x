@@ -83,6 +83,7 @@ $ chmod -R 777 ./caches
 
 - サイトマップキャッシュ生成中の2件目以降のリクエストに関するパフォーマンスが改善した。
 - 依存ライブラリ michelf/php-markdown, leafo/scssphp のバージョンを更新。
+- `PX=api` がサイトマップを利用できない場合に、サイトマップ操作のAPIが `false` を返すようになった。
 
 ### Pickles Framework 2.0.25 (2016年9月28日)
 

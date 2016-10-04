@@ -1,10 +1,11 @@
 <phpunit>
 	<testsuites>
-		<testsuite>
+		<testsuite name="default">
 			<file>./tests/picklesTest.php</file>
 			<file>./tests/encodingConverterTest.php</file>
-			<file>./tests/apiTest.php</file>
 			<file>./tests/prevnextTest.php</file>
+			<file>./tests/apiTest.php</file>
+			<file>./tests/apiBeforeSitemapTest.php</file>
 			<file>./tests/publishTest.php</file>
 		</testsuite>
 	</testsuites>
