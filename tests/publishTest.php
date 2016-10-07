@@ -410,6 +410,53 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 	}
 
+	/**
+	 * サイトマップ生成の途中でパブリッシュするテスト
+	 * @depends testBefore
+	 * @depends testStandardPublish
+	 */
+	public function testPublishDuringGeneratingSitemapCache(){
+
+		// 一旦キャッシュを消去し、サイトマップキャッシュ生成中を示すロックファイルを作成する。
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		$this->fs->mkdir_r(__DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/');
+		$this->fs->save_file(
+			__DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/making_sitemap_cache.lock.txt',
+			''
+		);
+
+		// サイトマップ生成中にパブリッシュプロセスを発行
+		$memo_time1 = time();
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/index.html&keep_cache=1' ,
+		] );
+		$memo_time2 = time();
+		// var_dump($output);
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $memo_time2 - $memo_time1 >= 2 );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
+
+		$csv = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
+		$this->assertTrue( is_array( $csv ) );
+		$this->assertEquals( $csv[1][1], '/index.html' );
+		$this->assertEquals( $csv[1][2], 'Sitemap cache generating is now in progress. This page has been incompletely generated.' );
+
+
+		// 後始末
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
 
 	/**
 	 * キャッシュを削除するテスト
