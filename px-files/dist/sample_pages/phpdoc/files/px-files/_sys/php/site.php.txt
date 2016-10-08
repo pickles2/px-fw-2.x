@@ -147,23 +147,16 @@ class site{
 	 */
 	private function load_sitemap_csv(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
-		if( $this->is_sitemap_cache() ){
-			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
-			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
-			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
-			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
-			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
-			return true;
-		}
 
 		$i = 0;
 		clearstatcache();
 		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
 			$i ++;
-			if( $i > 10 ){
+			if( $i > 2 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
-				// 10秒待って解除されなければ、true を返して終了する。
+				// 2秒待って解除されなければ、true を返して終了する。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
+				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
 				return false;
 				break;
 			}
@@ -171,6 +164,15 @@ class site{
 
 			// PHPのFileStatusCacheをクリア
 			clearstatcache();
+		}
+
+		if( $this->is_sitemap_cache() ){
+			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
+			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
+			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
+			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
+			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
+			return true;
 		}
 
 		// サイトマップキャッシュ作成中のアプリケーションロック
