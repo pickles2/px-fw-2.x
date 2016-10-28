@@ -219,6 +219,9 @@ class site{
 			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
 			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
 			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
+
+			// remove tmp database
+			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
 			return true;
 		}
 
@@ -504,8 +507,16 @@ INSERT INTO sitemap(
 
 		// キャッシュファイルを作成
 		if( $tmp_pdo !== false ){
+
+			// disconnect
+			$sth = null;
+			unset($sth);
+			$tmp_pdo = null;
+			unset($tmp_pdo);
+			$this->pdo = null;
+
 			$i = 0;
-			while( !$this->px->fs()->rename(
+			while( !$this->px->fs()->copy(
 				$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
 				$path_sitemap_cache_dir.'sitemap.sqlite'
 			) ){
@@ -516,14 +527,8 @@ INSERT INTO sitemap(
 				}
 				sleep(1);
 			}
-		}
-		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
-		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
-		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
-		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
 
-		// PDO をリロード
-		if( $tmp_pdo !== false ){
+			// PDO をリロード
 			$this->pdo = new \PDO(
 				'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite',
 				null, null,
@@ -531,7 +536,14 @@ INSERT INTO sitemap(
 					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
 				)
 			);
+
+			// remove tmp database
+			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
 		}
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
 
 		// サイトマップキャッシュ作成中のアプリケーションロックを解除
 		$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
