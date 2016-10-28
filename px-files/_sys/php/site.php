@@ -151,10 +151,17 @@ class site{
 		$i = 0;
 		clearstatcache();
 		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
+			if( @filemtime( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) < time()-(60*60) ){
+				// 60分以上更新された形跡がなければ、
+				// ロックを解除して再生成を試みる。
+				$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
+				break;
+			}
+
 			$i ++;
-			if( $i > 2 ){
+			if( $i > 0 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
-				// 2秒待って解除されなければ、true を返して終了する。
+				// 2秒待って解除されなければ、true を返して終了する。 → 待たないように変更。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
 				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
 				return false;
@@ -175,7 +182,7 @@ class site{
 			return true;
 		}
 
-		// サイトマップキャッシュ作成中のアプリケーションロック
+		// サイトマップキャッシュ作成中のアプリケーションロックファイルを作成
 		$lockfile_src = '';
 		$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
 		$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
@@ -229,6 +236,8 @@ CREATE TABLE sitemap(
 
 			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
+				// sleep(1); // 時間がかかる場合をシミュレーション
+
 				set_time_limit(30);//タイマー延命
 				$num_auto_pid++;
 				$tmp_array = array();
@@ -360,6 +369,13 @@ CREATE TABLE sitemap(
 
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 				$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
+
+				// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
+				$lockfile_src = '';
+				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+				$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+				$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+				unset( $lockfile_src );
 			}
 		}
 		//  / サイトマップをロード
