@@ -189,8 +189,23 @@ class site{
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 		unset( $lockfile_src );
 
+		// サイトマップキャッシュ生成中の一時データベースを作成
+		if( class_exists('\\PDO') ){
+			try {
+				$tmp_pdo = new \PDO(
+					'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
+					null, null,
+					array(
+						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+					)
+				);
+			} catch (Exception $e) {
+				$tmp_pdo = false;
+			}
+		}
 
-		if( $this->pdo !== false ){
+
+		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
 			ob_start();
 ?>
@@ -203,8 +218,8 @@ CREATE TABLE sitemap(
 	list_flg       INTEGER
 );
 <?php
-			$result = @$this->pdo->query(ob_get_clean());
-			$result = @$this->pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
+			$result = @$tmp_pdo->query(ob_get_clean());
+			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 		}
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
@@ -380,7 +395,7 @@ CREATE TABLE sitemap(
 		}
 		//  / サイトマップをロード
 
-		//  ダイナミックパスを並び替え
+		// ダイナミックパスを並び替え
 		usort($this->sitemap_dynamic_paths, function($a,$b){
 			$path_short_a = preg_replace( '/\{.*$/si', '', $a['path_original'] );
 			$path_short_b = preg_replace( '/\{.*$/si', '', $b['path_original'] );
@@ -392,7 +407,7 @@ CREATE TABLE sitemap(
 		});
 
 		//  ページツリー情報を構成
-		if( $this->pdo !== false ){
+		if( $tmp_pdo !== false ){
 			// INSERT文をストア
 			ob_start(); ?>
 INSERT INTO sitemap(
@@ -411,12 +426,13 @@ INSERT INTO sitemap(
 	:list_flg
 );
 <?php
-			$sth = $this->pdo->prepare( ob_get_clean() );
+			$sth = $tmp_pdo->prepare( ob_get_clean() );
 		}
 		$this->sitemap_page_tree = array();
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
 			set_time_limit(30);//タイマー延命
-			if( $this->pdo !== false ){
+			// sleep(1); // 時間がかかる場合をシミュレーション
+			if( $tmp_pdo !== false ){
 				$parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$parent_page_id = $parent_page_id[count($parent_page_id)-1];
 				if(is_null(@$this->sitemap_id_map[$parent_page_id])){
@@ -436,8 +452,13 @@ INSERT INTO sitemap(
 			}else{
 				$this->get_children( $tmp_path );
 			}
-			// $this->get_children( $tmp_path, array('filter'=>true) );
-			// $this->get_children( $tmp_path, array('filter'=>false) );//list_flgを無視して、全員持ってくる
+
+			// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
+			$lockfile_src = '';
+			$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+			$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+			unset( $lockfile_src );
 		}
 		set_time_limit(30);//タイマーリセット
 		unset($tmp_path, $tmp_page_info );
@@ -446,11 +467,36 @@ INSERT INTO sitemap(
 		set_time_limit(0);//タイマー延命
 		$this->px->fs()->mkdir($path_sitemap_cache_dir);
 
-		//  キャッシュファイルを作成
+		// キャッシュファイルを作成
+		if( $tmp_pdo !== false ){
+			$i = 0;
+			while( !$this->px->fs()->rename(
+				$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
+				$path_sitemap_cache_dir.'sitemap.sqlite'
+			) ){
+				$i ++;
+				if( $i > 10 ){
+					// 10秒待って完了できなければ終了
+					break;
+				}
+				sleep(1);
+			}
+		}
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
+
+		// PDO をリロード
+		if( $tmp_pdo !== false ){
+			$this->pdo = new \PDO(
+				'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite',
+				null, null,
+				array(
+					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+				)
+			);
+		}
 
 		// サイトマップキャッシュ作成中のアプリケーションロックを解除
 		$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
