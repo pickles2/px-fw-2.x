@@ -148,6 +148,12 @@ class site{
 	private function load_sitemap_csv(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
 
+		// $path_top の設定値をチューニング
+		$path_top = $this->conf->path_top;
+		if(!strlen( $path_top )){ $path_top = '/'; }
+		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
+
+
 		$i = 0;
 		clearstatcache();
 		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
@@ -169,6 +175,24 @@ class site{
 				$this->sitemap_id_map        = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ? @include($path_sitemap_cache_dir.'sitemap_id_map.array') : array() );
 				$this->sitemap_dynamic_paths = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') ? @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') : array() );
 				$this->sitemap_page_tree     = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_page_tree.array') ? @include($path_sitemap_cache_dir.'sitemap_page_tree.array') : array() );
+
+				if( !count( $this->sitemap_array ) ){
+					$this->sitemap_array = array(
+						$path_top => array(
+							'id' => '',
+							'path' => $path_top,
+							'content' => $path_top,
+							'title' => 'HOME',
+							'title_h1' => 'HOME',
+							'title_label' => 'HOME',
+							'title_breadcrumb' => 'HOME',
+							'title_full' => 'HOME',
+						)
+					);
+					$this->sitemap_id_map = array(
+						''=>$path_top
+					);
+				}
 
 				clearstatcache();
 				if( !$this->px->fs()->is_file( $path_sitemap_cache_dir.'sitemap.sqlite' ) || !filesize($path_sitemap_cache_dir.'sitemap.sqlite') ){
@@ -244,11 +268,6 @@ CREATE TABLE sitemap(
 			$ary_sitemap_files = array();
 		}
 		sort($ary_sitemap_files);
-
-		// $path_top の設定値をチューニング
-		$path_top = $this->conf->path_top;
-		if(!strlen( $path_top )){ $path_top = '/'; }
-		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
@@ -374,7 +393,7 @@ CREATE TABLE sitemap(
 						'preg'=>'/^'.$preg_pattern.'$/s',
 						'pattern_map'=>$pattern_map[2],
 					) );
-					if( !strlen( $tmp_array['content'] ) ){
+					if( !strlen( @$tmp_array['content'] ) ){
 						$tmp_array['content'] = $tmp_array['path'];
 					}
 					$tmp_array['path'] = $tmp_path_original;
