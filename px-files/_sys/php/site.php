@@ -163,7 +163,23 @@ class site{
 				// 他のプロセスがサイトマップキャッシュを作成中。
 				// 2秒待って解除されなければ、true を返して終了する。 → 待たないように変更。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
-				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
+
+				//  古いサイトマップキャッシュが存在する場合、ロードする。
+				$this->sitemap_array         = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap.array') ? @include($path_sitemap_cache_dir.'sitemap.array') : array() );
+				$this->sitemap_id_map        = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ? @include($path_sitemap_cache_dir.'sitemap_id_map.array') : array() );
+				$this->sitemap_dynamic_paths = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') ? @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') : array() );
+				$this->sitemap_page_tree     = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_page_tree.array') ? @include($path_sitemap_cache_dir.'sitemap_page_tree.array') : array() );
+
+				clearstatcache();
+				if( !$this->px->fs()->is_file( $path_sitemap_cache_dir.'sitemap.sqlite' ) || !filesize($path_sitemap_cache_dir.'sitemap.sqlite') ){
+					// サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、
+					// Fatal Error が発生する場合があるため、使えないようにしておく。
+					//
+					// sitemap.sqlite は、 $site の初期化時に同時に生成されるので、ファイルの存在確認だけでは不十分。
+					// 準備が整う前の sitemap.sqlite は、容量が 0 のはずなので、これを条件に加えた。
+					$this->pdo = false;
+				}
+
 				return false;
 				break;
 			}
