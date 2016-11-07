@@ -6,6 +6,11 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "phpinfo"
+ *
+ * <dl>
+ * 	<dt>PX=phpinfo</dt>
+ * 		<dd>`phpinfo()` の実行結果を表示します。</dd>
+ * </dl>
  */
 class phpinfo{
 

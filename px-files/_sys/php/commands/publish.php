@@ -6,6 +6,15 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "publish"
+ *
+ * <dl>
+ * 	<dt>PX=publish</dt>
+ * 		<dd>パブリッシュのホーム画面を表示します。</dd>
+ * 	<dt>PX=publish.run</dt>
+ * 		<dd>パブリッシュを実行します。</dd>
+ * 	<dt>PX=publish.version</dt>
+ * 		<dd>Pickles Framework のバージョン番号を JSON 形式の文字列で返します。</dd>
+ * </dl>
  */
 class publish{
 

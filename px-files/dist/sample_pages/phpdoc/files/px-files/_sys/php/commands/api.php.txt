@@ -6,6 +6,84 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "api"
+ *
+ * ## [API] api.get.*
+ *
+ * <dl>
+ * 	<dt>PX=api.get.version</dt>
+ * 		<dd>Pickles Framework のバージョン番号を取得します。</dd>
+ * 	<dt>PX=api.get.config</dt>
+ * 		<dd>設定オブジェクトを取得します。</dd>
+ *
+ * 	<dt>PX=api.get.sitemap</dt>
+ * 		<dd>サイトマップ全体の配列を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.page_info&path={$path}</dt>
+ * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.parent</dt>
+ * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.actors</dt>
+ * 		<dd><code>$px->site()->get_actors()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.role</dt>
+ * 		<dd><code>$px->site()->get_role()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.children&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_children()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.bros&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_bros()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.bros_next&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_bros_next()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.bros_prev&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_bros_prev()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.next&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_next()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.prev&filter={$filter}</dt>
+ * 		<dd><code>$px->site()->get_prev()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.breadcrumb_array</dt>
+ * 		<dd><code>$px->site()->get_breadcrumb_array()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.dynamic_path_info&path={$path}</dt>
+ * 		<dd><code>$px->site()->get_dynamic_path_info({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.bind_dynamic_path_param&path={$path}&param={$param}</dt>
+ * 		<dd><code>$px->site()->bind_dynamic_path_param({$path}, {$param})</code> の返却値を取得します。<code>{$param}</code> には、パラメータのキーと値の組を必要分格納したオブジェクトをJSON形式の文字列で指定します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ *
+ * 	<dt>PX=api.get.path_homedir</dt>
+ * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.path_controot</dt>
+ * 		<dd><code>$px->get_path_controot()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.path_docroot</dt>
+ * 		<dd><code>$px->get_path_docroot()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.path_content</dt>
+ * 		<dd><code>$px->get_path_content()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.path_files&path_resource={$path}</dt>
+ * 		<dd><code>$px->path_files({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.realpath_files&path_resource={$path}</dt>
+ * 		<dd><code>$px->realpath_files({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.path_files_cache&path_resource={$path}</dt>
+ * 		<dd><code>$px->path_files_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.realpath_files_cache&path_resource={$path}</dt>
+ * 		<dd><code>$px->realpath_files_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.realpath_files_private_cache&path_resource={$path}</dt>
+ * 		<dd><code>$px->realpath_files_private_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.domain</dt>
+ * 		<dd><code>$px->get_domain()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.directory_index</dt>
+ * 		<dd><code>$px->get_directory_index()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.directory_index_primary</dt>
+ * 		<dd><code>$px->get_directory_index_primary()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.path_proc_type</dt>
+ * 		<dd><code>$px->get_path_proc_type()</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.get.href&linkto={$path_linkto}</dt>
+ * 		<dd><code>$px->href({$path_linkto})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * </dl>
+ *
+ * ## [API] api.is.*
+ *
+ * <dl>
+ * 	<dt>PX=api.is.match_dynamic_path&path={$path}</dt>
+ * 		<dd><code>$px->site()->is_match_dynamic_path({$path})</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.is.page_in_breadcrumb&path={$path}</dt>
+ * 		<dd><code>$px->site()->is_page_in_breadcrumb({$path})</code> の返却値を取得します。</dd>
+ * 	<dt>PX=api.is.ignore_path&path={$path}</dt>
+ * 		<dd><code>$px->is_ignore_path({$path})</code> の返却値を取得します。</dd>
+ * </dl>
  */
 class api{
 
@@ -139,71 +217,6 @@ class api{
 	 * [API] api.get.*
 	 *
 	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 *
-	 * <dl>
-	 * 	<dt>PX=api.get.version</dt>
-	 * 		<dd>Pickles Framework のバージョン番号を取得します。</dd>
-	 * 	<dt>PX=api.get.config</dt>
-	 * 		<dd>設定オブジェクトを取得します。</dd>
-	 *
-	 * 	<dt>PX=api.get.sitemap</dt>
-	 * 		<dd>サイトマップ全体の配列を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.page_info&path={$path}</dt>
-	 * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.parent</dt>
-	 * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.actors</dt>
-	 * 		<dd><code>$px->site()->get_actors()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.role</dt>
-	 * 		<dd><code>$px->site()->get_role()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.children&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_children()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.bros&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_bros()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.bros_next&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_bros_next()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.bros_prev&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_bros_prev()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.next&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_next()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.prev&filter={$filter}</dt>
-	 * 		<dd><code>$px->site()->get_prev()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.breadcrumb_array</dt>
-	 * 		<dd><code>$px->site()->get_breadcrumb_array()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.dynamic_path_info&path={$path}</dt>
-	 * 		<dd><code>$px->site()->get_dynamic_path_info({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.bind_dynamic_path_param&path={$path}&param={$param}</dt>
-	 * 		<dd><code>$px->site()->bind_dynamic_path_param({$path}, {$param})</code> の返却値を取得します。<code>{$param}</code> には、パラメータのキーと値の組を必要分格納したオブジェクトをJSON形式の文字列で指定します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 *
-	 * 	<dt>PX=api.get.path_homedir</dt>
-	 * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.path_controot</dt>
-	 * 		<dd><code>$px->get_path_controot()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.path_docroot</dt>
-	 * 		<dd><code>$px->get_path_docroot()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.path_content</dt>
-	 * 		<dd><code>$px->get_path_content()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.path_files&path_resource={$path}</dt>
-	 * 		<dd><code>$px->path_files({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.realpath_files&path_resource={$path}</dt>
-	 * 		<dd><code>$px->realpath_files({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.path_files_cache&path_resource={$path}</dt>
-	 * 		<dd><code>$px->path_files_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.realpath_files_cache&path_resource={$path}</dt>
-	 * 		<dd><code>$px->realpath_files_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.realpath_files_private_cache&path_resource={$path}</dt>
-	 * 		<dd><code>$px->realpath_files_private_cache({$path})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * 	<dt>PX=api.get.domain</dt>
-	 * 		<dd><code>$px->get_domain()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.directory_index</dt>
-	 * 		<dd><code>$px->get_directory_index()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.directory_index_primary</dt>
-	 * 		<dd><code>$px->get_directory_index_primary()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.path_proc_type</dt>
-	 * 		<dd><code>$px->get_path_proc_type()</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.get.href&linkto={$path_linkto}</dt>
-	 * 		<dd><code>$px->href({$path_linkto})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
-	 * </dl>
 	 *
 	 * @return void
 	 */
@@ -361,15 +374,6 @@ class api{
 	 * [API] api.is.*
 	 *
 	 * 結果を標準出力した後、`exit()` を発行してスクリプトを終了します。
-	 *
-	 * <dl>
-	 * 	<dt>PX=api.is.match_dynamic_path&path={$path}</dt>
-	 * 		<dd><code>$px->site()->is_match_dynamic_path({$path})</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.is.page_in_breadcrumb&path={$path}</dt>
-	 * 		<dd><code>$px->site()->is_page_in_breadcrumb({$path})</code> の返却値を取得します。</dd>
-	 * 	<dt>PX=api.is.ignore_path&path={$path}</dt>
-	 * 		<dd><code>$px->is_ignore_path({$path})</code> の返却値を取得します。</dd>
-	 * </dl>
 	 *
 	 * @return void
 	 */

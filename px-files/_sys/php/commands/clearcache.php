@@ -6,6 +6,13 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "clearcache"
+ *
+ * <dl>
+ * 	<dt>PX=clearcache</dt>
+ * 		<dd>Pickles Framework 2 が生成したキャッシュファイルを削除します。</dd>
+ * 	<dt>PX=clearcache.version</dt>
+ * 		<dd>Pickles Framework のバージョン番号を JSON 形式の文字列で返します。</dd>
+ * </dl>
  */
 class clearcache{
 
