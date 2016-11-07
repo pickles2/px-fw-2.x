@@ -40,6 +40,30 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		] );
 		clearstatcache();
 
+		// -------------------
+		// publish.version
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.version' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
+
+		// -------------------
+		// clearcache.version
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=clearcache.version' ,
+		] );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
+
 
 		// ----- publish -----
 

@@ -53,6 +53,15 @@ class clearcache{
 	 * kick
 	 */
 	private function kick(){
+		$pxcmd = $this->px->get_px_command();
+
+		if( @$pxcmd[1] == 'version' ){
+			$val = $this->px->get_version();
+			@header('Content-type: application/json; charset=UTF-8');
+			print json_encode($val);
+			exit;
+		}
+
 		print $this->px->pxcmd()->get_cli_header();
 		print 'pickles home directory: '.$this->path_homedir."\n";
 		print 'pickles docroot directory: '.$this->path_docroot."\n";
