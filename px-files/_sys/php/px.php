@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.26';
+		return '2.0.27-alpha.1+nb';
 	}
 
 	/**

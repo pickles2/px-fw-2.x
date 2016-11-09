@@ -6,6 +6,15 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "publish"
+ *
+ * <dl>
+ * 	<dt>PX=publish</dt>
+ * 		<dd>パブリッシュのホーム画面を表示します。</dd>
+ * 	<dt>PX=publish.run</dt>
+ * 		<dd>パブリッシュを実行します。</dd>
+ * 	<dt>PX=publish.version</dt>
+ * 		<dd>Pickles Framework のバージョン番号を JSON 形式の文字列で返します。</dd>
+ * </dl>
  */
 class publish{
 
@@ -194,9 +203,30 @@ class publish{
 	 */
 	public function exec_home( $px ){
 		$pxcmd = $this->px->get_px_command();
+
+		if( @$pxcmd[1] == 'version' ){
+			// 命令が publish.version の場合、バージョン番号を返す。
+			$val = $this->px->get_version();
+			@header('Content-type: application/json; charset=UTF-8');
+			print json_encode($val);
+			exit;
+		}
 		if( @$pxcmd[1] == 'run' ){
 			// 命令が publish.run の場合、実行する。
 			$this->exec_publish( $px );
+			exit;
+		}
+		if( @strlen($pxcmd[1]) ){
+			// 命令が不明の場合、エラーを表示する。
+			if( $this->px->req()->is_cmd() ){
+				header('Content-type: text/plain;');
+				print $this->cli_header();
+				print 'execute PX command => "?PX=publish.run"'."\n";
+				print $this->cli_footer();
+			}else{
+				$html = '<p>Go to <a href="?PX=publish">PX=publish</a> to execute publish.</p>'."\n";
+				print $this->px->pxcmd()->wrap_gui_frame($html);
+			}
 			exit;
 		}
 

@@ -148,15 +148,62 @@ class site{
 	private function load_sitemap_csv(){
 		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
 
+		// $path_top の設定値をチューニング
+		$path_top = $this->conf->path_top;
+		if(!strlen( $path_top )){ $path_top = '/'; }
+		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
+
+
 		$i = 0;
 		clearstatcache();
 		while( @is_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) ){
+			if( @filemtime( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' ) < time()-(60*60) ){
+				// 60分以上更新された形跡がなければ、
+				// ロックを解除して再生成を試みる。
+				$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
+				break;
+			}
+
 			$i ++;
-			if( $i > 2 ){
+			if( $i > 0 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
-				// 2秒待って解除されなければ、true を返して終了する。
+				// 2秒待って解除されなければ、true を返して終了する。 → 待たないように変更。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
-				$this->pdo = false; // サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、Fatal Error が発生する場合があるため、使えないようにしておく。
+
+				//  古いサイトマップキャッシュが存在する場合、ロードする。
+				$this->sitemap_array         = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap.array') ? @include($path_sitemap_cache_dir.'sitemap.array') : array() );
+				$this->sitemap_id_map        = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ? @include($path_sitemap_cache_dir.'sitemap_id_map.array') : array() );
+				$this->sitemap_dynamic_paths = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') ? @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') : array() );
+				$this->sitemap_page_tree     = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_page_tree.array') ? @include($path_sitemap_cache_dir.'sitemap_page_tree.array') : array() );
+
+				if( !count( $this->sitemap_array ) ){
+					$this->sitemap_array = array(
+						$path_top => array(
+							'id' => '',
+							'path' => $path_top,
+							'content' => $path_top,
+							'title' => 'HOME',
+							'title_h1' => 'HOME',
+							'title_label' => 'HOME',
+							'title_breadcrumb' => 'HOME',
+							'title_full' => 'HOME',
+						)
+					);
+					$this->sitemap_id_map = array(
+						''=>$path_top
+					);
+				}
+
+				clearstatcache();
+				if( !$this->px->fs()->is_file( $path_sitemap_cache_dir.'sitemap.sqlite' ) || !filesize($path_sitemap_cache_dir.'sitemap.sqlite') ){
+					// サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、
+					// Fatal Error が発生する場合があるため、使えないようにしておく。
+					//
+					// sitemap.sqlite は、 $site の初期化時に同時に生成されるので、ファイルの存在確認だけでは不十分。
+					// 準備が整う前の sitemap.sqlite は、容量が 0 のはずなので、これを条件に加えた。
+					$this->pdo = false;
+				}
+
 				return false;
 				break;
 			}
@@ -172,18 +219,36 @@ class site{
 			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
 			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
 			$this->sitemap_page_tree     = @include($path_sitemap_cache_dir.'sitemap_page_tree.array');
+
+			// remove tmp database
+			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
 			return true;
 		}
 
-		// サイトマップキャッシュ作成中のアプリケーションロック
+		// サイトマップキャッシュ作成中のアプリケーションロックファイルを作成
 		$lockfile_src = '';
 		$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
 		$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 		unset( $lockfile_src );
 
+		// サイトマップキャッシュ生成中の一時データベースを作成
+		if( class_exists('\\PDO') ){
+			try {
+				$tmp_pdo = new \PDO(
+					'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
+					null, null,
+					array(
+						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+					)
+				);
+			} catch (Exception $e) {
+				$tmp_pdo = false;
+			}
+		}
 
-		if( $this->pdo !== false ){
+
+		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
 			ob_start();
 ?>
@@ -196,8 +261,8 @@ CREATE TABLE sitemap(
 	list_flg       INTEGER
 );
 <?php
-			$result = @$this->pdo->query(ob_get_clean());
-			$result = @$this->pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
+			$result = @$tmp_pdo->query(ob_get_clean());
+			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 		}
 
 		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
@@ -206,11 +271,6 @@ CREATE TABLE sitemap(
 			$ary_sitemap_files = array();
 		}
 		sort($ary_sitemap_files);
-
-		// $path_top の設定値をチューニング
-		$path_top = $this->conf->path_top;
-		if(!strlen( $path_top )){ $path_top = '/'; }
-		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
@@ -229,6 +289,8 @@ CREATE TABLE sitemap(
 
 			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
 			foreach ($tmp_sitemap as $row_number=>$row) {
+				// sleep(1); // 時間がかかる場合をシミュレーション
+
 				set_time_limit(30);//タイマー延命
 				$num_auto_pid++;
 				$tmp_array = array();
@@ -334,7 +396,7 @@ CREATE TABLE sitemap(
 						'preg'=>'/^'.$preg_pattern.'$/s',
 						'pattern_map'=>$pattern_map[2],
 					) );
-					if( !strlen( $tmp_array['content'] ) ){
+					if( !strlen( @$tmp_array['content'] ) ){
 						$tmp_array['content'] = $tmp_array['path'];
 					}
 					$tmp_array['path'] = $tmp_path_original;
@@ -360,11 +422,18 @@ CREATE TABLE sitemap(
 
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 				$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
+
+				// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
+				$lockfile_src = '';
+				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+				$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+				$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+				unset( $lockfile_src );
 			}
 		}
 		//  / サイトマップをロード
 
-		//  ダイナミックパスを並び替え
+		// ダイナミックパスを並び替え
 		usort($this->sitemap_dynamic_paths, function($a,$b){
 			$path_short_a = preg_replace( '/\{.*$/si', '', $a['path_original'] );
 			$path_short_b = preg_replace( '/\{.*$/si', '', $b['path_original'] );
@@ -376,7 +445,7 @@ CREATE TABLE sitemap(
 		});
 
 		//  ページツリー情報を構成
-		if( $this->pdo !== false ){
+		if( $tmp_pdo !== false ){
 			// INSERT文をストア
 			ob_start(); ?>
 INSERT INTO sitemap(
@@ -395,12 +464,13 @@ INSERT INTO sitemap(
 	:list_flg
 );
 <?php
-			$sth = $this->pdo->prepare( ob_get_clean() );
+			$sth = $tmp_pdo->prepare( ob_get_clean() );
 		}
 		$this->sitemap_page_tree = array();
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
 			set_time_limit(30);//タイマー延命
-			if( $this->pdo !== false ){
+			// sleep(1); // 時間がかかる場合をシミュレーション
+			if( $tmp_pdo !== false ){
 				$parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$parent_page_id = $parent_page_id[count($parent_page_id)-1];
 				if(is_null(@$this->sitemap_id_map[$parent_page_id])){
@@ -420,8 +490,13 @@ INSERT INTO sitemap(
 			}else{
 				$this->get_children( $tmp_path );
 			}
-			// $this->get_children( $tmp_path, array('filter'=>true) );
-			// $this->get_children( $tmp_path, array('filter'=>false) );//list_flgを無視して、全員持ってくる
+
+			// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
+			$lockfile_src = '';
+			$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+			$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+			unset( $lockfile_src );
 		}
 		set_time_limit(30);//タイマーリセット
 		unset($tmp_path, $tmp_page_info );
@@ -430,7 +505,41 @@ INSERT INTO sitemap(
 		set_time_limit(0);//タイマー延命
 		$this->px->fs()->mkdir($path_sitemap_cache_dir);
 
-		//  キャッシュファイルを作成
+		// キャッシュファイルを作成
+		if( $tmp_pdo !== false ){
+
+			// disconnect
+			$sth = null;
+			unset($sth);
+			$tmp_pdo = null;
+			unset($tmp_pdo);
+			$this->pdo = null;
+
+			$i = 0;
+			while( !$this->px->fs()->copy(
+				$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
+				$path_sitemap_cache_dir.'sitemap.sqlite'
+			) ){
+				$i ++;
+				if( $i > 10 ){
+					// 10秒待って完了できなければ終了
+					break;
+				}
+				sleep(1);
+			}
+
+			// PDO をリロード
+			$this->pdo = new \PDO(
+				'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite',
+				null, null,
+				array(
+					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+				)
+			);
+
+			// remove tmp database
+			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
+		}
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );

@@ -6,6 +6,11 @@ namespace picklesFramework2\commands;
 
 /**
  * PX Commands "config"
+ *
+ * <dl>
+ * 	<dt>PX=config</dt>
+ * 		<dd>Pickles Framework 2 の設定情報を表示します。</dd>
+ * </dl>
  */
 class config{
 
