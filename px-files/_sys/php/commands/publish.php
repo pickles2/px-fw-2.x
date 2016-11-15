@@ -465,6 +465,7 @@ function cont_EditPublishTargetPathApply(formElm){
 						$bin->status = 500;
 						$bin->message = 'Unknown server error';
 						$bin->errors = array('Unknown server error.');
+						$bin->relatedlinks = array();
 					}
 					$status_code = @$bin->status;
 					$status_message = @$bin->message;
@@ -476,22 +477,26 @@ function cont_EditPublishTargetPathApply(formElm){
 					}elseif( $bin->status >= 300 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}elseif( $bin->status >= 200 ){
-						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
-						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
-						foreach( $bin->relatedlinks as $link ){
-							$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
-							$link = $this->px->fs()->normalize_path( $link );
-							$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
-							if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
-								$this->make_list_by_dir_scan( $tmp_link.'/' );
-							}else{
-								$this->add_queue( $tmp_link );
-							}
-						}
+						// 200 番台は正常
 					}elseif( $bin->status >= 100 ){
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 					}else{
 						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
+					}
+
+					// コンテンツの書き出し処理
+					// エラーが含まれている場合でも、得られたコンテンツを出力する。
+					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
+					$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
+					foreach( $bin->relatedlinks as $link ){
+						$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
+						$link = $this->px->fs()->normalize_path( $link );
+						$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
+						if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
+							$this->make_list_by_dir_scan( $tmp_link.'/' );
+						}else{
+							$this->add_queue( $tmp_link );
+						}
 					}
 
 					// エラーメッセージを alert_log に追記
