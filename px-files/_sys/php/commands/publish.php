@@ -24,9 +24,6 @@ class publish{
 	/** プラグイン設定 */
 	private $plugin_conf;
 
-	/** サイトオブジェクト */
-	private $site;
-
 	/** パス設定 */
 	private $path_tmp_publish, $path_publish_dir, $path_docroot;
 
@@ -371,6 +368,10 @@ function cont_EditPublishTargetPathApply(formElm){
 		print "\n";
 		print "\n";
 
+		// この後の clearcache でサイトマップは削除されてしまうので、この段階で一覧を取得しておく。
+		// publishプロセス自体がサイトマップにアクセスする箇所はここのみ。
+		$sitemap = $this->px->site()->get_sitemap();
+
 		print '============'."\n";
 		print '## Clearing caches'."\n";
 		print "\n";
@@ -381,7 +382,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		print '## Making list'."\n";
 		print "\n";
 		print '-- making list by Sitemap'."\n";
-		$this->make_list_by_sitemap();
+		$this->make_list_by_sitemap( $sitemap );
 		print "\n";
 		print '-- making list by Directory Scan'."\n";
 		foreach( $this->get_region_root_path() as $path_region ){
@@ -857,9 +858,10 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * make list by sitemap
+	 * @param array $sitemap サイトマップ配列
+	 * @return bool 常に `true` を返します。
 	 */
-	private function make_list_by_sitemap(){
-		$sitemap = $this->px->site()->get_sitemap();
+	private function make_list_by_sitemap( $sitemap ){
 		foreach( $sitemap as $page_info ){
 			set_time_limit(30);
 			$href = $this->px->href( $page_info['path'] );

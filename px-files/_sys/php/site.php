@@ -69,12 +69,8 @@ class site{
 			$tmp_path_cache = realpath($tmp_path_cache).DIRECTORY_SEPARATOR;
 			clearstatcache();
 			try {
-				$sitemap_sqlite_filename = @include($tmp_path_cache.'sitemap.sqlite.filename.array');
-				if(!strlen( $sitemap_sqlite_filename )){
-					$sitemap_sqlite_filename = 'sitemap.sqlite';
-				}
 				$this->pdo = new \PDO(
-					'sqlite:'.$tmp_path_cache.$sitemap_sqlite_filename,
+					'sqlite:'.$tmp_path_cache.'sitemap.sqlite',
 					null, null,
 					array(
 						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
@@ -199,11 +195,7 @@ class site{
 				}
 
 				clearstatcache();
-				$sitemap_sqlite_filename = @include($tmp_path_cache.'sitemap.sqlite.filename.array');
-				if(!strlen( $sitemap_sqlite_filename )){
-					$sitemap_sqlite_filename = 'sitemap.sqlite';
-				}
-				if( !$this->px->fs()->is_file( $path_sitemap_cache_dir.$sitemap_sqlite_filename ) || !filesize($path_sitemap_cache_dir.$sitemap_sqlite_filename) ){
+				if( !$this->px->fs()->is_file( $path_sitemap_cache_dir.'sitemap.sqlite' ) || !filesize($path_sitemap_cache_dir.'sitemap.sqlite') ){
 					// サイトマップキャッシュ生成が不完全な状態でPDOでサイトマップの操作をしようとすると、
 					// Fatal Error が発生する場合があるため、使えないようにしておく。
 					//
@@ -526,7 +518,7 @@ INSERT INTO sitemap(
 			$i = 0;
 			while( !$this->px->fs()->copy(
 				$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
-				$path_sitemap_cache_dir.'sitemap'.$i.'.sqlite'
+				$path_sitemap_cache_dir.'sitemap.sqlite'
 			) ){
 				$i ++;
 				if( $i > 10 ){
@@ -538,7 +530,7 @@ INSERT INTO sitemap(
 
 			// PDO をリロード
 			$this->pdo = new \PDO(
-				'sqlite:'.$path_sitemap_cache_dir.'sitemap'.$i.'.sqlite',
+				'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite',
 				null, null,
 				array(
 					\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
@@ -547,7 +539,6 @@ INSERT INTO sitemap(
 
 			// remove tmp database
 			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
-			$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.sqlite.filename.array' , self::data2phpsrc('sitemap'.$i.'.sqlite') );
 		}
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
