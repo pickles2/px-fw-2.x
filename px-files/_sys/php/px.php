@@ -436,6 +436,22 @@ class px{
 	}
 
 	/**
+	 * set $site
+	 *
+	 * 外部から `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを受け取ります。
+	 *
+	 * @param object $site `$site` オブジェクト
+	 * @return bool 成功時 `true`、失敗時 `false` を返します。
+	 */
+	public function set_site( $site ){
+		if( !is_object($site) ){
+			return false;
+		}
+		$this->site = $site;
+		return true;
+	}
+
+	/**
 	 * get $pxcmd
 	 * @return object $pxcmd オブジェクト
 	 */

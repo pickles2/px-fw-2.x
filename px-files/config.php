@@ -174,6 +174,15 @@ return call_user_func( function(){
 		 // PX=phpinfo
 		'picklesFramework2\commands\phpinfo::register' ,
 
+		// PX=publish
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore'=> array(
+				// パブリッシュ対象から常に除外するパスを設定する。
+				// (ここに設定されたパスは、動的なプレビューは可能)
+				'/sample_pages/no_publish/*'
+			)
+		)).')' ,
+
 	);
 
 	/**
@@ -184,15 +193,6 @@ return call_user_func( function(){
 	$conf->funcs->before_content = array(
 		// PX=api
 		'picklesFramework2\commands\api::register' ,
-
-		// PX=publish
-		'picklesFramework2\commands\publish::register('.json_encode(array(
-			'paths_ignore'=> array(
-				// パブリッシュ対象から常に除外するパスを設定する。
-				// (ここに設定されたパスは、動的なプレビューは可能)
-				'/sample_pages/no_publish/*'
-			)
-		)).')' ,
 
 	);
 
