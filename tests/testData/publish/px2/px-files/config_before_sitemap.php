@@ -88,13 +88,6 @@ return call_user_func( function(){
 		 // PX=phpinfo
 		'picklesFramework2\commands\phpinfo::register' ,
 
-	];
-
-	// funcs: Before content
-	$conf->funcs->before_content = [
-		// PX=api
-		'picklesFramework2\commands\api::register' ,
-
 		// PX=publish
 		'picklesFramework2\commands\publish::register('.json_encode(array(
 			'paths_ignore' => array(
@@ -104,6 +97,13 @@ return call_user_func( function(){
 				'/no_publish/ext/*.scss', // <- ex以下の、scss を除外。 .css.scss は除外されないので、これにマッチするファイルはない。
 			)
 		)).')' ,
+
+	];
+
+	// funcs: Before content
+	$conf->funcs->before_content = [
+		// PX=api
+		'picklesFramework2\commands\api::register' ,
 
 	];
 
