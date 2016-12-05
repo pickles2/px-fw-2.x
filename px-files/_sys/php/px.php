@@ -266,7 +266,9 @@ class px{
 		// make instance $site
 		require_once(__DIR__.'/site.php');
 		$is_enable_sitemap = $this->is_path_enable_sitemap( $this->req()->get_request_file_path() );
-		if( $is_enable_sitemap ){
+		if( is_object( $this->site ) ){
+			// 既にセットされている場合はそのまま利用する
+		}elseif( $is_enable_sitemap ){
 			$this->site = new site($this);
 		}else{
 			$this->site = false;
