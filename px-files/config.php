@@ -76,6 +76,7 @@ return call_user_func( function(){
 	 *
 	 * パターンは先頭から検索され、はじめにマッチした設定を採用します。
 	 * ワイルドカードとして "*"(アスタリスク) が使用可能です。
+	 * 部分一致ではなく、完全一致で評価されます。従って、ディレクトリ以下すべてを表現する場合は、 `/*` で終わるようにしてください。
 	 *
 	 * extensionは、 `$conf->funcs->processor` に設定し、設定した順に実行されます。
 	 * 例えば、 '*.html' => 'html' にマッチしたリクエストは、
@@ -174,6 +175,15 @@ return call_user_func( function(){
 		 // PX=phpinfo
 		'picklesFramework2\commands\phpinfo::register' ,
 
+		// PX=publish
+		'picklesFramework2\commands\publish::register('.json_encode(array(
+			'paths_ignore'=> array(
+				// パブリッシュ対象から常に除外するパスを設定する。
+				// (ここに設定されたパスは、動的なプレビューは可能)
+				'/sample_pages/no_publish/*'
+			)
+		)).')' ,
+
 	);
 
 	/**
@@ -184,15 +194,6 @@ return call_user_func( function(){
 	$conf->funcs->before_content = array(
 		// PX=api
 		'picklesFramework2\commands\api::register' ,
-
-		// PX=publish
-		'picklesFramework2\commands\publish::register('.json_encode(array(
-			'paths_ignore'=> array(
-				// パブリッシュ対象から常に除外するパスを設定する。
-				// (ここに設定されたパスは、動的なプレビューは可能)
-				'/sample_pages/no_publish/*'
-			)
-		)).')' ,
 
 	);
 

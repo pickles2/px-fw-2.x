@@ -24,9 +24,6 @@ class publish{
 	/** プラグイン設定 */
 	private $plugin_conf;
 
-	/** サイトオブジェクト */
-	private $site;
-
 	/** パス設定 */
 	private $path_tmp_publish, $path_publish_dir, $path_docroot;
 
@@ -376,6 +373,10 @@ function cont_EditPublishTargetPathApply(formElm){
 		print "\n";
 		$this->clearcache();
 		print "\n";
+
+		// make instance $site
+		require_once(__DIR__.'/../site.php');
+		$this->px->set_site( new \picklesFramework2\site($this->px) );
 
 		print '============'."\n";
 		print '## Making list'."\n";
@@ -857,6 +858,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * make list by sitemap
+	 * @return bool 常に `true` を返します。
 	 */
 	private function make_list_by_sitemap(){
 		$sitemap = $this->px->site()->get_sitemap();

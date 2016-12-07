@@ -92,10 +92,14 @@ class publishTest extends PHPUnit_Framework_TestCase{
 	}// testBefore()
 
 	/**
-	 * パブリッシュしてみるテスト
+	 * パブリッシュしてみるテスト (`before_sitemap` に設定した場合)
 	 * @depends testBefore
 	 */
-	public function testStandardPublish(){
+	public function testStandardPublishBeforeSitemap(){
+		$this->fs->copy(
+			__DIR__.'/testData/publish/px2/px-files/config_before_sitemap.php',
+			__DIR__.'/testData/publish/px2/px-files/config.php'
+		);
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
@@ -181,7 +185,104 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
-	}//testStandardPublish()
+	}//testStandardPublishBeforeSitemap()
+
+
+	/**
+	 * パブリッシュしてみるテスト (`before_content` に設定した場合)
+	 * @depends testBefore
+	 */
+	public function testStandardPublishBeforeContent(){
+		$this->fs->copy(
+			__DIR__.'/testData/publish/px2/px-files/config_before_content.php',
+			__DIR__.'/testData/publish/px2/px-files/config.php'
+		);
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=publish.run' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page1/template.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力A』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$page_src = $this->fs->read_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/page3/3.html' );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $page_src ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<p>このページは『共通点コンテンツからの出力B』から出力されています。</p>', '/').'/s', $page_src ), 1 );
+
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/dp_test/a.html' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html' ) );
+		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html');
+		// var_dump( $fileSrc );
+		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $fileSrc ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote(htmlspecialchars('<php_output>'), '/').'/s', $fileSrc ), 1 );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html' ) );
+		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html');
+		// var_dump( $fileSrc );
+		$this->assertEquals( $fileSrc, '<'.'?= htmlspecialchars(\'<php_output>\'); ?'.'>' );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test2/test2.inc' ) );
+
+		// $px->path_files_private_cache() のテスト
+		$fileSrc = file_get_contents( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' );
+		// var_dump($fileSrc);
+		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
+
+		// ログファイルを確認
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
+		$publish_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' );
+		// var_dump($publish_log);
+		$this->assertEquals( $publish_log[0][0], 'datetime' );
+		$this->assertEquals( $publish_log[0][1], 'path' );
+		$this->assertEquals( $publish_log[0][2], 'proc_type' );
+		$this->assertEquals( $publish_log[0][3], 'status_code' );
+		$this->assertEquals( $publish_log[0][4], 'status_message' );
+		$this->assertEquals( $publish_log[0][5], 'errors' );
+		$this->assertEquals( $publish_log[0][6], 'filesize' );
+		$this->assertEquals( $publish_log[0][7], 'proc_microtime' );
+		$this->assertNull( @$publish_log[0][8] );
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
+		foreach( $publish_log as $publish_log_row ){
+			if( $publish_log_row[1] == '/errors/server_side_unknown_error.html' ){
+				$this->assertEquals( $publish_log_row[4], 'Unknown server error' );
+				$this->assertEquals( $publish_log_row[5], '1 errors: Unknown server error.;' );
+			}
+		}
+
+		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
+		// var_dump($alert_log);
+		$this->assertEquals( $alert_log[0][0], 'datetime' );
+		$this->assertEquals( $alert_log[0][1], 'path' );
+		$this->assertEquals( $alert_log[0][2], 'error_message' );
+		$this->assertNull( @$alert_log[0][3] );
+		$this->assertEquals( $alert_log[1][2], 'status: 500 Unknown server error' );
+		$this->assertEquals( $alert_log[2][2], 'Unknown server error.' );
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+
+	}//testStandardPublishBeforeContent()
 
 
 	/**
@@ -383,7 +484,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 	/**
 	 * ファイルを単体でパブリッシュするテスト
 	 * @depends testBefore
-	 * @depends testStandardPublish
+	 * @depends testStandardPublishBeforeContent
 	 */
 	public function testStandardSingleFile(){
 
@@ -437,7 +538,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 	/**
 	 * サイトマップ生成の途中でパブリッシュするテスト
 	 * @depends testBefore
-	 * @depends testStandardPublish
+	 * @depends testStandardPublishBeforeContent
 	 */
 	public function testPublishDuringGeneratingSitemapCache(){
 
@@ -485,7 +586,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 	/**
 	 * キャッシュを削除するテスト
 	 * @depends testBefore
-	 * @depends testStandardPublish
+	 * @depends testStandardPublishBeforeContent
 	 */
 	public function testStandardClearcache(){
 		// トップページを実行
