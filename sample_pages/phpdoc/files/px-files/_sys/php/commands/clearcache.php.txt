@@ -109,6 +109,9 @@ class clearcache{
 	 */
 	public function exec(){
 		print '-- cleaning "caches"'."\n";
+		if( $this->px->site() ){
+			$this->px->site()->__destruct(); // sitemap.sqlite を開放 (Windowsで、排他ロックされるためパブリッシュでエラーが起きる問題を回避するため)
+		}
 		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/caches/' ).' items done.'."\n";
 		print "\n";
 		print '-- cleaning "publish"'."\n";

@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.27';
+		return '2.0.28';
 	}
 
 	/**
@@ -266,7 +266,9 @@ class px{
 		// make instance $site
 		require_once(__DIR__.'/site.php');
 		$is_enable_sitemap = $this->is_path_enable_sitemap( $this->req()->get_request_file_path() );
-		if( $is_enable_sitemap ){
+		if( is_object( $this->site ) ){
+			// 既にセットされている場合はそのまま利用する
+		}elseif( $is_enable_sitemap ){
 			$this->site = new site($this);
 		}else{
 			$this->site = false;
@@ -433,6 +435,22 @@ class px{
 	 */
 	public function site(){
 		return $this->site;
+	}
+
+	/**
+	 * set $site
+	 *
+	 * 外部から `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを受け取ります。
+	 *
+	 * @param object $site `$site` オブジェクト
+	 * @return bool 成功時 `true`、失敗時 `false` を返します。
+	 */
+	public function set_site( $site ){
+		if( !is_object($site) ){
+			return false;
+		}
+		$this->site = $site;
+		return true;
 	}
 
 	/**
