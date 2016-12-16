@@ -784,7 +784,7 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		// キャッシュを消去
 		if( !$this->flg_keep_cache ){
-			(new clearcache( $this->px ))->exec();
+			(new \picklesFramework2\commands\clearcache( $this->px ))->exec();
 		}else{
 			// 一時パブリッシュディレクトリをクリーニング
 			echo '-- cleaning "publish"'."\n";
