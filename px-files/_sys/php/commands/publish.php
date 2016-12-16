@@ -375,7 +375,6 @@ function cont_EditPublishTargetPathApply(formElm){
 		print "\n";
 
 		// make instance $site
-		require_once(__DIR__.'/../site.php');
 		$this->px->set_site( new \picklesFramework2\site($this->px) );
 
 		print '============'."\n";

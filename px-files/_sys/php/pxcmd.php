@@ -38,7 +38,6 @@ class pxcmd{
 		$this->pxcommands = array();
 
 		// make instance $bowl
-		require_once(__DIR__.'/bowl.php');
 		$this->bowl = new bowl();
 
 	}
