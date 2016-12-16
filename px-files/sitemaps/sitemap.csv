@@ -12,6 +12,7 @@
 "/sample_pages/page1/5.html",,,"ステータスコードにメッセージを送信",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page1/6.html",,,"リソースパス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page1/global_urls/",,,"サイト外URLをサイトマップに組み込む",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
+"/sample_pages/page1/php/index.php",,,"PHPの動的なコンテンツ",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "http://pickles2.pxt.jp/",,"pickles2.pxt.jp_1","Pickles2 Official Website(1)",,,,,"/sample_pages/>/sample_pages/page1/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "//pickles2.pxt.jp/",,"pickles2.pxt.jp_2","Pickles2 Official Website(2)",,,,,"/sample_pages/>/sample_pages/page1/global_urls/>pickles2.pxt.jp_1",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/page1/global_urls/fin.html",,,"最下層",,,,,"/sample_pages/>/sample_pages/page1/global_urls/>pickles2.pxt.jp_1>pickles2.pxt.jp_2",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
