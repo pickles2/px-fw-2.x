@@ -82,7 +82,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.28';
+		return '2.0.29-alpha.1+nb';
 	}
 
 	/**
@@ -153,7 +153,6 @@ class px{
 		}
 
 		// make instance $bowl
-		require_once(__DIR__.'/bowl.php');
 		$this->bowl = new bowl();
 
 		// Apply command-line option "--command-php"
@@ -255,7 +254,6 @@ class px{
 
 
 		// make instance $pxcmd
-		require_once(__DIR__.'/pxcmd.php');
 		$this->pxcmd = new pxcmd($this);
 
 
@@ -264,7 +262,6 @@ class px{
 
 
 		// make instance $site
-		require_once(__DIR__.'/site.php');
 		$is_enable_sitemap = $this->is_path_enable_sitemap( $this->req()->get_request_file_path() );
 		if( is_object( $this->site ) ){
 			// 既にセットされている場合はそのまま利用する

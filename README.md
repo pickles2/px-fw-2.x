@@ -79,6 +79,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.29 (2016年??月??日)
+
+- クラス `site`, `bowl`, `pxcmd` のAPIを外部から呼び出せるようにした。
+
 ### Pickles Framework 2.0.28 (2016年12月8日)
 
 - Windowsサーバーで、サイトマップキャッシュが排他ロックされて更新に失敗することがある問題を修正。

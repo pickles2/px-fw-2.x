@@ -39,6 +39,9 @@
         "files": [
             "px-files/_sys/php/pickles.php",
             "px-files/_sys/php/px.php",
+            "px-files/_sys/php/bowl.php",
+            "px-files/_sys/php/pxcmd.php",
+            "px-files/_sys/php/site.php",
             "px-files/_sys/php/commands/api.php",
             "px-files/_sys/php/commands/clearcache.php",
             "px-files/_sys/php/commands/config.php",

@@ -1,0 +1,11 @@
+<?php
+// 偽装対象のページ情報を取得
+$php_page_info = $px->site()->get_page_info( '/sample_pages/page1/php/index.php' );
+
+// path は上書きできないので削除
+unset($php_page_info['path']);
+
+// カレントページの情報を偽装情報で上書き
+$px->site()->set_current_page_info( $php_page_info );
+?>
+{$main_contents}

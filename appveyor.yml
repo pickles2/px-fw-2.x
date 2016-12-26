@@ -31,7 +31,7 @@ init:
 # Install scripts
 install:
   ## Set PHP.
-  - cinst php
+  - cinst php --version 7.0.9
   - SET PATH=C:\tools\php\;%PATH%
   - cd C:\tools\php
   - copy php.ini-production php.ini
