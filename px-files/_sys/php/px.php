@@ -14,7 +14,7 @@ class px{
 	 * Pickles のホームディレクトリのパス
 	 * @access private
 	 */
-	private $path_homedir;
+	private $realpath_homedir;
 
 	/**
 	 * コンテンツディレクトリのパス
@@ -125,11 +125,11 @@ class px{
 		}
 
 		// load Config
-		$this->path_homedir = $path_homedir;
-		if( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.json') ){
-			$this->conf = json_decode( file_get_contents( $this->path_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
-		}elseif( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.php') ){
-			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
+		$this->realpath_homedir = $path_homedir;
+		if( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.json') ){
+			$this->conf = json_decode( file_get_contents( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
+		}elseif( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php') ){
+			$this->conf = include( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
 		$this->conf = json_decode( json_encode( $this->conf ) );
 		if( !@is_array($this->conf->paths_enable_sitemap) ){
@@ -170,7 +170,7 @@ class px{
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $conf );
-		$this->path_homedir = $this->fs->get_realpath($this->path_homedir.'/');
+		$this->realpath_homedir = $this->fs->get_realpath($this->realpath_homedir.'/');
 
 		// make instance $req
 		$conf = new \stdClass;
@@ -195,17 +195,17 @@ class px{
 			'/_sys/ram/data/',
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
-			if( strlen($this->path_homedir.$tmp_path_sys_dir) && !@is_dir( $this->path_homedir.$tmp_path_sys_dir ) ){
-				$this->fs->mkdir( $this->path_homedir.$tmp_path_sys_dir );
+			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !@is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
+				$this->fs->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
 
 		// 環境変数 $_SERVER['DOCUMENT_ROOT'] をセット
-		// get_path_docroot() は、$conf, $fs を参照するので、
+		// get_realpath_docroot() は、$conf, $fs を参照するので、
 		// これらの初期化の後が望ましい。
 		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
-			$_SERVER['DOCUMENT_ROOT'] = $this->get_path_docroot();
+			$_SERVER['DOCUMENT_ROOT'] = $this->get_realpath_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
 		}
 
@@ -478,15 +478,25 @@ class px{
 	}
 
 	/**
-	 * get home directory path
-	 * @return string ホームディレクトリパス
+	 * Get home directory realpath (deprecated)
+	 * このメソッドの使用は推奨されません。
+	 * 代わりに `$px->get_realpath_homedir()` を使用してください。
+	 * @return string ホームディレクトリの絶対パス
 	 */
 	public function get_path_homedir(){
-		return $this->path_homedir;
+		return $this->get_realpath_homedir();
 	}
 
 	/**
-	 * get content path
+	 * Get home directory realpath
+	 * @return string ホームディレクトリの絶対パス
+	 */
+	public function get_realpath_homedir(){
+		return $this->realpath_homedir;
+	}
+
+	/**
+	 * Get content path
 	 * @return string コンテンツディレクトリパス
 	 */
 	public function get_path_content(){
@@ -834,7 +844,7 @@ class px{
 		if( !strlen( @$this->conf()->contents_manifesto ) ){
 			return '';
 		}
-		$realpath = $this->get_path_docroot().$this->href( @$this->conf()->contents_manifesto );
+		$realpath = $this->get_realpath_docroot().$this->href( @$this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
 		}
@@ -1162,10 +1172,20 @@ class px{
 	}
 
 	/**
-	 * DOCUMENT_ROOT のパスを取得する
+	 * DOCUMENT_ROOT のパスを取得する (deprecated)
+	 * このメソッドの使用は推奨されません。
+	 * 代わりに `$px->get_realpath_docroot()` を使用してください。
 	 * @return string ドキュメントルートのパス
 	 */
 	public function get_path_docroot(){
+		return $this->get_realpath_docroot();
+	}
+
+	/**
+	 * DOCUMENT_ROOT のパスを取得する
+	 * @return string ドキュメントルートのパス
+	 */
+	public function get_realpath_docroot(){
 		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
 		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
@@ -1220,7 +1240,7 @@ class px{
 	public function realpath_files( $localpath_resource = null ){
 		$rtn = $this->path_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $rtn );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}//realpath_files()
 
@@ -1252,15 +1272,15 @@ class px{
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/c'.$path_content;
 		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
-		$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+		$this->fs()->mkdir_r( dirname( $this->get_realpath_docroot().$rtn ) );
 
-		if( file_exists( $this->get_path_docroot().$path_original ) ){
-			if( is_dir($this->get_path_docroot().$path_original) ){
-				$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
+		if( file_exists( $this->get_realpath_docroot().$path_original ) ){
+			if( is_dir($this->get_realpath_docroot().$path_original) ){
+				$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
 			}else{
-				$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+				$this->fs()->mkdir_r( dirname( $this->get_realpath_docroot().$rtn ) );
 			}
-			$this->fs()->copy_r( $this->get_path_docroot().$path_original, $this->get_path_docroot().$rtn );
+			$this->fs()->copy_r( $this->get_realpath_docroot().$path_original, $this->get_realpath_docroot().$rtn );
 		}
 
 		$rtn = $this->fs()->normalize_path($rtn);
@@ -1285,7 +1305,7 @@ class px{
 			return false;
 		}
 		$rtn = $this->path_files_cache( $localpath_resource );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}//realpath_files_cache()
 
@@ -1308,7 +1328,7 @@ class px{
 
 		$path_original = $this->get_path_controot().$path_content;
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
-		$rtn = $this->get_path_homedir().'/_sys/ram/caches/c'.$path_content;
+		$rtn = $this->get_realpath_homedir().'/_sys/ram/caches/c'.$path_content;
 		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
 		$this->fs()->mkdir_r( dirname( $rtn ) );
 
@@ -1335,18 +1355,18 @@ class px{
 		}
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
-		if( !$this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
-			$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
+		if( !$this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
+			$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
 		}
 		if( !strlen( $localpath_resource ) ){
 			return $this->fs()->normalize_path($rtn);
 		}
 		$rtn = $this->fs()->get_realpath( $rtn.'/'.$localpath_resource );
-		if( $this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
+		if( $this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
 			$rtn .= '/';
 		}
-		if( !$this->fs()->is_dir( dirname($this->get_path_docroot().$rtn) ) ){
-			$this->fs()->mkdir_r( dirname($this->get_path_docroot().$rtn) );
+		if( !$this->fs()->is_dir( dirname($this->get_realpath_docroot().$rtn) ) ){
+			$this->fs()->mkdir_r( dirname($this->get_realpath_docroot().$rtn) );
 		}
 		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
@@ -1370,7 +1390,7 @@ class px{
 			return false;
 		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}
 
@@ -1381,7 +1401,7 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_private_cache( $localpath_resource = null ){
-		$lib_realpath = $this->get_path_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
+		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 		if( !$this->fs()->is_dir( $rtn ) ){
 			$this->fs()->mkdir_r( $rtn );
@@ -1517,7 +1537,7 @@ class px{
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function lock( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$timeout_limit = 5;
 
 		if( !@is_dir( dirname( $lockfilepath ) ) ){
@@ -1554,7 +1574,7 @@ class px{
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	public function is_locked( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$lockfile_expire = $expire;
 
 		// PHPのFileStatusCacheをクリア
@@ -1577,7 +1597,7 @@ class px{
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function unlock( $app_name ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -1592,7 +1612,7 @@ class px{
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function touch_lockfile( $app_name ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();

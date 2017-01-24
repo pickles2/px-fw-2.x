@@ -90,7 +90,7 @@ class publish{
 		$this->px = $px;
 		$this->plugin_conf = $json;
 
-		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_path_homedir().'_sys/ram/publish/' );
+		$this->path_tmp_publish = $px->fs()->get_realpath( $px->get_realpath_homedir().'_sys/ram/publish/' );
 		$this->path_lockfile = $this->path_tmp_publish.'applock.txt';
 		if( $this->get_path_publish_dir() !== false ){
 			$this->path_publish_dir = $this->get_path_publish_dir();
@@ -492,7 +492,7 @@ function cont_EditPublishTargetPathApply(formElm){
 						$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
 						$link = $this->px->fs()->normalize_path( $link );
 						$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
-						if( $this->px->fs()->is_dir( $this->px->get_path_docroot().'/'.$link ) ){
+						if( $this->px->fs()->is_dir( $this->px->get_realpath_docroot().'/'.$link ) ){
 							$this->make_list_by_dir_scan( $tmp_link.'/' );
 						}else{
 							$this->add_queue( $tmp_link );

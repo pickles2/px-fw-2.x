@@ -60,10 +60,10 @@ class ssi{
 				$realpath_incfile = null;
 				$path_incfile = null;
 				if( preg_match( '/^\//s', $href_incfile ) ){
-					$realpath_incfile = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$href_incfile );
+					$realpath_incfile = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().$href_incfile );
 					$path_incfile = $href_incfile;
 				}else{
-					$realpath_incfile = $this->px->fs()->get_realpath( $this->px->get_path_docroot().dirname($current_path).'/'.$href_incfile );
+					$realpath_incfile = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().dirname($current_path).'/'.$href_incfile );
 					$path_incfile = $this->px->fs()->get_realpath( $href_incfile, dirname($current_path) );
 				}
 				$ssi_content = $this->px->fs()->read_file( $realpath_incfile );

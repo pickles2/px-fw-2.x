@@ -64,7 +64,7 @@ class site{
 
 		$this->pdo = false;//初期化
 		if( class_exists('\\PDO') ){
-			$tmp_path_cache = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
+			$tmp_path_cache = $this->px->get_realpath_homedir().'_sys/ram/caches/sitemaps/';
 			$this->px->fs()->mkdir( $tmp_path_cache );
 			$tmp_path_cache = realpath($tmp_path_cache).DIRECTORY_SEPARATOR;
 			clearstatcache();
@@ -146,7 +146,7 @@ class site{
 	 * @return bool 成功時に `true`, 失敗時に `false` を返します。
 	 */
 	private function load_sitemap_csv(){
-		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_realpath_homedir().'_sys/ram/caches/sitemaps/';
 
 		// $path_top の設定値をチューニング
 		$path_top = $this->conf->path_top;
@@ -265,7 +265,7 @@ CREATE TABLE sitemap(
 			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 		}
 
-		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
+		$path_sitemap_dir = $this->px->get_realpath_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
 		if( !is_array($ary_sitemap_files) ){
 			$ary_sitemap_files = array();
@@ -559,8 +559,8 @@ INSERT INTO sitemap(
 	 * @return bool 読み込み可能な場合に `true`、読み込みできない場合に `false` を返します。
 	 */
 	private function is_sitemap_cache(){
-		$path_sitemap_cache_dir = $this->px->get_path_homedir().'_sys/ram/caches/sitemaps/';
-		$path_sitemap_dir = $this->px->get_path_homedir().'sitemaps/';
+		$path_sitemap_cache_dir = $this->px->get_realpath_homedir().'_sys/ram/caches/sitemaps/';
+		$path_sitemap_dir = $this->px->get_realpath_homedir().'sitemaps/';
 		if(
 			!is_file($path_sitemap_cache_dir.'sitemap.array') ||
 			!is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ||

@@ -138,7 +138,7 @@ class pxcmd{
 
 		// リソースをキャッシュ領域にコピー
 		$path_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/px/' );
-		$realpath_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_docroot().$path_pxcache );
+		$realpath_pxcache = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().$path_pxcache );
 		$this->px->fs()->mkdir( $realpath_pxcache );
 		$this->px->fs()->copy_r( __DIR__.'/files/', $realpath_pxcache );
 
