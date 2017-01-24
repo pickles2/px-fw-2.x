@@ -2,7 +2,7 @@
 /**
  * class bowl
  *
- * Pickles2 のコアオブジェクトの1つ `$bowl` のオブジェクトクラスを定義します。
+ * Pickles 2 のコアオブジェクトの1つ `$bowl` のオブジェクトクラスを定義します。
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
@@ -11,8 +11,8 @@ namespace picklesFramework2;
 /**
  * Bowl
  *
- * Pickles2 のコアオブジェクトの1つ `$bowl` のオブジェクトクラスです。
- * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
+ * Pickles 2 のコアオブジェクトの1つ `$bowl` のオブジェクトクラスです。
+ * このオブジェクトは、Pickles 2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
  *
  * メソッド `$px->bowl()` を通じてアクセスします。
  *
@@ -30,7 +30,7 @@ class bowl{
 	);
 
 	/**
-	 * constructor
+	 * Constructor
 	 */
 	public function __construct(){
 	}
@@ -80,7 +80,7 @@ class bowl{
 	}
 
 	/**
-	 * コンテンツボウルからコンテンツを引き出す
+	 * コンテンツボウルからコンテンツを引き出す。
 	 *
 	 * 引き出したコンテンツは、ボウルから削除されます。
 	 *
@@ -99,7 +99,8 @@ class bowl{
 	}
 
 	/**
-	 * コンテンツボウルにあるコンテンツの索引を取得する
+	 * コンテンツボウルにあるコンテンツの索引を取得する。
+	 *
 	 * @return array ボウルのキーの一覧
 	 */
 	public function get_keys(){
@@ -108,7 +109,8 @@ class bowl{
 	}
 
 	/**
-	 * 全ボウルのコンテンツに同じ加工を施す
+	 * 全ボウルのコンテンツに同じ加工を施す。
+	 *
 	 * @param callback $func 加工処理関数
 	 * @return object $bowlオブジェクト
 	 */
