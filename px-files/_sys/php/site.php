@@ -2,7 +2,7 @@
 /**
  * class site
  *
- * Pickles2 のコアオブジェクトの1つ `$site` のオブジェクトクラスを定義します。
+ * Pickles 2 のコアオブジェクトの1つ `$site` のオブジェクトクラスを定義します。
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
@@ -11,8 +11,8 @@ namespace picklesFramework2;
 /**
  * Site and page Manager
  *
- * Pickles2 のコアオブジェクトの1つ `$site` のオブジェクトクラスです。
- * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
+ * Pickles 2 のコアオブジェクトの1つ `$site` のオブジェクトクラスです。
+ * このオブジェクトは、Pickles 2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
  *
  * メソッド `$px->site()` を通じてアクセスします。
  *
@@ -21,40 +21,48 @@ namespace picklesFramework2;
 class site{
 	/**
 	 * Picklesオブジェクト
+	 * @access private
 	 */
 	private $px;
 	/**
 	 * 設定オブジェクト
+	 * @access private
 	 */
 	private $conf;
 	/**
 	 * サイトマップ配列
+	 * @access private
 	 */
 	private $sitemap_array = array();
 	/**
 	 * ページIDマップ
+	 * @access private
 	 */
 	private $sitemap_id_map = array();
 	/**
 	 * ダイナミックパスの一覧
+	 * @access private
 	 */
 	private $sitemap_dynamic_paths = array();
 	/**
 	 * サイトマップのツリー構造
+	 * @access private
 	 */
 	private $sitemap_page_tree = array();
 	/**
 	 * ダイナミックパスパラメータ
+	 * @access private
 	 */
 	private $dynamic_path_param = array();
 	/**
 	 * PDOインスタンス
 	 * $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータベース。
+	 * @access private
 	 */
 	private $pdo;
 
 	/**
-	 * コンストラクタ
+	 * Constructor
 	 *
 	 * @param object $px Picklesオブジェクト
 	 */
@@ -99,7 +107,7 @@ class site{
 	}
 
 	/**
-	 * デストラクタ
+	 * Destructor
 	 * @return null
 	 */
 	public function __destruct(){

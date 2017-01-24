@@ -2,7 +2,7 @@
 /**
  * class pxcmd
  *
- * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスを定義します。
+ * Pickles 2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスを定義します。
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
@@ -11,25 +11,29 @@ namespace picklesFramework2;
 /**
  * PX Commands
  *
- * Pickles2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスです。
- * このオブジェクトは、Pickles2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
+ * Pickles 2 のコアオブジェクトの1つ `$pxcmd` のオブジェクトクラスです。
+ * このオブジェクトは、Pickles 2 の初期化処理の中で自動的に生成され、`$px` の内部に格納されます。
  *
  * メソッド `$px->pxcmd()` を通じてアクセスします。
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class pxcmd{
+
 	/**
 	 * オブジェクト
+	 * @access private
 	 */
 	private $px, $bowl;
+
 	/**
 	 * PXコマンド
+	 * @access private
 	 */
 	private $pxcommands = array();
 
 	/**
-	 * constructor
+	 * Constructor
 	 *
 	 * @param object $px Picklesオブジェクト
 	 */
@@ -43,7 +47,8 @@ class pxcmd{
 	}
 
 	/**
-	 * PXコマンドを登録する
+	 * PXコマンドを登録する。
+	 *
 	 * @param string $cmd PXコマンド名
 	 * @param function $fnc 実行するコマンド
 	 * @return bool 成功時 `true`、失敗時 `false`
@@ -75,21 +80,9 @@ class pxcmd{
 		return true;
 	}
 
-	// /**
-	//  * Run PX Commands
-	//  */
-	// public function run(){
-	// 	$pxcmd = $this->px->get_px_command();
-	// 	foreach( $this->pxcommands as $key=>$row ){
-	// 		if( $pxcmd[0] == $row['cmd'] ){
-	// 			$row['fnc']($this->px);
-	// 		}
-	// 	}
-	// 	return true;
-	// }
-
 	/**
-	 * get $bowl
+	 * `$bowl` オブジェクトを取得する。
+	 *
 	 * @return object $bowlオブジェクト
 	 */
 	public function bowl(){
@@ -97,7 +90,7 @@ class pxcmd{
 	}
 
 	/**
-	 * generate CLI header
+	 * CLI header を生成する。
 	 * @return string Header
 	 */
 	public function get_cli_header(){
@@ -113,7 +106,7 @@ class pxcmd{
 	}
 
 	/**
-	 * generate CLI footer
+	 * CLI footer を生成する。
 	 * @return string Footer
 	 */
 	public function get_cli_footer(){
@@ -127,6 +120,7 @@ class pxcmd{
 
 	/**
 	 * wrap GUI frame
+	 *
 	 * @param string $content コンテンツ領域のHTMLソースコード
 	 * @return string HTML全体のHTMLソースコード
 	 */
