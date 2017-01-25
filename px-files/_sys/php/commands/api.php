@@ -45,11 +45,15 @@ namespace picklesFramework2\commands;
  * 		<dd><code>$px->site()->bind_dynamic_path_param({$path}, {$param})</code> の返却値を取得します。<code>{$param}</code> には、パラメータのキーと値の組を必要分格納したオブジェクトをJSON形式の文字列で指定します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  *
  * 	<dt>PX=api.get.path_homedir</dt>
- * 		<dd><code>$px->get_path_homedir()</code> の返却値を取得します。</dd>
+ * 		<dd>*[非推奨]* このAPIは <code>PX=api.get.realpath_homedir</code> に改名されました。 古い名前も残されていますが、使用は推奨されません。</dd>
+ * 	<dt>PX=api.get.realpath_homedir</dt>
+ * 		<dd><code>$px->get_realpath_homedir()</code> の返却値を取得します。</dd>
  * 	<dt>PX=api.get.path_controot</dt>
  * 		<dd><code>$px->get_path_controot()</code> の返却値を取得します。</dd>
  * 	<dt>PX=api.get.path_docroot</dt>
- * 		<dd><code>$px->get_path_docroot()</code> の返却値を取得します。</dd>
+ * 		<dd>*[非推奨]* このAPIは <code>PX=api.get.realpath_docroot</code> に改名されました。 古い名前も残されていますが、使用は推奨されません。</dd>
+ * 	<dt>PX=api.get.realpath_docroot</dt>
+ * 		<dd><code>$px->get_realpath_docroot()</code> の返却値を取得します。</dd>
  * 	<dt>PX=api.get.path_content</dt>
  * 		<dd><code>$px->get_path_content()</code> の返却値を取得します。</dd>
  * 	<dt>PX=api.get.path_files&path_resource={$path}</dt>
@@ -307,16 +311,24 @@ class api{
 				print $this->data_convert( $val );
 				unset($param);
 				break;
-			case 'path_homedir':
-				$val = $this->px->get_path_homedir();
+			case 'path_homedir': // deprecated
+				$val = $this->px->get_realpath_homedir();
+				print $this->data_convert( $val );
+				break;
+			case 'realpath_homedir':
+				$val = $this->px->get_realpath_homedir();
 				print $this->data_convert( $val );
 				break;
 			case 'path_controot':
 				$val = $this->px->get_path_controot();
 				print $this->data_convert( $val );
 				break;
-			case 'path_docroot':
-				$val = $this->px->get_path_docroot();
+			case 'path_docroot': // deprecated
+				$val = $this->px->get_realpath_docroot();
+				print $this->data_convert( $val );
+				break;
+			case 'realpath_docroot':
+				$val = $this->px->get_realpath_docroot();
 				print $this->data_convert( $val );
 				break;
 			case 'path_content':

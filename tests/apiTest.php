@@ -439,10 +439,23 @@ class apiTest extends PHPUnit_Framework_TestCase{
 
 
 		// -------------------
-		// api.get.path_homedir
+		// api.get.path_homedir (deprecated)
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.path_homedir' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
+
+		// -------------------
+		// api.get.realpath_homedir
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.realpath_homedir' ,
 		] );
 		clearstatcache();
 
@@ -467,11 +480,25 @@ class apiTest extends PHPUnit_Framework_TestCase{
 
 
 		// -------------------
-		// api.get.path_docroot
+		// api.get.path_docroot (deprecated)
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.path_docroot' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
+
+		// -------------------
+		// api.get.realpath_docroot
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.realpath_docroot' ,
 		] );
 		clearstatcache();
 

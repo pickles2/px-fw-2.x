@@ -1,20 +1,20 @@
 <?php
 /**
- * pickles2
+ * Pickles 2
  */
 namespace picklesFramework2;
 
 /**
- * pickles2 core class
+ * Pickles 2 core class
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class px{
 	/**
-	 * Pickles のホームディレクトリのパス
+	 * Pickles 2 のホームディレクトリのパス
 	 * @access private
 	 */
-	private $path_homedir;
+	private $realpath_homedir;
 
 	/**
 	 * コンテンツディレクトリのパス
@@ -86,7 +86,7 @@ class px{
 	}
 
 	/**
-	 * constructor
+	 * Constructor
 	 *
 	 * @param string $path_homedir Pickles のホームディレクトリのパス
 	 */
@@ -125,11 +125,11 @@ class px{
 		}
 
 		// load Config
-		$this->path_homedir = $path_homedir;
-		if( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.json') ){
-			$this->conf = json_decode( file_get_contents( $this->path_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
-		}elseif( is_file($this->path_homedir.DIRECTORY_SEPARATOR.'config.php') ){
-			$this->conf = include( $this->path_homedir.DIRECTORY_SEPARATOR.'config.php' );
+		$this->realpath_homedir = $path_homedir;
+		if( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.json') ){
+			$this->conf = json_decode( file_get_contents( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.json' ) );
+		}elseif( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php') ){
+			$this->conf = include( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
 		$this->conf = json_decode( json_encode( $this->conf ) );
 		if( !@is_array($this->conf->paths_enable_sitemap) ){
@@ -170,7 +170,7 @@ class px{
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $conf );
-		$this->path_homedir = $this->fs->get_realpath($this->path_homedir.'/');
+		$this->realpath_homedir = $this->fs->get_realpath($this->realpath_homedir.'/');
 
 		// make instance $req
 		$conf = new \stdClass;
@@ -195,17 +195,17 @@ class px{
 			'/_sys/ram/data/',
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
-			if( strlen($this->path_homedir.$tmp_path_sys_dir) && !@is_dir( $this->path_homedir.$tmp_path_sys_dir ) ){
-				$this->fs->mkdir( $this->path_homedir.$tmp_path_sys_dir );
+			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !@is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
+				$this->fs->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
 
-		// 環境変数 $_SERVER['DOCUMENT_ROOT'] をセット
-		// get_path_docroot() は、$conf, $fs を参照するので、
+		// 環境変数 `$_SERVER['DOCUMENT_ROOT']` をセット
+		// `$px->get_realpath_docroot()` は、`$conf`, `$fs` を参照するので、
 		// これらの初期化の後が望ましい。
 		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
-			$_SERVER['DOCUMENT_ROOT'] = $this->get_path_docroot();
+			$_SERVER['DOCUMENT_ROOT'] = $this->get_realpath_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
 		}
 
@@ -332,7 +332,7 @@ class px{
 	}
 
 	/**
-	 * デストラクタ
+	 * Destructor
 	 * @return null
 	 */
 	public function __destruct(){
@@ -397,7 +397,7 @@ class px{
 
 
 	/**
-	 * get $fs
+	 * `$fs` オブジェクトを取得する。
 	 *
 	 * `$fs`(class [tomk79\filesystem](tomk79.filesystem.html))のインスタンスを返します。
 	 *
@@ -409,7 +409,7 @@ class px{
 	}
 
 	/**
-	 * get $req
+	 * `$req` オブジェクトを取得する。
 	 *
 	 * `$req`(class [tomk79\request](tomk79.request.html))のインスタンスを返します。
 	 *
@@ -421,9 +421,11 @@ class px{
 	}
 
 	/**
-	 * get $site
+	 * `$site` オブジェクトを取得する。
 	 *
 	 * `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを返します。
+	 *
+	 * `$site` は、主にサイトマップCSVから読み込んだページの一覧情報を管理するオブジェクトです。
 	 *
 	 * `$conf->paths_enable_sitemap` の設定によって、 `$site` がロードされない場合があります。
 	 * ロードされない場合は、 `false` が返されます。
@@ -435,9 +437,11 @@ class px{
 	}
 
 	/**
-	 * set $site
+	 * `$site` オブジェクトをセットする
 	 *
 	 * 外部から `$site`(class [picklesFramework2\site](picklesFramework2.site.html))のインスタンスを受け取ります。
+	 *
+	 * このメソッドを通じて、プラグインから `$site` の振る舞いを変更することができます。
 	 *
 	 * @param object $site `$site` オブジェクト
 	 * @return bool 成功時 `true`、失敗時 `false` を返します。
@@ -451,7 +455,8 @@ class px{
 	}
 
 	/**
-	 * get $pxcmd
+	 * `$pxcmd` オブジェクトを取得する。
+	 *
 	 * @return object $pxcmd オブジェクト
 	 */
 	public function pxcmd(){
@@ -459,7 +464,7 @@ class px{
 	}
 
 	/**
-	 * get $bowl
+	 * `$bowl` オブジェクトを取得する。
 	 *
 	 * `$bowl`(class [picklesFramework2\bowl](picklesFramework2.bowl.html))のインスタンスを返します。
 	 *
@@ -470,7 +475,7 @@ class px{
 	}
 
 	/**
-	 * get $conf
+	 * `$conf` オブジェクトを取得する。
 	 * @return object $conf オブジェクト
 	 */
 	public function conf(){
@@ -478,23 +483,39 @@ class px{
 	}
 
 	/**
-	 * get home directory path
-	 * @return string ホームディレクトリパス
+	 * ホームディレクトリの絶対パスを取得する (deprecated)
+	 * このメソッドの使用は推奨されません。
+	 * 代わりに `$px->get_realpath_homedir()` を使用してください。
+	 * @return string ホームディレクトリの絶対パス
 	 */
 	public function get_path_homedir(){
-		return $this->path_homedir;
+		return $this->get_realpath_homedir();
 	}
 
 	/**
-	 * get content path
-	 * @return string コンテンツディレクトリパス
+	 * ホームディレクトリの絶対パスを取得する。
+	 *
+	 * ホームディレクトリは、 Pickles 2 のフレームワークが使用するファイルが置かれるディレクトリで、
+	 * 主には `config.php`, `sitemaps/*`, `_sys/ram/*` などが格納されているディレクトリのことです。
+	 *
+	 * pickles2/px-fw-2.x@2.0.29 で `get_path_homedir()` からの名称変更として追加されました。
+	 *
+	 * @return string ホームディレクトリの絶対パス
+	 */
+	public function get_realpath_homedir(){
+		return $this->realpath_homedir;
+	}
+
+	/**
+	 * コンテンツのパスを取得する。
+	 * @return string コンテンツのパス
 	 */
 	public function get_path_content(){
 		return $this->path_content;
 	}
 
 	/**
-	 * directory_index(省略できるファイル名) の一覧を得る。
+	 * `directory_index` (省略できるファイル名) の一覧を得る。
 	 *
 	 * @return array ディレクトリインデックスの一覧
 	 */
@@ -516,7 +537,7 @@ class px{
 	}//get_directory_index()
 
 	/**
-	 * directory_index のいずれかにマッチするためのpregパターン式を得る。
+	 * `directory_index` のいずれかにマッチするための pregパターン式を得る。
 	 *
 	 * @param string $delimiter pregパターンのデリミタ。省略時は `/` (`preg_quote()` の実装に従う)。
 	 * @return string pregパターン
@@ -657,7 +678,7 @@ class px{
 	}//is_ignore_path();
 
 	/**
-	 * output content-type
+	 * HTTPヘッダー `Content-Type` を出力する。
 	 */
 	private function output_content_type(){
 		$extension = strtolower( pathinfo( $this->req()->get_request_file_path() , PATHINFO_EXTENSION ) );
@@ -688,25 +709,31 @@ class px{
 	}
 
 	/**
-	 * get response status
-	 * @return int ステータスコード
+	 * response status code を取得する。
+	 *
+	 * `$px->set_status()` で登録した情報を取り出します。
+	 *
+	 * @return int ステータスコード (100〜599の間の数値)
 	 */
 	public function get_status(){
 		return $this->response_status;
 	}
 	/**
-	 * get response message
-	 * @return int ステータスメッセージ
+	 * response ステータスメッセージを取得する。
+	 *
+	 * `$px->set_status()` で登録した情報を取り出します。
+	 *
+	 * @return string ステータスメッセージ
 	 */
 	public function get_status_message(){
 		return $this->response_message;
 	}
 
 	/**
-	 * set response status
+	 * response status code をセットする
 	 * @param int $code ステータスコード (100〜599の間の数値)
-	 * @param string $message メッセージ
-	 * @return bool 成功時 true, 失敗時 false
+	 * @param string $message ステータスメッセージ
+	 * @return bool 成功時 `true`, 失敗時 `false`
 	 */
 	public function set_status($code, $message = null){
 		$code = intval($code);
@@ -753,7 +780,7 @@ class px{
 	}
 
 	/**
-	 * 拡張ヘッダ X-PXFW-RELATEDLINK にリンクを追加する。
+	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` にリンクを追加する。
 	 *
 	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` は、サイトマップや物理ディレクトリから発見できないファイルを、Pickles Framework のパブリッシュツールに知らせます。
 	 *
@@ -774,7 +801,7 @@ class px{
 	}
 
 	/**
-	 * 拡張ヘッダ X-PXFW-RELATEDLINK に追加されたリンクを取得する。
+	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` に追加されたリンクを取得する。
 	 *
 	 * 拡張ヘッダ `X-PXFW-RELATEDLINK` に、既に追加されているリンクの一覧を取得します。
 	 *
@@ -787,7 +814,8 @@ class px{
 	}
 
 	/**
-	 * getting PX Command
+	 * PX Command を取得する。
+	 * @return array コマンド配列(ドットで区切られた結果の配列)
 	 */
 	public function get_px_command(){
 		if( !$this->conf()->allow_pxcommands && !$this->req()->is_cmd() ){
@@ -802,7 +830,7 @@ class px{
 	}// get_px_command()
 
 	/**
-	 * execute content
+	 * コンテンツを実行する。
 	 * @param object $px picklesオブジェクト
 	 * @return bool true
 	 */
@@ -825,7 +853,7 @@ class px{
 	}
 
 	/**
-	 * Contents Manifesto のソースを取得する
+	 * Contents Manifesto のソースを取得する。
 	 * @return string HTMLコード
 	 */
 	public function get_contents_manifesto(){
@@ -834,7 +862,7 @@ class px{
 		if( !strlen( @$this->conf()->contents_manifesto ) ){
 			return '';
 		}
-		$realpath = $this->get_path_docroot().$this->href( @$this->conf()->contents_manifesto );
+		$realpath = $this->get_realpath_docroot().$this->href( @$this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
 		}
@@ -845,7 +873,7 @@ class px{
 	}
 
 	/**
-	 * 実行者がパブリッシュツールかどうか調べる
+	 * 実行者がパブリッシュツールかどうか調べる。
 	 *
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
@@ -1119,7 +1147,12 @@ class px{
 	}
 
 	/**
-	 * domain を取得する
+	 * ドメイン名を取得する。
+	 *
+	 * `$conf->domain` が設定されている場合、これを返します。
+	 * 設定されていない場合は、環境変数 `$_SERVER['SERVER_NAME']` から取得して返します。
+	 * ただし、Pickles 2 は ウェブサーバー上で実行されているとは限らないため、 `$_SERVER['SERVER_NAME']` は取得できないことがあります。
+	 * なるべく `$conf->domain` を正しく設定する方が望ましい結果が得られます。
 	 * @return string ドメイン名
 	 */
 	public function get_domain(){
@@ -1136,7 +1169,15 @@ class px{
 	}
 
 	/**
-	 * コンテンツルートディレクトリのパス(=install path) を取得する
+	 * コンテンツルートディレクトリのパス(=install path) を取得する。
+	 *
+	 * コンテンツルートディレクトリは、PHPの実行ファイル (通常は `.px_execute.php`)が設置されたディレクトリを指します。
+	 *
+	 * 通常、これは ドキュメントルート(`$px->get_realpath_docroot()` から得られる) と同じディレクトリですが、
+	 * より深い物理階層に Pickles 2 をインストールすることもできます。
+	 * この場合、 `$conf->path_controot` に ドキュメントルート以下のパスを設定してください。
+	 * `get_path_controot()` は、このパスを整形して返します。
+	 *
 	 * @return string コンテンツディレクトリのパス(HTTPクライアントから見た場合のパス)
 	 */
 	public function get_path_controot(){
@@ -1162,10 +1203,23 @@ class px{
 	}
 
 	/**
-	 * DOCUMENT_ROOT のパスを取得する
+	 * DOCUMENT_ROOT のパスを取得する。 (deprecated)
+	 * このメソッドの使用は推奨されません。
+	 * 代わりに `$px->get_realpath_docroot()` を使用してください。
 	 * @return string ドキュメントルートのパス
 	 */
 	public function get_path_docroot(){
+		return $this->get_realpath_docroot();
+	}
+
+	/**
+	 * DOCUMENT_ROOT のパスを取得する。
+	 *
+	 * pickles2/px-fw-2.x@2.0.29 で `get_path_docroot()` からの名称変更として追加されました。
+	 *
+	 * @return string ドキュメントルートのパス
+	 */
+	public function get_realpath_docroot(){
 		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
 		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
@@ -1220,7 +1274,7 @@ class px{
 	public function realpath_files( $localpath_resource = null ){
 		$rtn = $this->path_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $rtn );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}//realpath_files()
 
@@ -1252,15 +1306,15 @@ class px{
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/c'.$path_content;
 		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
-		$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+		$this->fs()->mkdir_r( dirname( $this->get_realpath_docroot().$rtn ) );
 
-		if( file_exists( $this->get_path_docroot().$path_original ) ){
-			if( is_dir($this->get_path_docroot().$path_original) ){
-				$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
+		if( file_exists( $this->get_realpath_docroot().$path_original ) ){
+			if( is_dir($this->get_realpath_docroot().$path_original) ){
+				$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
 			}else{
-				$this->fs()->mkdir_r( dirname( $this->get_path_docroot().$rtn ) );
+				$this->fs()->mkdir_r( dirname( $this->get_realpath_docroot().$rtn ) );
 			}
-			$this->fs()->copy_r( $this->get_path_docroot().$path_original, $this->get_path_docroot().$rtn );
+			$this->fs()->copy_r( $this->get_realpath_docroot().$path_original, $this->get_realpath_docroot().$rtn );
 		}
 
 		$rtn = $this->fs()->normalize_path($rtn);
@@ -1285,7 +1339,7 @@ class px{
 			return false;
 		}
 		$rtn = $this->path_files_cache( $localpath_resource );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}//realpath_files_cache()
 
@@ -1308,7 +1362,7 @@ class px{
 
 		$path_original = $this->get_path_controot().$path_content;
 		$path_original = $this->fs()->get_realpath($this->fs()->trim_extension($path_original).'_files/'.$localpath_resource);
-		$rtn = $this->get_path_homedir().'/_sys/ram/caches/c'.$path_content;
+		$rtn = $this->get_realpath_homedir().'/_sys/ram/caches/c'.$path_content;
 		$rtn = $this->fs()->get_realpath($this->fs()->trim_extension($rtn).'_files/'.$localpath_resource);
 		$this->fs()->mkdir_r( dirname( $rtn ) );
 
@@ -1335,18 +1389,18 @@ class px{
 		}
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
-		if( !$this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
-			$this->fs()->mkdir_r( $this->get_path_docroot().$rtn );
+		if( !$this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
+			$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
 		}
 		if( !strlen( $localpath_resource ) ){
 			return $this->fs()->normalize_path($rtn);
 		}
 		$rtn = $this->fs()->get_realpath( $rtn.'/'.$localpath_resource );
-		if( $this->fs()->is_dir( $this->get_path_docroot().$rtn ) ){
+		if( $this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
 			$rtn .= '/';
 		}
-		if( !$this->fs()->is_dir( dirname($this->get_path_docroot().$rtn) ) ){
-			$this->fs()->mkdir_r( dirname($this->get_path_docroot().$rtn) );
+		if( !$this->fs()->is_dir( dirname($this->get_realpath_docroot().$rtn) ) ){
+			$this->fs()->mkdir_r( dirname($this->get_realpath_docroot().$rtn) );
 		}
 		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
@@ -1370,7 +1424,7 @@ class px{
 			return false;
 		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
-		$rtn = $this->fs()->get_realpath( $this->get_path_docroot().$rtn );
+		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		return $rtn;
 	}
 
@@ -1381,7 +1435,7 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_private_cache( $localpath_resource = null ){
-		$lib_realpath = $this->get_path_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
+		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 		if( !$this->fs()->is_dir( $rtn ) ){
 			$this->fs()->mkdir_r( $rtn );
@@ -1401,7 +1455,7 @@ class px{
 	}
 
 	/**
-	 * テキストを、指定の文字セットに変換する
+	 * テキストを、指定の文字セットに変換する。
 	 *
 	 * @param mixed $text テキスト
 	 * @param string $encode 変換後の文字セット。省略時、`mb_internal_encoding()` から取得
@@ -1517,7 +1571,7 @@ class px{
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function lock( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$timeout_limit = 5;
 
 		if( !@is_dir( dirname( $lockfilepath ) ) ){
@@ -1554,7 +1608,7 @@ class px{
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	public function is_locked( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$lockfile_expire = $expire;
 
 		// PHPのFileStatusCacheをクリア
@@ -1577,7 +1631,7 @@ class px{
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function unlock( $app_name ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -1592,7 +1646,7 @@ class px{
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function touch_lockfile( $app_name ){
-		$lockfilepath = $this->get_path_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -1604,12 +1658,12 @@ class px{
 	} // touch_lockfile()
 
 	/**
-	 * Pickles の SVG ロゴソースを取得する
+	 * Pickles 2 の SVG ロゴソースを取得する。
 	 * @param array $opt オプション
 	 * <dl>
 	 * 	<dt>color</dt><dd>ロゴの色コード</dd>
 	 * </dl>
-	 * @return string Pickles ロゴの SVG ソースコード
+	 * @return string Pickles 2 ロゴの SVG ソースコード
 	 */
 	public function get_pickles_logo_svg( $opt = array() ){
 		$logo_color = '#f6f6f6';
