@@ -16,6 +16,119 @@ namespace picklesFramework2;
  *
  * メソッド `$px->site()` を通じてアクセスします。
  *
+ * `$site` の役割は、 サイトマップCSVを読み込み、サイトマップツリーを管理することです。
+ * サイトマップからページの情報を取り出したり、親階層のページや子階層のページの一覧を取り出したりなど、
+ * サイトマップの操作に関するAPIを提供します。
+ *
+ * `$site` は サイトマップCSVの処理前(`before_sitemap`)段階では `null`、サイトマップを読み込んだ後の段階では `$site` オブジェクトを格納しています。
+ * サイトマップをロードしないように設定(`$conf->paths_enable_sitemap` に設定)されたリクエストでは、サイトマップを読み込んだ後の段階では `false` が格納されます。
+ *
+ * サイトマップには次のカラムが予め定義されています。
+ *
+ * - CSVファイルはUTF-8で保存してください。
+ * - 1行目は定義行として、2行目以降にページデータを記述してください。
+ * - 定義行は、`* 定義名` のように、先頭にアスタリスクを記述します。
+ * - `* path`、`* title` は必須です。必ず定義に加えてください。
+ * - 列の並び順は決められていないので好きに並び替えることができます。
+ * - 任意の名前のカスタムカラムを自由に定義することができます。カスタムカラムにセットした値は、テーマやコンテンツから簡単に呼び出して利用することができます。
+ *
+ * <table border="1">
+ * <thead>
+ * <tr>
+ * <th>列</th>
+ * <th>キー</th>
+ * <th>意味</th>
+ * </tr>
+ * </thead>
+ * <tbody>
+ * <tr>
+ * <th>A</th>
+ * <td>path</td>
+ * <td>ページのパス</td>
+ * </tr>
+ * <tr>
+ * <th>B</th>
+ * <td>content</td>
+ * <td>コンテンツファイルの格納先</td>
+ * </tr>
+ * <tr>
+ * <th>C</th>
+ * <td>id</td>
+ * <td>ページID</td>
+ * </tr>
+ * <tr>
+ * <th>D</th>
+ * <td>title</td>
+ * <td>ページタイトル</td>
+ * </tr>
+ * <tr>
+ * <th>E</th>
+ * <td>title_breadcrumb</td>
+ * <td>ページタイトル(パン屑表示用)</td>
+ * </tr>
+ * <tr>
+ * <th>F</th>
+ * <td>title_h1</td>
+ * <td>ページタイトル(H1表示用)</td>
+ * </tr>
+ * <tr>
+ * <th>G</th>
+ * <td>title_label</td>
+ * <td>ページタイトル(リンク表示用)</td>
+ * </tr>
+ * <tr>
+ * <th>H</th>
+ * <td>title_full</td>
+ * <td>ページタイトル(タイトルタグ用)</td>
+ * </tr>
+ * <tr>
+ * <th>I</th>
+ * <td>logical_path</td>
+ * <td>論理構造上のパス</td>
+ * </tr>
+ * <tr>
+ * <th>J</th>
+ * <td>list_flg</td>
+ * <td>一覧表示フラグ</td>
+ * </tr>
+ * <tr>
+ * <th>K</th>
+ * <td>layout</td>
+ * <td>レイアウト</td>
+ * </tr>
+ * <tr>
+ * <th>L</th>
+ * <td>orderby</td>
+ * <td>表示順</td>
+ * </tr>
+ * <tr>
+ * <th>M</th>
+ * <td>keywords</td>
+ * <td>metaキーワード</td>
+ * </tr>
+ * <tr>
+ * <th>N</th>
+ * <td>description</td>
+ * <td>metaディスクリプション</td>
+ * </tr>
+ * <tr>
+ * <th>O</th>
+ * <td>category_top_flg</td>
+ * <td>カテゴリトップフラグ</td>
+ * </tr>
+ * <tr>
+ * <th>P</th>
+ * <td>role</td>
+ * <td>ロール</td>
+ * </tr>
+ * <tr>
+ * <th>Q</th>
+ * <td>proc_type</td>
+ * <td>コンテンツの処理方法</td>
+ * </tr>
+ * </tbody>
+ * </table>
+ *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 class site{

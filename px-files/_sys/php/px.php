@@ -428,7 +428,9 @@ class px{
 	 * `$conf->paths_enable_sitemap` の設定によって、 `$site` がロードされない場合があります。
 	 * ロードされない場合は、 `false` が返されます。
 	 *
-	 * @return object|bool `$site` オブジェクト。ロードされない場合は `false`。
+	 * また、サイトマップをロードする前段階(`before_sitemap`) では、 `null` を返します。
+	 *
+	 * @return object|bool `$site` オブジェクト。ロード前は `null`、ロードされない場合は `false`。
 	 */
 	public function site(){
 		return $this->site;
