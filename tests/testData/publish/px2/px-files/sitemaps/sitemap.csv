@@ -1,10 +1,12 @@
-"*path","*content","*id","*title","*title_breadcrumb","*title_h1","*title_label","*title_full","*logical_path","*list_flg","*layout","*orderby","*keywords","*description","*category_top_flg"
-"/",,,"HOME",,,,,,1,"top",,,,
-"/path_ignored/testpage.html",,,"Ignored",,,,,,1,,,"","",1
-"/files_ignored/",,,"Ignored file",,,,,,1,,,"","",1
-"/files_ignored/not_ignored.html",,,"Not ignored file",,,,,,1,,,"","",1
-"/update_sync_test/stay.html",,,"stay",,,,,,1,,,"","",1
-"/update_sync_test/new.html",,,"new",,,,,,1,,,"","",1
-"/region/region1/index.html",,,"region1",,,,,,1,"naked",,"","",1
-"/region/region2/index.html",,,"region2",,,,,,1,"naked",,"","",1
-"/region/region3/index.html",,,"region3",,,,,,1,"naked",,"","",1
+"*path","*content","*id","*title","*title_breadcrumb","*title_h1","*title_label","*title_full","*logical_path","*list_flg","*layout","*orderby","*keywords","*description","*category_top_flg","*proc_type"
+"/",,,"HOME",,,,,,1,"top",,,,,
+"/path_ignored/testpage.html",,,"Ignored",,,,,,1,,,,,1,
+"/files_ignored/",,,"Ignored file",,,,,,1,,,,,1,
+"/files_ignored/not_ignored.html",,,"Not ignored file",,,,,,1,,,,,1,
+"/update_sync_test/stay.html",,,"stay",,,,,,1,,,,,1,
+"/update_sync_test/new.html",,,"new",,,,,,1,,,,,1,
+"/region/region1/index.html",,,"region1",,,,,,1,"naked",,,,1,
+"/region/region2/index.html",,,"region2",,,,,,1,"naked",,,,1,
+"/region/region3/index.html",,,"region3",,,,,,1,"naked",,,,1,
+"/proc_type/ignore.html",,,"proc_type=ignore",,,,,,1,,,,,1,"ignore"
+"/proc_type/pass.html",,,"proc_type=pass",,,,,,1,,,,,1,"pass"

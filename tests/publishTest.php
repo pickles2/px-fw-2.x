@@ -395,6 +395,13 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/md.html.md' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/no_publish/ext/html.html' ) );
 
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/proc_type/ignore.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/proc_type/pass.html' ) );
+		$this->assertEquals(
+			file_get_contents( __DIR__.'/testData/publish/published/proc_type/pass.html' ),
+			file_get_contents( __DIR__.'/testData/publish/px2/proc_type/pass.html' )
+		);
+
 
 
 		$output = $this->passthru( [
