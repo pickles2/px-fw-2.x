@@ -81,6 +81,7 @@ $ chmod -R 777 ./caches
 
 ### Pickles Framework 2.0.29 (2017年??月??日)
 
+- サイトマップ項目に `proc_type` を追加。 `$conf->paths_proc_type` と同様の効果だが、サイトマップ上で設定できるようになった。
 - クラス `site`, `bowl`, `pxcmd` のAPIを外部から呼び出せるようにした。
 - `$px->get_path_homedir()` を `$px->get_realpath_homedir()` に改名。(古いメソッド名の実装は残されているが非推奨)
 - `$px->get_path_docroot()` を `$px->get_realpath_docroot()` に改名。(古いメソッド名の実装は残されているが非推奨)

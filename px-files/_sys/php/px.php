@@ -213,41 +213,37 @@ class px{
 		$this->output_content_type();
 
 
-		// ignore されたコンテンツはこの段階で判断してレスポンスする
+		// ignore されたコンテンツをレスポンスする
 		$fnc_response_ignore = function($px){
-			if( $px->is_ignore_path( $px->req()->get_request_file_path() ) ){
-				$px->set_status(403);// 403 Forbidden
-				print 'ignored path';
-				exit;
-			}
-			return false;
+			$px->set_status(403);// 403 Forbidden
+			print 'ignored path';
+			exit;
 		};
-		// pass 判定されたコンテンツはこの段階で判断してレスポンスする
+		// pass 判定されたコンテンツをレスポンスする
 		$fnc_response_pass = function($px){
-			if( $px->get_path_proc_type( $px->req()->get_request_file_path() ) === 'pass' ){
-				if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
-					@header('Content-type: text/html;');
-					$px->set_status(404);// 404 NotFound
-					$px->bowl()->send('<p>404 - File not found.</p>');
-					return true;
-				}
-				$src = $px->fs()->read_file( './'.$px->req()->get_request_file_path() );
-				$px->bowl()->send($src);
+			if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
+				@header('Content-type: text/html;');
+				$px->set_status(404);// 404 NotFound
+				$px->bowl()->send('<p>404 - File not found.</p>');
 				return true;
 			}
-			return false;
+			$src = $px->fs()->read_file( './'.$px->req()->get_request_file_path() );
+			$px->bowl()->send($src);
+			return true;
 		};
 
 		$pxcmd = $this->get_px_command();
 		if( is_null($pxcmd) || !count($pxcmd) ){
 			// PXコマンドが無効かつ ignore か pass の場合、
 			// この時点でレスポンスを返す。
-			if( $fnc_response_ignore($this) ){
+			if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 				// ignore のレスポンス
+				$fnc_response_ignore($this);
 				return;
 			}
-			if( $fnc_response_pass($this) ){
+			if( $this->get_path_proc_type( $this->req()->get_request_file_path() ) === 'pass' ){
 				// pass のレスポンス
+				$fnc_response_pass($this);
 				return;
 			}
 		}
@@ -307,12 +303,14 @@ class px{
 		// PXコマンドが有効、かつ ignore か pass の場合、
 		// この時点でレスポンスを返す。
 		// ここまでの before sitemap, before contents でレスポンスされた場合は、ここは通らない。
-		if( $fnc_response_ignore($this) ){
+		if( $this->is_ignore_path( $this->req()->get_request_file_path() ) ){
 			// ignore のレスポンス
+			$fnc_response_ignore($this);
 			return;
 		}
-		if( $fnc_response_pass($this) ){
+		if( $this->get_path_proc_type( $this->req()->get_request_file_path() ) === 'pass' ){
 			// pass のレスポンス
+			$fnc_response_pass($this);
 			return;
 		}
 
@@ -430,7 +428,9 @@ class px{
 	 * `$conf->paths_enable_sitemap` の設定によって、 `$site` がロードされない場合があります。
 	 * ロードされない場合は、 `false` が返されます。
 	 *
-	 * @return object|bool `$site` オブジェクト。ロードされない場合は `false`。
+	 * また、サイトマップをロードする前段階(`before_sitemap`) では、 `null` を返します。
+	 *
+	 * @return object|bool `$site` オブジェクト。ロード前は `null`、ロードされない場合は `false`。
 	 */
 	public function site(){
 		return $this->site;
@@ -576,6 +576,7 @@ class px{
 	 */
 	public function get_path_proc_type( $path = null ){
 		static $rtn = array();
+		static $rtn_after_sitemap = array();
 		if( is_null($path) ){
 			$path = $this->req()->get_request_file_path();
 		}
@@ -588,7 +589,18 @@ class px{
 		}
 		$path = $this->fs()->normalize_path($path);
 
-		if( @is_bool($rtn[$path]) ){
+		if( is_object( $this->site ) ){
+			if( @!is_null($rtn_after_sitemap[$path]) ){
+				return $rtn_after_sitemap[$path];
+			}
+			$page_info = $this->site()->get_page_info( $path );
+			if( @strlen( $page_info['proc_type'] ) ){
+				$rtn_after_sitemap[$path] = $page_info['proc_type'];
+				return $rtn_after_sitemap[$path];
+			}
+		}
+
+		if( @!is_null($rtn[$path]) ){
 			return $rtn[$path];
 		}
 
