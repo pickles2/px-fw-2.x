@@ -88,6 +88,7 @@ $ chmod -R 777 ./caches
 - `$px->get_path_homedir()` を `$px->get_realpath_homedir()` に改名。(古いメソッド名の実装は残されているが非推奨)
 - `$px->get_path_docroot()` を `$px->get_realpath_docroot()` に改名。(古いメソッド名の実装は残されているが非推奨)
 - メソッド名の改名に合わせて、 `PX=api.*` もそれぞれ改名。(古い名前のAPIの実装は残されているが非推奨)
+- パブリッシュのパフォーマンスを改善。
 
 ### Pickles Framework 2.0.28 (2016年12月8日)
 

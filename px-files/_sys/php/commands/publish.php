@@ -965,6 +965,41 @@ function cont_EditPublishTargetPathApply(formElm){
 		// if( $this->px->is_ignore_path( './'.$path ) ){
 		// 	return true;
 		// }
+
+
+		foreach( $this->px->conf()->paths_proc_type as $row => $type ){
+			// $conf->paths_proc_type の設定から、
+			// 明らかに除外できると判断できるディレクトリは再帰処理をキャンセルする。
+			// 設定値の末尾が `/*` で終わっている ignore 指定の行は、 "ディレクトリ以下すべて除外" と断定し、
+			// これにマッチしたディレクトリをキャンセルの対象とする。
+			if(!is_string($row)){continue;}
+			if( $type != 'ignore' ){
+				continue;
+			}
+			if( strrpos($row, '/*') !== strlen($row)-2 ){
+				continue;
+			}
+			// var_dump($row);
+			$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)), '/');
+			$realpath_controot = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot() ) );
+			if( preg_match('/\*/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_quote($row,'/');
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}elseif(is_dir($realpath_controot.$row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)).'/','/');
+			}elseif(is_file($realpath_controot.$row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
+			}
+			$path_child = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path ).'/' );
+			// var_dump($preg_pattern);
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path_child ) ){
+				// var_dump($path_child);
+				return true;
+			}
+		}
+
 		foreach( $ls as $basename ){
 			set_time_limit(30);
 			$this->make_list_by_dir_scan( $path.DIRECTORY_SEPARATOR.$basename );
