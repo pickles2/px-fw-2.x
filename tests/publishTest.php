@@ -162,8 +162,8 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
 		foreach( $publish_log as $publish_log_row ){
 			if( $publish_log_row[1] == '/errors/server_side_unknown_error.html' ){
-				$this->assertEquals( $publish_log_row[4], 'Unknown server error' );
-				$this->assertEquals( $publish_log_row[5], '1 errors: Unknown server error.;' );
+				$this->assertEquals( strpos($publish_log_row[4], 'Unknown server error'), 0 );
+				$this->assertEquals( strpos($publish_log_row[5], '1 errors: Unknown server error'), 0 );
 			}
 		}
 
@@ -173,8 +173,8 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
 		$this->assertNull( @$alert_log[0][3] );
-		$this->assertEquals( $alert_log[1][2], 'status: 500 Unknown server error' );
-		$this->assertEquals( $alert_log[2][2], 'Unknown server error.' );
+		$this->assertEquals( strpos($alert_log[1][2], 'status: 500 Unknown server error'), 0 );
+		$this->assertEquals( strpos($alert_log[2][2], 'Unknown server error'), 0 );
 
 		// 後始末
 		// $this->assertTrue( false );
@@ -259,8 +259,8 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
 		foreach( $publish_log as $publish_log_row ){
 			if( $publish_log_row[1] == '/errors/server_side_unknown_error.html' ){
-				$this->assertEquals( $publish_log_row[4], 'Unknown server error' );
-				$this->assertEquals( $publish_log_row[5], '1 errors: Unknown server error.;' );
+				$this->assertEquals( strpos($publish_log_row[4], 'Unknown server error'), 0 );
+				$this->assertEquals( strpos($publish_log_row[5], '1 errors: Unknown server error'), 0 );
 			}
 		}
 
@@ -270,8 +270,8 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
 		$this->assertNull( @$alert_log[0][3] );
-		$this->assertEquals( $alert_log[1][2], 'status: 500 Unknown server error' );
-		$this->assertEquals( $alert_log[2][2], 'Unknown server error.' );
+		$this->assertEquals( strpos($alert_log[1][2], 'status: 500 Unknown server error'), 0 );
+		$this->assertEquals( strpos($alert_log[2][2], 'Unknown server error'), 0 );
 
 		// 後始末
 		// $this->assertTrue( false );
@@ -625,6 +625,10 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/px-files/_sys/ram/caches/sitemaps/' ) );
+
+		//↓realpathが記載されるため削除
+		unlink( __DIR__.'/testData/publish/published/php_error/notice.html' );
+		unlink( __DIR__.'/testData/publish/published/php_error/warning.html' );
 	}
 
 
@@ -636,9 +640,10 @@ class publishTest extends PHPUnit_Framework_TestCase{
 	 * PHPがエラー吐いてないか確認しておく。
 	 */
 	private function common_error( $output ){
-		if( preg_match('/'.preg_quote('Fatal', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Warning', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Notice', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Parse error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Fatal error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Warning:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Notice:', '/').'/si', $output) ){ return false; }
 		return true;
 	}
 
@@ -652,7 +657,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		set_time_limit(60*10);
 		$cmd = array();
 		foreach( $ary_command as $row ){
-			$param = '"'.addslashes($row).'"';
+			$param = escapeshellcmd($row);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );

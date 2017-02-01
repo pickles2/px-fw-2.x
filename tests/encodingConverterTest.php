@@ -152,9 +152,10 @@ class encodingConverterTest extends PHPUnit_Framework_TestCase{
 	 * PHPがエラー吐いてないか確認しておく。
 	 */
 	private function common_error( $output ){
-		if( preg_match('/'.preg_quote('Fatal', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Warning', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Notice', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Parse error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Fatal error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Warning:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Notice:', '/').'/si', $output) ){ return false; }
 		return true;
 	}
 
@@ -200,7 +201,7 @@ class encodingConverterTest extends PHPUnit_Framework_TestCase{
 		set_time_limit(60*10);
 		$cmd = array();
 		foreach( $ary_command as $row ){
-			$param = '"'.addslashes($row).'"';
+			$param = escapeshellcmd($row);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );
