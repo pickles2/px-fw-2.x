@@ -49,6 +49,7 @@ class pickles{
 				$json->relatedlinks = $px->get_relatedlinks();
 				$json->errors = $px->get_errors();
 				$json->body_base64 = base64_encode($px->bowl()->pull());
+				$json->header = $px->header_list();
 				print json_encode($json);
 				break;
 			default:
