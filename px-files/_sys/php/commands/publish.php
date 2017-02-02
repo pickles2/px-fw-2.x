@@ -347,6 +347,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	 */
 	private function exec_publish( $px ){
 		header('Content-type: text/plain;');
+		$total_time = time();
 		print $this->cli_header();
 
 		$validate = $this->validate();
@@ -458,14 +459,21 @@ function cont_EditPublishTargetPathApply(formElm){
 						)
 					);
 
-					$bin = $this->passthru( $php_command );
+					$bin = $this->passthru( $php_command, $return_var );
 					$bin = json_decode($bin);
 					if( !is_object($bin) ){
 						$bin = new \stdClass;
 						$bin->status = 500;
-						$bin->message = 'Unknown server error';
-						$bin->errors = array('Unknown server error.');
+						$tmp_err_msg = 'Unknown server error';
+						$tmp_err_msg .= "\n".'PHP returned status code "'.$return_var.'" on exit. There is a possibility of "Parse Error" or "Fatal Error" was occured.';
+						$tmp_err_msg .= "\n".'Hint: Normally, "Pickles 2" content files are parsed as PHP scripts. If you are using "<'.'?", "<'.'?php", "<'.'%", or "<'.'?=" unintentionally in contents, might be the cause.';
+						$bin->message = $tmp_err_msg;
+						$bin->errors = array();
+						// $bin->errors = array($tmp_err_msg);
 						$bin->relatedlinks = array();
+						$bin->body_base64 = base64_encode('');
+						// $bin->body_base64 = base64_encode($tmp_err_msg);
+						unset($tmp_err_msg);
 					}
 					$status_code = @$bin->status;
 					$status_message = @$bin->message;
@@ -567,6 +575,40 @@ function cont_EditPublishTargetPathApply(formElm){
 		print "\n";
 		print '============'."\n";
 		print '## done.'."\n";
+		print "\n";
+
+		$path_logfile = $this->path_tmp_publish.'alert_log.csv';
+		clearstatcache();
+		if( @is_file( $path_logfile ) ){
+			sleep(1);
+			$alert_log = $this->px->fs()->read_csv( $path_logfile );
+			array_shift( $alert_log );
+			$alert_total_count = count($alert_log);
+			$max_preview_count = 20;
+			$alert_header = '************************* '.$alert_total_count.' ALERTS ******';
+			print $alert_header."\n";
+			print "\n";
+			$counter = 0;
+			foreach( $alert_log as $key=>$row ){
+				$counter ++;
+				// var_dump($row);
+				$tmp_number = '  ['.($key+1).'] ';
+				print $tmp_number;
+				print preg_replace('/(\r\n|\r|\n)/s', '$1'.str_pad('', strlen($tmp_number), ' '), $row[2])."\n";
+				print str_pad('', strlen($tmp_number), ' ').'  in '.$row[1]."\n";
+				if( $counter >= $max_preview_count ){ break; }
+			}
+			if( $alert_total_count > $max_preview_count ){
+				print '  [etc...]'."\n";
+			}
+			print "\n";
+			print '    You got total '.$alert_total_count.' alerts.'."\n";
+			print '    see more: '.realpath($path_logfile)."\n";
+			print str_pad('', strlen($alert_header), '*')."\n";
+			print "\n";
+		}
+
+		print 'Total Time: '.(time() - $total_time).' sec.'."\n";
 		print "\n";
 
 		$this->unlock();//ロック解除
@@ -753,18 +795,20 @@ function cont_EditPublishTargetPathApply(formElm){
 
 	/**
 	 * コマンドを実行し、標準出力値を返す
+	 *
 	 * @param array $ary_command コマンドのパラメータを要素として持つ配列
+	 * @param array $return_var コマンドの終了コードを格納して返します (`passthru()` の第2引数として渡されます)
 	 * @return string コマンドの標準出力値
 	 */
-	private function passthru( $ary_command ){
+	private function passthru( $ary_command, &$return_var ){
 		$cmd = array();
 		foreach( $ary_command as $row ){
-			$param = '"'.addslashes($row).'"';
+			$param = escapeshellcmd($row);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );
 		ob_start();
-		passthru( $cmd );
+		@passthru( $cmd, $return_var );
 		$bin = ob_get_clean();
 		return $bin;
 	}
@@ -921,6 +965,41 @@ function cont_EditPublishTargetPathApply(formElm){
 		// if( $this->px->is_ignore_path( './'.$path ) ){
 		// 	return true;
 		// }
+
+
+		foreach( $this->px->conf()->paths_proc_type as $row => $type ){
+			// $conf->paths_proc_type の設定から、
+			// 明らかに除外できると判断できるディレクトリは再帰処理をキャンセルする。
+			// 設定値の末尾が `/*` で終わっている ignore 指定の行は、 "ディレクトリ以下すべて除外" と断定し、
+			// これにマッチしたディレクトリをキャンセルの対象とする。
+			if(!is_string($row)){continue;}
+			if( $type != 'ignore' ){
+				continue;
+			}
+			if( strrpos($row, '/*') !== strlen($row)-2 ){
+				continue;
+			}
+			// var_dump($row);
+			$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)), '/');
+			$realpath_controot = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot() ) );
+			if( preg_match('/\*/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_quote($row,'/');
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}elseif(is_dir($realpath_controot.$row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)).'/','/');
+			}elseif(is_file($realpath_controot.$row)){
+				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
+			}
+			$path_child = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path ).'/' );
+			// var_dump($preg_pattern);
+			if( preg_match( '/^'.$preg_pattern.'$/s' , $path_child ) ){
+				// var_dump($path_child);
+				return true;
+			}
+		}
+
 		foreach( $ls as $basename ){
 			set_time_limit(30);
 			$this->make_list_by_dir_scan( $path.DIRECTORY_SEPARATOR.$basename );

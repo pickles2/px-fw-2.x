@@ -513,12 +513,8 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
-		$this->assertEquals( $output->commands->php, ($this->fs->is_windows() ? addslashes('C:\path\to\command\php.exe') : 'C:\path\to\command\php.exe') );
-		$this->assertEquals( $output->path_phpini, ($this->fs->is_windows() ? addslashes('C:\path\to\file\php.ini') : 'C:\path\to\file\php.ini') );
-			// ↑Windowsでは、エスケープされたバックスラッシュが、受け取り側で解決されず倍に増えてる(?) ような、問題がある。
-			// 　バックスラッシュが増えてても、スラッシュで指定していても、この用途においては問題にならないようなので、深追いしない。
-			// 　なので、このテストは本来あるべきではない分岐を使い、変な感じの実装になっている。
-
+		$this->assertEquals( $output->commands->php, 'C:\path\to\command\php.exe' );
+		$this->assertEquals( $output->path_phpini, 'C:\path\to\file\php.ini' );
 
 
 		// 後始末
@@ -600,9 +596,10 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	 * PHPがエラー吐いてないか確認しておく。
 	 */
 	private function common_error( $output ){
-		if( preg_match('/'.preg_quote('Fatal', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Warning', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Notice', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Parse error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Fatal error:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Warning:', '/').'/si', $output) ){ return false; }
+		if( preg_match('/'.preg_quote('Notice:', '/').'/si', $output) ){ return false; }
 		return true;
 	}
 
@@ -648,7 +645,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		set_time_limit(60*10);
 		$cmd = array();
 		foreach( $ary_command as $row ){
-			$param = '"'.addslashes($row).'"';
+			$param = escapeshellcmd($row);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );

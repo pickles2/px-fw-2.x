@@ -604,6 +604,7 @@ class px{
 			return $rtn[$path];
 		}
 
+		$realpath_controot = $this->fs()->normalize_path( $this->fs()->get_realpath( $this->get_path_docroot().$this->get_path_controot() ) );
 		foreach( $this->conf->paths_proc_type as $row => $type ){
 			if(!is_string($row)){continue;}
 			$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)), '/');
@@ -612,9 +613,9 @@ class px{
 				$preg_pattern = preg_quote($row,'/');
 				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
 				$preg_pattern = $preg_pattern.'$';//前方・後方一致
-			}elseif(is_dir($row)){
+			}elseif(is_dir($realpath_controot.$row)){
 				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)).'/','/');
-			}elseif(is_file($row)){
+			}elseif(is_file($realpath_controot.$row)){
 				$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)),'/');
 			}
 			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
