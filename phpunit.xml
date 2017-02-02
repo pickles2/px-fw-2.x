@@ -2,6 +2,7 @@
 	<testsuites>
 		<testsuite name="default">
 			<file>./tests/picklesTest.php</file>
+			<file>./tests/headerTest.php</file>
 			<file>./tests/encodingConverterTest.php</file>
 			<file>./tests/prevnextTest.php</file>
 			<file>./tests/apiTest.php</file>
