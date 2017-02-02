@@ -210,7 +210,7 @@ class px{
 		}
 
 		// デフォルトの Content-type を出力
-		$this->output_content_type();
+		@header('Content-type: '.$this->get_default_mime_type());
 
 
 		// ignore されたコンテンツをレスポンスする
@@ -222,7 +222,7 @@ class px{
 		// pass 判定されたコンテンツをレスポンスする
 		$fnc_response_pass = function($px){
 			if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
-				@header('Content-type: text/html;');
+				@header('Content-type: text/html');
 				$px->set_status(404);// 404 NotFound
 				$px->bowl()->send('<p>404 - File not found.</p>');
 				return true;
@@ -691,35 +691,55 @@ class px{
 	}//is_ignore_path();
 
 	/**
-	 * HTTPヘッダー `Content-Type` を出力する。
+	 * デフォルトの MIME Type を取得する。
+	 *
+	 * @param string $path パス
+	 * @return string MIME Type
 	 */
-	private function output_content_type(){
-		$extension = strtolower( pathinfo( $this->req()->get_request_file_path() , PATHINFO_EXTENSION ) );
-		$output_encoding = @$this->conf->output_encoding;
-		if( !strlen( $output_encoding ) ){
-			$output_encoding = 'utf-8';
+	private function get_default_mime_type( $path = null ){
+		$rtn = null;
+		if(@!strlen($path)){
+			$path = $this->req()->get_request_file_path();
 		}
+		$extension = $this->get_path_proc_type( $path );
+		switch( strtolower( $extension ) ){
+			case 'pass':
+			case 'ignore':
+			case 'direct':
+				$extension = pathinfo( $path , PATHINFO_EXTENSION );
+				break;
+			default:
+				break;
+		}
+
 		switch( strtolower( $extension ) ){
 			case 'css':
-				@header('Content-type: text/css; charset='.$output_encoding);
+				$rtn = 'text/css';
 				break;
 			case 'js':
-				@header('Content-type: text/javascript; charset='.$output_encoding);
+				$rtn = 'text/javascript';
 				break;
 			case 'html':
 			case 'htm':
-				@header('Content-type: text/html; charset='.$output_encoding);
+			case 'shtml':
+			case 'shtm':
+			case 'xbm':
+				$rtn = 'text/html';
 				break;
-			case 'png': @header('Content-type: image/png'); break;
-			case 'gif': @header('Content-type: image/gif'); break;
-			case 'jpg':case 'jpeg':case 'jpe': @header('Content-type: image/jpeg'); break;
-			case 'svg':case 'svgz': @header('Content-type: image/svg+xml'); break;
+			case 'png': $rtn = 'image/png'; break;
+			case 'gif': $rtn = 'image/gif'; break;
+			case 'jpg':case 'jpeg':case 'jpe': $rtn = 'image/jpeg'; break;
+			case 'svg':case 'svgz': $rtn = 'image/svg+xml'; break;
+			case 'csv': $rtn = 'text/comma-separated-values'; break;
+			case 'tsv': $rtn = 'text/tab-separated-values'; break;
+			case 'pdf': $rtn = 'application/pdf'; break;
+			case 'swf': $rtn = 'application/x-shockwave-flash'; break;
 			case 'txt':case 'text':
 			default:
-				@header('Content-type: text/plain; charset='.$output_encoding); break;
+				$rtn = 'text/plain'; break;
 		}
-		return ;
-	}
+		return $rtn;
+	} // get_default_mime_type()
 
 	/**
 	 * response status code を取得する。
@@ -849,7 +869,7 @@ class px{
 	 */
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
-			@header('Content-type: text/html;');
+			@header('Content-type: text/html');
 			$px->set_status(404);// 404 NotFound
 			$px->bowl()->send('<p>404 - File not found.</p>');
 			return true;
