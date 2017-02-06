@@ -41,6 +41,13 @@ class px{
 	private $proc_type, $proc_id, $proc_num = 0;
 
 	/**
+	 * HTTP Response Header List
+	 */
+	private $response_headers = array(
+		"Content-type" => array("text/html")
+	);
+
+	/**
 	 * 関連ファイルのURL情報
 	 * @access private
 	 */
@@ -210,7 +217,7 @@ class px{
 		}
 
 		// デフォルトの Content-type を出力
-		$this->output_content_type();
+		@$this->header('Content-type: '.$this->get_default_mime_type());
 
 
 		// ignore されたコンテンツをレスポンスする
@@ -222,7 +229,7 @@ class px{
 		// pass 判定されたコンテンツをレスポンスする
 		$fnc_response_pass = function($px){
 			if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
-				@header('Content-type: text/html;');
+				@$px->header('Content-type: text/html');
 				$px->set_status(404);// 404 NotFound
 				$px->bowl()->send('<p>404 - File not found.</p>');
 				return true;
@@ -691,35 +698,55 @@ class px{
 	}//is_ignore_path();
 
 	/**
-	 * HTTPヘッダー `Content-Type` を出力する。
+	 * デフォルトの MIME Type を取得する。
+	 *
+	 * @param string $path パス
+	 * @return string MIME Type
 	 */
-	private function output_content_type(){
-		$extension = strtolower( pathinfo( $this->req()->get_request_file_path() , PATHINFO_EXTENSION ) );
-		$output_encoding = @$this->conf->output_encoding;
-		if( !strlen( $output_encoding ) ){
-			$output_encoding = 'utf-8';
+	private function get_default_mime_type( $path = null ){
+		$rtn = null;
+		if(@!strlen($path)){
+			$path = $this->req()->get_request_file_path();
 		}
+		$extension = $this->get_path_proc_type( $path );
+		switch( strtolower( $extension ) ){
+			case 'pass':
+			case 'ignore':
+			case 'direct':
+				$extension = pathinfo( $path , PATHINFO_EXTENSION );
+				break;
+			default:
+				break;
+		}
+
 		switch( strtolower( $extension ) ){
 			case 'css':
-				@header('Content-type: text/css; charset='.$output_encoding);
+				$rtn = 'text/css';
 				break;
 			case 'js':
-				@header('Content-type: text/javascript; charset='.$output_encoding);
+				$rtn = 'text/javascript';
 				break;
 			case 'html':
 			case 'htm':
-				@header('Content-type: text/html; charset='.$output_encoding);
+			case 'shtml':
+			case 'shtm':
+			case 'xbm':
+				$rtn = 'text/html';
 				break;
-			case 'png': @header('Content-type: image/png'); break;
-			case 'gif': @header('Content-type: image/gif'); break;
-			case 'jpg':case 'jpeg':case 'jpe': @header('Content-type: image/jpeg'); break;
-			case 'svg':case 'svgz': @header('Content-type: image/svg+xml'); break;
+			case 'png': $rtn = 'image/png'; break;
+			case 'gif': $rtn = 'image/gif'; break;
+			case 'jpg':case 'jpeg':case 'jpe': $rtn = 'image/jpeg'; break;
+			case 'svg':case 'svgz': $rtn = 'image/svg+xml'; break;
+			case 'csv': $rtn = 'text/comma-separated-values'; break;
+			case 'tsv': $rtn = 'text/tab-separated-values'; break;
+			case 'pdf': $rtn = 'application/pdf'; break;
+			case 'swf': $rtn = 'application/x-shockwave-flash'; break;
 			case 'txt':case 'text':
 			default:
-				@header('Content-type: text/plain; charset='.$output_encoding); break;
+				$rtn = 'text/plain'; break;
 		}
-		return ;
-	}
+		return $rtn;
+	} // get_default_mime_type()
 
 	/**
 	 * response status code を取得する。
@@ -849,7 +876,7 @@ class px{
 	 */
 	private static function exec_content( $px ){
 		if( !$px->fs()->is_file( './'.$px->get_path_content() ) ){
-			@header('Content-type: text/html;');
+			@$px->header('Content-type: text/html');
 			$px->set_status(404);// 404 NotFound
 			$px->bowl()->send('<p>404 - File not found.</p>');
 			return true;
@@ -1574,6 +1601,68 @@ class px{
 		return $path_type;
 	}//get_path_type()
 
+
+
+	/**
+	 * HTTP ヘッダを送信する。
+	 *
+	 * このメソッドは、 PHP の `header()` の代わりに使用します。
+	 *
+	 * PHP の `header()` は、SAPI に依存しており、 CLI SAPI 上ではヘッダーを送信できません。
+	 * このメソッドは CLI SAPI の環境下でも、HTTPレスポンスヘッダーの処理をエミュレートするために用意されました。
+	 * `$px->header()` を通して送信されたHTTPヘッダーは、 `$px->header_list()` から取得でき、 JSON形式の出力(コマンドラインオプション `-o json` を付加して実行)時、`header` に格納されます。
+	 *
+	 * ただし、 `$px->header()` は、次のヘッダーは扱いません。
+	 *
+	 * - HTTPステータスコード : 代わりに `$px->set_status()` を使用してください。 `$px->header()` にこのヘッダーを渡すと、 `$px->set_status()` にフォワードされます。
+	 * - X-PXFW-ERROR : 代わりに `$px->error()` を使用してください。
+	 * - X-PXFW-RELATEDLINK : 代わりに `$px->add_relatedlink()` を使用してください。
+	 *
+	 * @param string $string ヘッダー文字列
+	 * @param bool $replace ヘッダが 前に送信された類似のヘッダを置換するか、または、同じ形式の二番目の ヘッダを追加するかどうかを指定する
+	 * @return null 値を返しません。
+	 */
+	public function header($string, $replace = true){
+		if( preg_match( '/^(.*?)\:(.*)$/', $string, $matched ) ){
+			$key = @strtolower(trim($matched[1]));
+			$val = @trim($matched[2]);
+			switch($key){
+				case 'content-type': $key = 'Content-type'; break;
+			}
+			if( $replace === true ){
+				unset( $this->response_headers[$key] );
+			}
+			if( !@is_array($this->response_headers[$key]) ){
+				$this->response_headers[$key] = array();
+			}
+			array_push( $this->response_headers[$key], $val );
+		}elseif( preg_match( '/^HTTP\/([0-9\.]*?) ([0-9]{3}) (.*)$/', $string, $matched ) ){
+			// ステータスコードは $px が管理しているので転送する
+			$this->set_status($matched[2], $matched[3]);
+		}
+
+		@header($string, $replace);
+		return;
+	}
+
+	/**
+	 * 送信した (もしくは送信される予定の) レスポンスヘッダの一覧を返す。
+	 *
+	 * `$px->header()` から送られたHTTPレスポンスヘッダーの一覧を返します。
+	 * このメソッドは CLI SAPI の環境下でも、HTTPレスポンスヘッダーの処理をエミュレートするために用意されました。
+	 * 従って、実際に送信されたヘッダー情報を管理するものではありません。
+	 *
+	 * @return array ヘッダを、数値添字の配列で返します。
+	 */
+	public function header_list(){
+		$rtn = array();
+		foreach($this->response_headers as $key=>$vals){
+			foreach($vals as $val){
+				array_push($rtn, $key.': '.$val);
+			}
+		}
+		return $rtn;
+	}
 
 
 	/**
