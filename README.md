@@ -82,6 +82,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.30 (2017年??月??日)
 
 - `$px->href()` が、 hash を query として置き換えてしまうことがある不具合を修正。
+- `path` に hash や query を持つページを正常にパブリッシュできない不具合を修正。
 
 ### Pickles Framework 2.0.29 (2017年2月6日)
 

@@ -587,6 +587,8 @@ class px{
 		if( is_null($path) ){
 			$path = $this->req()->get_request_file_path();
 		}
+		$path = preg_replace('/\#.*$/', '', $path);
+		$path = preg_replace('/\?.*$/', '', $path);
 		$path = $this->fs()->get_realpath( '/'.$path );
 		if( is_dir('./'.$path) ){
 			$path .= '/'.$this->get_directory_index_primary();
