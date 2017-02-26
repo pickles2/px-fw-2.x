@@ -23,6 +23,9 @@
 "http://pickles2.pxt.jp/abc.html",,,"Pickles2 Official Website(7)",,,,,"/sample_pages/>/sample_pages/page1/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,,
 "/sample_pages/page1/proc_type/pass.html",,,"proc_type = pass",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,,"pass"
 "/sample_pages/page1/proc_type/ignore.html",,,"proc_type = ignore",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,,"ignore"
+"/sample_pages/hash/index.html",,,"Hash TEST 1",,,,,"/sample_pages/",1,,,"","",,,
+"alias:/sample_pages/hash/index.html?querytest#hashtest",,"page-hash-test","Hash TEST 2",,,,,"/sample_pages/",1,,,"","",,,
+"/sample_pages/hash/child1.html",,,"Hash TEST child",,,,,"/sample_pages/>page-hash-test",1,,,"","",,,
 "alias:/sample_pages/page2/",,,"サンプルページ2へのエイリアス",,,,,"/sample_pages/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,,
 "/sample_pages/page2/",,,"サンプルページ2",,,,,,1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",1,,
 "/sample_pages/page2/1.htm",,,"サンプル2-1",,,,,"/sample_pages/page2/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,,
