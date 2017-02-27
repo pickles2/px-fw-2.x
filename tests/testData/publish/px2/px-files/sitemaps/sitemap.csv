@@ -10,3 +10,6 @@
 "/region/region3/index.html",,,"region3",,,,,,1,"naked",,,,1,
 "/proc_type/ignore.html",,,"proc_type=ignore",,,,,,1,,,,,1,"ignore"
 "/proc_type/pass.html",,,"proc_type=pass",,,,,,1,,,,,1,"pass"
+"/hashtest/",,,"hashtest A",,,,,,1,,,,,1,
+"/hashtest/?querytest#hashtest",,"hashtest-b","hashtest B",,,,,"/hashtest/",1,,,,,1,
+"/hashtest/child.html",,,"hashtest Child",,,,,"/hashtest/>hashtest-b",1,,,,,1,

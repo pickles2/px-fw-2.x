@@ -286,6 +286,18 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 
 	/**
+	 * hash と query がついているページのパブリッシュ結果を確認
+	 * @depends testBefore
+	 */
+	public function testPublishHashQueryPages(){
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/hashtest/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/hashtest/child.html' ) );
+		$files = $this->fs->ls( __DIR__.'/testData/publish/published/hashtest/' );
+		// var_dump($files);
+		$this->assertEquals( count($files), 2 );
+	}//testPublishHashQueryPages()
+
+	/**
 	 * パブリッシュ範囲のテスト
 	 * @depends testBefore
 	 */
