@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title>サンプル3-2 | Pickles Framework 2</title>
+		<title>Hash TEST child | Pickles Framework 2</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="keywords" content="sample, サンプル" />
-		<meta name="description" content="このページはPickles2のサンプルコードとして用意されたものです。" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
 		<meta name="copyright" content="&copy;Pickles 2 Project">
 
  
@@ -32,7 +32,7 @@
 				<div class="theme_shouldernavi">
 <ul><li><a href="/sample_pages/help/">ヘルプ</a></li></ul>				</div>
 				<div class="theme_globalnavi">
-<ul><li><a href="/sample_pages/">サンプルページ1</a></li><li><a href="/sample_pages/page2/">サンプルページ2</a></li><li><a href="/sample_pages/page3/" class="current">サンプルページ3</a></li></ul>
+<ul><li><a href="/sample_pages/" class="current">サンプルページ1</a></li><li><a href="/sample_pages/page2/">サンプルページ2</a></li><li><a href="/sample_pages/page3/">サンプルページ3</a></li></ul>
 				</div>
 			</div>
 		</header>
@@ -40,44 +40,17 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-9">
-						<div class="theme_breadcrumb"><ul><li><a href="/">ホーム</a></li><li><a href="/sample_pages/page3/">サンプルページ3</a></li><li><span>サンプル3-2</span></li></ul></div>
-						<h1>サンプル3-2-actor1(h1)</h1>
+						<div class="theme_breadcrumb"><ul><li><a href="/">ホーム</a></li><li><a href="/sample_pages/">サンプルページ1</a></li><li><a href="/sample_pages/hash/?querytest#hashtest">Hash TEST 2</a></li><li><span>Hash TEST child</span></li></ul></div>
+						<h1>Hash TEST child</h1>
 						<div class="contents">
-<p>これは、<a href="./2.html">page3-2</a> のactor(役者) <strong>サンプル3-2-actor1</strong> です。</p>
-
-<ul>
-<li><a href="./2.html">role</a></li>
-<li><a href="./2-actor1.html">actor1</a></li>
-<li><a href="./2-actor2.html">actor2</a></li>
-</ul>
-
-<pre>string(9) "role-page"
-</pre>
+<p><a href="./">HASH TEST 1</a></p>
 						</div>
-						<div class="theme_breadcrumb"><ul><li><a href="/">ホーム</a></li><li><a href="/sample_pages/page3/">サンプルページ3</a></li><li><span>サンプル3-2</span></li></ul></div>
+						<div class="theme_breadcrumb"><ul><li><a href="/">ホーム</a></li><li><a href="/sample_pages/">サンプルページ1</a></li><li><a href="/sample_pages/hash/?querytest#hashtest">Hash TEST 2</a></li><li><span>Hash TEST child</span></li></ul></div>
 					</div>
 					<div class="col-sm-3">
 						<nav class="theme_common_navi">
-							<p><a href="/sample_pages/page3/">サンプルページ3</a></p>
+							<p><a href="/sample_pages/">サンプルページ1</a></p>
 <ul>
-<li><a href="/sample_pages/page3/1.html">サンプル3-1</a></li>
-<li><a href="/sample_pages/page3/2.html" class="current">サンプル3-2</a><ul>
-<li><a href="/sample_pages/page3/2-child.html">サンプル3-2-child</a></li>
-<li><a href="/sample_pages/page3/2-actor2-child.html">サンプル3-2-actor2-child</a></li>
-</ul>
-</li>
-<li><a href="/sample_pages/page3/3.html">共通点コンテンツからの出力B</a></li>
-</ul>
-						</nav>
-					</div>
-				</div><!-- /.row -->
-			</div><!-- /.container -->
-		</div><!-- /.theme_mainblock -->
-		<footer class="theme_footer">
-			<div class="container">
-				<nav class="theme_megafooter_navi">
-<ul>
-<li><a href="/sample_pages/">サンプルページ1</a><ul>
 <li><a href="/sample_pages/page1/1.html">ページタイトル(リンクのラベル)</a></li>
 <li><a href="/sample_pages/page1/2.html">PHPコード埋め込み</a></li>
 <li><a href="/sample_pages/page1/3.html">Markdown記法</a></li>
@@ -91,7 +64,36 @@
 <li><a href="/sample_pages/page1/proc_type/pass.html">proc_type = pass</a></li>
 <li><a href="/sample_pages/page1/proc_type/ignore.html">proc_type = ignore</a></li>
 <li><a href="/sample_pages/hash/">Hash TEST 1</a></li>
-<li><a href="/sample_pages/hash/?querytest#hashtest">Hash TEST 2</a></li>
+<li><a href="/sample_pages/hash/?querytest#hashtest" class="current">Hash TEST 2</a><ul>
+<li><a href="/sample_pages/hash/child1.html" class="current">Hash TEST child</a></li>
+</ul>
+</li>
+<li><a href="/sample_pages/page2/">サンプルページ2へのエイリアス</a></li>
+</ul>
+						</nav>
+					</div>
+				</div><!-- /.row -->
+			</div><!-- /.container -->
+		</div><!-- /.theme_mainblock -->
+		<footer class="theme_footer">
+			<div class="container">
+				<nav class="theme_megafooter_navi">
+<ul>
+<li><a href="/sample_pages/" class="current">サンプルページ1</a><ul>
+<li><a href="/sample_pages/page1/1.html">ページタイトル(リンクのラベル)</a></li>
+<li><a href="/sample_pages/page1/2.html">PHPコード埋め込み</a></li>
+<li><a href="/sample_pages/page1/3.html">Markdown記法</a></li>
+<li><a href="/sample_pages/page1/popup.html" onclick="window.open(this.href);return false;">ポップアップページ</a></li>
+<li><a href="/sample_pages/page1/4/">ダイナミックパス</a></li>
+<li><a href="/sample_pages/page1/template.html">共通点コンテンツからの出力A</a></li>
+<li><a href="/sample_pages/page1/5.html">ステータスコードにメッセージを送信</a></li>
+<li><a href="/sample_pages/page1/6.html">リソースパス</a></li>
+<li><a href="/sample_pages/page1/global_urls/">サイト外URLをサイトマップに組み込む</a></li>
+<li><a href="/sample_pages/page1/php/index.php">PHPの動的なコンテンツ</a></li>
+<li><a href="/sample_pages/page1/proc_type/pass.html">proc_type = pass</a></li>
+<li><a href="/sample_pages/page1/proc_type/ignore.html">proc_type = ignore</a></li>
+<li><a href="/sample_pages/hash/">Hash TEST 1</a></li>
+<li><a href="/sample_pages/hash/?querytest#hashtest" class="current">Hash TEST 2</a></li>
 <li><a href="/sample_pages/page2/">サンプルページ2へのエイリアス</a></li>
 </ul>
 </li>
@@ -100,9 +102,9 @@
 <li><a href="/sample_pages/page2/2.html">サンプル2-2</a></li>
 </ul>
 </li>
-<li><a href="/sample_pages/page3/" class="current">サンプルページ3</a><ul>
+<li><a href="/sample_pages/page3/">サンプルページ3</a><ul>
 <li><a href="/sample_pages/page3/1.html">サンプル3-1</a></li>
-<li><a href="/sample_pages/page3/2.html" class="current">サンプル3-2</a></li>
+<li><a href="/sample_pages/page3/2.html">サンプル3-2</a></li>
 <li><a href="/sample_pages/page3/3.html">共通点コンテンツからの出力B</a></li>
 </ul>
 </li>

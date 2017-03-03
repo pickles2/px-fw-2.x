@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.29';
+		return '2.0.30-alpha.1+nb';
 	}
 
 	/**
@@ -587,6 +587,8 @@ class px{
 		if( is_null($path) ){
 			$path = $this->req()->get_request_file_path();
 		}
+		$path = preg_replace('/\#.*$/', '', $path);
+		$path = preg_replace('/\?.*$/', '', $path);
 		$path = $this->fs()->get_realpath( '/'.$path );
 		if( is_dir('./'.$path) ){
 			$path .= '/'.$this->get_directory_index_primary();
@@ -1025,7 +1027,7 @@ class px{
 
 				// パラメータを、引数の生の状態に戻す。
 				$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
-				$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'?'.@$parsed_url_fin['fragment']:''));
+				$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'#'.@$parsed_url_fin['fragment']:''));
 				break;
 		}
 
