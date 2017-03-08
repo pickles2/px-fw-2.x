@@ -1014,6 +1014,8 @@ function cont_EditPublishTargetPathApply(formElm){
 	 */
 	private function add_queue( $path ){
 		$path = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path, $this->path_docroot ) );
+		$path = preg_replace('/\#.*$/', '', $path);
+		$path = preg_replace('/\?.*$/', '', $path);
 		if( preg_match( '/\/$/', $path ) ){
 			$path .= $this->px->get_directory_index_primary();
 		}
