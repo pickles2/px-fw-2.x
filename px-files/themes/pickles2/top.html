@@ -23,7 +23,7 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars( $px->conf()->name ) ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
-<?= $px->bowl()->pull('head') ?>
+<?= $px->bowl()->get_clean('head') ?>
 
 		<style type="text/css">
 			.theme_welcome{
@@ -88,7 +88,7 @@
 		<div class="theme_mainblock">
 			<div class="container">
 				<div class="contents">
-<?= $px->bowl()->pull() ?>
+<?= $px->bowl()->get_clean() ?>
 				</div>
 			</div><!-- /.container -->
 		</div><!-- /.theme_mainblock -->
@@ -114,6 +114,6 @@
 			</div>
 <?php } ?>
 		</footer>
-<?= $px->bowl()->pull('foot') ?>
+<?= $px->bowl()->get_clean('foot') ?>
 	</body>
 </html>

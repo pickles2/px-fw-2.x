@@ -79,6 +79,12 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.31 (2017年??月??日)
+
+- `$px->bowl()->get()` を追加。
+- `$px->bowl()->send()` を `$px->bowl()->put()` に改名。(古いメソッド名の実装は残されているが非推奨)
+- `$px->bowl()->pull()` を `$px->bowl->get_clean()` に改名。(古いメソッド名の実装は残されているが非推奨)
+
 ### Pickles Framework 2.0.30 (2017年3月8日)
 
 - `$px->href()` が、 hash を query として置き換えてしまうことがある不具合を修正。

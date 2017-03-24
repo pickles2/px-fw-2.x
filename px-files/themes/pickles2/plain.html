@@ -4,10 +4,10 @@
 		<meta charset="UTF-8" />
 		<title><?= htmlspecialchars($px->site()->get_current_page_info('title_full')); ?></title>
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
-<?= $px->bowl()->pull('head') ?>
+<?= $px->bowl()->get_clean('head') ?>
 	</head>
 	<body>
-<?= $px->bowl()->pull() ?>
-<?= $px->bowl()->pull('foot') ?>
+<?= $px->bowl()->get_clean() ?>
+<?= $px->bowl()->get_clean('foot') ?>
 	</body>
 </html>
