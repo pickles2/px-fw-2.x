@@ -83,6 +83,7 @@ return call_user_func( function(){
 	 * $conf->funcs->processor->html に設定したプロセッサのリストに沿って、上から順に処理されます。
 	 */
 	$conf->paths_proc_type = array(
+		'/LICENSE' => 'ignore' ,
 		'/.htaccess' => 'ignore' ,
 		'/.travis.yml' => 'ignore' ,
 		'/appveyor.yml' => 'ignore' ,
