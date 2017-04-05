@@ -332,6 +332,42 @@ class publishTest extends PHPUnit_Framework_TestCase{
 
 	}//testPublishRegion()
 
+	/**
+	 * パブリッシュ範囲のテスト (ワイルドカードを使用)
+	 * @depends testBefore
+	 */
+	public function testPublishRegionWildcard(){
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/publish/px2/.px_execute.php' ,
+			'/?PX=publish.run&path_region=/region/ignore/&paths_ignore[]=*.tmp_ig&paths_ignore[]=*/test2.html' ,
+		] );
+		clearstatcache();
+
+		// var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/test1.html' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/test1_files/ignored_ext.tmp_ig' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/test2.html' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/ignore/index.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/ignore/test1.html' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/ignore/test1_files/ignored_ext.tmp_ig' ) );
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/ignore/test2.html' ) );
+
+		// 後始末
+		// $this->assertTrue( false );
+		$output = $this->passthru( [
+			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
+
+	}//testPublishRegionWildcard()
+
 
 	/**
 	 * パブリッシュの対象が0件の場合のテスト
