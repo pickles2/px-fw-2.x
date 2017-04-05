@@ -1774,25 +1774,9 @@ class px{
 		if( @strlen( $opt['color'] ) ){
 			$logo_color = $opt['color'];
 		}
-		ob_start();
-		?>
-<svg version="1.1" id="pickles2-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	 y="0px" width="40px" height="40px" viewBox="0 0 42.5 42.5" style="enable-background:new 0 0 42.5 42.5;" xml:space="preserve">
-<g>
-	<path fill="<?php print htmlspecialchars($logo_color); ?>" d="M1.2,1.2v40.1h40.1V1.2H1.2z M2.3,40.2V2.3h37.8v37.8H2.3z"/>
-	<g>
-		<path fill="<?php print htmlspecialchars($logo_color); ?>" d="M11.5,14.1c3.4,0,5,1.4,5,4.1c0,2.7-1.8,4.5-5.3,4.5c-0.5,0-1.1,0-1.8-0.1v5.7H8.7V14.5
-			C9.6,14.3,10.6,14.2,11.5,14.1z M13.8,21.6c1.1-0.5,1.9-1.7,1.9-3.3c0-2.4-1.4-3.5-4.3-3.5c-0.7,0-1.3,0.1-2.1,0.2v7
-			c0.5,0.1,1.1,0.1,1.6,0.1C12.1,22.1,13,22,13.8,21.6z"/>
-		<path fill="<?php print htmlspecialchars($logo_color); ?>" d="M18.9,18.8l2.6,3.9l2.6-3.9h0.6c0,0.2-0.2,0.5-0.3,0.7L22,23.3l3,4.4c0.1,0.2,0.3,0.4,0.4,0.7h-0.7l-3.1-4.5
-			l-3.1,4.5h-0.7c0-0.2,0.2-0.4,0.4-0.7l3-4.5l-2.6-3.7c-0.1-0.2-0.3-0.4-0.4-0.7H18.9z"/>
-		<path fill="<?php print htmlspecialchars($logo_color); ?>" d="M30.7,14.1c2.6,0,3.8,1.7,3.8,3.8c0,2.8-2,5.1-4.6,7.8l-1.9,2h6.8l0,0.6h-7.6l-0.1-0.7l1.7-1.8
-			c3.3-3.4,4.9-5.4,4.9-7.8c0-1.8-1-3.2-3-3.2c-1,0-2,0.4-2.9,1l-0.4-0.5C28.4,14.5,29.5,14.1,30.7,14.1z"/>
-	</g>
-</g>
-</svg>
-<?php
-		return ob_get_clean();
+		$svg_src = file_get_contents( __DIR__.'/files/svg/pickles2-logo.svg' );
+		$svg_src = str_replace( '#000000', htmlspecialchars($logo_color), $svg_src );
+		return $svg_src;
 	}//get_pickles_logo_svg()
 
 }
