@@ -1033,7 +1033,8 @@ function cont_EditPublishTargetPathApply(formElm){
 			// 　　ディレクトリの内容がすべて一時対象外に指定された場合に、
 			// 　　一時パブリッシュディレクトリにフォルダが作られないため、
 			// 　　同期時にディレクトリごと削除されてしまうことを防止するため。
-			if(dirname($path) != '/'){ $this->add_queue( dirname($path) ); }
+			$dirname = $this->px->fs()->normalize_path(dirname($path));
+			if($dirname != '/'){ $this->add_queue( $dirname ); }
 			return false;
 		}
 		if( array_key_exists($path, $this->paths_queue) ){
