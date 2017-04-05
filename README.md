@@ -84,6 +84,7 @@ $ chmod -R 777 ./caches
 - `$px->bowl()->get()` を追加。
 - `$px->bowl()->send()` を `$px->bowl()->put()` に改名。(古いメソッド名の実装は残されているが非推奨)
 - `$px->bowl()->pull()` を `$px->bowl->get_clean()` に改名。(古いメソッド名の実装は残されているが非推奨)
+- `PX=publish` の `paths_ignore` オプションで、ワイルドカード `*` が使えるようになった。
 
 ### Pickles Framework 2.0.30 (2017年3月8日)
 
