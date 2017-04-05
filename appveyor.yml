@@ -34,7 +34,7 @@ install:
   - ps: Set-Service wuauserv -StartupType Manual
   - cinst php --version 7.1.3 -y
   - SET PATH=C:\tools\php\;%PATH%
-  - cd C:\tools\php
+  - cd C:\tools\php71
   - copy php.ini-production php.ini
   - echo date.timezone="Asia/Tokyo" >> php.ini
   - echo extension_dir=ext >> php.ini
