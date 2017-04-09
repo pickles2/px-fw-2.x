@@ -756,6 +756,7 @@ class px{
 	 * @param string $request_path リクエストを発行する対象のパス
 	 * @param array $options Pickles 2 へのコマンド発行時のオプション
 	 * - output = 出力形式。`json` を指定すると、JSON形式の出力を受けられます。
+	 * - user_agent = `HTTP_USER_AGENT` 文字列。 `user_agent` が空白の場合、または文字列 `PicklesCrawler` を含む場合には、パブリッシュツールからのアクセスであるとみなされます。
 	 * @param array $return_var コマンドの終了コードを格納して返します (`passthru()` の第2引数として渡されます)
 	 * @return mixed サブリクエストの実行結果。
 	 * 通常は 得られた標準出力をそのまま文字列として返します。
@@ -790,6 +791,10 @@ class px{
 		if( @$options['output'] == 'json' ){
 			array_push($php_command, '-o');
 			array_push($php_command, 'json');
+		}
+		if( @strlen($options['user_agent']) ){
+			array_push($php_command, '-u');
+			array_push($php_command, $options['user_agent']);
 		}
 		array_push($php_command, $request_path);
 
