@@ -801,7 +801,7 @@ class px{
 
 		$cmd = array();
 		foreach( $php_command as $row ){
-			$param = escapeshellcmd($row);
+			$param = escapeshellarg($row);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );
