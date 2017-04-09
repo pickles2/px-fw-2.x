@@ -438,35 +438,8 @@ function cont_EditPublishTargetPathApply(formElm){
 					default:
 						// pickles execute
 						print $ext.' -> '.$proc_type."\n";
-						$php_command = array();
-						array_push( $php_command, $this->px->conf()->commands->php );
-						if( strlen(@$this->px->conf()->path_phpini) ){
-							$php_command = array_merge(
-								$php_command,
-								array(
-									'-c', @$this->px->conf()->path_phpini,// ← php.ini のパス
-								)
-							);
-						}
-						if( strlen(@$this->px->req()->get_cli_option( '-d' )) ){
-							$php_command = array_merge(
-								$php_command,
-								array(
-									'-d', @$this->px->req()->get_cli_option( '-d' ),// ← php.ini definition
-								)
-							);
-						}
-						$php_command = array_merge(
-							$php_command,
-							array(
-								$_SERVER['SCRIPT_FILENAME'] ,
-								'-o' , 'json' ,// output as JSON
-								$path ,
-							)
-						);
 
-						$bin = $this->passthru( $php_command, $return_var );
-						$bin = json_decode($bin);
+						$bin = $this->px->internal_sub_request( $path, array('output'=>'json'), $return_var );
 						if( !is_object($bin) ){
 							$bin = new \stdClass;
 							$bin->status = 500;
@@ -799,26 +772,6 @@ function cont_EditPublishTargetPathApply(formElm){
 			clearstatcache();
 		}
 		return error_log( $this->px->fs()->mk_csv( array($row) ), 3, $path_logfile );
-	}
-
-	/**
-	 * コマンドを実行し、標準出力値を返す
-	 *
-	 * @param array $ary_command コマンドのパラメータを要素として持つ配列
-	 * @param array $return_var コマンドの終了コードを格納して返します (`passthru()` の第2引数として渡されます)
-	 * @return string コマンドの標準出力値
-	 */
-	private function passthru( $ary_command, &$return_var ){
-		$cmd = array();
-		foreach( $ary_command as $row ){
-			$param = escapeshellcmd($row);
-			array_push( $cmd, $param );
-		}
-		$cmd = implode( ' ', $cmd );
-		ob_start();
-		@passthru( $cmd, $return_var );
-		$bin = ob_get_clean();
-		return $bin;
 	}
 
 	/**
