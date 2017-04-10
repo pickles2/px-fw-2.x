@@ -63,6 +63,7 @@ class config{
 <colgroup><col width="30%" /><col width="30%" /><col width="40%" /></colgroup>
 <?php
 print $this->mk_config_unit('name', 'プロジェクト名', 'string');
+print $this->mk_config_unit('copyright', 'コピーライト', 'string');
 print $this->mk_config_unit('domain', 'ドメイン名', 'string', true);
 print $this->mk_config_unit('path_controot', 'コンテンツルートのパス', 'string', true);
 print $this->mk_config_unit('path_top', 'トップページのパス', 'string');
@@ -98,6 +99,32 @@ print $this->mk_config_unit('session_expire', 'セッション有効期限', 'in
 </table>
 
 <h2>processor</h2>
+<h3>paths_enable_sitemap (サイトマップのロードを有効にするパス)</h3>
+<?php
+	$conf_value = @$this->conf->{'paths_enable_sitemap'};
+	unset( $this->conf->{'paths_enable_sitemap'} );
+?>
+<table class="def" style="width:100%; table-layout: fixed;">
+<colgroup><col width="100%" /></colgroup>
+<thead>
+<tr>
+<th>path</th>
+</tr>
+</thead>
+<tfoot>
+<tr>
+<th>path</th>
+</tr>
+</tfoot>
+<?php
+foreach( $conf_value as $key=>$val ){
+	print '<tr>';
+	print '<td>'.htmlspecialchars($val).'</td>';
+	print '</tr>';
+}
+?>
+</table>
+
 <h3>paths_proc_type (プロセスタイプ)</h3>
 <?php
 	$conf_value = @$this->conf->{'paths_proc_type'};
