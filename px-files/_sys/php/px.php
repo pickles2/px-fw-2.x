@@ -369,8 +369,10 @@ class px{
 				$fnc_name = @$matched[1];
 				$option_value = @$matched[2];
 				unset($matched);
-				if( strlen( $option_value ) ){
+				if( strlen( trim($option_value) ) ){
 					$option_value = json_decode( $option_value );
+				}else{
+					$option_value = null;
 				}
 				// var_dump($fnc_name);
 				// var_dump($option_value);
