@@ -57,24 +57,9 @@ class theme_top{
 	}//get_color_scheme()
 
 	/**
-	 * PxFWのSVGロゴソースを返す。
-	 * @param array $opt オプション
-	 * @return string SVGソース
-	 */
-	public function create_src_pxfw_logo_svg($opt = array()){
-		$colors = $this->get_color_scheme();
-		if( @strlen($opt['color']) ){
-			$colors['mainx'] = $opt['color'];
-		}
-		ob_start();
-		include(__DIR__.'/svg/pickles_logo.svg');
-		return ob_get_clean();
-	}//create_src_pxfw_logo_svg()
-
-	/**
 	 * リンクアイコンのSVGロゴソースを返す。
 	 * @param array $type アイコンの種類
-	 * 
+	 *
 	 * blank, download, pdf, up, down, back, icon(default) のいずれかを指定。
 	 * @param array $opt オプション
 	 * @return string SVGソース
@@ -165,9 +150,9 @@ class theme_top{
 		if( @strlen($opt['color']) ){
 			$colors['mainx'] = $opt['color'];
 		}
-		ob_start();
-		include( __DIR__.'/svg/welcome.svg' );
-		return ob_get_clean();
+		$svg_src = file_get_contents( __DIR__.'/svg/welcome.svg' );
+		$svg_src = str_replace( '#0000ff', htmlspecialchars($colors['link']), $svg_src );
+		return $svg_src;
 	}//create_src_welcome_svg()
 
 
@@ -229,3 +214,4 @@ class theme_top{
 		return $rtn;
 	}
 }
+

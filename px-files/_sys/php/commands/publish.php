@@ -404,134 +404,115 @@ function cont_EditPublishTargetPathApply(formElm){
 			foreach( $this->paths_queue as $path=>$val ){break;}
 			print '------------'."\n";
 			print $path."\n";
+			if( $this->px->fs()->is_dir(dirname($_SERVER['SCRIPT_FILENAME']).$path) ){
+				// ディレクトリを処理
+				$this->px->fs()->mkdir( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path );
+				print ' -> A directory.'."\n";
 
-			$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
-			$proc_type = $this->px->get_path_proc_type( $path );
-			$status_code = null;
-			$status_message = null;
-			$errors = array();
-			$microtime = microtime(true);
-			switch( $proc_type ){
-				case 'pass':
-					// pass
-					print $ext.' -> '.$proc_type."\n";
-					if( !$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ) ){
-						$status_code = 500;
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to making parent directory.' ));
+			}else{
+				// ファイルを処理
+				$ext = strtolower( pathinfo( $path , PATHINFO_EXTENSION ) );
+				$proc_type = $this->px->get_path_proc_type( $path );
+				$status_code = null;
+				$status_message = null;
+				$errors = array();
+				$microtime = microtime(true);
+				switch( $proc_type ){
+					case 'pass':
+						// pass
+						print $ext.' -> '.$proc_type."\n";
+						if( !$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ) ){
+							$status_code = 500;
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to making parent directory.' ));
+							break;
+						}
+						if( !$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ){
+							$status_code = 500;
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to copying file.' ));
+							break;
+						}
+						$status_code = 200;
 						break;
-					}
-					if( !$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) ){
-						$status_code = 500;
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to copying file.' ));
-						break;
-					}
-					$status_code = 200;
-					break;
 
-				case 'direct':
-				default:
-					// pickles execute
-					print $ext.' -> '.$proc_type."\n";
-					$php_command = array();
-					array_push( $php_command, $this->px->conf()->commands->php );
-					if( strlen(@$this->px->conf()->path_phpini) ){
-						$php_command = array_merge(
-							$php_command,
-							array(
-								'-c', @$this->px->conf()->path_phpini,// ← php.ini のパス
-							)
-						);
-					}
-					if( strlen(@$this->px->req()->get_cli_option( '-d' )) ){
-						$php_command = array_merge(
-							$php_command,
-							array(
-								'-d', @$this->px->req()->get_cli_option( '-d' ),// ← php.ini definition
-							)
-						);
-					}
-					$php_command = array_merge(
-						$php_command,
-						array(
-							$_SERVER['SCRIPT_FILENAME'] ,
-							'-o' , 'json' ,// output as JSON
-							$path ,
-						)
-					);
+					case 'direct':
+					default:
+						// pickles execute
+						print $ext.' -> '.$proc_type."\n";
 
-					$bin = $this->passthru( $php_command, $return_var );
-					$bin = json_decode($bin);
-					if( !is_object($bin) ){
-						$bin = new \stdClass;
-						$bin->status = 500;
-						$tmp_err_msg = 'Unknown server error';
-						$tmp_err_msg .= "\n".'PHP returned status code "'.$return_var.'" on exit. There is a possibility of "Parse Error" or "Fatal Error" was occured.';
-						$tmp_err_msg .= "\n".'Hint: Normally, "Pickles 2" content files are parsed as PHP scripts. If you are using "<'.'?", "<'.'?php", "<'.'%", or "<'.'?=" unintentionally in contents, might be the cause.';
-						$bin->message = $tmp_err_msg;
-						$bin->errors = array();
-						// $bin->errors = array($tmp_err_msg);
-						$bin->relatedlinks = array();
-						$bin->body_base64 = base64_encode('');
-						// $bin->body_base64 = base64_encode($tmp_err_msg);
-						unset($tmp_err_msg);
-					}
-					$status_code = @$bin->status;
-					$status_message = @$bin->message;
-					$errors = @$bin->errors;
-					if( $bin->status >= 500 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
-					}elseif( $bin->status >= 400 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
-					}elseif( $bin->status >= 300 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
-					}elseif( $bin->status >= 200 ){
-						// 200 番台は正常
-					}elseif( $bin->status >= 100 ){
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
-					}else{
-						$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
-					}
-
-					// コンテンツの書き出し処理
-					// エラーが含まれている場合でも、得られたコンテンツを出力する。
-					$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
-					$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
-					foreach( $bin->relatedlinks as $link ){
-						$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
-						$link = $this->px->fs()->normalize_path( $link );
-						$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
-						if( $this->px->fs()->is_dir( $this->px->get_realpath_docroot().'/'.$link ) ){
-							$this->make_list_by_dir_scan( $tmp_link.'/' );
+						$bin = $this->px->internal_sub_request( $path, array('output'=>'json'), $return_var );
+						if( !is_object($bin) ){
+							$bin = new \stdClass;
+							$bin->status = 500;
+							$tmp_err_msg = 'Unknown server error';
+							$tmp_err_msg .= "\n".'PHP returned status code "'.$return_var.'" on exit. There is a possibility of "Parse Error" or "Fatal Error" was occured.';
+							$tmp_err_msg .= "\n".'Hint: Normally, "Pickles 2" content files are parsed as PHP scripts. If you are using "<'.'?", "<'.'?php", "<'.'%", or "<'.'?=" unintentionally in contents, might be the cause.';
+							$bin->message = $tmp_err_msg;
+							$bin->errors = array();
+							// $bin->errors = array($tmp_err_msg);
+							$bin->relatedlinks = array();
+							$bin->body_base64 = base64_encode('');
+							// $bin->body_base64 = base64_encode($tmp_err_msg);
+							unset($tmp_err_msg);
+						}
+						$status_code = @$bin->status;
+						$status_message = @$bin->message;
+						$errors = @$bin->errors;
+						if( $bin->status >= 500 ){
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+						}elseif( $bin->status >= 400 ){
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+						}elseif( $bin->status >= 300 ){
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+						}elseif( $bin->status >= 200 ){
+							// 200 番台は正常
+						}elseif( $bin->status >= 100 ){
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
 						}else{
-							$this->add_queue( $tmp_link );
+							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
 						}
-					}
 
-					// エラーメッセージを alert_log に追記
-					if( is_array( $bin->errors ) && count( $bin->errors ) ){
-						foreach( $bin->errors as $tmp_error_row ){
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, $tmp_error_row ));
+						// コンテンツの書き出し処理
+						// エラーが含まれている場合でも、得られたコンテンツを出力する。
+						$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path ) );
+						$this->px->fs()->save_file( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path, base64_decode( @$bin->body_base64 ) );
+						foreach( $bin->relatedlinks as $link ){
+							$link = $this->px->fs()->get_realpath( $link, dirname($this->path_docroot.$path).'/' );
+							$link = $this->px->fs()->normalize_path( $link );
+							$tmp_link = preg_replace( '/^'.preg_quote($this->px->get_path_controot(), '/').'/s', '/', $link );
+							if( $this->px->fs()->is_dir( $this->px->get_realpath_docroot().'/'.$link ) ){
+								$this->make_list_by_dir_scan( $tmp_link.'/' );
+							}else{
+								$this->add_queue( $tmp_link );
+							}
 						}
-					}
 
-					break;
-			}
+						// エラーメッセージを alert_log に追記
+						if( is_array( $bin->errors ) && count( $bin->errors ) ){
+							foreach( $bin->errors as $tmp_error_row ){
+								$this->alert_log(array( @date('Y-m-d H:i:s'), $path, $tmp_error_row ));
+							}
+						}
 
-			$str_errors = '';
-			if( is_array($errors) && count($errors) ){
-				$str_errors .= count($errors).' errors: ';
-				$str_errors .= implode(', ', $errors).';';
+						break;
+				}
+
+				$str_errors = '';
+				if( is_array($errors) && count($errors) ){
+					$str_errors .= count($errors).' errors: ';
+					$str_errors .= implode(', ', $errors).';';
+				}
+				$this->log(array(
+					@date('Y-m-d H:i:s') ,
+					$path ,
+					$proc_type ,
+					$status_code ,
+					$status_message ,
+					$str_errors,
+					@filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path),
+					microtime(true)-$microtime
+				));
+
 			}
-			$this->log(array(
-				@date('Y-m-d H:i:s') ,
-				$path ,
-				$proc_type ,
-				$status_code ,
-				$status_message ,
-				$str_errors,
-				@filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path),
-				microtime(true)-$microtime
-			));
 
 			if( !empty( $this->path_publish_dir ) ){
 				// パブリッシュ先ディレクトリに都度コピー
@@ -794,26 +775,6 @@ function cont_EditPublishTargetPathApply(formElm){
 	}
 
 	/**
-	 * コマンドを実行し、標準出力値を返す
-	 *
-	 * @param array $ary_command コマンドのパラメータを要素として持つ配列
-	 * @param array $return_var コマンドの終了コードを格納して返します (`passthru()` の第2引数として渡されます)
-	 * @return string コマンドの標準出力値
-	 */
-	private function passthru( $ary_command, &$return_var ){
-		$cmd = array();
-		foreach( $ary_command as $row ){
-			$param = escapeshellcmd($row);
-			array_push( $cmd, $param );
-		}
-		$cmd = implode( ' ', $cmd );
-		ob_start();
-		@passthru( $cmd, $return_var );
-		$bin = ob_get_clean();
-		return $bin;
-	}
-
-	/**
 	 * validate
 	 */
 	private function validate(){
@@ -986,7 +947,6 @@ function cont_EditPublishTargetPathApply(formElm){
 				// ワイルドカードが使用されている場合
 				$preg_pattern = preg_quote($row,'/');
 				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
-				$preg_pattern = $preg_pattern.'$';//前方・後方一致
 			}elseif(is_dir($realpath_controot.$row)){
 				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)).'/','/');
 			}elseif(is_file($realpath_controot.$row)){
@@ -1020,16 +980,14 @@ function cont_EditPublishTargetPathApply(formElm){
 			$path .= $this->px->get_directory_index_primary();
 		}
 
-		if( $this->px->is_ignore_path( $path ) ){
-			// 対象外
-			return false;
-		}
-		if( $this->is_ignore_path( $path ) ){
-			// パブリッシュ対象外
-			return false;
-		}
-		if( !$this->is_region_path( $path ) ){
-			// 範囲外
+		if( $this->px->is_ignore_path( $path ) || $this->is_ignore_path( $path ) || !$this->is_region_path( $path ) ){
+			// 対象外, パブリッシュ対象外, 範囲外
+			// 対象外パスの親ディレクトリが対象パスの場合は、ディレクトリ単体でキューに登録を試みる。
+			// 　　ディレクトリの内容がすべて一時対象外に指定された場合に、
+			// 　　一時パブリッシュディレクトリにフォルダが作られないため、
+			// 　　同期時にディレクトリごと削除されてしまうことを防止するため。
+			$dirname = $this->px->fs()->normalize_path(dirname($path));
+			if($dirname != '/'){ $this->add_queue( $dirname ); }
 			return false;
 		}
 		if( array_key_exists($path, $this->paths_queue) ){
@@ -1075,13 +1033,24 @@ function cont_EditPublishTargetPathApply(formElm){
 				// ワイルドカードが使用されている場合
 				$preg_pattern = preg_quote($row,'/');
 				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
-				$preg_pattern = $preg_pattern.'$';//前方・後方一致
 			}elseif(is_dir($row)){
 				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)).'/','/');
 			}elseif(is_file($row)){
 				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
 			}
 			if( preg_match( '/^'.$preg_pattern.'$/s' , $path ) ){
+				$rtn[$path] = true;
+				return $rtn[$path];
+			}
+		}
+		foreach( $this->paths_ignore as $path_ignore ){
+			$preg_pattern = preg_quote( $path_ignore, '/' );
+			if( preg_match('/'.preg_quote('\*','/').'/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}
+			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
 				$rtn[$path] = true;
 				return $rtn[$path];
 			}
@@ -1112,7 +1081,13 @@ function cont_EditPublishTargetPathApply(formElm){
 			return false;
 		}
 		foreach( $this->paths_ignore as $path_ignore ){
-			if( preg_match( '/^'.preg_quote( $path_ignore, '/' ).'/s' , $path ) ){
+			$preg_pattern = preg_quote( $path_ignore, '/' );
+			if( preg_match('/'.preg_quote('\*','/').'/',$preg_pattern) ){
+				// ワイルドカードが使用されている場合
+				$preg_pattern = preg_replace('/'.preg_quote('\*','/').'/','(?:.*?)',$preg_pattern);//ワイルドカードをパターンに反映
+				$preg_pattern = $preg_pattern.'$';//前方・後方一致
+			}
+			if( preg_match( '/^'.$preg_pattern.'/s' , $path ) ){
 				return false;
 			}
 		}

@@ -104,13 +104,13 @@ return call_user_func( function(){
 	// funcs: Before sitemap
 	$conf->funcs->before_sitemap = [
 		// PX=clearcache
-		'picklesFramework2\commands\clearcache::register' ,
+		'picklesFramework2\commands\clearcache::register(  )' ,
 
 		 // PX=config
-		'picklesFramework2\commands\config::register' ,
+		'picklesFramework2\commands\config::register( )' ,
 
 		 // PX=phpinfo
-		'picklesFramework2\commands\phpinfo::register' ,
+		'picklesFramework2\commands\phpinfo::register()' ,
 
 	];
 

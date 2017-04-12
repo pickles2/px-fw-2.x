@@ -27,7 +27,7 @@
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "tomk79/filesystem": "^1.0.0",
-        "tomk79/request": "^0.1.0",
+        "tomk79/request": "^1.0.0",
         "michelf/php-markdown": "1.6.*",
         "leafo/scssphp": "0.6.*"
     },
