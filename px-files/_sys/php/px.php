@@ -365,7 +365,7 @@ class px{
 			if( is_string($func_list) ){
 				$fnc_name = $func_list;
 				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
-				preg_match( '/^(.*?)(?:\\((.*)\\))?$/', $fnc_name, $matched );
+				preg_match( '/^(.*?)(?:\\((.*)\\))?$/s', $fnc_name, $matched );
 				$fnc_name = @$matched[1];
 				$option_value = @$matched[2];
 				unset($matched);
