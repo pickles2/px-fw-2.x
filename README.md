@@ -34,7 +34,7 @@
 Pickles Framework(PxFW) は、静的で大きなウェブサイトを効率よく構築できる オープンソースのHTML生成ツールです。<br />
 データベース不要、PHPが動くサーバーに手軽に導入でき、プロトタイプ制作を中心に進めるような柔軟な制作スタイルを実現します。
 
-Pickles2 は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
+Pickles 2 は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
 主な改善点は次の通りです。
 
 - `composer` からインストールできるようになりました。
@@ -46,12 +46,11 @@ Pickles2 は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です。
 
 ## インストール手順 - Install
 
-
-Pickles Framework 2.x はラッパーである [Pickles 2](https://github.com/pickles2/pickles2) からの利用をおすすめします。
+Pickles Framework 2.x はラッパーである [Get start "Pickles 2" !](https://github.com/pickles2/preset-get-start-pickles2) からの利用をおすすめします。
 
 ```
 $ cd {$documentRoot}
-$ composer create-project pickles2/pickles2 ./
+$ composer create-project pickles2/preset-get-start-pickles2 ./
 ```
 
 `.px_execute.php` の置かれたディレクトリがドキュメントルートになるよう、ウェブサーバーを設定してください。
@@ -79,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.31 (2017年??月??日)
+### Pickles Framework 2.0.31 (2017年4月20日)
 
 - `$px->internal_sub_request()` を追加。
 - `$px->bowl()->get()` を追加。
