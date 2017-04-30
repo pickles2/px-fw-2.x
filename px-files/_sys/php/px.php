@@ -130,6 +130,10 @@ class px{
 				}
 			}
 		}
+		if( !@array_key_exists( 'HTTP_USER_AGENT' , $_SERVER ) ){
+			// HTTP_USER_AGENT が存在しない場合、空白文字列で初期化する。
+			$_SERVER['HTTP_USER_AGENT'] = '';
+		}
 
 		// load Config
 		$this->realpath_homedir = $path_homedir;

@@ -24,6 +24,7 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		// var_dump($toppage_info);
 		$this->assertEquals( $toppage_info['title'], '<HOME>' );
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
+		$this->assertEquals( $_SERVER['HTTP_USER_AGENT'], '' );
 
 		chdir($cd);
 		$px->__destruct();// <- required on Windows
