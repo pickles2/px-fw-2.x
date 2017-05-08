@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.32 (20??年??月??日)
+
+- `$_SERVER['HTTP_USER_AGENT']` が存在しない場合、空白文字列で初期化するようになった。
+
 ### Pickles Framework 2.0.31 (2017年4月20日)
 
 - `$px->internal_sub_request()` を追加。
