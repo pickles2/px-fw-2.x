@@ -705,6 +705,18 @@ function cont_EditPublishTargetPathApply(formElm){
 		$target = $this->px->fs()->localize_path($target);
 		$comparison = $this->px->fs()->localize_path($comparison);
 		$path_region = $this->px->fs()->localize_path($path_region);
+		$flist = array();
+
+		// 先に、ディレクトリ内をスキャンする
+		if( @is_dir( $target.$path_region ) ){
+			$flist = $this->px->fs()->ls( $target.$path_region );
+			foreach ( $flist as $Line ){
+				if( $Line == '.' || $Line == '..' ){ continue; }
+				$this->sync_dir_compare_and_cleanup( $target , $comparison, $path_region.DIRECTORY_SEPARATOR.$Line );
+			}
+			$flist = $this->px->fs()->ls( $target.$path_region );
+		}
+
 
 		if( !@file_exists( $comparison.$path_region ) && @file_exists( $target.$path_region ) ){
 			if( $this->px->is_ignore_path( $path_region ) ){
@@ -714,19 +726,16 @@ function cont_EditPublishTargetPathApply(formElm){
 				// 範囲外のパスには、操作しない。
 				return true;
 			}
-			$this->px->fs()->rm( $target.$path_region );
-			return true;
-		}
+			if( @is_dir( $target.$path_region ) ){
+				if( !count($flist) ){
+					// ディレクトリの場合は、内容が空でなければ削除しない。
+					$this->px->fs()->rm( $target.$path_region );
+				}
+			}else{
+				$this->px->fs()->rm( $target.$path_region );
+			}
 
-		if( @is_dir( $target.$path_region ) ){
-			$flist = $this->px->fs()->ls( $target.$path_region );
-		}else{
 			return true;
-		}
-
-		foreach ( $flist as $Line ){
-			if( $Line == '.' || $Line == '..' ){ continue; }
-			$this->sync_dir_compare_and_cleanup( $target , $comparison, $path_region.DIRECTORY_SEPARATOR.$Line );
 		}
 
 		return true;
