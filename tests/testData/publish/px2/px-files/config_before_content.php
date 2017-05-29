@@ -61,6 +61,7 @@ return call_user_func( function(){
 
 		'/path_ignored/*' => 'ignore' ,
 		'/files_ignored/index.html' => 'ignore' ,
+		'/files_ignored_dist_only/*' => 'ignore' ,
 
 		'*.html' => 'html' ,
 		'*.htm' => 'html' ,

@@ -428,6 +428,9 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/files_ignored/not_ignored.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/not_ignored.html' ) );
 
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored_dist_only/test1.txt' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/files_ignored_dist_only/test1.txt' ) );
+
 
 		// パブリッシュ対象外設定のテスト
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/no_publish/index.html' ) );
@@ -471,6 +474,9 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/files_ignored/not_ignored.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored/not_ignored.html' ) );
+
+		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/files_ignored_dist_only/test1.txt' ) );
+		$this->assertFalse( is_file( __DIR__.'/testData/publish/px2/files_ignored_dist_only/test1.txt' ) );
 
 
 
