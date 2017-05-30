@@ -607,8 +607,12 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * @return bool 常に `true` を返します。
 	 */
 	private function sync_dir( $path_sync_from , $path_sync_to, $path_region ){
+		print 'Copying files and directories...';
 		$this->sync_dir_copy_r( $path_sync_from , $path_sync_to, $path_region );
+		print "\n";
+		print 'Deleting removed files and directories...';
 		$this->sync_dir_compare_and_cleanup( $path_sync_to , $path_sync_from, $path_region );
+		print "\n";
 		return true;
 	}//sync_dir()
 
@@ -624,6 +628,10 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	private function sync_dir_copy_r( $from, $to, $path_region, $perm = null ){
+		static $count = 0;
+		if( $count%100 == 0 ){print '.';}
+		$count ++;
+
 		$from = $this->px->fs()->localize_path($from);
 		$to   = $this->px->fs()->localize_path($to  );
 		$path_region = $this->px->fs()->localize_path($path_region);
@@ -700,11 +708,27 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * @return bool 成功時 `true`、失敗時 `false` を返します。
 	 */
 	private function sync_dir_compare_and_cleanup( $target , $comparison, $path_region ){
+		static $count = 0;
+		if( $count%100 == 0 ){print '.';}
+		$count ++;
+
 		if( is_null( $comparison ) || is_null( $target ) ){ return false; }
 
 		$target = $this->px->fs()->localize_path($target);
 		$comparison = $this->px->fs()->localize_path($comparison);
 		$path_region = $this->px->fs()->localize_path($path_region);
+		$flist = array();
+
+		// 先に、ディレクトリ内をスキャンする
+		if( @is_dir( $target.$path_region ) ){
+			$flist = $this->px->fs()->ls( $target.$path_region );
+			foreach ( $flist as $Line ){
+				if( $Line == '.' || $Line == '..' ){ continue; }
+				$this->sync_dir_compare_and_cleanup( $target , $comparison, $path_region.DIRECTORY_SEPARATOR.$Line );
+			}
+			$flist = $this->px->fs()->ls( $target.$path_region );
+		}
+
 
 		if( !@file_exists( $comparison.$path_region ) && @file_exists( $target.$path_region ) ){
 			if( $this->px->is_ignore_path( $path_region ) ){
@@ -714,19 +738,16 @@ function cont_EditPublishTargetPathApply(formElm){
 				// 範囲外のパスには、操作しない。
 				return true;
 			}
-			$this->px->fs()->rm( $target.$path_region );
-			return true;
-		}
+			if( @is_dir( $target.$path_region ) ){
+				if( !count($flist) ){
+					// ディレクトリの場合は、内容が空でなければ削除しない。
+					$this->px->fs()->rm( $target.$path_region );
+				}
+			}else{
+				$this->px->fs()->rm( $target.$path_region );
+			}
 
-		if( @is_dir( $target.$path_region ) ){
-			$flist = $this->px->fs()->ls( $target.$path_region );
-		}else{
 			return true;
-		}
-
-		foreach ( $flist as $Line ){
-			if( $Line == '.' || $Line == '..' ){ continue; }
-			$this->sync_dir_compare_and_cleanup( $target , $comparison, $path_region.DIRECTORY_SEPARATOR.$Line );
 		}
 
 		return true;
