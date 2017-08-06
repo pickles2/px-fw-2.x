@@ -7,4 +7,10 @@
 		$px->add_relatedlink('./dp_test/');
 		$px->add_relatedlink('./dp_test/a.html');
 	}
+
+	// 定義されていないキーで要求してみる
+	$undefined_param = $px->site()->get_path_param('undefined_param_key');
+	if( !is_null($undefined_param) ){
+		trigger_error('$px->site()->get_path_param(\'undefined_param_key\') returns NOT `null`.');
+	}
 ?>
