@@ -13,4 +13,9 @@
 	if( !is_null($undefined_param) ){
 		trigger_error('$px->site()->get_path_param(\'undefined_param_key\') returns NOT `null`.');
 	}
+
+	$current_page_info = $px->site()->get_current_page_info();
+	print '<pre><code>'."\n";
+	var_dump($current_page_info);
+	print '</code></pre>'."\n";
 ?>
