@@ -237,7 +237,7 @@ class site{
 	 * @return string ダイナミックパスパラメータ値
 	 */
 	public function get_path_param( $key ){
-		return $this->dynamic_path_param[$key];
+		return @$this->dynamic_path_param[$key];
 	}//get_path_param()
 
 	/**

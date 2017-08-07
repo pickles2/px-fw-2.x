@@ -78,6 +78,11 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.33 (20??年??月??日)
+
+- `$site()->get_path_param()` で存在しないキーを要求した場合にエラーが起きる問題を修正した。
+- その他、軽微な不具合の修正。
+
 ### Pickles Framework 2.0.32 (2017年5月30日)
 
 - `$_SERVER['HTTP_USER_AGENT']` が存在しない場合、空白文字列で初期化するようになった。
