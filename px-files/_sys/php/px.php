@@ -761,12 +761,14 @@ class px{
 	 *
 	 * @param string $request_path リクエストを発行する対象のパス
 	 * @param array $options Pickles 2 へのコマンド発行時のオプション
-	 * - output = 出力形式。`json` を指定すると、JSON形式の出力を受けられます。
+	 * - output = 期待する出力形式。`json` を指定すると、サブリクエストに `-o json` オプションが加えられ、JSON形式で解析済みのオブジェクトが返されます。
 	 * - user_agent = `HTTP_USER_AGENT` 文字列。 `user_agent` が空白の場合、または文字列 `PicklesCrawler` を含む場合には、パブリッシュツールからのアクセスであるとみなされます。
-	 * @param array $return_var コマンドの終了コードを格納して返します (`passthru()` の第2引数として渡されます)
+	 * @param int &$return_var コマンドの終了コードで上書きされます
 	 * @return mixed サブリクエストの実行結果。
 	 * 通常は 得られた標準出力をそのまま文字列として返します。
 	 * `output` オプションに `json` が指定された場合、 `json_decode()` された値が返却されます。
+	 *
+	 * サブリクエストから標準エラー出力を検出した場合、 `$px->error( $stderr )` に転送します。
 	 */
 	public function internal_sub_request($request_path, $options = null, &$return_var = null){
 		if(!is_string($request_path)){
@@ -811,9 +813,26 @@ class px{
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );
+
+		// コマンドを実行
 		ob_start();
-		@passthru( $cmd, $return_var );
-		$bin = ob_get_clean();
+		$proc = proc_open($cmd, array(
+			0 => array('pipe','r'),
+			1 => array('pipe','w'),
+			2 => array('pipe','w'),
+		), $pipes);
+		$io = array();
+		foreach($pipes as $idx=>$pipe){
+			$io[$idx] = stream_get_contents($pipe);
+			fclose($pipe);
+		}
+		$return_var = proc_close($proc);
+		ob_get_clean();
+
+		$bin = $io[1]; // stdout
+		if( strlen( $io[2] ) ){
+			$this->error($io[2]); // stderr
+		}
 
 		if( @$options['output'] == 'json' ){
 			$bin = json_decode($bin);
