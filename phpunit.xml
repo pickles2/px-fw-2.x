@@ -1,6 +1,7 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="default">
+			<file>./tests/mainTest.php</file>
 			<file>./tests/picklesTest.php</file>
 			<file>./tests/headerTest.php</file>
 			<file>./tests/encodingConverterTest.php</file>
