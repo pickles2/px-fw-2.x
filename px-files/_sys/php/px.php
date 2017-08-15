@@ -778,12 +778,14 @@ class px{
 		if(!strlen($request_path)){ $request_path = '/'; }
 		if(is_null($options)){ $options = array(); }
 		$php_command = array();
-		array_push( $php_command, $this->conf()->commands->php );
+		array_push( $php_command, addslashes($this->conf()->commands->php) );
+			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
+
 		if( strlen(@$this->conf()->path_phpini) ){
 			$php_command = array_merge(
 				$php_command,
 				array(
-					'-c', @$this->conf()->path_phpini,// ← php.ini のパス
+					'-c', escapeshellarg(@$this->conf()->path_phpini),// ← php.ini のパス
 				)
 			);
 		}
@@ -791,25 +793,25 @@ class px{
 			$php_command = array_merge(
 				$php_command,
 				array(
-					'-d', @$this->req()->get_cli_option( '-d' ),// ← php.ini definition
+					'-d', escapeshellarg(@$this->req()->get_cli_option( '-d' )),// ← php.ini definition
 				)
 			);
 		}
-		array_push($php_command, $_SERVER['SCRIPT_FILENAME']);
+		array_push($php_command, ''.realpath($_SERVER['SCRIPT_FILENAME']).'');
 		if( @$options['output'] == 'json' ){
 			array_push($php_command, '-o');
 			array_push($php_command, 'json');
 		}
 		if( @strlen($options['user_agent']) ){
 			array_push($php_command, '-u');
-			array_push($php_command, $options['user_agent']);
+			array_push($php_command, escapeshellarg($options['user_agent']));
 		}
-		array_push($php_command, $request_path);
+		array_push($php_command, escapeshellarg($request_path));
 
 
 		$cmd = array();
-		foreach( $php_command as $row ){
-			$param = escapeshellarg($row);
+		foreach( $php_command as $param ){
+			// $param = escapeshellarg($param);
 			array_push( $cmd, $param );
 		}
 		$cmd = implode( ' ', $cmd );

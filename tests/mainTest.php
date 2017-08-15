@@ -35,10 +35,13 @@ class mainTest extends PHPUnit_Framework_TestCase{
 			array(),
 			$vars
 		);
+		$error = $px->get_errors();
 		// var_dump($output);
 		// var_dump($vars);
+		// var_dump($error);
 		$this->assertTrue( is_string($output) );
-		$this->assertTrue( $vars === 0 );
+		$this->assertSame( 0, $vars ); // <- strict equals
+		$this->assertSame( array(), $error );
 
 
 		chdir($cd);
