@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.33 (20??年??月??日)
+### Pickles Framework 2.0.33 (2017年9月14日)
 
 - `$site()->get_path_param()` で存在しないキーを要求した場合にエラーが起きる問題を修正した。
 - `$px->internal_sub_request()` が、サブリクエストが発行した標準エラー出力を `$px->error()` に転送するようになった。
