@@ -16,7 +16,17 @@ return call_user_func( function(){
 	$conf->name = 'Pickles Framework 2';
 	/** コピーライト表記 */
 	$conf->copyright = 'Pickles 2 Project';
-	/** ドメイン(本番環境のドメイン) */
+	/**
+	 * スキーマ
+	 * 本番環境のスキーマ
+	 * (例: http, https)
+	 */
+	$conf->scheme = null;
+	/**
+	 * ドメイン
+	 * 本番環境のドメイン
+	 * (例: www.example.com, 192.168.0.1, www.example.com:8080, etc...)
+	 */
 	$conf->domain = null;
 	/** コンテンツルートディレクトリ */
 	$conf->path_controot = '/';

@@ -1282,12 +1282,45 @@ class px{
 	}
 
 	/**
+	 * スキーマ名を取得する。
+	 *
+	 * `$conf->scheme` が設定されている場合、これを返します。
+	 * 設定されていない場合は、環境変数 `$_SERVER['REQUEST_SCHEME']` から取得して返します。
+	 * `$_SERVER['REQUEST_SCHEME']` がセットされない場合は、 `$_SERVER['SERVER_PORT']` から推測して決定します。
+	 * ただし、Pickles 2 は ウェブサーバー上で実行されているとは限らないため、 環境変数は意図通りに取得できないことがあります。
+	 * `$conf->scheme` を正しく設定する方が望ましい結果が得られます。
+	 * @return string ドメイン名
+	 */
+	public function get_scheme(){
+		static $rtn;
+		if( !is_null($rtn) ){
+			return $rtn;
+		}
+		if( @strlen( $this->conf->scheme ) ){
+			$rtn = $this->conf->scheme;
+			return $rtn;
+		}
+		if( @strlen( $_SERVER['REQUEST_SCHEME'] ) ){
+			// ただし、値がセットされていることはPHPによって保証されてはいない
+			$rtn = $_SERVER['REQUEST_SCHEME'];
+			return $rtn;
+		}
+		if( @strlen( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == '443' ){
+			// ただし、ポート 443 だからといって https とは限らない
+			$rtn = 'https';
+			return $rtn;
+		}
+		$rtn = 'http';
+		return $rtn;
+	}
+
+	/**
 	 * ドメイン名を取得する。
 	 *
 	 * `$conf->domain` が設定されている場合、これを返します。
 	 * 設定されていない場合は、環境変数 `$_SERVER['SERVER_NAME']` から取得して返します。
 	 * ただし、Pickles 2 は ウェブサーバー上で実行されているとは限らないため、 `$_SERVER['SERVER_NAME']` は取得できないことがあります。
-	 * なるべく `$conf->domain` を正しく設定する方が望ましい結果が得られます。
+	 * `$conf->domain` を正しく設定する方が望ましい結果が得られます。
 	 * @return string ドメイン名
 	 */
 	public function get_domain(){
