@@ -28,6 +28,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
 		$this->assertEquals( $_SERVER['HTTP_USER_AGENT'], '' );
 
+		$this->assertEquals( $px->get_scheme(), 'http' );
+		$this->assertEquals( $px->get_domain(), 'pickles2.pxt.jp' );
+
 
 		// サブリクエストでキャッシュを消去
 		$output = $px->internal_sub_request(
