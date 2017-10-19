@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.34 (2017年??月??日)
+
+- [bugfix] .px_execute.php の絶対パス中にスペースが含まれている場合にパブリッシュが正常に処理されない不具合を修正。
+
 ### Pickles Framework 2.0.33 (2017年9月21日)
 
 - `$site()->get_path_param()` で存在しないキーを要求した場合にエラーが起きる問題を修正した。
