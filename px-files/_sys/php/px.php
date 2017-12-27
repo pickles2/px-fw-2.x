@@ -142,7 +142,6 @@ class px{
 		}elseif( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php') ){
 			$this->conf = include( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
-		$this->conf = json_decode( json_encode( $this->conf ) );
 		if( !@is_array($this->conf->paths_enable_sitemap) ){
 			// sitemap のロードを有効にするべきパス。
 			$this->conf->paths_enable_sitemap = array(
@@ -154,7 +153,7 @@ class px{
 		if ( @strlen($this->conf->default_timezone) ) {
 			@date_default_timezone_set($this->conf->default_timezone);
 		}
-		if ( !@strlen($this->conf->path_files) ) {
+		if ( !@is_callable($this->conf->path_files) && !@strlen($this->conf->path_files) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
 		if ( !@strlen($this->conf->copyright) ) {
@@ -1406,18 +1405,27 @@ class px{
 			$path_content = $this->req()->get_request_file_path();
 		}
 
-		$rtn = $this->conf->path_files;
-		$data = array(
-			'dirname'=>$this->fs->normalize_path(dirname($path_content)),
-			'filename'=>basename($this->fs()->trim_extension($path_content)),
-			'ext'=>strtolower($this->fs()->get_extension($path_content)),
-		);
-		$rtn = str_replace( '{$dirname}', $data['dirname'], $rtn );
-		$rtn = str_replace( '{$filename}', $data['filename'], $rtn );
-		$rtn = str_replace( '{$ext}', $data['ext'], $rtn );
+		$rtn = '';
+		if( is_callable($this->conf->path_files) ){
+			// コールバック関数が設定された場合
+			$rtn = call_user_func($this->conf->path_files, $this->fs->normalize_path($path_content) );
+		}elseif( is_string($this->conf->path_files) && strpos(trim($this->conf->path_files), 'function') === 0 ){
+			// function で始まる文字列が設定された場合
+			$rtn = call_user_func(eval('return '.$this->conf->path_files.';'), $this->fs->normalize_path($path_content) );
+		}else{
+			$rtn = $this->conf->path_files;
+			$data = array(
+				'dirname'=>$this->fs->normalize_path(dirname($path_content)),
+				'filename'=>basename($this->fs()->trim_extension($path_content)),
+				'ext'=>strtolower($this->fs()->get_extension($path_content)),
+			);
+			$rtn = str_replace( '{$dirname}', $data['dirname'], $rtn );
+			$rtn = str_replace( '{$filename}', $data['filename'], $rtn );
+			$rtn = str_replace( '{$ext}', $data['ext'], $rtn );
+		}
+
 		$rtn = preg_replace( '/^\/*/', '/', $rtn );
 		$rtn = preg_replace( '/\/*$/', '', $rtn ).'/';
-
 		$rtn = $rtn.$localpath_resource;
 		if( $this->fs()->is_dir('./'.$rtn) ){
 			$rtn .= '/';

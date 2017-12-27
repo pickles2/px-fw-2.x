@@ -937,10 +937,16 @@ class apiTest extends PHPUnit_Framework_TestCase{
 	 */
 	public function confPathFilesProvider(){
 		return array(
-			array('common-ext-dot', '/common/{$dirname}/{$filename}.{$ext}.files/',                  '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
-			array('noslashes',      'common/{$dirname}/{$filename}.{$ext}.files',                    '/abc/def.html', '/sample_image.png', '/common/abc/def.html.files/sample_image.png'),
-			array('manyslashes',    '/////common/////{$dirname}////{$filename}.{$ext}.files///////', '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
-			array('default',        '{$dirname}/{$filename}_files/',                                 '/',             '/sample_image.png', '/index_files/sample_image.png'),
+			array('callback-string',
+				'function($path){return preg_replace("/\\.[a-z]+$/", "_files_callback", $path);}',
+				'/',
+				'/sample_image.png',
+				'/index_files_callback/sample_image.png'
+			),
+			array('common-ext-dot',  '/common/{$dirname}/{$filename}.{$ext}.files/',                  '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
+			array('noslashes',       'common/{$dirname}/{$filename}.{$ext}.files',                    '/abc/def.html', '/sample_image.png', '/common/abc/def.html.files/sample_image.png'),
+			array('manyslashes',     '/////common/////{$dirname}////{$filename}.{$ext}.files///////', '/',             '/sample_image.png', '/common/index.html.files/sample_image.png'),
+			array('default',         '{$dirname}/{$filename}_files/',                                 '/',             '/sample_image.png', '/index_files/sample_image.png'),
 		);
 	}
 
