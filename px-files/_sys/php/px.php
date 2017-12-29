@@ -180,7 +180,7 @@ class px{
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $conf );
-		$this->realpath_homedir = $this->fs->get_realpath($this->realpath_homedir.'/');
+		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 
 		// make instance $req
 		$conf = new \stdClass;
@@ -194,7 +194,7 @@ class px{
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
 		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
-			$this->fs->mkdir( './'.$this->conf->public_cache_dir );
+			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
 		}
 		// _sysフォルダが存在しない場合、作成する
 		foreach( array(
@@ -206,7 +206,7 @@ class px{
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
 			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !@is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
-				$this->fs->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
+				$this->fs()->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
 
@@ -1347,7 +1347,7 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		$rtn = $this->fs->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
+		$rtn = $this->fs()->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
 		if( $rtn != '/' ){
 			$rtn .= '/';
 		}
@@ -1356,11 +1356,11 @@ class px{
 			if( @strlen( $this->conf->path_controot ) ){
 				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
-				$rtn = $this->fs->normalize_path($rtn);
+				$rtn = $this->fs()->normalize_path($rtn);
 				return $rtn;
 			}
 		}
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -1382,10 +1382,10 @@ class px{
 	 * @return string ドキュメントルートのパス
 	 */
 	public function get_realpath_docroot(){
-		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
-		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
+		$path_controot = $this->fs()->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
+		$path_cd = $this->fs()->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -1408,14 +1408,14 @@ class px{
 		$rtn = '';
 		if( is_callable($this->conf->path_files) ){
 			// コールバック関数が設定された場合
-			$rtn = call_user_func($this->conf->path_files, $this->fs->normalize_path($path_content) );
+			$rtn = call_user_func($this->conf->path_files, $this->fs()->normalize_path($path_content) );
 		}elseif( is_string($this->conf->path_files) && strpos(trim($this->conf->path_files), 'function') === 0 ){
 			// function で始まる文字列が設定された場合
-			$rtn = call_user_func(eval('return '.$this->conf->path_files.';'), $this->fs->normalize_path($path_content) );
+			$rtn = call_user_func(eval('return '.$this->conf->path_files.';'), $this->fs()->normalize_path($path_content) );
 		}else{
 			$rtn = $this->conf->path_files;
 			$data = array(
-				'dirname'=>$this->fs->normalize_path(dirname($path_content)),
+				'dirname'=>$this->fs()->normalize_path(dirname($path_content)),
 				'filename'=>basename($this->fs()->trim_extension($path_content)),
 				'ext'=>strtolower($this->fs()->get_extension($path_content)),
 			);
@@ -1431,7 +1431,7 @@ class px{
 			$rtn .= '/';
 		}
 		$rtn = $this->href( $rtn );
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		return $rtn;
 	}//path_files()
