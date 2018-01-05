@@ -1122,6 +1122,33 @@ class px{
 	}//href()
 
 	/**
+	 * リンク先の完全なURLを生成する。
+	 *
+	 * 実装例:
+	 * ```
+	 * <link rel="canonical" href="<?= $px->canonical() ?>" />
+	 * ```
+	 *
+	 * @param string $linkto リンク先の パス または ページID (省略時はカレントページ)
+	 *
+	 * @return string href属性値
+	 */
+	public function canonical( $linkto = null ){
+		if( !strlen($linkto) ){
+			$linkto = $this->site()->get_current_page_info('id');
+		}
+		$href = $this->href( $linkto );
+		$scheme = @$this->conf()->scheme;
+		if( !strlen($scheme) ){ $scheme = 'http'; }
+		$domain = @$this->conf()->domain;
+		if( !strlen($domain) ){
+			$this->error('Config "domain" is required.');
+			return $href;
+		}
+		return $scheme.'://'.$domain.$href;
+	}//canonical()
+
+	/**
 	 * リンクタグ(aタグ)を生成する。
 	 *
 	 * リンク先の パス または ページID を受け取り、aタグを生成して返します。リンク先は、`href()` メソッドを通して調整されます。
@@ -1178,6 +1205,8 @@ class px{
 	 * <dl>
 	 *   <dt>mixed $options['label']</dt>
 	 *	 <dd>リンクのラベルを変更します。文字列か、またはコールバック関数が利用できます。</dd>
+	 *   <dt>bool $options['canonical']</dt>
+	 *	 <dd><code>true</code> または <code>false</code> を指定します。この値が <code>true</code> の場合、リンク先の生成に `$px->href()` の代わりに `$px->canonical()` が使用されます。 デフォルトは <code>false</code> です。</dd>
 	 *   <dt>bool $options['current']</dt>
 	 *	 <dd><code>true</code> または <code>false</code> を指定します。<code>class="current"</code> を強制的に付加または削除します。このオプションが指定されない場合は、自動的に選択されます。</dd>
 	 *   <dt>bool $options['no_escape']</dt>
@@ -1199,8 +1228,13 @@ class px{
 				$page_info = $this->site()->get_page_info(@$parsed_url['path']);
 			}
 		}
-		$href = $this->href($linkto);
-		$hrefc = $this->href($this->req()->get_request_file_path());
+		if( is_array($options) && array_key_exists('canonical', $options) && !is_null( $options['canonical'] ) && !@empty($options['canonical']) ){
+			$href = $this->canonical($linkto);
+			$hrefc = $this->canonical($this->req()->get_request_file_path());
+		}else{
+			$href = $this->href($linkto);
+			$hrefc = $this->href($this->req()->get_request_file_path());
+		}
 		$label = $page_info['title_label'];
 		$page_id = $page_info['id'];
 

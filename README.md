@@ -78,8 +78,9 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.35 (2017年??月??日)
+### Pickles Framework 2.0.35 (2018年??月??日)
 
+- `$px->canonical()` を追加。
 - `$conf->path_files` に、コールバックを設定できるようになった。
 
 ### Pickles Framework 2.0.34 (2017年11月2日)

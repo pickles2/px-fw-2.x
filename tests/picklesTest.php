@@ -266,6 +266,57 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * $px->href() と $px->canonical() を実行してみるテスト
+	 * @depends testCLIStandard
+	 */
+	public function testStandardHrefCanonical(){
+		$cd = realpath('.');
+		$SCRIPT_FILENAME = $_SERVER['SCRIPT_FILENAME'];
+		chdir(__DIR__.'/testData/standard/');
+		$_SERVER['SCRIPT_FILENAME'] = __DIR__.'/testData/standard/.px_execute.php';
+
+		$px = new picklesFramework2\px('./px-files/');
+
+		$this->assertEquals( $px->href('/'), '/' );
+		$this->assertEquals( $px->href('/undefined_page/test.html'), '/undefined_page/test.html' );
+		$this->assertEquals( $px->href('/undefined_page/test.html?param1=1'), '/undefined_page/test.html?param1=1' );
+		$this->assertEquals( $px->href('/undefined_page/test.html#hash'), '/undefined_page/test.html#hash' );
+		$this->assertEquals( $px->href('/undefined_page/test.html?param1=1#hash'), '/undefined_page/test.html?param1=1#hash' );
+		$this->assertEquals( $px->canonical(), 'http://pickles2.pxt.jp/' );
+		$this->assertEquals( $px->canonical('/'), 'http://pickles2.pxt.jp/' );
+		$this->assertEquals( $px->canonical('/undefined_page/test.html'), 'http://pickles2.pxt.jp/undefined_page/test.html' );
+		$this->assertEquals( $px->canonical('/undefined_page/test.html?param1=1'), 'http://pickles2.pxt.jp/undefined_page/test.html?param1=1' );
+		$this->assertEquals( $px->canonical('/undefined_page/test.html#hash'), 'http://pickles2.pxt.jp/undefined_page/test.html#hash' );
+		$this->assertEquals( $px->canonical('/undefined_page/test.html?param1=1#hash'), 'http://pickles2.pxt.jp/undefined_page/test.html?param1=1#hash' );
+
+		// `mk_link()` の canonical オプション
+		$this->assertEquals( $px->mk_link('/'), '<a href="/" class="current">&lt;HOME&gt;</a>' );
+		$this->assertEquals( $px->mk_link('/', array('canonical'=>true)), '<a href="http://pickles2.pxt.jp/" class="current">&lt;HOME&gt;</a>' );
+
+
+		// サブリクエストでキャッシュを消去
+		$output = $px->internal_sub_request(
+			'/index.html?PX=clearcache',
+			array(),
+			$vars
+		);
+		$error = $px->get_errors();
+		// var_dump($output);
+		// var_dump($vars);
+		// var_dump($error);
+		$this->assertTrue( is_string($output) );
+		$this->assertSame( 0, $vars ); // <- strict equals
+		$this->assertSame( array(), $error );
+
+
+		chdir($cd);
+		$_SERVER['SCRIPT_FILENAME'] = $SCRIPT_FILENAME;
+
+		$px->__destruct();// <- required on Windows
+		unset($px);
+	}
+
+	/**
 	 * paths_enable_sitemap のテスト
 	 * @depends testCLIStandard
 	 */
