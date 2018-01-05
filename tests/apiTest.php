@@ -812,6 +812,20 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output, '/dynamicPath/?a=b#testAnch' );
 
 
+		// -------------------
+		// api.get.canonical
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.canonical&linkto='.urlencode('/sample_pages/page2/index.html') ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output, 'http://pickles2.pxt.jp/sample_pages/page2/' );
+
+
 
 
 

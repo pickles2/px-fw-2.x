@@ -76,6 +76,8 @@ namespace picklesFramework2\commands;
  * 		<dd><code>$px->get_path_proc_type()</code> の返却値を取得します。</dd>
  * 	<dt>PX=api.get.href&linkto={$path_linkto}</dt>
  * 		<dd><code>$px->href({$path_linkto})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.canonical&linkto={$path_linkto}</dt>
+ * 		<dd><code>$px->canonical({$path_linkto})</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * </dl>
  *
  * ## [API] api.is.*
@@ -373,6 +375,10 @@ class api{
 				break;
 			case 'href':
 				$val = ($this->px->site() ? $this->px->href($this->px->req()->get_param('linkto')) : false);
+				print $this->data_convert( $val );
+				break;
+			case 'canonical':
+				$val = ($this->px->site() ? $this->px->canonical($this->px->req()->get_param('linkto')) : false);
 				print $this->data_convert( $val );
 				break;
 			default:
