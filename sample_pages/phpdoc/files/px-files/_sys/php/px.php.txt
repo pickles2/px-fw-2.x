@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.34';
+		return '2.0.35-alpha.1';
 	}
 
 	/**
@@ -142,7 +142,6 @@ class px{
 		}elseif( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php') ){
 			$this->conf = include( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
-		$this->conf = json_decode( json_encode( $this->conf ) );
 		if( !@is_array($this->conf->paths_enable_sitemap) ){
 			// sitemap のロードを有効にするべきパス。
 			$this->conf->paths_enable_sitemap = array(
@@ -154,7 +153,7 @@ class px{
 		if ( @strlen($this->conf->default_timezone) ) {
 			@date_default_timezone_set($this->conf->default_timezone);
 		}
-		if ( !@strlen($this->conf->path_files) ) {
+		if ( !@is_callable($this->conf->path_files) && !@strlen($this->conf->path_files) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
 		if ( !@strlen($this->conf->copyright) ) {
@@ -181,7 +180,7 @@ class px{
 		$conf->dir_default_permission  = $this->conf->dir_default_permission;
 		$conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $conf );
-		$this->realpath_homedir = $this->fs->get_realpath($this->realpath_homedir.'/');
+		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 
 		// make instance $req
 		$conf = new \stdClass;
@@ -195,7 +194,7 @@ class px{
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
 		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
-			$this->fs->mkdir( './'.$this->conf->public_cache_dir );
+			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
 		}
 		// _sysフォルダが存在しない場合、作成する
 		foreach( array(
@@ -207,7 +206,7 @@ class px{
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
 			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !@is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
-				$this->fs->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
+				$this->fs()->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
 
@@ -1123,6 +1122,36 @@ class px{
 	}//href()
 
 	/**
+	 * リンク先の正式なURLを生成する。
+	 *
+	 * スキーマ、ドメインが補完された完全なURLを返します。
+	 * このメソッドは、 設定項目 `scheme` と `domain` に影響を受けます。 `domain` が設定されていない場合にエラーを発行します。
+	 *
+	 * 実装例:
+	 * ```
+	 * <link rel="canonical" href="<?= $px->canonical() ?>" />
+	 * ```
+	 *
+	 * @param string $linkto リンク先の パス または ページID (省略時はカレントページ)
+	 *
+	 * @return string href属性値
+	 */
+	public function canonical( $linkto = null ){
+		if( !strlen($linkto) ){
+			$linkto = $this->site()->get_current_page_info('id');
+		}
+		$href = $this->href( $linkto );
+		$scheme = @$this->conf()->scheme;
+		if( !strlen($scheme) ){ $scheme = 'http'; }
+		$domain = @$this->conf()->domain;
+		if( !strlen($domain) ){
+			$this->error('Config "domain" is required.');
+			return $href;
+		}
+		return $scheme.'://'.$domain.$href;
+	}//canonical()
+
+	/**
 	 * リンクタグ(aタグ)を生成する。
 	 *
 	 * リンク先の パス または ページID を受け取り、aタグを生成して返します。リンク先は、`href()` メソッドを通して調整されます。
@@ -1179,6 +1208,8 @@ class px{
 	 * <dl>
 	 *   <dt>mixed $options['label']</dt>
 	 *	 <dd>リンクのラベルを変更します。文字列か、またはコールバック関数が利用できます。</dd>
+	 *   <dt>bool $options['canonical']</dt>
+	 *	 <dd><code>true</code> または <code>false</code> を指定します。この値が <code>true</code> の場合、リンク先の生成に `$px->href()` の代わりに `$px->canonical()` が使用されます。 デフォルトは <code>false</code> です。</dd>
 	 *   <dt>bool $options['current']</dt>
 	 *	 <dd><code>true</code> または <code>false</code> を指定します。<code>class="current"</code> を強制的に付加または削除します。このオプションが指定されない場合は、自動的に選択されます。</dd>
 	 *   <dt>bool $options['no_escape']</dt>
@@ -1200,8 +1231,13 @@ class px{
 				$page_info = $this->site()->get_page_info(@$parsed_url['path']);
 			}
 		}
-		$href = $this->href($linkto);
-		$hrefc = $this->href($this->req()->get_request_file_path());
+		if( is_array($options) && array_key_exists('canonical', $options) && !is_null( $options['canonical'] ) && !@empty($options['canonical']) ){
+			$href = $this->canonical($linkto);
+			$hrefc = $this->canonical($this->req()->get_request_file_path());
+		}else{
+			$href = $this->href($linkto);
+			$hrefc = $this->href($this->req()->get_request_file_path());
+		}
 		$label = $page_info['title_label'];
 		$page_id = $page_info['id'];
 
@@ -1348,7 +1384,7 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		$rtn = $this->fs->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
+		$rtn = $this->fs()->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
 		if( $rtn != '/' ){
 			$rtn .= '/';
 		}
@@ -1357,11 +1393,11 @@ class px{
 			if( @strlen( $this->conf->path_controot ) ){
 				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
-				$rtn = $this->fs->normalize_path($rtn);
+				$rtn = $this->fs()->normalize_path($rtn);
 				return $rtn;
 			}
 		}
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -1383,10 +1419,10 @@ class px{
 	 * @return string ドキュメントルートのパス
 	 */
 	public function get_realpath_docroot(){
-		$path_controot = $this->fs->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
-		$path_cd = $this->fs->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
+		$path_controot = $this->fs()->normalize_path( $this->fs()->get_realpath( $this->get_path_controot() ) );
+		$path_cd = $this->fs()->normalize_path( $this->fs()->get_realpath( dirname($_SERVER['SCRIPT_FILENAME']) ).DIRECTORY_SEPARATOR );
 		$rtn = preg_replace( '/'.preg_quote( $path_controot, '/' ).'$/s', '', $path_cd ).DIRECTORY_SEPARATOR;
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -1406,24 +1442,33 @@ class px{
 			$path_content = $this->req()->get_request_file_path();
 		}
 
-		$rtn = $this->conf->path_files;
-		$data = array(
-			'dirname'=>$this->fs->normalize_path(dirname($path_content)),
-			'filename'=>basename($this->fs()->trim_extension($path_content)),
-			'ext'=>strtolower($this->fs()->get_extension($path_content)),
-		);
-		$rtn = str_replace( '{$dirname}', $data['dirname'], $rtn );
-		$rtn = str_replace( '{$filename}', $data['filename'], $rtn );
-		$rtn = str_replace( '{$ext}', $data['ext'], $rtn );
+		$rtn = '';
+		if( is_callable($this->conf->path_files) ){
+			// コールバック関数が設定された場合
+			$rtn = call_user_func($this->conf->path_files, $this->fs()->normalize_path($path_content) );
+		}elseif( is_string($this->conf->path_files) && strpos(trim($this->conf->path_files), 'function') === 0 ){
+			// function で始まる文字列が設定された場合
+			$rtn = call_user_func(eval('return '.$this->conf->path_files.';'), $this->fs()->normalize_path($path_content) );
+		}else{
+			$rtn = $this->conf->path_files;
+			$data = array(
+				'dirname'=>$this->fs()->normalize_path(dirname($path_content)),
+				'filename'=>basename($this->fs()->trim_extension($path_content)),
+				'ext'=>strtolower($this->fs()->get_extension($path_content)),
+			);
+			$rtn = str_replace( '{$dirname}', $data['dirname'], $rtn );
+			$rtn = str_replace( '{$filename}', $data['filename'], $rtn );
+			$rtn = str_replace( '{$ext}', $data['ext'], $rtn );
+		}
+
 		$rtn = preg_replace( '/^\/*/', '/', $rtn );
 		$rtn = preg_replace( '/\/*$/', '', $rtn ).'/';
-
 		$rtn = $rtn.$localpath_resource;
 		if( $this->fs()->is_dir('./'.$rtn) ){
 			$rtn .= '/';
 		}
 		$rtn = $this->href( $rtn );
-		$rtn = $this->fs->normalize_path($rtn);
+		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		return $rtn;
 	}//path_files()
