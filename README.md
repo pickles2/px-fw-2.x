@@ -84,6 +84,7 @@ $ chmod -R 777 ./caches
 - `PX=api.get.canonical` を追加。
 - `$px->mk_link()` に、 `canonical` オプションを追加。
 - `$conf->path_files` に、コールバックを設定できるようになった。
+- サイトマップ項目のうち、`id`, `path`, `content`, `logical_path`, `list_flg`, `layout`, `orderby`, `category_top_flg`, `role`, `proc_type` の前後の空白文字列を自動的に削除して扱うようになった。
 
 ### Pickles Framework 2.0.34 (2017年11月2日)
 

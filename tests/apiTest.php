@@ -254,9 +254,10 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		// var_dump($output);
-		$this->assertEquals( $output[0], ':auto_page_id.16' );
-		$this->assertEquals( $output[5], ':auto_page_id.21' );
-		$this->assertEquals( count($output), 7 );
+		$this->assertEquals( $output[0], 'trim_white_space_test' );
+		$this->assertEquals( $output[1], ':auto_page_id.16' );
+		$this->assertEquals( $output[6], ':auto_page_id.21' );
+		$this->assertEquals( count($output), 8 );
 
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
@@ -304,9 +305,10 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertTrue( $this->common_error( $output ) );
 		$output = json_decode($output);
 		// var_dump($output);
-		$this->assertEquals( $output[0], ':auto_page_id.16' );
-		$this->assertEquals( $output[5], ':auto_page_id.21' );
-		$this->assertEquals( count($output), 7 );
+		$this->assertEquals( $output[0], 'trim_white_space_test' );
+		$this->assertEquals( $output[1], ':auto_page_id.16' );
+		$this->assertEquals( $output[6], ':auto_page_id.21' );
+		$this->assertEquals( count($output), 8 );
 
 		$output = $this->passthru( [
 			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,

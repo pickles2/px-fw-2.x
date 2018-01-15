@@ -98,7 +98,6 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		$px = new picklesFramework2\px('./px-files/');
 		$toppage_info = $px->site()->get_page_info('');
-		// var_dump($toppage_info);
 		$this->assertEquals( count($toppage_info), 16 );
 		$this->assertEquals( $toppage_info['title'], '<HOME>' );
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
@@ -124,6 +123,20 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( count($page_info), 16 );
 		$this->assertEquals( $page_info['title'], 'Pickles2 Official Website(4)' );
 		$this->assertEquals( $page_info['path'], 'alias38://pickles2.pxt.jp/index.html' );
+
+		$page_info = $px->site()->get_page_info('trim_white_space_test');
+		// var_dump($page_info);
+		$this->assertEquals( count($page_info), 16 );
+		$this->assertEquals( $page_info['id'], 'trim_white_space_test' );
+		$this->assertEquals( $page_info['title'], '前後の空白文字を削除するテスト' );
+		$this->assertEquals( $page_info['path'], '/sample_pages/trim_white_space_test.html' );
+		$this->assertEquals( $page_info['content'], '/sample_pages/trim_white_space_test.html' );
+		$this->assertEquals( $page_info['logical_path'], '/sample_pages/' );
+		$this->assertEquals( $page_info['list_flg'], '1' );
+		$this->assertEquals( $page_info['layout'], 'default' );
+		$this->assertEquals( $page_info['orderby'], '100' );
+		$this->assertEquals( $page_info['category_top_flg'], '0' );
+		$this->assertEquals( $page_info['role'], '' );
 
 		chdir($cd);
 		$px->__destruct();// <- required on Windows
