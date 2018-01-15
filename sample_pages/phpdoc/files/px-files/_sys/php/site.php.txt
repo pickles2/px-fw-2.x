@@ -457,6 +457,14 @@ CREATE TABLE sitemap(
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
 				}
+
+				// 前後の空白文字を削除する
+				foreach(array('id', 'path', 'content', 'logical_path', 'list_flg', 'layout', 'orderby', 'category_top_flg', 'role', 'proc_type') as $tmpDefKey){
+					if( @array_key_exists($tmpDefKey, $tmp_array) ){
+						$tmp_array[$tmpDefKey] = @trim($tmp_array[$tmpDefKey]);
+					}
+				}
+
 				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
 					// 不正な形式のチェック
 					continue;

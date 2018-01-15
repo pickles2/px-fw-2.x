@@ -191,7 +191,8 @@ return call_user_func( function(){
 			'paths_ignore'=> array(
 				// パブリッシュ対象から常に除外するパスを設定する。
 				// (ここに設定されたパスは、動的なプレビューは可能)
-				'/sample_pages/no_publish/*'
+				'/sample_pages/no_publish/*',
+				'/sample_pages/phpdoc/*',
 			)
 		)).')' ,
 
