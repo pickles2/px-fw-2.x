@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.35 (2018年1月23日)
+### Pickles Framework 2.0.35 (2018年1月24日)
 
 - `$px->canonical()` を追加。
 - `PX=api.get.canonical` を追加。
