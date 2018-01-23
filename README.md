@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.36 (未定)
+
+- ???????????????????
+
 ### Pickles Framework 2.0.35 (2018年1月24日)
 
 - `$px->canonical()` を追加。
