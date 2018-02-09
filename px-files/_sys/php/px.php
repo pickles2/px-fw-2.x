@@ -32,7 +32,7 @@ class px{
 	 * ディレクトリインデックス(省略できるファイル名の一覧)
 	 * @access private
 	 */
-	private $directory_index;
+	private $directory_index = array();
 
 	/**
 	 * プロセス関連情報
