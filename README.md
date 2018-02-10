@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.36 (未定)
+### Pickles Framework 2.0.36 (2018年2月15日)
 
 - PHP 7.2 で、Warning が発生する問題を修正。
 
