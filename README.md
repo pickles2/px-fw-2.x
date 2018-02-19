@@ -78,8 +78,9 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.37 (未定)
+### Pickles Framework 2.0.37 (2018年2月28日)
 
+- PHP 7.2 で SCSS のプレビューが失敗する問題を修正。
 - 依存ライブラリ `michelf/php-markdown`, `leafo/scssphp` のバージョンを更新。
 
 ### Pickles Framework 2.0.36 (2018年2月15日)
