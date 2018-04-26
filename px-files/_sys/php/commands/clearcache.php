@@ -39,7 +39,7 @@ class clearcache{
 		$px->pxcmd()->register('clearcache', function($px){
 			(new self( $px ))->kick();
 			exit;
-		}, true);
+		});
 	}
 
 	/**

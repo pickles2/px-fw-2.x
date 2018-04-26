@@ -27,7 +27,7 @@ class phpinfo{
 		$px->pxcmd()->register('phpinfo', function($px){
 			(new self( $px ))->kick();
 			exit;
-		}, true);
+		});
 	}
 
 	/**

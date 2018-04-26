@@ -112,7 +112,7 @@ class api{
 		$px->pxcmd()->register('api', function($px){
 			(new self( $px ))->kick();
 			exit;
-		}, true);
+		});
 	}
 
 	/**

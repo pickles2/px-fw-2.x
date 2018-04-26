@@ -66,13 +66,7 @@ class pxcmd{
 			'name' => $cmd ,
 			'fnc' => $fnc ,
 		);
-		// if( $rightnow ){
-		// 	$pxcmd = $this->px->get_px_command();
-		// 	if( $pxcmd[0] == $cmd ){
-		// 		$this->pxcommands = array();
-		// 		$fnc($this->px);
-		// 	}
-		// }
+
 		$pxcmd = $this->px->get_px_command();
 		if( is_array($pxcmd) && count($pxcmd) && $pxcmd[0] == $cmd ){
 			$fnc($this->px);
