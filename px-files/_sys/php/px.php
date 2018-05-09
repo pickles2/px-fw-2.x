@@ -1093,14 +1093,18 @@ class px{
 			unset($tmp_path , $tmp_matched);
 		}
 
-		$path = $this->fs()->normalize_path($path);
-		$path_type = $this->get_path_type( $path );
+		$tmp_path = $this->fs()->normalize_path($path);
+		$path_type = $this->get_path_type( $tmp_path );
 		switch( $path_type ){
 			case 'full_url':
+			case 'data':
 			case 'javascript':
 			case 'anchor':
 				break;
 			default:
+				// apply normalize_path()
+				$path = $tmp_path;
+
 				// index.htmlを省略
 				$path = preg_replace('/\/'.$this->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);
 				if( preg_match( '/^\\//' , $path ) ){
@@ -1717,6 +1721,7 @@ class px{
 	 * 次の基準で判定されます。
 	 *
 	 * - `javascript:` から始まる場合 => 'javascript'
+	 * - `data:` から始まる場合 => 'data'
 	 * - `#` から始まる場合 => 'anchor'
 	 * - `http://` などURLスキーマ名から始まる場合, `//` から始まる場合 => 'full_url'
 	 * - その他で `alias:` から始まる場合 => 'alias'
@@ -1737,6 +1742,11 @@ class px{
 			//  サイトマップ上での重複を許容するために、
 			//  自動的にalias扱いとなることを考慮した正規表現。
 			$path_type = 'javascript';
+		}elseif( preg_match( '/^(?:alias[0-9]*\:)?data\:/i' , $path ) ) {
+			//  data: から始まる場合
+			//  サイトマップ上での重複を許容するために、
+			//  自動的にalias扱いとなることを考慮した正規表現。
+			$path_type = 'data';
 		} else if( preg_match( '/^(?:alias[0-9]*\:)?\#/' , $path ) ) {
 			//  # から始まる場合
 			//  サイトマップ上での重複を許容するために、

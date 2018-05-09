@@ -465,12 +465,13 @@ CREATE TABLE sitemap(
 					}
 				}
 
-				if( !preg_match( '/^(?:\/|alias\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
+				if( !preg_match( '/^(?:\/|alias\:|data\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
 					// 不正な形式のチェック
 					continue;
 				}
 				switch( $this->get_path_type( $tmp_array['path'] ) ){
 					case 'full_url':
+					case 'data':
 					case 'javascript':
 					case 'anchor':
 						// 直リンク系のパスをエイリアス扱いにする
@@ -873,6 +874,7 @@ INSERT INTO sitemap(
 		}
 		switch( $this->get_path_type($path) ){
 			case 'full_url':
+			case 'data':
 			case 'javascript':
 			case 'anchor':
 				break;
@@ -886,6 +888,7 @@ INSERT INTO sitemap(
 			foreach( $this->px->get_directory_index() as $index_file_name ){
 				switch( $this->get_path_type($path) ){
 					case 'full_url':
+					case 'data':
 					case 'javascript':
 					case 'anchor':
 						break;
@@ -914,6 +917,7 @@ INSERT INTO sitemap(
 
 		switch( $this->get_path_type($path) ){
 			case 'full_url':
+			case 'data':
 			case 'javascript':
 			case 'anchor':
 				break;
@@ -974,6 +978,7 @@ INSERT INTO sitemap(
 		}
 		switch( $path_type ){
 			case 'full_url':
+			case 'data':
 			case 'javascript':
 			case 'anchor':
 				break;
