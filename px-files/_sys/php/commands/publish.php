@@ -404,7 +404,12 @@ function cont_EditPublishTargetPathApply(formElm){
 			foreach( $this->paths_queue as $path=>$val ){break;}
 			print '------------'."\n";
 			print $path."\n";
-			if( $this->px->fs()->is_dir(dirname($_SERVER['SCRIPT_FILENAME']).$path) ){
+			$path_type = $this->px->get_path_type( $path );
+			if( $path_type != 'normal' && $path_type !== false ){
+				// 物理ファイルではないものはスキップ
+				print ' -> Non file URL.'."\n";
+
+			}elseif( $this->px->fs()->is_dir(dirname($_SERVER['SCRIPT_FILENAME']).$path) ){
 				// ディレクトリを処理
 				$this->px->fs()->mkdir( $this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path );
 				print ' -> A directory.'."\n";
@@ -994,6 +999,13 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * @return bool 真偽
 	 */
 	private function add_queue( $path ){
+		$path_type = $this->px->get_path_type( $path );
+		if($path_type != 'normal'){
+			// `normal` ではないもの(`data`, `javascript`, `anchor`, `full_url` など)は、
+			// 物理ファイルを出力するものではないので、キューに送らない。
+			return false;
+		}
+
 		$path = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path, $this->path_docroot ) );
 		$path = preg_replace('/\#.*$/', '', $path);
 		$path = preg_replace('/\?.*$/', '', $path);
