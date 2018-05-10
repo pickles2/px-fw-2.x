@@ -38,6 +38,8 @@
 "http://pickles2.pxt.jp/index.html",,,"Pickles2 Official Website(3)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "//pickles2.pxt.jp/index.html",,,"Pickles2 Official Website(4)",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
 "/sample_pages/global_urls/fin.html",,,"最下層",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/>pickles2.pxt.jp_1>pickles2.pxt.jp_2",1,,,"sample, サンプル","このページはPickles2のサンプルコードとして用意されたものです。",,
+"javascript:alert('JavaScript//URL//Link');",,,"JavaScript",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,,,,
+"data:image/png;base64,hoge/fuga///foo.bar==",,,"Data Scheme",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列","/sample_pages/>/sample_pages/global_urls/",1,,,,,,
 "
 /sample_pages/trim_white_space_test.html
 ","

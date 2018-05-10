@@ -138,6 +138,15 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		// var_dump( $fileSrc );
 		$this->assertEquals( $fileSrc, '<'.'?= htmlspecialchars(\'<php_output>\'); ?'.'>' );
 
+		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/global_urls/index.html' ) );
+		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/global_urls/index.html');
+		// var_dump( $fileSrc );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="http://pickles2.pxt.jp/">Pickles2 Official Website(1)</a></li>','/').'/s', $fileSrc) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="http://pickles2.pxt.jp/index.html">Pickles2 Official Website(3)</a></li>','/').'/s', $fileSrc) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="//pickles2.pxt.jp/index.html">Pickles2 Official Website(4)</a></li>','/').'/s', $fileSrc) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="javascript:alert(\'JavaScript//URL//Link\');">JavaScript</a></li>','/').'/s', $fileSrc) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="data:image/png;base64,hoge/fuga///foo.bar==">Data Scheme</a></li>','/').'/s', $fileSrc) );
+
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test2/test2.inc' ) );
 
