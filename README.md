@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.38 (未定)
+### Pickles Framework 2.0.38 (リリース日未定)
 
 - サイトマップの `path` に、 Dataスキーマを扱えるようになった。
 - 特殊なURL(`javascript:`、`data:` など)をパブリッシュしようとしてエラーになる不具合を修正。
@@ -276,7 +276,7 @@ $ composer run-script documentation
 
 ## ライセンス - License
 
-Copyright (c)2001-2017 Tomoya Koyanagi, and Pickles 2 Project<br />
+Copyright (c)2001-2018 Tomoya Koyanagi, and Pickles 2 Project<br />
 MIT License https://opensource.org/licenses/mit-license.php
 
 
