@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.38 (リリース日未定)
+### Pickles Framework 2.0.38 (2018年8月30日)
 
 - サイトマップの `path` に、 Dataスキーマを扱えるようになった。
 - 特殊なURL(`javascript:`、`data:` など)をパブリッシュしようとしてエラーになる不具合を修正。
