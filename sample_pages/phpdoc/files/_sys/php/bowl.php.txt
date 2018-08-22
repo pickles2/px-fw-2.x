@@ -60,7 +60,10 @@ class bowl{
 	public function put( $src, $content_name = 'main' ){
 		if( !strlen($content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
-		@$this->contents_bowl[$content_name] .= $src;
+		if( !array_key_exists($content_name, $this->contents_bowl) ){
+			$this->contents_bowl[$content_name] = '';
+		}
+		$this->contents_bowl[$content_name] .= $src;
 		return true;
 	}
 

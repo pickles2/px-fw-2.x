@@ -483,7 +483,7 @@ CREATE TABLE sitemap(
 						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
-				if( !strlen( @$tmp_array['id'] ) ){
+				if( !array_key_exists('id', $tmp_array) || !strlen( @$tmp_array['id'] ) ){
 					//ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
 					$tmp_array['id'] = $tmp_id;
@@ -535,7 +535,7 @@ CREATE TABLE sitemap(
 					unset($tmp_path_original);
 				}
 
-				if( !strlen( @$tmp_array['content'] ) ){
+				if( !array_key_exists('content', $tmp_array) || !strlen( @$tmp_array['content'] ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
 					// $tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
@@ -758,6 +758,9 @@ INSERT INTO sitemap(
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$current_page_info = $this->get_page_info($path);
+		if(!is_array( $current_page_info )){
+			return '';
+		}
 		if( @$current_page_info['category_top_flg'] ){
 			//  自身がカテゴリトップだった場合。
 			return $current_page_info['id'];
@@ -896,7 +899,7 @@ INSERT INTO sitemap(
 						$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/s','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
 						break;
 				}
-				if( !is_null( @$this->sitemap_array[$tmp_path] ) ){
+				if( array_key_exists($tmp_path, $this->sitemap_array) && !is_null( @$this->sitemap_array[$tmp_path] ) ){
 					break;
 				}
 			}
@@ -905,7 +908,7 @@ INSERT INTO sitemap(
 		$parsed_url = parse_url($path);
 		unset($tmp_path);
 
-		if( is_null( @$this->sitemap_array[$path] ) ){
+		if( !array_key_exists($path, $this->sitemap_array) || is_null( @$this->sitemap_array[$path] ) ){
 			//  サイトマップにズバリなければ、
 			//  ダイナミックパスを検索する。
 			$sitemap_dynamic_path = $this->get_dynamic_path_info( $path );
@@ -923,7 +926,7 @@ INSERT INTO sitemap(
 				break;
 			default:
 				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
-				if( is_null( @$this->sitemap_array[$path] ) ){
+				if( !array_key_exists($path, $this->sitemap_array) || is_null( @$this->sitemap_array[$path] ) ){
 					//  サイトマップにズバリなければ、
 					//  引数からパラメータを外したパスだけで再検索
 					$path = @$parsed_url['path'];
@@ -931,8 +934,11 @@ INSERT INTO sitemap(
 				break;
 		}
 
-		$rtn = @$this->sitemap_array[$path];
-		if( @strlen( $rtn['role'] ) ){
+		$rtn = null;
+		if( array_key_exists($path, $this->sitemap_array) ){
+			$rtn = @$this->sitemap_array[$path];
+		}
+		if( is_array($rtn) && array_key_exists('role', $rtn) && @strlen( $rtn['role'] ) ){
 			// $args[0] = $rtn['role'];
 			$tmp_page_info_original = $rtn;
 			$rtn = $this->get_page_info( $tmp_page_info_original['role'] );
@@ -952,12 +958,17 @@ INSERT INTO sitemap(
 			unset($tmp_page_info_original, $tmpKey, $tmpVal);
 		}
 		if( !is_array($rtn) ){ return null; }
-		if( !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
-		if( !strlen( @$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
-		if( !strlen( @$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
-		if( !strlen( @$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
+		if( !array_key_exists('title', $rtn)            || !strlen( @$rtn['title'] ) ){ $rtn['title'] = ''; }
+		if( !array_key_exists('title_breadcrumb', $rtn) || !strlen( @$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
+		if( !array_key_exists('title_h1', $rtn)         || !strlen( @$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
+		if( !array_key_exists('title_label', $rtn)      || !strlen( @$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
+		if( !array_key_exists('title_full', $rtn)       || !strlen( @$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
 		if( count($args) >= 2 ){
-			$rtn = @$rtn[$args[1]];
+			if( array_key_exists($args[1], $rtn) ){
+				$rtn = @$rtn[$args[1]];
+			}else{
+				$rtn = null;
+			}
 		}
 		return $rtn;
 	}// get_page_info()
@@ -995,7 +1006,10 @@ INSERT INTO sitemap(
 			$is_target_current_page = true;
 		}
 
-		if(!is_array($before_page_info) || ( $before_page_info['path'] != $path && $before_page_info['id'] != $path ) ){
+		if(
+			!is_array($before_page_info) ||
+			( $before_page_info['path'] != $path && $before_page_info['id'] != $path )
+		){
 			//まったく新しいページだったら
 			$before_page_info = $this->get_current_page_info();
 			if( is_string( $path_type ) ){
@@ -1087,6 +1101,9 @@ INSERT INTO sitemap(
 	 */
 	public function get_page_id_by_path( $path ){
 		$page_info = $this->get_page_info($path);
+		if( !is_array($page_info) || !array_key_exists( 'id', $page_info ) ){
+			return null;
+		}
 		return $page_info['id'];
 	}
 
@@ -1319,15 +1336,18 @@ INSERT INTO sitemap(
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
+		if(!array_key_exists('filter', @$opt)){
+			$opt['filter'] = null;
+		}
 		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
 
 		$page_info = $this->get_page_info( $path );
 
-		if( $filter && is_array( @$this->sitemap_page_tree[$page_info['path']]['children'] ) ){
+		if( $filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children', $this->sitemap_page_tree[$page_info['path']] ) && is_array( @$this->sitemap_page_tree[$page_info['path']]['children'] ) ){
 			//  ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children'];
 		}
-		if( !$filter && is_array( @$this->sitemap_page_tree[$page_info['path']]['children_all'] ) ){
+		if( !$filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children_all', $this->sitemap_page_tree[$page_info['path']] ) && is_array( @$this->sitemap_page_tree[$page_info['path']]['children_all'] ) ){
 			//  ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children_all'];
 		}
@@ -1698,7 +1718,7 @@ INSERT INTO sitemap(
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info( $path );
-		if( !strlen($page_info['id']) ){return array();}
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id']) ){return array();}
 
 		$rtn = array('');
 		$tmp_breadcrumb = @explode( '>', $page_info['logical_path'] );
