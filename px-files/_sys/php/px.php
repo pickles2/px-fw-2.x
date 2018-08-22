@@ -285,7 +285,10 @@ class px{
 		if($ext !== 'direct' && $ext !== 'pass'){
 			if( $is_enable_sitemap ){
 				$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
-				$this->path_content = $current_page_info['content'];
+				$this->path_content = null;
+				if( is_array($current_page_info) && array_key_exists('content', $current_page_info) ){
+					$this->path_content = $current_page_info['content'];
+				}
 				if( is_null( $this->path_content ) ){
 					$this->path_content = $this->req()->get_request_file_path();
 				}
@@ -368,9 +371,14 @@ class px{
 			if( is_string($func_list) ){
 				$fnc_name = $func_list;
 				$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
+				$option_value = null;
 				preg_match( '/^(.*?)(?:\\((.*)\\))?$/s', $fnc_name, $matched );
-				$fnc_name = @$matched[1];
-				$option_value = @$matched[2];
+				if(array_key_exists( 1, $matched )){
+					$fnc_name = @$matched[1];
+				}
+				if(array_key_exists( 2, $matched )){
+					$option_value = @$matched[2];
+				}
 				unset($matched);
 				if( strlen( trim($option_value) ) ){
 					$option_value = json_decode( $option_value );
@@ -1050,6 +1058,7 @@ class px{
 	 */
 	public function href( $linkto ){
 		$parsed_url = parse_url($linkto);
+		$tmp_page_info_by_id = null;
 		if( $this->site() !== false ){
 			$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
 			if( !$tmp_page_info_by_id ){
@@ -1059,7 +1068,10 @@ class px{
 		$path = $linkto;
 		$path_type = false;
 		$path_type = $this->get_path_type( $linkto );
-		if( @$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'] ){
+		if(
+			is_array($tmp_page_info_by_id) && array_key_exists('id', $tmp_page_info_by_id) && 
+			(@$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'])
+		){
 			$path = @$tmp_page_info_by_id['path'];
 			$path_type = $this->get_path_type( $path );
 		}
@@ -1117,8 +1129,16 @@ class px{
 				$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
 
 				// パラメータを、引数の生の状態に戻す。
-				$path .= (strlen(@$parsed_url['query'])?'?'.@$parsed_url['query']:(strlen(@$parsed_url_fin['query'])?'?'.@$parsed_url_fin['query']:''));
-				$path .= (strlen(@$parsed_url['fragment'])?'#'.@$parsed_url['fragment']:(strlen(@$parsed_url_fin['fragment'])?'#'.@$parsed_url_fin['fragment']:''));
+				if( array_key_exists('query', $parsed_url) && strlen($parsed_url['query']) ){
+					$path .= '?'.$parsed_url['query'];
+				}elseif( array_key_exists('query', $parsed_url_fin) && strlen(@$parsed_url_fin['query']) ){
+					$path .= '?'.@$parsed_url_fin['query'];
+				}
+				if( array_key_exists('fragment', $parsed_url) && strlen($parsed_url['fragment']) ){
+					$path .= '#'.$parsed_url['fragment'];
+				}elseif( array_key_exists('fragment', $parsed_url_fin) && strlen(@$parsed_url_fin['fragment']) ){
+					$path .= '#'.@$parsed_url_fin['fragment'];
+				}
 				break;
 		}
 
@@ -1250,14 +1270,14 @@ class px{
 			//  最後の引数が配列なら
 			//  オプション連想配列として読み込む
 			$options = $args[count($args)-1];
-			if( is_string(@$options['label']) || (is_object(@$options['label']) && is_callable(@$options['label'])) ){
+			if( array_key_exists('label', $options) && (is_string(@$options['label']) || (is_object(@$options['label']) && is_callable(@$options['label'])) ) ){
 				$label = $options['label'];
 				if( !is_array($options) || !array_key_exists('no_escape', $options) || is_null($options['no_escape']) ){
 					$options['no_escape'] = true;
 				}
 			}
 		}
-		if( @is_string($args[1]) || (@is_object($args[1]) && @is_callable($args[1])) ){
+		if( array_key_exists(1, $args) && ( @is_string($args[1]) || (@is_object($args[1]) && @is_callable($args[1])) ) ){
 			//  第2引数が文字列、または function なら
 			//  リンクのラベルとして採用
 			$label = $args[1];
@@ -1306,7 +1326,7 @@ class px{
 				$options['no_escape'] = true;
 			}
 		}
-		if( !@$options['no_escape'] ){
+		if( !array_key_exists('no_escape', $options) || !@$options['no_escape'] ){
 			// no_escape(エスケープしない)指示がなければ、
 			// HTMLをエスケープする。
 			$label = htmlspecialchars($label);
