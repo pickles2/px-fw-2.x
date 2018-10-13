@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.38';
+		return '2.0.39';
 	}
 
 	/**
@@ -115,6 +115,13 @@ class px{
 		}
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
+
+		if( realpath('/') !== '/' ) {
+			// Windows + PHP7 で CSV を正しく読み込めない問題への対策。
+			// Windows では、 ja_JP.UTF-8 ロケールが正しく受け付けられない問題がある。
+			// 代わりに、Cロケールを設定することで回避できる。
+			setlocale(LC_CTYPE, 'C');
+		}
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
 			// commandline only
