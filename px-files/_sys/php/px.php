@@ -116,6 +116,13 @@ class px{
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
 
+		if( realpath('/') !== '/' ) {
+			// Windows + PHP7 で CSV を正しく読み込めない問題への対策。
+			// Windows では、 ja_JP.UTF-8 ロケールが正しく受け付けられない問題がある。
+			// 代わりに、Cロケールを設定することで回避できる。
+			setlocale(LC_CTYPE, 'C');
+		}
+
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
 			// commandline only
 			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
