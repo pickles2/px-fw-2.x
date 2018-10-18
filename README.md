@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.40 (リリース日未定)
+
+- ????????????????
+
 ### Pickles Framework 2.0.39 (2018年10月19日)
 
 - Windows + PHP7 の環境で、CSV ファイルを正しく読み込めない問題に対応した。
