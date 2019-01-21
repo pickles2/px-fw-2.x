@@ -121,6 +121,18 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page2/?PX=api.get.page_info' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/aaaaa.html') ,
 		] );
 		clearstatcache();
@@ -172,6 +184,48 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( $output->title_breadcrumb, 'sample3-2-actor2' );
 		$this->assertEquals( $output->title_h1, 'sample3-2-actor1' );
 		$this->assertEquals( $output->logical_path, '/sample_pages/page3/' );
+
+
+		// -------------------
+		// api.get.page_origin
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.page_origin&path='.urlencode('/sample_pages/page2/') ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->basename, 'sitemap.csv' );
+		$this->assertEquals( $output->row, 21 );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/page1/2.html?PX=api.get.page_origin' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->basename, 'sitemap.csv' );
+		$this->assertEquals( $output->row, 16 );
+
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/dynamicPath/aaaaaa.html?PX=api.get.page_origin' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->basename, 'sitemap.csv' );
+		$this->assertEquals( $output->row, 10 );
 
 
 		// -------------------
