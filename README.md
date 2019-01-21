@@ -81,6 +81,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.40 (リリース日未定)
 
 - `$site->get_page_origin()` を追加。
+- `PX=api.get.page_origin` を追加。
 
 ### Pickles Framework 2.0.39 (2018年10月19日)
 

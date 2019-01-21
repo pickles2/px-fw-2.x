@@ -1135,7 +1135,7 @@ INSERT INTO sitemap(
 			return false;
 		}
 		$sitemap_page_origin = @include($path_sitemap_cache_dir.'sitemap_page_origin.array');
-		$page_info = $this->get_page_info($page_id);
+		$page_info = $this->get_page_info($path);
 		if( !array_key_exists( $page_info['path'], $sitemap_page_origin ) ){
 			return null;
 		}
