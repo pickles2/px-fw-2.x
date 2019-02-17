@@ -230,19 +230,12 @@ return call_user_func( function(){
 
 		// Apache互換のSSIの記述を解決する
 		'picklesFramework2\processors\ssi\ssi::exec' ,
-
-		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	);
 
 	$conf->funcs->processor->css = array(
-		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	);
 
 	$conf->funcs->processor->js = array(
-		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
-		'picklesFramework2\processors\encodingconverter\encodingconverter::exec' ,
 	);
 
 	$conf->funcs->processor->md = array(
@@ -270,6 +263,15 @@ return call_user_func( function(){
 	 * (HTMLの場合は、テーマの処理の後のコードが対象になります)
 	 */
 	$conf->funcs->before_output = array(
+		// output_encoding, output_eol_coding の設定に従ってエンコード変換する。
+		'picklesFramework2\processors\encodingconverter\encodingconverter::exec('.json_encode(array(
+			'ext'=>array( // 対象の拡張子。省略時はすべてのリクエストが適用される。
+				'html',
+				'htm',
+				'css',
+				'js',
+			),
+		)).')' ,
 	);
 
 
