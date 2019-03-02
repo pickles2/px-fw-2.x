@@ -187,11 +187,11 @@ class apiTest extends PHPUnit_Framework_TestCase{
 
 
 		// -------------------
-		// api.get.page_origin
+		// api.get.page_originated_csv
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/?PX=api.get.page_origin&path='.urlencode('/sample_pages/page2/') ,
+			'/?PX=api.get.page_originated_csv&path='.urlencode('/sample_pages/page2/') ,
 		] );
 		clearstatcache();
 
@@ -204,7 +204,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/sample_pages/page1/2.html?PX=api.get.page_origin' ,
+			'/sample_pages/page1/2.html?PX=api.get.page_originated_csv' ,
 		] );
 		clearstatcache();
 
@@ -217,7 +217,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = $this->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
-			'/dynamicPath/aaaaaa.html?PX=api.get.page_origin' ,
+			'/dynamicPath/aaaaaa.html?PX=api.get.page_originated_csv' ,
 		] );
 		clearstatcache();
 
