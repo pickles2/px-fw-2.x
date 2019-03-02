@@ -84,6 +84,7 @@ $ chmod -R 777 ./caches
 - `PX=api.get.page_origin` を追加。
 - `PX=api.get.page_info` が、パラメータ `path` を省略した場合に、カレントページを探すようになった。
 - `encodingconverter` に `ext` オプションを追加。対象の拡張子を制限できるようになった。
+- `$site->get_pdo()` を追加。
 
 ### Pickles Framework 2.0.39 (2018年10月19日)
 

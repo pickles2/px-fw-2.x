@@ -231,6 +231,16 @@ class site{
 	}
 
 	/**
+	 * PDOインスタンスを取り出す
+	 * このPDOインスタンスは、サイトマップキャッシュを読み書きするためのDBアクセスです。
+	 * このメソッドは pickles2/px-fw-2.x v2.0.40 で追加されました。
+	 * @return object $pdo を返します。 または、PDOが利用できない場合に false を返すことがあります。
+	 */
+	public function get_pdo(){
+		return $this->pdo;
+	}
+
+	/**
 	 * ダイナミックパスからパラメータを受け取る。
 	 *
 	 * @param string $key ダイナミックパスパラメータ名
@@ -1123,7 +1133,9 @@ INSERT INTO sitemap(
 	}
 
 	/**
-	 * ページIDから、定義されたCSVのファイル名と行番号を得る
+	 * ページIDから、そのページ情報が定義されたCSVのファイル名と行番号を得る
+	 *
+	 * このメソッドは pickles2/px-fw-2.x v2.0.40 で追加されました。
 	 *
 	 * @param string $path 取得するページのパス または ページID。
 	 * @return array ファイル名(`basename`) と 行番号(`row`) を格納する連想配列。
