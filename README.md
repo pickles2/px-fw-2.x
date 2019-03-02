@@ -80,8 +80,8 @@ $ chmod -R 777 ./caches
 
 ### Pickles Framework 2.0.40 (リリース日未定)
 
-- `$site->get_page_origin()` を追加。
-- `PX=api.get.page_origin` を追加。
+- `$site->get_page_originated_csv()` を追加。
+- `PX=api.get.page_originated_csv` を追加。
 - `PX=api.get.page_info` が、パラメータ `path` を省略した場合に、カレントページを探すようになった。
 - `encodingconverter` に `ext` オプションを追加。対象の拡張子を制限できるようになった。
 - `$site->get_pdo()` を追加。

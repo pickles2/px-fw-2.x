@@ -403,7 +403,7 @@ CREATE TABLE sitemap(
 		//  サイトマップをロード
 		$num_auto_pid = 0;
 		$tmp_sitemap_definition = array();
-		$sitemap_page_origin = array();
+		$sitemap_page_originated_csv = array();
 		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
 			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
@@ -561,7 +561,7 @@ CREATE TABLE sitemap(
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 				$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
 
-				$sitemap_page_origin[$tmp_array['path']] = array(
+				$sitemap_page_originated_csv[$tmp_array['path']] = array(
 					'basename'=>$basename_sitemap_csv,
 					'row'=>$row_number,
 				);
@@ -687,7 +687,7 @@ INSERT INTO sitemap(
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_dynamic_paths.array' , self::data2phpsrc($this->sitemap_dynamic_paths) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_tree.array' , self::data2phpsrc($this->sitemap_page_tree) );
-		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_origin.array' , self::data2phpsrc($sitemap_page_origin) );
+		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_page_originated_csv.array' , self::data2phpsrc($sitemap_page_originated_csv) );
 
 		// サイトマップキャッシュ作成中のアプリケーションロックを解除
 		$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
@@ -1141,17 +1141,17 @@ INSERT INTO sitemap(
 	 * @return array ファイル名(`basename`) と 行番号(`row`) を格納する連想配列。
 	 * または、`$path` が見つけられない場合に `null` を、失敗した場合(サイトマップキャッシュが作成されていない、など)に `false` を返します。
 	 */
-	public function get_page_origin( $path ){
+	public function get_page_originated_csv( $path ){
 		$path_sitemap_cache_dir = $this->px->get_realpath_homedir().'_sys/ram/caches/sitemaps/';
-		if( !is_file($path_sitemap_cache_dir.'sitemap_page_origin.array') ){
+		if( !is_file($path_sitemap_cache_dir.'sitemap_page_originated_csv.array') ){
 			return false;
 		}
-		$sitemap_page_origin = @include($path_sitemap_cache_dir.'sitemap_page_origin.array');
+		$sitemap_page_originated_csv = @include($path_sitemap_cache_dir.'sitemap_page_originated_csv.array');
 		$page_info = $this->get_page_info($path);
-		if( !array_key_exists( $page_info['path'], $sitemap_page_origin ) ){
+		if( !array_key_exists( $page_info['path'], $sitemap_page_originated_csv ) ){
 			return null;
 		}
-		$rtn = $sitemap_page_origin[$page_info['path']];
+		$rtn = $sitemap_page_originated_csv[$page_info['path']];
 		return $rtn;
 	}
 

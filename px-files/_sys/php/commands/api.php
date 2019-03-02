@@ -19,8 +19,8 @@ namespace picklesFramework2\commands;
  * 		<dd>サイトマップ全体の配列を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * 	<dt>PX=api.get.page_info&path={$path}</dt>
  * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。<code>$path</code>を省略した場合は、カレントページの情報を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
- * 	<dt>PX=api.get.page_origin&path={$path}</dt>
- * 		<dd><code>$px->site()->get_page_origin({$path})</code> の返却値を取得します。<code>$path</code>を省略した場合は、カレントページの情報を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.page_originated_csv&path={$path}</dt>
+ * 		<dd><code>$px->site()->get_page_originated_csv({$path})</code> の返却値を取得します。<code>$path</code>を省略した場合は、カレントページの情報を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * 	<dt>PX=api.get.parent</dt>
  * 		<dd><code>$px->site()->get_parent()</code> の返却値を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * 	<dt>PX=api.get.actors</dt>
@@ -268,12 +268,12 @@ class api{
 				$val = ($this->px->site() ? $this->px->site()->get_page_info($path) : false);
 				print $this->data_convert( $val );
 				break;
-			case 'page_origin':
+			case 'page_originated_csv':
 				$path = $this->px->req()->get_param('path');
 				if( is_null($path) ){
 					$path = $this->px->req()->get_request_file_path();
 				}
-				$val = ($this->px->site() ? $this->px->site()->get_page_origin($path) : false);
+				$val = ($this->px->site() ? $this->px->site()->get_page_originated_csv($path) : false);
 				print $this->data_convert( $val );
 				break;
 			case 'parent':
