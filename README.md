@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.40 (リリース日未定)
+### Pickles Framework 2.0.40 (2019年4月19日)
 
 - `$site->get_page_originated_csv()` を追加。
 - `PX=api.get.page_originated_csv` を追加。
