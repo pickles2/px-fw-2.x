@@ -14,7 +14,7 @@
             "php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.0.40 API Document\" -d \"./px-files/_sys/php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.0.41-alpha.1+dev API Document\" -d \"./px-files/_sys/php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "stable",
