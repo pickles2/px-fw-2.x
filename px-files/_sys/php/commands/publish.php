@@ -120,6 +120,7 @@ class publish{
 			return true;
 		};
 		$param_path_region = $this->px->req()->get_param('path_region');
+		$param_path_region = preg_replace( '/^\\/*/is', '/', $param_path_region ); // 先頭がスラッシュじゃない場合は追加する
 		if( strlen( $param_path_region ) && $param_path_region != $path_region && $func_check_param_path( $param_path_region ) ){
 			$path_region = $param_path_region;
 		}
@@ -132,11 +133,13 @@ class publish{
 			$this->paths_region = array_merge( $this->paths_region, $paths_region );
 		}
 
-		// パブリッシュ範囲の指定から、2重拡張子の2つ目を削除
 		foreach( $this->paths_region as $tmp_key=>$tmp_localpath_region ){
+			// 2重拡張子の2つ目を削除
 			if( !is_dir('./'.$tmp_localpath_region) && preg_match( '/\.'.$this->preg_exts.'\.'.$this->preg_exts.'$/is', $tmp_localpath_region ) ){
 				$this->paths_region[$tmp_key] = preg_replace( '/\.'.$this->preg_exts.'$/is', '', $tmp_localpath_region );
 			}
+			// 先頭がスラッシュじゃない場合は追加する
+			$this->paths_region[$tmp_key] = preg_replace( '/^\\/*/is', '/', $this->paths_region[$tmp_key] );
 		}
 		unset($tmp_localpath_region, $tmp_key);
 
@@ -150,6 +153,10 @@ class publish{
 		}
 		if( !is_array($this->paths_ignore) ){
 			$this->paths_ignore = array();
+		}
+		foreach( $this->paths_ignore as $tmp_key=>$tmp_localpath_region ){
+			// 先頭がスラッシュじゃない場合は追加する
+			$this->paths_ignore[$tmp_key] = preg_replace( '/^\\/*/is', '/', $this->paths_ignore[$tmp_key] );
 		}
 	}
 
