@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.41 (リリース日未定)
+### Pickles Framework 2.0.41 (2019年6月8日)
 
 - パブリッシュのパラメータ `path_region`、`paths_region`、`paths_ignore` で、各行の先頭にスラッシュを補完するようになった。
 
