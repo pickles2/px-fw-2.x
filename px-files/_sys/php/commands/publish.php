@@ -1207,6 +1207,15 @@ function cont_EditPublishTargetPathApply(formElm){
 		$src .= 'ProcessID='.getmypid()."\r\n";
 		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$RTN = $this->px->fs()->save_file( $lockfilepath , $src );
+
+		// 割り込みを検証
+		clearstatcache();
+		sleep(1);
+		clearstatcache();
+		if($src !== file_get_contents( $lockfilepath )){
+			return false;
+		}
+
 		return	$RTN;
 	}//lock()
 
