@@ -1448,7 +1448,7 @@ INSERT INTO sitemap(
 				$tmpWhere .= ' OR ____parent_page_id = '.json_encode($actor);
 			}
 			$sth = $this->pdo->prepare(
-				'SELECT * FROM sitemap WHERE id != \'\' AND ('.$tmpWhere.') ;'
+				'SELECT * FROM sitemap WHERE id != \'\' AND ('.$tmpWhere.') ORDER BY ____order;'
 			);
 			$sth->execute(array());
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
