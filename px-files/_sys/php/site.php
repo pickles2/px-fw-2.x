@@ -628,20 +628,18 @@ CREATE TABLE sitemap(
 		if( $tmp_pdo !== false ){
 			// INSERT文をストア
 			ob_start(); ?>
-INSERT INTO sitemap(
-	id,
-	path,
-	role,
-	orderby,
-	list_flg,
+INSERT INTO sitemap( <?php
+foreach( $sitemap_definition as $sitemap_definition_key ){
+	echo $sitemap_definition_key.',';
+}
+?>
 	____parent_page_id,
 	____order
-)VALUES(
-	:id,
-	:path,
-	:role,
-	:orderby,
-	:list_flg,
+)VALUES(<?php
+foreach( $sitemap_definition as $sitemap_definition_key ){
+	echo ':'.$sitemap_definition_key.',';
+}
+?>
 	:____parent_page_id,
 	:____order
 );
@@ -662,16 +660,23 @@ INSERT INTO sitemap(
 				}
 
 				// var_dump($role_id);
-				$sth->execute(array(
-					':id'=>@$tmp_page_info['id'],
-					':path'=>@$tmp_page_info['path'],
-					':role'=>@$this->get_role($tmp_page_info['id']),
-					':orderby'=>@$tmp_page_info['orderby'],
-					':list_flg'=>@$tmp_page_info['list_flg'],
-					':____parent_page_id'=>$____parent_page_id,
-					':____order'=>$____order,
-				));
+
+				$values = array();
+				foreach( $sitemap_definition as $sitemap_definition_key ){
+					if( !array_key_exists($sitemap_definition_key, $tmp_page_info) || !array_key_exists('id', $tmp_page_info) ){
+						$values[':'.$sitemap_definition_key] = null;
+					}elseif( $sitemap_definition_key == 'role' ){
+						$values[':'.$sitemap_definition_key] = $this->get_role($tmp_page_info['id']);
+					}else{
+						$values[':'.$sitemap_definition_key] = $tmp_page_info[$sitemap_definition_key];
+					}
+				}
+				$values[':____parent_page_id'] = $____parent_page_id;
+				$values[':____order'] = $____order;
+
+				$sth->execute($values);
 				$____order ++;
+
 			}else{
 				$this->get_children( $tmp_path );
 			}
@@ -1351,7 +1356,7 @@ INSERT INTO sitemap(
 
 		if( $this->pdo !== false ){
 			// PDO+SQLiteの処理
-			// INSERT文をストア
+			// SELECT文をストア
 			$sth = $this->pdo->prepare(
 				'SELECT * FROM sitemap WHERE id != \'\' AND role = :role ;'
 			);
@@ -1441,7 +1446,7 @@ INSERT INTO sitemap(
 
 		if( $this->pdo !== false ){
 			// PDO+SQLiteの処理
-			// INSERT文をストア
+			// SELECT文をストア
 			$tmpWhere = '____parent_page_id = '.json_encode($page_info['id']);
 			$actors = $this->get_actors( $page_info['id'] );
 			foreach( $actors as $actor ){
