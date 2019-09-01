@@ -451,7 +451,7 @@ class site{
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
-					if( array_search( $defrow['key'], $sitemap_definition ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) ){
+					if( array_search( $defrow['key'], $sitemap_definition ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) && !preg_match('/^\_\_\_\_/si', $defrow['key']) ){
 						array_push($sitemap_definition, $defrow['key']);
 					}
 				}
@@ -595,6 +595,7 @@ class site{
 
 		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
+			$result = @$tmp_pdo->query('DROP TABLE sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 			$tmp_db_column_defs = array();
 			foreach( $sitemap_definition as $sitemap_definition_key ){
 				$tmp_db_column_def = $sitemap_definition_key;
@@ -617,11 +618,12 @@ class site{
 CREATE TABLE sitemap(
 	<?= implode(', ', $tmp_db_column_defs) ?>,
 	____parent_page_id TEXT,
-	____order INTEGER
+	____order INTEGER,
+	____originated_csv TEXT,
+	____originated_csv_row INTEGER
 );
 <?php
 			$result = @$tmp_pdo->query(ob_get_clean());
-			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
 		}
 
 		//  ページツリー情報を構成
@@ -634,14 +636,18 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 }
 ?>
 	____parent_page_id,
-	____order
+	____order,
+	____originated_csv,
+	____originated_csv_row
 )VALUES(<?php
 foreach( $sitemap_definition as $sitemap_definition_key ){
 	echo ':'.$sitemap_definition_key.',';
 }
 ?>
 	:____parent_page_id,
-	:____order
+	:____order,
+	:____originated_csv,
+	:____originated_csv_row
 );
 <?php
 			$sth = $tmp_pdo->prepare( ob_get_clean() );
@@ -685,6 +691,8 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 				}
 				$values[':____parent_page_id'] = $____parent_page_id;
 				$values[':____order'] = $____order;
+				$values[':____originated_csv'] = $sitemap_page_originated_csv[$tmp_page_info['path']]['basename'];
+				$values[':____originated_csv_row'] = $sitemap_page_originated_csv[$tmp_page_info['path']]['row'];
 
 				$sth->execute($values);
 				$____order ++;
