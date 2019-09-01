@@ -451,7 +451,7 @@ class site{
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
-					if( array_search( $defrow['key'], $sitemap_definition ) === false ){
+					if( array_search( $defrow['key'], $sitemap_definition ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) ){
 						array_push($sitemap_definition, $defrow['key']);
 					}
 				}
