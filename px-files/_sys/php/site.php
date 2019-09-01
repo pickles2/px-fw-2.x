@@ -667,6 +667,18 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 						$values[':'.$sitemap_definition_key] = null;
 					}elseif( $sitemap_definition_key == 'role' ){
 						$values[':'.$sitemap_definition_key] = $this->get_role($tmp_page_info['id']);
+					}elseif( preg_match('/\_fla?g$/si', $sitemap_definition_key) ){
+						$values[':'.$sitemap_definition_key] = intval($tmp_page_info[$sitemap_definition_key]);
+					}elseif( preg_match('/\_date$/si', $sitemap_definition_key) ){
+						$values[':'.$sitemap_definition_key] = '';
+						if( strlen($tmp_page_info[$sitemap_definition_key]) ){
+							$values[':'.$sitemap_definition_key] = date('Y-m-d', strtotime($tmp_page_info[$sitemap_definition_key]));
+						}
+					}elseif( preg_match('/\_datetime$/si', $sitemap_definition_key) ){
+						$values[':'.$sitemap_definition_key] = '';
+						if( strlen($tmp_page_info[$sitemap_definition_key]) ){
+							$values[':'.$sitemap_definition_key] = date('Y-m-d H:i:s', strtotime($tmp_page_info[$sitemap_definition_key]));
+						}
 					}else{
 						$values[':'.$sitemap_definition_key] = $tmp_page_info[$sitemap_definition_key];
 					}
