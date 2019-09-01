@@ -360,39 +360,6 @@ class site{
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 		unset( $lockfile_src );
 
-		// サイトマップキャッシュ生成中の一時データベースを作成
-		if( class_exists('\\PDO') ){
-			try {
-				$tmp_pdo = new \PDO(
-					'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
-					null, null,
-					array(
-						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
-					)
-				);
-			} catch (Exception $e) {
-				$tmp_pdo = false;
-			}
-		}
-
-
-		if( $tmp_pdo !== false ){
-			// SQLiteキャッシュのテーブルを作成する
-			ob_start();
-?>
-CREATE TABLE sitemap(
-	id             TEXT UNIQUE,
-	path           TEXT UNIQUE,
-	parent_page_id TEXT,
-	role         TEXT,
-	orderby        INTEGER,
-	list_flg       INTEGER
-);
-<?php
-			$result = @$tmp_pdo->query(ob_get_clean());
-			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
-		}
-
 		$path_sitemap_dir = $this->px->get_realpath_homedir().'sitemaps/';
 		$ary_sitemap_files = $this->px->fs()->ls( $path_sitemap_dir );
 		if( !is_array($ary_sitemap_files) ){
@@ -402,10 +369,30 @@ CREATE TABLE sitemap(
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
-		$tmp_sitemap_definition = array();
+		$sitemap_definition = array(
+			'path',
+			'content',
+			'id',
+			'title',
+			'title_breadcrumb',
+			'title_h1',
+			'title_label',
+			'title_full',
+			'logical_path',
+			'list_flg',
+			'layout',
+			'orderby',
+			'keywords',
+			'description',
+			'category_top_flg',
+			'role',
+			'proc_type',
+		);
 		$sitemap_page_originated_csv = array();
 		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
+			$tmp_sitemap_definition = array();
+
 			if( strtolower( $this->px->fs()->get_extension($basename_sitemap_csv) ) != 'csv' ){
 				// 拡張子がCSV意外のファイルは無視する
 				continue;
@@ -464,6 +451,9 @@ CREATE TABLE sitemap(
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
+					if( array_search( $defrow['key'], $sitemap_definition ) === false ){
+						array_push($sitemap_definition, $defrow['key']);
+					}
 				}
 
 				// 前後の空白文字を削除する
@@ -587,6 +577,53 @@ CREATE TABLE sitemap(
 			return 0;
 		});
 
+		// サイトマップキャッシュ生成中の一時データベースを作成
+		if( class_exists('\\PDO') ){
+			try {
+				$tmp_pdo = new \PDO(
+					'sqlite:'.$path_sitemap_cache_dir.'sitemap.sqlite.tmp',
+					null, null,
+					array(
+						\PDO::ATTR_PERSISTENT => false, // ←これをtrueにすると、"持続的な接続" になる
+					)
+				);
+			} catch (Exception $e) {
+				$tmp_pdo = false;
+			}
+		}
+
+
+		if( $tmp_pdo !== false ){
+			// SQLiteキャッシュのテーブルを作成する
+			$tmp_db_column_defs = array();
+			foreach( $sitemap_definition as $sitemap_definition_key ){
+				$tmp_db_column_def = $sitemap_definition_key;
+				if( preg_match('/\_date$/si', $sitemap_definition_key) ){
+					$tmp_db_column_def .= ' DATE';
+				}elseif( preg_match('/\_datetime$/si', $sitemap_definition_key) ){
+					$tmp_db_column_def .= ' DATETIME';
+				}elseif( $sitemap_definition_key == 'orderby' || preg_match('/\_fla?g$/si', $sitemap_definition_key) ){
+					$tmp_db_column_def .= ' INTEGER';
+				}else{
+					$tmp_db_column_def .= ' TEXT';
+				}
+				if( $sitemap_definition_key == 'id' || $sitemap_definition_key == 'path' ){
+					$tmp_db_column_def .= ' UNIQUE';
+				}
+				array_push( $tmp_db_column_defs, $tmp_db_column_def );
+			}
+			ob_start();
+?>
+CREATE TABLE sitemap(
+	<?= implode(', ', $tmp_db_column_defs) ?>,
+	____parent_page_id TEXT,
+	____order INTEGER
+);
+<?php
+			$result = @$tmp_pdo->query(ob_get_clean());
+			$result = @$tmp_pdo->query('DELETE FROM sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
+		}
+
 		//  ページツリー情報を構成
 		if( $tmp_pdo !== false ){
 			// INSERT文をストア
@@ -594,42 +631,47 @@ CREATE TABLE sitemap(
 INSERT INTO sitemap(
 	id,
 	path,
-	parent_page_id,
 	role,
 	orderby,
-	list_flg
+	list_flg,
+	____parent_page_id,
+	____order
 )VALUES(
 	:id,
 	:path,
-	:parent_page_id,
 	:role,
 	:orderby,
-	:list_flg
+	:list_flg,
+	:____parent_page_id,
+	:____order
 );
 <?php
 			$sth = $tmp_pdo->prepare( ob_get_clean() );
 		}
 		$this->sitemap_page_tree = array();
+		$____order = 0;
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
 			set_time_limit(30);//タイマー延命
 			// sleep(1); // 時間がかかる場合をシミュレーション
 			if( $tmp_pdo !== false ){
-				$parent_page_id = explode('>', $tmp_page_info['logical_path']);
-				$parent_page_id = $parent_page_id[count($parent_page_id)-1];
-				if(is_null(@$this->sitemap_id_map[$parent_page_id])){
-					$parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $parent_page_id );
-					$parent_page_id = @$this->sitemap_array[$parent_page_id]['id'];
+				$____parent_page_id = explode('>', $tmp_page_info['logical_path']);
+				$____parent_page_id = $____parent_page_id[count($____parent_page_id)-1];
+				if(is_null(@$this->sitemap_id_map[$____parent_page_id])){
+					$____parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $____parent_page_id );
+					$____parent_page_id = @$this->sitemap_array[$____parent_page_id]['id'];
 				}
 
 				// var_dump($role_id);
 				$sth->execute(array(
 					':id'=>@$tmp_page_info['id'],
 					':path'=>@$tmp_page_info['path'],
-					':parent_page_id'=>$parent_page_id,
 					':role'=>@$this->get_role($tmp_page_info['id']),
 					':orderby'=>@$tmp_page_info['orderby'],
 					':list_flg'=>@$tmp_page_info['list_flg'],
+					':____parent_page_id'=>$____parent_page_id,
+					':____order'=>$____order,
 				));
+				$____order ++;
 			}else{
 				$this->get_children( $tmp_path );
 			}
@@ -1400,10 +1442,10 @@ INSERT INTO sitemap(
 		if( $this->pdo !== false ){
 			// PDO+SQLiteの処理
 			// INSERT文をストア
-			$tmpWhere = 'parent_page_id = '.json_encode($page_info['id']);
+			$tmpWhere = '____parent_page_id = '.json_encode($page_info['id']);
 			$actors = $this->get_actors( $page_info['id'] );
 			foreach( $actors as $actor ){
-				$tmpWhere .= ' OR parent_page_id = '.json_encode($actor);
+				$tmpWhere .= ' OR ____parent_page_id = '.json_encode($actor);
 			}
 			$sth = $this->pdo->prepare(
 				'SELECT * FROM sitemap WHERE id != \'\' AND ('.$tmpWhere.') ;'
@@ -1440,21 +1482,21 @@ INSERT INTO sitemap(
 				}
 
 				// $target_layer = '';
-				$parent_page_id = '';
+				$____parent_page_id = '';
 				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
 				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
-				$parent_page_id = trim($tmp_page_info['id']);
-				$parent_page_role = $this->get_role($parent_page_id);
+				$____parent_page_id = trim($tmp_page_info['id']);
+				$parent_page_role = $this->get_role($____parent_page_id);
 				if( !is_null($parent_page_role) ){
-					$parent_page_id = $parent_page_role;
+					$____parent_page_id = $parent_page_role;
 				}
 				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
 
-				if( $page_info['id'] != $parent_page_id && array_search( $parent_page_id, $actors ) === false ){
+				if( $page_info['id'] != $____parent_page_id && array_search( $____parent_page_id, $actors ) === false ){
 					continue;
 				}
 
-				if( $page_info['id'] == $parent_page_id ){
+				if( $page_info['id'] == $____parent_page_id ){
 					if(@strlen($row['role'])){continue;}//役者はリストされない。
 
 					if(@strlen($row['orderby'])){
