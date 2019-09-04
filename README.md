@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.42 (リリース日未定)
+### Pickles Framework 2.0.42 (2019年9月4日)
 
 - パブリッシュが2重に起動することがある問題を修正。
 - サイトマップキャッシュに関する内部処理の修正。
