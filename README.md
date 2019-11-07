@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.43 (リリース日未定)
+
+- `$site->get_path_param()` の引数を省略できない不具合を修正。
+
 ### Pickles Framework 2.0.42 (2019年9月4日)
 
 - パブリッシュが2重に起動することがある問題を修正。

@@ -3,7 +3,7 @@
 <?php
 	print '<p>'.htmlspecialchars($px->site()->get_path_param('')).'</p>'."\n";
 
-	if( $px->site()->get_path_param('') == 'index.html' ){
+	if( $px->site()->get_path_param() == 'index.html' ){
 		$px->add_relatedlink('./dp_test/');
 		$px->add_relatedlink('./dp_test/a.html');
 	}
