@@ -288,7 +288,7 @@ class site{
 		// $path_top の設定値をチューニング
 		$path_top = $this->conf->path_top;
 		if(!strlen( $path_top )){ $path_top = '/'; }
-		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top );//index.htmlを付加する。
+		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top ); // index.htmlを付加する。
 
 
 		$i = 0;
@@ -304,7 +304,8 @@ class site{
 			$i ++;
 			if( $i > 0 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
-				// 2秒待って解除されなければ、true を返して終了する。 → 待たないように変更。
+				// 2秒待って解除されなければ、true を返して終了する。(=古い仕様)
+				//  → 待たずに false を返すように変更した。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
 
 				//  古いサイトマップキャッシュが存在する場合、ロードする。
