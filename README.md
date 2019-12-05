@@ -81,7 +81,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.43 (リリース日未定)
 
 - `$site->get_path_param()` の引数を省略できない不具合を修正。
-- コマンドラインオプション `--method`、 `--body` を追加。
+- コマンドラインオプション `--method`、 `--body`、 `--body-file` を追加。
 
 ### Pickles Framework 2.0.42 (2019年9月4日)
 

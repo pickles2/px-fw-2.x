@@ -188,11 +188,6 @@ class px{
 		if( strlen($req->get_cli_option( '--method' )) ){
 			$_SERVER['REQUEST_METHOD'] = strtoupper($req->get_cli_option( '--method' ));
 		}
-		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
-			if( strlen($req->get_cli_option( '--body' )) ){
-				parse_str($req->get_cli_option( '--body' ), $_POST);
-			}
-		}
 
 		// make instance $fs
 		$conf = new \stdClass;
@@ -226,6 +221,13 @@ class px{
 				}
 			}
 			unset( $tmp_cli_params, $tmp_path, $tmp_query );
+		}
+		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
+			if( strlen($this->req->get_cli_option( '--body-file' )) && $this->fs->is_file($this->req->get_cli_option( '--body-file' )) ){
+				parse_str($this->fs()->read_file( $this->req->get_cli_option( '--body-file' ) ), $_POST);
+			}elseif( strlen($this->req->get_cli_option( '--body' )) ){
+				parse_str($this->req->get_cli_option( '--body' ), $_POST);
+			}
 		}
 		if(!count($_REQUEST)){
 			$_REQUEST = $this->req->get_all_params();
