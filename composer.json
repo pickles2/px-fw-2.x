@@ -14,7 +14,7 @@
             "php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.0.43-alpha.1+dev API Document\" -d \"./px-files/_sys/php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.0.43-alpha.1+dev API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "stable",
@@ -38,21 +38,21 @@
     },
     "autoload": {
         "files": [
-            "px-files/_sys/php/pickles.php",
-            "px-files/_sys/php/px.php",
-            "px-files/_sys/php/bowl.php",
-            "px-files/_sys/php/pxcmd.php",
-            "px-files/_sys/php/site.php",
-            "px-files/_sys/php/commands/api.php",
-            "px-files/_sys/php/commands/clearcache.php",
-            "px-files/_sys/php/commands/config.php",
-            "px-files/_sys/php/commands/phpinfo.php",
-            "px-files/_sys/php/commands/publish.php",
-            "px-files/_sys/php/processors/md.php",
-            "px-files/_sys/php/processors/scss.php",
-            "px-files/_sys/php/processors/autoindex.php",
-            "px-files/_sys/php/processors/encodingconverter.php",
-            "px-files/_sys/php/processors/ssi.php",
+            "php/pickles.php",
+            "php/px.php",
+            "php/bowl.php",
+            "php/pxcmd.php",
+            "php/site.php",
+            "php/commands/api.php",
+            "php/commands/clearcache.php",
+            "php/commands/config.php",
+            "php/commands/phpinfo.php",
+            "php/commands/publish.php",
+            "php/processors/md.php",
+            "php/processors/scss.php",
+            "php/processors/autoindex.php",
+            "php/processors/encodingconverter.php",
+            "php/processors/ssi.php",
             "px-files/themes/pickles2/php/theme.php"
         ]
     }

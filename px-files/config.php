@@ -107,6 +107,7 @@ return call_user_func( function(){
 		'/README.md' => 'ignore' ,
 		'/vendor/*' => 'ignore' ,
 		'/tests/*' => 'ignore' ,
+		'/php/*' => 'ignore' ,
 		'*/.DS_Store' => 'ignore' ,
 		'*/Thumbs.db' => 'ignore' ,
 		'*/.svn/*' => 'ignore' ,
