@@ -30,6 +30,22 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = UTC</p>', '/').'/s', $output) );
 
 
+		$output = $this->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php',
+			'-u', 'Mozilla',
+			'--method', 'post',
+			'--body', 'test=post_test',
+			'/http_methods/index.html?test=get_test'
+		] );
+		clearstatcache();
+		var_dump($output);
+		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>method = POST</p>', '/').'/s', $output) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>$_GET[\'test\'] = get_test</p>', '/').'/s', $output) );
+		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>$_POST[\'test\'] = post_test</p>', '/').'/s', $output) );
+
+
 		// 後始末
 		$output = $this->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		$output = $this->px_execute( '/prevnext/.px_execute.php', '/?PX=clearcache' );

@@ -59,3 +59,4 @@ default
 ","
 
 "
+"/http_methods/",,"http-method-test","HTTP Method test",,,,,"定義行が空白のため無視される列","定義行がアスタリスクで始まっていないため無視される列",,1,,,,,,

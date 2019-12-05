@@ -137,10 +137,15 @@ class px{
 				}
 			}
 		}
-		if( !@array_key_exists( 'HTTP_USER_AGENT' , $_SERVER ) ){
+		if( !array_key_exists( 'REQUEST_METHOD' , $_SERVER ) ){
+			// REQUEST_METHOD が存在しない場合、文字列 `GET` で初期化する。
+			$_SERVER['REQUEST_METHOD'] = 'GET';
+		}
+		if( !array_key_exists( 'HTTP_USER_AGENT' , $_SERVER ) ){
 			// HTTP_USER_AGENT が存在しない場合、空白文字列で初期化する。
 			$_SERVER['HTTP_USER_AGENT'] = '';
 		}
+
 
 		// load Config
 		$this->realpath_homedir = $path_homedir;
@@ -175,10 +180,18 @@ class px{
 		// Apply command-line option "--command-php"
 		$req = new \tomk79\request();
 		if( strlen(@$req->get_cli_option( '--command-php' )) ){
-			@$this->conf->commands->php = $req->get_cli_option( '--command-php' );
+			$this->conf->commands->php = $req->get_cli_option( '--command-php' );
 		}
 		if( strlen(@$req->get_cli_option( '-c' )) ){
-			@$this->conf->path_phpini = $req->get_cli_option( '-c' );
+			$this->conf->path_phpini = $req->get_cli_option( '-c' );
+		}
+		if( strlen($req->get_cli_option( '--method' )) ){
+			$_SERVER['REQUEST_METHOD'] = strtoupper($req->get_cli_option( '--method' ));
+		}
+		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
+			if( strlen($req->get_cli_option( '--body' )) ){
+				parse_str($req->get_cli_option( '--body' ), $_POST);
+			}
 		}
 
 		// make instance $fs
@@ -198,6 +211,26 @@ class px{
 		if( strlen(@$this->req->get_cli_option( '-u' )) ){
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
+		if(!count($_GET)){
+			$tmp_cli_params = $this->req->get_cli_params();
+			if( count($tmp_cli_params) ){
+				$tmp_path = $tmp_cli_params[count($tmp_cli_params)-1];
+				if( preg_match( '/^\//', $tmp_path ) ){
+					$tmp_path = parse_url($tmp_path);
+					if( is_array($tmp_path) && array_key_exists('query', $tmp_path) ){
+						parse_str( $tmp_path['query'], $tmp_query );
+						if( is_array($tmp_query) ){
+							$_GET = array_merge( $_GET, $tmp_query );
+						}
+					}
+				}
+			}
+			unset( $tmp_cli_params, $tmp_path, $tmp_query );
+		}
+		if(!count($_REQUEST)){
+			$_REQUEST = $this->req->get_all_params();
+		}
+
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
 		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
