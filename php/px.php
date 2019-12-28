@@ -1272,7 +1272,7 @@ class px{
 	 * );
 	 * ?&gt;</pre>
 	 *
-	 * @param string $linkto リンク先のパス。PxFWのインストールパスを基点にした絶対パスで指定。
+	 * @param string $linkto リンク先のパス。Pickles Framework のインストールパスを基点にした絶対パスで指定。
 	 * @param array $options options: [as string] Link label, [as function] callback function, [as array] Any options.
 	 * <dl>
 	 *   <dt>mixed $options['label']</dt>
@@ -1297,7 +1297,7 @@ class px{
 		if( $this->site() !== false ){
 			$page_info = $this->site()->get_page_info($linkto);
 			if( !$page_info ){
-				$page_info = $this->site()->get_page_info(@$parsed_url['path']);
+				$page_info = $this->site()->get_page_info($parsed_url['path']);
 			}
 		}
 		if( is_array($options) && array_key_exists('canonical', $options) && !is_null( $options['canonical'] ) && !@empty($options['canonical']) ){
@@ -1307,8 +1307,12 @@ class px{
 			$href = $this->href($linkto);
 			$hrefc = $this->href($this->req()->get_request_file_path());
 		}
-		$label = $page_info['title_label'];
-		$page_id = $page_info['id'];
+		$label = null;
+		$page_id = null;
+		if( is_array($page_info) ){
+			$label = $page_info['title_label'];
+			$page_id = $page_info['id'];
+		}
 
 		$options = array();
 		if( count($args) >= 2 && is_array($args[count($args)-1]) ){
@@ -1337,7 +1341,7 @@ class px{
 				$is_current = !@empty($options['current']);
 			}elseif($href==$hrefc){
 				$is_current = true;
-			}elseif( $this->site()->is_page_in_breadcrumb($page_info['id']) ){
+			}elseif( $this->site()->is_page_in_breadcrumb($page_id) ){
 				$is_current = true;
 			}
 		}
