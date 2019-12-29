@@ -1506,12 +1506,15 @@ class px{
 	 * @return string ローカルリソースの実際の絶対パス
 	 */
 	public function path_files( $localpath_resource = null ){
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 
@@ -1574,12 +1577,15 @@ class px{
 		if( !strlen( @$this->conf()->public_cache_dir ) ){
 			return false;
 		}
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 
@@ -1632,12 +1638,15 @@ class px{
 	 * @return string コンテンツ別の非公開キャッシュのサーバー内部パス
 	 */
 	public function realpath_files_private_cache( $localpath_resource = null ){
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 
