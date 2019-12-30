@@ -81,6 +81,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.44 (リリース日未定)
 
 - PHP 7.4 に対応した。
+- `$_SERVER['REMOTE_ADDR']` がない場合に、 `null` で初期化するようになった。
 
 ### Pickles Framework 2.0.43 (2019年12月13日)
 

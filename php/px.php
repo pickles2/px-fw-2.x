@@ -125,6 +125,7 @@ class px{
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
 			// commandline only
+			$_SERVER['REMOTE_ADDR'] = null; // REMOTE_ADDR が存在しない場合、nullで初期化する。
 			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
 				dirname(realpath($_SERVER['SCRIPT_FILENAME'])) !== realpath('./')
 			){
