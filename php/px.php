@@ -125,7 +125,6 @@ class px{
 
 		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
 			// commandline only
-			$_SERVER['REMOTE_ADDR'] = null; // REMOTE_ADDR が存在しない場合、nullで初期化する。
 			if( realpath($_SERVER['SCRIPT_FILENAME']) === false ||
 				dirname(realpath($_SERVER['SCRIPT_FILENAME'])) !== realpath('./')
 			){
@@ -163,13 +162,13 @@ class px{
 			);
 		}
 
-		if ( @strlen($this->conf->default_timezone) ) {
-			@date_default_timezone_set($this->conf->default_timezone);
+		if ( property_exists($this->conf, 'default_timezone') && strlen($this->conf->default_timezone) ) {
+			date_default_timezone_set($this->conf->default_timezone);
 		}
-		if ( !@is_callable($this->conf->path_files) && !@strlen($this->conf->path_files) ) {
+		if ( !property_exists($this->conf, 'path_files') || ( !is_callable($this->conf->path_files) && !strlen($this->conf->path_files) ) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
-		if ( !@strlen($this->conf->copyright) ) {
+		if ( !property_exists($this->conf, 'copyright') || !strlen($this->conf->copyright) ) {
 			// NOTE: 2016-03-15 $conf->copyright 追加
 			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
 			$this->conf->copyright = null;
@@ -180,10 +179,10 @@ class px{
 
 		// Apply command-line option "--command-php"
 		$req = new \tomk79\request();
-		if( strlen(@$req->get_cli_option( '--command-php' )) ){
+		if( strlen($req->get_cli_option( '--command-php' )) ){
 			$this->conf->commands->php = $req->get_cli_option( '--command-php' );
 		}
-		if( strlen(@$req->get_cli_option( '-c' )) ){
+		if( strlen($req->get_cli_option( '-c' )) ){
 			$this->conf->path_phpini = $req->get_cli_option( '-c' );
 		}
 		if( strlen($req->get_cli_option( '--method' )) ){
@@ -204,7 +203,7 @@ class px{
 		$conf->session_expire = $this->conf->session_expire;
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
-		if( strlen(@$this->req->get_cli_option( '-u' )) ){
+		if( strlen($this->req->get_cli_option( '-u' )) ){
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 		if(!count($_GET)){
@@ -236,7 +235,7 @@ class px{
 
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
-		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
+		if( property_exists($this->conf, 'public_cache_dir') && strlen($this->conf->public_cache_dir) && !is_dir( './'.$this->conf->public_cache_dir ) ){
 			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
 		}
 		// _sysフォルダが存在しない場合、作成する
@@ -256,14 +255,14 @@ class px{
 		// 環境変数 `$_SERVER['DOCUMENT_ROOT']` をセット
 		// `$px->get_realpath_docroot()` は、`$conf`, `$fs` を参照するので、
 		// これらの初期化の後が望ましい。
-		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
+		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( $_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
 			$_SERVER['DOCUMENT_ROOT'] = $this->get_realpath_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
 		}
 
 		// デフォルトの Content-type を出力
-		@$this->header('Content-type: '.$this->get_default_mime_type());
+		$this->header('Content-type: '.$this->get_default_mime_type());
 
 
 		// ignore されたコンテンツをレスポンスする
@@ -275,7 +274,7 @@ class px{
 		// pass 判定されたコンテンツをレスポンスする
 		$fnc_response_pass = function($px){
 			if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
-				@$px->header('Content-type: text/html');
+				$px->header('Content-type: text/html');
 				$px->set_status(404);// 404 NotFound
 				$px->bowl()->send('<p>404 - File not found.</p>');
 				return true;
@@ -305,6 +304,11 @@ class px{
 		// make instance $pxcmd
 		$this->pxcmd = new pxcmd($this);
 
+		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
+			// REMOTE_ADDR が存在しない場合、nullで初期化する。
+			// `$req` より先に初期化すると壊れます。
+			$_SERVER['REMOTE_ADDR'] = null;
+		}
 
 		// funcs: Before sitemap
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_sitemap, $this );
