@@ -1455,6 +1455,9 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
 
 		$page_info = $this->get_page_info( $path );
+		if( !is_array($page_info) ){
+			return array();
+		}
 
 		if( $filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children', $this->sitemap_page_tree[$page_info['path']] ) && is_array( @$this->sitemap_page_tree[$page_info['path']]['children'] ) ){
 			//  ページキャッシュツリーがすでに作られている場合

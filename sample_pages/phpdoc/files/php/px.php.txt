@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.43';
+		return '2.0.44';
 	}
 
 	/**
@@ -162,13 +162,13 @@ class px{
 			);
 		}
 
-		if ( @strlen($this->conf->default_timezone) ) {
-			@date_default_timezone_set($this->conf->default_timezone);
+		if ( property_exists($this->conf, 'default_timezone') && strlen($this->conf->default_timezone) ) {
+			date_default_timezone_set($this->conf->default_timezone);
 		}
-		if ( !@is_callable($this->conf->path_files) && !@strlen($this->conf->path_files) ) {
+		if ( !property_exists($this->conf, 'path_files') || ( !is_callable($this->conf->path_files) && !strlen($this->conf->path_files) ) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
-		if ( !@strlen($this->conf->copyright) ) {
+		if ( !property_exists($this->conf, 'copyright') || !strlen($this->conf->copyright) ) {
 			// NOTE: 2016-03-15 $conf->copyright 追加
 			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
 			$this->conf->copyright = null;
@@ -179,10 +179,10 @@ class px{
 
 		// Apply command-line option "--command-php"
 		$req = new \tomk79\request();
-		if( strlen(@$req->get_cli_option( '--command-php' )) ){
+		if( strlen($req->get_cli_option( '--command-php' )) ){
 			$this->conf->commands->php = $req->get_cli_option( '--command-php' );
 		}
-		if( strlen(@$req->get_cli_option( '-c' )) ){
+		if( strlen($req->get_cli_option( '-c' )) ){
 			$this->conf->path_phpini = $req->get_cli_option( '-c' );
 		}
 		if( strlen($req->get_cli_option( '--method' )) ){
@@ -203,7 +203,7 @@ class px{
 		$conf->session_expire = $this->conf->session_expire;
 		$conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $conf );
-		if( strlen(@$this->req->get_cli_option( '-u' )) ){
+		if( strlen($this->req->get_cli_option( '-u' )) ){
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 		if(!count($_GET)){
@@ -235,7 +235,7 @@ class px{
 
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
-		if( strlen(@$this->conf->public_cache_dir) && !@is_dir( './'.$this->conf->public_cache_dir ) ){
+		if( property_exists($this->conf, 'public_cache_dir') && strlen($this->conf->public_cache_dir) && !is_dir( './'.$this->conf->public_cache_dir ) ){
 			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
 		}
 		// _sysフォルダが存在しない場合、作成する
@@ -255,14 +255,14 @@ class px{
 		// 環境変数 `$_SERVER['DOCUMENT_ROOT']` をセット
 		// `$px->get_realpath_docroot()` は、`$conf`, `$fs` を参照するので、
 		// これらの初期化の後が望ましい。
-		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( @$_SERVER['DOCUMENT_ROOT'] ) ){
+		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( $_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
 			$_SERVER['DOCUMENT_ROOT'] = $this->get_realpath_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
 		}
 
 		// デフォルトの Content-type を出力
-		@$this->header('Content-type: '.$this->get_default_mime_type());
+		$this->header('Content-type: '.$this->get_default_mime_type());
 
 
 		// ignore されたコンテンツをレスポンスする
@@ -274,7 +274,7 @@ class px{
 		// pass 判定されたコンテンツをレスポンスする
 		$fnc_response_pass = function($px){
 			if( !$px->fs()->is_file( './'.$px->req()->get_request_file_path() ) ){
-				@$px->header('Content-type: text/html');
+				$px->header('Content-type: text/html');
 				$px->set_status(404);// 404 NotFound
 				$px->bowl()->send('<p>404 - File not found.</p>');
 				return true;
@@ -304,6 +304,11 @@ class px{
 		// make instance $pxcmd
 		$this->pxcmd = new pxcmd($this);
 
+		if( !array_key_exists( 'REMOTE_ADDR' , $_SERVER ) ){
+			// REMOTE_ADDR が存在しない場合、nullで初期化する。
+			// `$req` より先に初期化すると壊れます。
+			$_SERVER['REMOTE_ADDR'] = null;
+		}
 
 		// funcs: Before sitemap
 		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_sitemap, $this );
@@ -869,7 +874,10 @@ class px{
 		), $pipes);
 		$io = array();
 		foreach($pipes as $idx=>$pipe){
-			$io[$idx] = stream_get_contents($pipe);
+			$io[$idx] = null;
+			if( $idx >= 1 ){
+				$io[$idx] = stream_get_contents($pipe);
+			}
 			fclose($pipe);
 		}
 		$return_var = proc_close($proc);
@@ -1269,7 +1277,7 @@ class px{
 	 * );
 	 * ?&gt;</pre>
 	 *
-	 * @param string $linkto リンク先のパス。PxFWのインストールパスを基点にした絶対パスで指定。
+	 * @param string $linkto リンク先のパス。Pickles Framework のインストールパスを基点にした絶対パスで指定。
 	 * @param array $options options: [as string] Link label, [as function] callback function, [as array] Any options.
 	 * <dl>
 	 *   <dt>mixed $options['label']</dt>
@@ -1294,7 +1302,7 @@ class px{
 		if( $this->site() !== false ){
 			$page_info = $this->site()->get_page_info($linkto);
 			if( !$page_info ){
-				$page_info = $this->site()->get_page_info(@$parsed_url['path']);
+				$page_info = $this->site()->get_page_info($parsed_url['path']);
 			}
 		}
 		if( is_array($options) && array_key_exists('canonical', $options) && !is_null( $options['canonical'] ) && !@empty($options['canonical']) ){
@@ -1304,8 +1312,12 @@ class px{
 			$href = $this->href($linkto);
 			$hrefc = $this->href($this->req()->get_request_file_path());
 		}
-		$label = $page_info['title_label'];
-		$page_id = $page_info['id'];
+		$label = null;
+		$page_id = null;
+		if( is_array($page_info) ){
+			$label = $page_info['title_label'];
+			$page_id = $page_info['id'];
+		}
 
 		$options = array();
 		if( count($args) >= 2 && is_array($args[count($args)-1]) ){
@@ -1334,7 +1346,7 @@ class px{
 				$is_current = !@empty($options['current']);
 			}elseif($href==$hrefc){
 				$is_current = true;
-			}elseif( $this->site()->is_page_in_breadcrumb($page_info['id']) ){
+			}elseif( $this->site()->is_page_in_breadcrumb($page_id) ){
 				$is_current = true;
 			}
 		}
@@ -1499,12 +1511,15 @@ class px{
 	 * @return string ローカルリソースの実際の絶対パス
 	 */
 	public function path_files( $localpath_resource = null ){
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 
@@ -1567,12 +1582,15 @@ class px{
 		if( !strlen( @$this->conf()->public_cache_dir ) ){
 			return false;
 		}
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 
@@ -1625,12 +1643,15 @@ class px{
 	 * @return string コンテンツ別の非公開キャッシュのサーバー内部パス
 	 */
 	public function realpath_files_private_cache( $localpath_resource = null ){
+		$path_content = null;
 		if( $this->site() !== false ){
 			$tmp_page_info = $this->site()->get_current_page_info();
-			$path_content = $tmp_page_info['content'];
+			if( is_array($tmp_page_info) ){
+				$path_content = $tmp_page_info['content'];
+			}
 			unset($tmp_page_info);
 		}
-		if( @is_null($path_content) ){
+		if( is_null($path_content) ){
 			$path_content = $this->req()->get_request_file_path();
 		}
 

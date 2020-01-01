@@ -78,7 +78,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.44 (リリース日未定)
+### Pickles Framework 2.0.44 (2020年1月2日)
 
 - PHP 7.4 に対応した。
 - `$_SERVER['REMOTE_ADDR']` がない場合に、 `null` で初期化するようになった。
@@ -309,7 +309,7 @@ $ composer run-script documentation
 
 ## ライセンス - License
 
-Copyright (c)2001-2019 Tomoya Koyanagi, and Pickles 2 Project<br />
+Copyright (c)2001-2020 Tomoya Koyanagi, and Pickles 2 Project<br />
 MIT License https://opensource.org/licenses/mit-license.php
 
 
