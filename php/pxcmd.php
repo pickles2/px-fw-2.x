@@ -197,7 +197,7 @@ class pxcmd{
 				<p><a href="?" class="btn btn-default">PX Commands を終了する</a></p>
 				<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
 				<p><?= htmlspecialchars(@date('Y-m-d H:i:s')) ?></p>
-				<p class="pxcmd-credits"><a href="https://pickles2.pxt.jp/" target="_blank">Pickles Framework</a> (C)Tomoya Koyanagi, and Pickles 2 Project.</p>
+				<p class="pxcmd-credits"><a href="https://pickles2.pxt.jp/" target="_blank">Pickles Framework</a> (C)Tomoya Koyanagi, and Pickles Project.</p>
 			</div><!-- /.footer -->
 		</div>
 

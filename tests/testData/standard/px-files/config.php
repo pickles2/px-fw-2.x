@@ -6,7 +6,7 @@ return call_user_func( function(){
 
 	// project
 	$conf->name = 'Pickles 2'; // サイト名
-	$conf->copyright = 'Pickles 2 Project'; // コピーライト表記
+	$conf->copyright = 'Pickles Project'; // コピーライト表記
 	$conf->scheme = 'http'; // スキーマ
 	$conf->domain = 'pickles2.pxt.jp'; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ

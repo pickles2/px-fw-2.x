@@ -15,7 +15,7 @@ return call_user_func( function(){
 	/** サイト名 */
 	$conf->name = 'Pickles Framework 2';
 	/** コピーライト表記 */
-	$conf->copyright = 'Pickles 2 Project';
+	$conf->copyright = 'Pickles Project';
 	/**
 	 * スキーマ
 	 * 本番環境のスキーマ
