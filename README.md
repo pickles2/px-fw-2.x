@@ -78,6 +78,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework 2.0.45 (リリース日未定)
+
+- 外部依存パッケージのバージョンを更新。
+
 ### Pickles Framework 2.0.44 (2020年1月2日)
 
 - PHP 7.4 に対応した。

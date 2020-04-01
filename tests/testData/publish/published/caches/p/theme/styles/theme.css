@@ -82,7 +82,7 @@ pre code {
   display: block;
   background-color: #f5f5ff; }
 
-@media all and (max-width: 580px) {
+@media (max-width: 580px) {
   .theme_globalnavi {
     display: none; } }
 /**
@@ -105,7 +105,7 @@ pre code {
   display: block;
   color: #fff; }
 
-@media all and (max-width: 580px) {
+@media (max-width: 580px) {
   .theme_shouldernavi {
     display: none; } }
 /**
