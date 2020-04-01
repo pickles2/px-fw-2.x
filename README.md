@@ -81,6 +81,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework 2.0.45 (リリース日未定)
 
 - 外部依存パッケージのバージョンを更新。
+- パブリッシュ時に、開始時刻と終了時刻を `timelog.txt` に記録するようになった。
 
 ### Pickles Framework 2.0.44 (2020年1月2日)
 

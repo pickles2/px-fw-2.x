@@ -402,6 +402,8 @@ function cont_EditPublishTargetPathApply(formElm){
 		print $this->cli_report();
 		print "\n";
 
+		file_put_contents($this->path_tmp_publish.'timelog.txt', 'Started at: '.date('c', $total_time)."\n", FILE_APPEND); // 2020-04-01 @tomk79 記録するようにした。
+
 		while(1){
 			set_time_limit(5*60);
 			flush();
@@ -601,7 +603,10 @@ function cont_EditPublishTargetPathApply(formElm){
 			print "\n";
 		}
 
-		print 'Total Time: '.(time() - $total_time).' sec.'."\n";
+		$end_time = time();
+		print 'Total Time: '.($end_time - $total_time).' sec.'."\n";
+		file_put_contents($this->path_tmp_publish.'timelog.txt', 'Ended at: '.date('c', $end_time)."\n", FILE_APPEND); // 2020-04-01 @tomk79 記録するようにした。
+		file_put_contents($this->path_tmp_publish.'timelog.txt', 'Total Time: '.($end_time - $total_time).' sec'."\n", FILE_APPEND); // 2020-04-01 @tomk79 記録するようにした。
 		print "\n";
 
 		$this->unlock();//ロック解除
