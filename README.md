@@ -71,8 +71,8 @@ $ chmod -R 777 ./caches
   - mod_rewrite が利用可能であること
   - .htaccess が利用可能であること
 - PHP 5.4 以上
-  - [mbstring](https://www.php.net/manual/ja/book.mbstring.php) Extension
-  - [ZipArchive](https://www.php.net/manual/ja/class.ziparchive.php) Extension
+  - [mbstring](https://www.php.net/manual/ja/book.mbstring.php)
+  - [ZipArchive](https://www.php.net/manual/ja/class.ziparchive.php)
   - [PDO](https://www.php.net/manual/ja/book.pdo.php)
   - [PDO SQLite (PDO_SQLITE)](https://www.php.net/manual/ja/ref.pdo-sqlite.php)
 
