@@ -71,9 +71,10 @@ $ chmod -R 777 ./caches
   - mod_rewrite が利用可能であること
   - .htaccess が利用可能であること
 - PHP 5.4 以上
-  - mbstring が有効に設定されていること
-  - PDO SQLiteドライバー (PDO_SQLITE) が有効に設定されていること
-  - safe_mode が無効に設定されていること
+  - [mbstring](https://www.php.net/manual/ja/book.mbstring.php) Extension
+  - [ZipArchive](https://www.php.net/manual/ja/class.ziparchive.php) Extension
+  - [PDO](https://www.php.net/manual/ja/book.pdo.php)
+  - [PDO SQLite (PDO_SQLITE)](https://www.php.net/manual/ja/ref.pdo-sqlite.php)
 
 
 ## 更新履歴 - Change log
