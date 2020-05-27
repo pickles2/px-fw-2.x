@@ -319,7 +319,14 @@ class picklesTest extends PHPUnit_Framework_TestCase{
 
 		// var_dump($output);
 		$this->assertTrue( $this->common_error( $output ) );
-		$this->assertEquals( '<a href="/" class="current">&lt;HOME&gt;</a><a href="/" class="current"><link0></a><a href="/" class="current"><link1></a><a href="/" class="current"><link2></a><a href="/" class="current">&lt;link3&gt;</a>', $output );
+		$this->assertEquals(
+			'<a href="/" class="current">&lt;HOME&gt;</a><a href="/" class="current"><link0></a>'
+			.'<a href="/" class="current"><link1></a>'
+			.'<a href="/" class="current"><link2></a>'
+			.'<a href="/" class="current">&lt;link3&gt;</a>'
+			.'<a href="/" target="_blank" class="current"><link4></a>'
+			.'<a href="/" target="_blank" class="current"><link5></a>'
+		, $output );
 
 
 		// 後始末

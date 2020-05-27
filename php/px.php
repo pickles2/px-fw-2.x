@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.45';
+		return '2.0.46-alpha.1+dev';
 	}
 
 	/**
@@ -565,7 +565,7 @@ class px{
 	 * ホームディレクトリは、 Pickles 2 のフレームワークが使用するファイルが置かれるディレクトリで、
 	 * 主には `config.php`, `sitemaps/*`, `_sys/ram/*` などが格納されているディレクトリのことです。
 	 *
-	 * pickles2/px-fw-2.x@2.0.29 で `get_path_homedir()` からの名称変更として追加されました。
+	 * Pickles Framework v2.0.29 で `get_path_homedir()` からの名称変更として追加されました。
 	 *
 	 * @return string ホームディレクトリの絶対パス
 	 */
@@ -1290,6 +1290,8 @@ class px{
 	 *	 <dd><code>true</code> または <code>false</code> を指定します。この値が <code>false</code> の場合、リンクラベルに含まれるHTML特殊文字が自動的にエスケープされます。デフォルトは、<code>false</code>、<code>$options['label']</code>が指定された場合は自動的に <code>true</code> になります。</dd>
 	 *   <dt>mixed $options['class']</dt>
 	 *	 <dd>スタイルシートの クラス名 を文字列または配列で指定します。</dd>
+	 *   <dt>mixed $options['target']</dt>
+	 *	 <dd>target 属性値 を文字列で指定します。 Pickles Framework v2.0.46 で追加されました。</dd>
 	 * </dl>
 	 * 第2引数にリンクラベルを直接指定することもできます。この場合、オプション配列は第3引数に指定します。
 	 *
@@ -1386,7 +1388,17 @@ class px{
 			$label = htmlspecialchars($label);
 		}
 
-		$rtn = '<a href="'.htmlspecialchars($href).'"'.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes)).'"':'').''.($is_popup?' onclick="window.open(this.href);return false;"':'').'>'.$label.'</a>';
+		// target属性 (2020-05-27 追加)
+		$target = null;
+		if( array_key_exists('target', $options) && strlen($options['target']) ){
+			$target = htmlspecialchars($options['target']);
+		}
+
+		$rtn = '<a href="'.htmlspecialchars($href).'"'
+			.(strlen($target)?' target="'.htmlspecialchars($target).'"':'').''
+			.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes)).'"':'').''
+			.($is_popup?' onclick="window.open(this.href);return false;"':'')
+			.'>'.$label.'</a>';
 		return $rtn;
 	}
 
@@ -1492,7 +1504,7 @@ class px{
 	/**
 	 * DOCUMENT_ROOT のパスを取得する。
 	 *
-	 * pickles2/px-fw-2.x@2.0.29 で `get_path_docroot()` からの名称変更として追加されました。
+	 * Pickles Framework v2.0.29 で `get_path_docroot()` からの名称変更として追加されました。
 	 *
 	 * @return string ドキュメントルートのパス
 	 */
