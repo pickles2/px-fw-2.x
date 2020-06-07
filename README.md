@@ -80,7 +80,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.46 (リリース日未定)
+### Pickles Framework 2.0.46 (2020年6月7日)
 
 - `$px->mk_link()` に `target` オプションを追加。
 
