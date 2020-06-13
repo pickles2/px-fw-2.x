@@ -72,10 +72,13 @@ $ chmod -R 777 ./caches
   - .htaccess が利用可能であること
 - PHP 5.4 以上
   - [mbstring](https://www.php.net/manual/ja/book.mbstring.php) PHP Extension
-  - [ZipArchive](https://www.php.net/manual/ja/class.ziparchive.php) PHP Extension
   - [JSON](https://www.php.net/manual/ja/book.json.php) PHP Extension
   - [PDO](https://www.php.net/manual/ja/book.pdo.php) PHP Extension
   - [PDO SQLite (PDO_SQLITE)](https://www.php.net/manual/ja/ref.pdo-sqlite.php) PHP Extension
+
+プラグインなど他のパッケージとの構成によって、いくつかの要件が追加される場合があります。
+依存パッケージのシステム要件も確認してください。
+
 
 
 ## 更新履歴 - Change log
