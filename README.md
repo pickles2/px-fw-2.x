@@ -83,40 +83,40 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework 2.0.47 (2020年6月21日)
+### Pickles Framework v2.0.47 (2020年6月21日)
 
 - 外部依存パッケージのバージョンを更新。
 
-### Pickles Framework 2.0.46 (2020年6月7日)
+### Pickles Framework v2.0.46 (2020年6月7日)
 
 - `$px->mk_link()` に `target` オプションを追加。
 
-### Pickles Framework 2.0.45 (2020年4月4日)
+### Pickles Framework v2.0.45 (2020年4月4日)
 
 - 外部依存パッケージのバージョンを更新。
 - パブリッシュ時に、開始時刻と終了時刻を `timelog.txt` に記録するようになった。
 
-### Pickles Framework 2.0.44 (2020年1月2日)
+### Pickles Framework v2.0.44 (2020年1月2日)
 
 - PHP 7.4 に対応した。
 - `$_SERVER['REMOTE_ADDR']` がない場合に、 `null` で初期化するようになった。
 - その他、軽微な内部コードの修正。
 
-### Pickles Framework 2.0.43 (2019年12月13日)
+### Pickles Framework v2.0.43 (2019年12月13日)
 
 - `$site->get_path_param()` の引数を省略できない不具合を修正。
 - コマンドラインオプション `--method`、 `--body`、 `--body-file` を追加。
 
-### Pickles Framework 2.0.42 (2019年9月4日)
+### Pickles Framework v2.0.42 (2019年9月4日)
 
 - パブリッシュが2重に起動することがある問題を修正。
 - サイトマップキャッシュに関する内部処理の修正。
 
-### Pickles Framework 2.0.41 (2019年6月8日)
+### Pickles Framework v2.0.41 (2019年6月8日)
 
 - パブリッシュのパラメータ `path_region`、`paths_region`、`paths_ignore` で、各行の先頭にスラッシュを補完するようになった。
 
-### Pickles Framework 2.0.40 (2019年4月19日)
+### Pickles Framework v2.0.40 (2019年4月19日)
 
 - `$site->get_page_originated_csv()` を追加。
 - `PX=api.get.page_originated_csv` を追加。
@@ -124,26 +124,26 @@ $ chmod -R 777 ./caches
 - `encodingconverter` に `ext` オプションを追加。対象の拡張子を制限できるようになった。
 - `$site->get_pdo()` を追加。
 
-### Pickles Framework 2.0.39 (2018年10月19日)
+### Pickles Framework v2.0.39 (2018年10月19日)
 
 - Windows + PHP7 の環境で、CSV ファイルを正しく読み込めない問題に対応した。
 
-### Pickles Framework 2.0.38 (2018年8月30日)
+### Pickles Framework v2.0.38 (2018年8月30日)
 
 - サイトマップの `path` に、 Dataスキーマを扱えるようになった。
 - 特殊なURL(`javascript:`、`data:` など)をパブリッシュしようとしてエラーになる不具合を修正。
 - その他の細かい不具合を修正。
 
-### Pickles Framework 2.0.37 (2018年2月28日)
+### Pickles Framework v2.0.37 (2018年2月28日)
 
 - PHP 7.2 で SCSS のプレビューが失敗する問題を修正。
 - 依存ライブラリ `michelf/php-markdown`, `leafo/scssphp` のバージョンを更新。
 
-### Pickles Framework 2.0.36 (2018年2月15日)
+### Pickles Framework v2.0.36 (2018年2月15日)
 
 - PHP 7.2 で、Warning が発生する問題を修正。
 
-### Pickles Framework 2.0.35 (2018年1月24日)
+### Pickles Framework v2.0.35 (2018年1月24日)
 
 - `$px->canonical()` を追加。
 - `PX=api.get.canonical` を追加。
@@ -151,23 +151,23 @@ $ chmod -R 777 ./caches
 - `$conf->path_files` に、コールバックを設定できるようになった。
 - サイトマップ項目のうち、`id`, `path`, `content`, `logical_path`, `list_flg`, `layout`, `orderby`, `category_top_flg`, `role`, `proc_type` の前後の空白文字列を自動的に削除して扱うようになった。
 
-### Pickles Framework 2.0.34 (2017年11月2日)
+### Pickles Framework v2.0.34 (2017年11月2日)
 
 - [bugfix] .px_execute.php の絶対パス中にスペースが含まれている場合にパブリッシュが正常に処理されない不具合を修正。
 
-### Pickles Framework 2.0.33 (2017年9月21日)
+### Pickles Framework v2.0.33 (2017年9月21日)
 
 - `$site()->get_path_param()` で存在しないキーを要求した場合にエラーが起きる問題を修正した。
 - `$px->internal_sub_request()` が、サブリクエストが発行した標準エラー出力を `$px->error()` に転送するようになった。
 - 新しい設定項目 `$conf->scheme` と、対応するゲッターメソッド `$px->get_scheme()` を追加。
 - その他、軽微な不具合の修正。
 
-### Pickles Framework 2.0.32 (2017年5月30日)
+### Pickles Framework v2.0.32 (2017年5月30日)
 
 - `$_SERVER['HTTP_USER_AGENT']` が存在しない場合、空白文字列で初期化するようになった。
 - パブリッシュ時に、一時パブリッシュディレクトリに存在せずパブリッシュ先ディレクトリに存在する除外設定されたディレクトリが削除されてしまうことがある不具合を修正。
 
-### Pickles Framework 2.0.31 (2017年4月20日)
+### Pickles Framework v2.0.31 (2017年4月20日)
 
 - `$px->internal_sub_request()` を追加。
 - `$px->bowl()->get()` を追加。
@@ -177,12 +177,12 @@ $ chmod -R 777 ./caches
 - プラグインの引数が空白の `()` で記述された場合に、空白文字列ではなく `null` として扱われるように修正。
 - プラグインの引数内に改行コードを受け付けられない不具合を修正。
 
-### Pickles Framework 2.0.30 (2017年3月8日)
+### Pickles Framework v2.0.30 (2017年3月8日)
 
 - `$px->href()` が、 hash を query として置き換えてしまうことがある不具合を修正。
 - `path` に hash や query を持つページを正常にパブリッシュできない不具合を修正。
 
-### Pickles Framework 2.0.29 (2017年2月6日)
+### Pickles Framework v2.0.29 (2017年2月6日)
 
 - サイトマップ項目に `proc_type` を追加。 `$conf->paths_proc_type` と同様の効果だが、サイトマップ上で設定できるようになった。
 - クラス `site`, `bowl`, `pxcmd` のAPIを外部から呼び出せるようにした。
@@ -196,13 +196,13 @@ $ chmod -R 777 ./caches
 - `$px->header()`, `$px->header_list()` を追加。
 - JSONでの出力時(コマンドラインオプション `-o json` 付加時)、 `header` に HTTPヘッダー情報が出力されるようになった。
 
-### Pickles Framework 2.0.28 (2016年12月8日)
+### Pickles Framework v2.0.28 (2016年12月8日)
 
 - Windowsサーバーで、サイトマップキャッシュが排他ロックされて更新に失敗することがある問題を修正。
 - パブリッシュプラグインを `before_sitemap` に設定しても動作するように変更。サイトマップ生成のパフォーマンスが改善する。
 - `$site` が既にセットされている場合に、再生成せずそのまま利用するようになった。実質、 `before_sitemap` に設定したプラグインから `$site` の挙動を変更することが可能になった。
 
-### Pickles Framework 2.0.27 (2016年11月21日)
+### Pickles Framework v2.0.27 (2016年11月21日)
 
 - サイトマップキャッシュ生成中の2件目以降のリクエストに関するパフォーマンスを改善。待ち時間がなくなった。
 - サイトマップキャッシュ生成開始から60分経過しても進捗した形跡がなければ、再生成するようになった。
@@ -211,30 +211,30 @@ $ chmod -R 777 ./caches
 - PXコマンド `PX=publish.version`, `PX=clearcache.version` を追加。
 - パブリッシュ時、エラーを含むページも、削除されずに出力されるようになった。
 
-### Pickles Framework 2.0.26 (2016年10月17日)
+### Pickles Framework v2.0.26 (2016年10月17日)
 
 - サイトマップキャッシュ生成中の2件目以降のリクエストに関するパフォーマンスが改善した。
 - 依存ライブラリ michelf/php-markdown, leafo/scssphp のバージョンを更新。
 - `PX=api` がサイトマップを利用できない場合に、サイトマップ操作のAPIが `false` を返すようになった。
 
-### Pickles Framework 2.0.25 (2016年9月28日)
+### Pickles Framework v2.0.25 (2016年9月28日)
 
 - サイトマップに載っていないファイルを単体でパブリッシュできない不具合を修正。
 - パブリッシュ範囲をファイル単体で指定した場合の、2重拡張子によるファイル名の揺れを吸収するようになった。
 
-### Pickles Framework 2.0.24 (2016年9月22日)
+### Pickles Framework v2.0.24 (2016年9月22日)
 
 - proc_type が `pass` 、 `ignore` の場合に、 `$conf->funcs->before_sitemap`, `$conf->funcs->before_content` に設定されたPXコマンドが実行されるようになった。
 - パブリッシュ範囲に具体的なファイル名を指定した場合のパフォーマンスが向上した。
 
-### Pickles Framework 2.0.23 (2016年8月24日)
+### Pickles Framework v2.0.23 (2016年8月24日)
 
 - パブリッシュのオプション `keep_cache` を追加。キャッシュの消去と再生成のプロセスをスキップできるようになった。
 - パブリッシュのオプション `paths_region` を追加。パブリッシュ対象範囲を複数指定できるようになった。
 - コマンドラインからの起動時にも、 `$_SERVER['DOCUMENT_ROOT']` を使用できるようになった。
 - サイトマップに含まれる外部URLが `/index.html` で終わっている場合に、ページとして正しく処理できない不具合を修正。
 
-### Pickles Framework 2.0.22 (2016年7月27日)
+### Pickles Framework v2.0.22 (2016年7月27日)
 
 - コンフィグ項目 `$conf->paths_enable_sitemap` を追加。
 - `$conf->paths_proc_type` に、新しい処理方法 pass を追加。デフォルトを pass に変更。
@@ -242,7 +242,7 @@ $ chmod -R 777 ./caches
 - 他プロセスがサイトマップキャッシュを生成中にアクセスした場合にサイトマップキャッシュ生成をスキップするアプリケーションロック機能を追加。
 - Windows で Apache 上で実行する場合に、 `$px->get_path_controot()` 等のパスがずれてしまう不具合を修正。
 
-### Pickles Framework 2.0.21 (2016年7月14日)
+### Pickles Framework v2.0.21 (2016年7月14日)
 
 - `$conf->paths_proc_type` の設定を、前方マッチから完全マッチに変更。 ディレクトリの指定等は、ワイルドカード `*` を使って表現する方針で統一。
 - `PX=publish` に、パブリッシュ対象外のパスをコンフィグオプションで設定できる機能を追加。 (コマンドラインオプションで除外する方法は従来から存在していた)
@@ -253,46 +253,46 @@ $ chmod -R 777 ./caches
 - サイトマップ解析時に、Libre Office, Open Office 形式の一時ファイルを無視するように変更。
 - その他の細かい不具合修正。
 
-### Pickles Framework 2.0.20 (2016年4月7日)
+### Pickles Framework v2.0.20 (2016年4月7日)
 
 - サイトマップCSVの定義列がアスタリスク始まりではない(または空欄)の列がある場合、定義行が存在しないとみなしてしまう問題を修正。
 
-### Pickles Framework 2.0.19 (2016年3月15日)
+### Pickles Framework v2.0.19 (2016年3月15日)
 
 - コンフィグ項目 $conf->copyright を追加。
 
-### Pickles Framework 2.0.18 (2016年2月22日)
+### Pickles Framework v2.0.18 (2016年2月22日)
 
 - パブリッシュオプション paths_ignore に指定したパスが、パブリッシュディレクトリから削除されてしまう不具合を修正。
 
-### Pickles Framework 2.0.17 (2016年2月18日)
+### Pickles Framework v2.0.17 (2016年2月18日)
 
 - 範囲指定したパブリッシュのディレクトリスキャンにかかるパフォーマンスを改善。
 - ?PX=publish のオプション paths_ignore を追加。
 
-### Pickles Framework 2.0.16 (2016年1月2日)
+### Pickles Framework v2.0.16 (2016年1月2日)
 
 - パブリッシュ実行中に、パブリッシュ先ディレクトリに都度コピーする機能が無効になる場合がある不具合を修正。
 - その他、軽微な不具合の修正。
 
-### Pickles Framework 2.0.15 (2015年11月9日)
+### Pickles Framework v2.0.15 (2015年11月9日)
 
 - Actor機能追加。
 - pickles.php と px.php を分離。テストを書きやすくするための配慮により。
 - パブリッシュ時、サイトマップ上でプロトコル名、またはドメイン名から始まるリンク先の場合はスキップするように変更。
 
-### Pickles Framework 2.0.14 (2015年10月23日)
+### Pickles Framework v2.0.14 (2015年10月23日)
 
 - Markdownプロセッサーが、head と foot を処理しないように変更。
 - .ignore を含むパスへのリクエストを、.htaccess で除外するように変更。
 
-### Pickles Framework 2.0.13 (2015年9月4日)
+### Pickles Framework v2.0.13 (2015年9月4日)
 
 - サイトマップキャッシュに SQLite を導入。ページ数の多いサイトの処理が高速化。
 - デフォルトで bowl "foot" の定義を新たに追加。
 - サイトマップに、サイト外のURLを組み込めるようになった。
 
-### Pickles Framework 2.0.12 (2015年8月3日)
+### Pickles Framework v2.0.12 (2015年8月3日)
 
 - $conf->path_files を追加。
 - $conf->default_timezone を追加。
@@ -300,7 +300,7 @@ $ chmod -R 777 ./caches
 - コマンドラインオプション --command-php, -c を追加。
 - その他、不具合の修正など。
 
-### Pickles Framework 2.0.11 (2015年7月2日)
+### Pickles Framework v2.0.11 (2015年7月2日)
 
 - パブリッシュに時間が掛かり過ぎるときに、タイムアウトが発生して途中終了することがある不具合を修正。
 - パブリッシュログに ファイルサイズ と ファイル個々にの処理にかかった時間(microtime) を記載するようになった。
