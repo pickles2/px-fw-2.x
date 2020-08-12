@@ -154,7 +154,10 @@ class px{
 		}elseif( is_file($this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php') ){
 			$this->conf = include( $this->realpath_homedir.DIRECTORY_SEPARATOR.'config.php' );
 		}
-		if( !@is_array($this->conf->paths_enable_sitemap) ){
+		if( !is_object($this->conf) ){
+			$this->conf = (object) $this->conf;
+		}
+		if( !property_exists($this->conf, 'paths_enable_sitemap') || !is_array($this->conf->paths_enable_sitemap) ){
 			// sitemap のロードを有効にするべきパス。
 			$this->conf->paths_enable_sitemap = array(
 				'*.html',
@@ -172,6 +175,15 @@ class px{
 			// NOTE: 2016-03-15 $conf->copyright 追加
 			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
 			$this->conf->copyright = null;
+		}
+		if( !property_exists($this->conf, 'path_phpini') ){
+			$this->conf->path_phpini = null;
+		}
+		if( !property_exists($this->conf, 'commands') ){
+			$this->conf->commands = null;
+		}
+		if( !property_exists($this->conf->commands, 'php') ){
+			$this->conf->commands->php = null;
 		}
 
 		// make instance $bowl
@@ -831,32 +843,33 @@ class px{
 		}
 		if(!strlen($request_path)){ $request_path = '/'; }
 		if(is_null($options)){ $options = array(); }
+		if(!is_array($options)){ $options = (array) $options; }
 		$php_command = array();
 		array_push( $php_command, addslashes($this->conf()->commands->php) );
 			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
 
-		if( strlen(@$this->conf()->path_phpini) ){
+		if( strlen($this->conf()->path_phpini) ){
 			$php_command = array_merge(
 				$php_command,
 				array(
-					'-c', escapeshellarg(@$this->conf()->path_phpini),// ← php.ini のパス
+					'-c', escapeshellarg($this->conf()->path_phpini),// ← php.ini のパス
 				)
 			);
 		}
-		if( strlen(@$this->req()->get_cli_option( '-d' )) ){
+		if( strlen($this->req()->get_cli_option( '-d' )) ){
 			$php_command = array_merge(
 				$php_command,
 				array(
-					'-d', escapeshellarg(@$this->req()->get_cli_option( '-d' )),// ← php.ini definition
+					'-d', escapeshellarg($this->req()->get_cli_option( '-d' )),// ← php.ini definition
 				)
 			);
 		}
 		array_push($php_command, escapeshellarg( realpath($_SERVER['SCRIPT_FILENAME']) ));
-		if( @$options['output'] == 'json' ){
+		if( array_key_exists('output', $options) && $options['output'] == 'json' ){
 			array_push($php_command, '-o');
 			array_push($php_command, 'json');
 		}
-		if( @strlen($options['user_agent']) ){
+		if( array_key_exists('user_agent', $options) && strlen($options['user_agent']) ){
 			array_push($php_command, '-u');
 			array_push($php_command, escapeshellarg($options['user_agent']));
 		}
@@ -888,7 +901,7 @@ class px{
 			$this->error($io[2]); // stderr
 		}
 
-		if( @$options['output'] == 'json' ){
+		if( array_key_exists('output', $options) && $options['output'] == 'json' ){
 			$bin = json_decode($bin);
 		}
 
