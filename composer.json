@@ -14,7 +14,7 @@
             "php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.0.48 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework 2.1.0-alpha.1+dev API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "stable",
@@ -22,7 +22,7 @@
     "repositories": [
     ],
     "require": {
-        "php": ">=5.4.0" ,
+        "php": ">=7.2.0" ,
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo": "*",
@@ -33,7 +33,7 @@
         "leafo/scssphp": "~0.7"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.1" ,
+        "phpunit/phpunit": "~8.5" ,
         "phpdocumentor/phpdocumentor": "^2.9.0"
     },
     "autoload": {

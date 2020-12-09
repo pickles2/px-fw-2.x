@@ -5,6 +5,7 @@ Thumbs.db
 !.gitkeep
 vendor/
 composer.lock
+.phpunit.result.cache
 px-files/_sys/ram/
 !px-files/_sys/ram/applock/.gitkeep
 !px-files/_sys/ram/caches/.gitkeep

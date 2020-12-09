@@ -2,10 +2,10 @@
 /**
  * test for pickles2/px-fw-2.x
  */
-class encodingConverterTest extends PHPUnit_Framework_TestCase{
+class encodingConverterTest extends PHPUnit\Framework\TestCase{
 	private $fs;
 
-	public function setup(){
+	public function setup() : void{
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
 		require_once(__DIR__.'/libs/simple_html_dom.php');
