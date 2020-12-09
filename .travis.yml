@@ -7,10 +7,11 @@ dist: bionic
 jobs:
   include:
     - php: "8.0"
+      dist: bionic
     - php: "7.4"
+      dist: bionic
     - php: "7.3"
-    - php: "7.2"
-      dist: xenial
+      dist: bionic
 
 before_install:
   - composer selfupdate
