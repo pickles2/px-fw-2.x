@@ -87,7 +87,11 @@ $ chmod -R 777 ./caches
 
 - サポート環境をPHP 7.3 以上に変更。 ただし、PHP 5.4 〜 7.2 へのサポートは、引き続き Pickles Framework 2.0.x で継続します。
 
-### Pickles Framework v2.0.49 (リリース日未定)
+### Pickles Framework v2.0.50 (リリース日未定)
+
+- `$px->internal_sub_request()` に、新しいオプション `method`、 `body`、 `body_file` を追加。
+
+### Pickles Framework v2.0.49 (2020年12月19日)
 
 - 内部コードの細かい改善。
 

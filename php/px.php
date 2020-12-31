@@ -865,14 +865,35 @@ class px{
 			);
 		}
 		array_push($php_command, escapeshellarg( realpath($_SERVER['SCRIPT_FILENAME']) ));
+
+		// 出力形式
 		if( array_key_exists('output', $options) && $options['output'] == 'json' ){
 			array_push($php_command, '-o');
 			array_push($php_command, 'json');
 		}
+
+		// USER_AGENT
 		if( array_key_exists('user_agent', $options) && strlen($options['user_agent']) ){
 			array_push($php_command, '-u');
 			array_push($php_command, escapeshellarg($options['user_agent']));
 		}
+
+		// Request Method
+		if( array_key_exists('method', $options) && strlen($options['method']) ){
+			array_push($php_command, '--method');
+			array_push($php_command, escapeshellarg($options['method']));
+		}
+
+		// Request Body
+		if( array_key_exists('body', $options) && strlen($options['body']) ){
+			array_push($php_command, '--body');
+			array_push($php_command, escapeshellarg($options['body']));
+		}
+		if( array_key_exists('body_file', $options) && strlen($options['body_file']) ){
+			array_push($php_command, '--body-file');
+			array_push($php_command, escapeshellarg($options['body_file']));
+		}
+
 		if( realpath('/') == '/' ){
 			// Linux
 			array_push($php_command, escapeshellarg($request_path));
