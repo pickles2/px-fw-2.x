@@ -602,9 +602,6 @@ class site{
 
 		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
-			try{
-				$tmp_pdo->query('DROP TABLE sitemap;');//既にDBが存在する場合を想定して、テーブルの内容を消去する
-			}catch(Exception $e){}
 			$tmp_db_column_defs = array();
 			foreach( $sitemap_definition as $sitemap_definition_key ){
 				$tmp_db_column_def = $sitemap_definition_key;
