@@ -86,6 +86,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework v2.0.50 (リリース日未定)
 
 - `$px->internal_sub_request()` に、新しいオプション `method`、 `body`、 `body_file` を追加。
+- コマンドラインオプション `--method`、 `--body`、 `--body-file` の処理に関する不具合の修正。
 
 ### Pickles Framework v2.0.49 (2020年12月19日)
 
