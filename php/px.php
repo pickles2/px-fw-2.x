@@ -190,31 +190,38 @@ class px{
 		$this->bowl = new bowl();
 
 		// Apply command-line option "--command-php"
-		$req = new \tomk79\request();
-		if( strlen($req->get_cli_option( '--command-php' )) ){
-			$this->conf->commands->php = $req->get_cli_option( '--command-php' );
+		$temporary_req = new \tomk79\request();
+		if( strlen($temporary_req->get_cli_option( '--command-php' )) ){
+			$this->conf->commands->php = $temporary_req->get_cli_option( '--command-php' );
 		}
-		if( strlen($req->get_cli_option( '-c' )) ){
-			$this->conf->path_phpini = $req->get_cli_option( '-c' );
+		if( strlen($temporary_req->get_cli_option( '-c' )) ){
+			$this->conf->path_phpini = $temporary_req->get_cli_option( '-c' );
 		}
-		if( strlen($req->get_cli_option( '--method' )) ){
-			$_SERVER['REQUEST_METHOD'] = strtoupper($req->get_cli_option( '--method' ));
+		if( strlen($temporary_req->get_cli_option( '--method' )) ){
+			$_SERVER['REQUEST_METHOD'] = strtoupper($temporary_req->get_cli_option( '--method' ));
+		}
+		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
+			if( strlen($temporary_req->get_cli_option( '--body-file' )) && is_file($temporary_req->get_cli_option( '--body-file' )) ){
+				parse_str(file_get_contents( $temporary_req->get_cli_option( '--body-file' ) ), $_POST);
+			}elseif( strlen($temporary_req->get_cli_option( '--body' )) ){
+				parse_str($temporary_req->get_cli_option( '--body' ), $_POST);
+			}
 		}
 
 		// make instance $fs
-		$conf = new \stdClass;
-		$conf->file_default_permission = $this->conf->file_default_permission;
-		$conf->dir_default_permission  = $this->conf->dir_default_permission;
-		$conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
-		$this->fs = new \tomk79\filesystem( $conf );
+		$fs_conf = new \stdClass;
+		$fs_conf->file_default_permission = $this->conf->file_default_permission;
+		$fs_conf->dir_default_permission  = $this->conf->dir_default_permission;
+		$fs_conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
+		$this->fs = new \tomk79\filesystem( $fs_conf );
 		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 
 		// make instance $req
-		$conf = new \stdClass;
-		$conf->session_name   = $this->conf->session_name;
-		$conf->session_expire = $this->conf->session_expire;
-		$conf->directory_index_primary = $this->get_directory_index_primary();
-		$this->req = new \tomk79\request( $conf );
+		$req_conf = new \stdClass;
+		$req_conf->session_name   = $this->conf->session_name;
+		$req_conf->session_expire = $this->conf->session_expire;
+		$req_conf->directory_index_primary = $this->get_directory_index_primary();
+		$this->req = new \tomk79\request( $req_conf );
 		if( strlen($this->req->get_cli_option( '-u' )) ){
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
@@ -233,13 +240,6 @@ class px{
 				}
 			}
 			unset( $tmp_cli_params, $tmp_path, $tmp_query );
-		}
-		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
-			if( strlen($this->req->get_cli_option( '--body-file' )) && $this->fs->is_file($this->req->get_cli_option( '--body-file' )) ){
-				parse_str($this->fs()->read_file( $this->req->get_cli_option( '--body-file' ) ), $_POST);
-			}elseif( strlen($this->req->get_cli_option( '--body' )) ){
-				parse_str($this->req->get_cli_option( '--body' ), $_POST);
-			}
 		}
 		if(!count($_REQUEST)){
 			$_REQUEST = $this->req->get_all_params();
