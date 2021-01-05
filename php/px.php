@@ -201,11 +201,21 @@ class px{
 			$_SERVER['REQUEST_METHOD'] = strtoupper($temporary_req->get_cli_option( '--method' ));
 		}
 		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
-			if( strlen($temporary_req->get_cli_option( '--body-file' )) && is_file($temporary_req->get_cli_option( '--body-file' )) ){
-				parse_str(file_get_contents( $temporary_req->get_cli_option( '--body-file' ) ), $_POST);
+			$tmp_body_file = $temporary_req->get_cli_option( '--body-file' );
+			if( strlen($tmp_body_file) ){
+				// ファイルからPOSTパラメータを読み取る
+				if( is_file($this->realpath_homedir.'/_sys/ram/data/'.$tmp_body_file) ){
+					// 先に _sys/ram/data/ の中を探す
+					parse_str(file_get_contents( $this->realpath_homedir.'/_sys/ram/data/'.$tmp_body_file ), $_POST);
+				}elseif( is_file($tmp_body_file) ){
+					// なければ、絶対パスとして探す
+					parse_str(file_get_contents( $tmp_body_file ), $_POST);
+				}
 			}elseif( strlen($temporary_req->get_cli_option( '--body' )) ){
+				// POSTパラメータを直接受け取る
 				parse_str($temporary_req->get_cli_option( '--body' ), $_POST);
 			}
+			unset($tmp_body_file);
 		}
 
 		// make instance $fs
