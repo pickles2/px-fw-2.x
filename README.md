@@ -83,8 +83,9 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.0.50 (リリース日未定)
+### Pickles Framework v2.1.0, v2.0.50 (2021年1月16日)
 
+- Pickles Framework v2.1.x で、サポート環境を PHP 8 を含む PHP 7.3 以上に変更。 PHP 5.4 〜 7.2 へのサポートは、引き続き Pickles Framework v2.0.x で継続します。
 - `$px->internal_sub_request()` に、新しいオプション `method`、 `body`、 `body_file` を追加。
 - コマンドラインオプション `--method`、 `--body`、 `--body-file` の処理に関する不具合の修正。
 - `--body-file` オプションは、 `px-files/_sys/ram/data/` 内を先に検索するようになった。
