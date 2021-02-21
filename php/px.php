@@ -225,6 +225,7 @@ class px{
 		$fs_conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
 		$this->fs = new \tomk79\filesystem( $fs_conf );
 		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
+		$this->realpath_homedir = $this->fs()->normalize_path($this->realpath_homedir);
 
 		// make instance $req
 		$req_conf = new \stdClass;
@@ -1626,6 +1627,7 @@ class px{
 		$rtn = $this->path_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $rtn );
 		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}//realpath_files()
 
@@ -1694,8 +1696,9 @@ class px{
 		}
 		$rtn = $this->path_files_cache( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
-	}//realpath_files_cache()
+	} // realpath_files_cache()
 
 
 	/**
@@ -1726,6 +1729,7 @@ class px{
 		$rtn = $this->fs()->normalize_path( $rtn );
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		$rtn = $this->fs()->get_realpath( $rtn );
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}//realpath_files_private_cache()
 
@@ -1782,6 +1786,7 @@ class px{
 		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
 		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
@@ -1808,6 +1813,7 @@ class px{
 		if( !$this->fs()->is_dir( dirname($rtn) ) ){
 			$this->fs()->mkdir_r( dirname($rtn) );
 		}
+		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
 	}
 
