@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.1, v2.0.51 (リリース日未定)
+
+- Windows環境での、パスの正規化に関する修正。
+
 ### Pickles Framework v2.1.0, v2.0.50 (2021年1月16日)
 
 - Pickles Framework v2.1.x で、サポート環境を PHP 8 を含む PHP 7.3 以上に変更。 PHP 5.4 〜 7.2 へのサポートは、引き続き Pickles Framework v2.0.x で継続します。
