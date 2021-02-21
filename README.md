@@ -85,7 +85,7 @@ $ chmod -R 777 ./caches
 
 ### Pickles Framework v2.1.1, v2.0.51 (リリース日未定)
 
-- Windows環境での、パスの正規化に関する修正。
+- Windows環境での、APIが返すパスの正規化に関する修正。
 
 ### Pickles Framework v2.1.0, v2.0.50 (2021年1月16日)
 

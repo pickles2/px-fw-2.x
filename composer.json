@@ -19,6 +19,9 @@
     } ,
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "config": {
+        "process-timeout": 0
+    },
     "repositories": [
     ],
     "require": {

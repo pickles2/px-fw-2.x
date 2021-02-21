@@ -506,6 +506,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		// -------------------
 		// api.get.realpath_homedir
@@ -519,6 +520,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
@@ -548,6 +550,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		// -------------------
 		// api.get.realpath_docroot
@@ -562,6 +565,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
@@ -619,6 +623,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
@@ -626,6 +631,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/dummypath/sample.png') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
@@ -653,6 +659,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
@@ -660,6 +667,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/dummypath/sample.png') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
@@ -670,6 +678,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		$output = $this->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
@@ -677,6 +686,7 @@ class apiTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/dummypath/sample.png') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------

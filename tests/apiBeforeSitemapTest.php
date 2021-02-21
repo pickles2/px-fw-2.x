@@ -310,6 +310,8 @@ class apiBeforeSitemapTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/apiBeforeSitemap/px-files') );
+		$this->assertFalse( strpos($output, '\\') );
+
 
 		// -------------------
 		// api.get.realpath_homedir
@@ -323,6 +325,7 @@ class apiBeforeSitemapTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/apiBeforeSitemap/px-files') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
@@ -352,6 +355,7 @@ class apiBeforeSitemapTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/apiBeforeSitemap') );
+		$this->assertFalse( strpos($output, '\\') );
 
 		// -------------------
 		// api.get.realpath_docroot
@@ -366,6 +370,7 @@ class apiBeforeSitemapTest extends PHPUnit_Framework_TestCase{
 		$output = json_decode($output);
 		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/apiBeforeSitemap') );
+		$this->assertFalse( strpos($output, '\\') );
 
 
 		// -------------------
