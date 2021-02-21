@@ -153,7 +153,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		// $px->path_files_private_cache() のテスト
 		$fileSrc = file_get_contents( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' );
 		// var_dump($fileSrc);
-		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->normalize_path( $this->fs->get_realpath( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
 
 		// ログファイルを確認
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
@@ -250,7 +250,7 @@ class publishTest extends PHPUnit_Framework_TestCase{
 		// $px->path_files_private_cache() のテスト
 		$fileSrc = file_get_contents( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' );
 		// var_dump($fileSrc);
-		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->get_realpath( $this->fs->normalize_path( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
+		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->normalize_path( $this->fs->get_realpath( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
 
 		// ログファイルを確認
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
