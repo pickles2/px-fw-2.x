@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.2, v2.0.52 (リリース日未定)
+
+- 内部コードの細かい改善。
+
 ### Pickles Framework v2.1.1, v2.0.51 (2021年2月21日)
 
 - APIが返すパスの、Windowsパスに関する環境依存を修正。

@@ -8,6 +8,7 @@ namespace picklesFramework2\theme;
  * theme "pickles" class
  */
 class theme_top{
+
 	/**
 	 * objects
 	 */
@@ -21,9 +22,6 @@ class theme_top{
 	public function __construct( $px, $theme ){
 		$this->px = $px;
 		$this->theme = $theme;
-		// $this->px->path_theme_files('css/common.css');
-		// $this->px->path_theme_files('css/layout.css');
-		// $this->px->path_theme_files('css/modules_custom.css');
 	}//__construct()
 
 
@@ -54,7 +52,7 @@ class theme_top{
 			$colors['black'] = '#fff';
 		}
 		return $colors;
-	}//get_color_scheme()
+	} // get_color_scheme()
 
 	/**
 	 * リンクアイコンのSVGロゴソースを返す。
