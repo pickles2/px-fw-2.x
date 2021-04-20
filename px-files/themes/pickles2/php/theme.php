@@ -8,6 +8,7 @@ namespace picklesFramework2\theme;
  * theme "pickles" class
  */
 class theme{
+
 	/**
 	 * objects
 	 */

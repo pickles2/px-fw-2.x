@@ -40,23 +40,13 @@
         "phpdocumentor/phpdocumentor": "^2.9.0"
     },
     "autoload": {
-        "files": [
-            "php/pickles.php",
-            "php/px.php",
-            "php/bowl.php",
-            "php/pxcmd.php",
-            "php/site.php",
-            "php/commands/api.php",
-            "php/commands/clearcache.php",
-            "php/commands/config.php",
-            "php/commands/phpinfo.php",
-            "php/commands/publish.php",
-            "php/processors/md.php",
-            "php/processors/scss.php",
-            "php/processors/autoindex.php",
-            "php/processors/encodingconverter.php",
-            "php/processors/ssi.php",
-            "px-files/themes/pickles2/php/theme.php"
-        ]
+        "psr-4": {
+            "picklesFramework2\\": [
+                "php"
+            ],
+            "picklesFramework2\\theme\\": [
+                "px-files/themes/pickles2/php"
+            ]
+        }
     }
 }
