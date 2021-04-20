@@ -1,10 +1,15 @@
-.DS_Store
-Thumbs.db
-.~*.csv#
-~$*
+# Composer
 !.gitkeep
 vendor/
 composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
+# PHP Documentor
+.phpdoc
+
+# Pickles Framework
 px-files/_sys/ram/
 !px-files/_sys/ram/applock/.gitkeep
 !px-files/_sys/ram/caches/.gitkeep
@@ -12,3 +17,9 @@ px-files/_sys/ram/
 !px-files/_sys/ram/publish/.gitkeep
 caches/
 !caches/.gitkeep
+
+# Others...
+.DS_Store
+Thumbs.db
+.~*.csv#
+~$*
