@@ -507,7 +507,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 * パブリッシュディレクトリ + 複数のパブリッシュ対象範囲 のテスト
 	 */
 	public function testPublishDirectoryMultiRegionTest(){
-		@$this->fs->rm( __DIR__.'/testData/publish/published/region/' );
+		$this->fs->rm( __DIR__.'/testData/publish/published/region/' );
 
 		// テストデータの操作をテスト
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
