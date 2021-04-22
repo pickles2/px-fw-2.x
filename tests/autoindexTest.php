@@ -2,7 +2,7 @@
 /**
  * test for pickles2/px-fw-2.x
  */
-class autoindexTest extends PHPUnit_Framework_TestCase{
+class autoindexTest extends PHPUnit\Framework\TestCase{
 	private $fs;
 
 	public function setup() : void{
