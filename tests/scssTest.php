@@ -2,11 +2,11 @@
 /**
  * test for pickles2/px-fw-2.x
  */
-class scssTest extends PHPUnit_Framework_TestCase{
+class scssTest extends PHPUnit\Framework\TestCase{
 	private $fs;
 	private $utils;
 
-	public function setup(){
+	public function setup() : void{
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
 		require_once(__DIR__.'/libs/utils.php');

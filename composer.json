@@ -33,7 +33,6 @@
         "tomk79/filesystem": "~1.0",
         "tomk79/request": "~1.0",
         "michelf/php-markdown": "~1.6",
-        "leafo/scssphp": "~0.7",
         "scssphp/scssphp": "^1.4"
     },
     "require-dev": {
