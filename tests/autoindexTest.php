@@ -4,8 +4,9 @@
  */
 class autoindexTest extends PHPUnit_Framework_TestCase{
 	private $fs;
+	private $utils;
 
-	public function setup() : void{
+	public function setup(){
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
 		require_once(__DIR__.'/libs/utils.php');
