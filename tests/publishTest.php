@@ -4,10 +4,13 @@
  */
 class publishTest extends PHPUnit\Framework\TestCase{
 	private $fs;
+	private $utils;
 
 	public function setup() : void{
 		mb_internal_encoding('UTF-8');
 		$this->fs = new tomk79\filesystem();
+		require_once(__DIR__.'/libs/utils.php');
+		$this->utils = new \picklesFramework2\tests\utils();
 	}
 
 
@@ -20,7 +23,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.vertion
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.version' ,
@@ -28,12 +31,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// api.get.config
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.config' ,
@@ -42,26 +45,26 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// publish.version
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.version' ,
 		] );
 		clearstatcache();
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// clearcache.version
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=clearcache.version' ,
 		] );
 		clearstatcache();
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 
@@ -69,7 +72,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.vertion
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=api.get.version' ,
@@ -77,12 +80,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// api.get.config
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=api.get.config' ,
@@ -100,7 +103,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 			__DIR__.'/testData/publish/px2/px-files/config_before_sitemap.php',
 			__DIR__.'/testData/publish/px2/px-files/config.php'
 		);
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run' ,
@@ -108,7 +111,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
 
@@ -187,11 +190,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
 	}//testStandardPublishBeforeSitemap()
@@ -206,7 +209,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 			__DIR__.'/testData/publish/px2/px-files/config_before_content.php',
 			__DIR__.'/testData/publish/px2/px-files/config.php'
 		);
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run' ,
@@ -214,7 +217,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
 
@@ -284,11 +287,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
 	}//testStandardPublishBeforeContent()
@@ -311,7 +314,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 * @depends testBefore
 	 */
 	public function testPublishRegion(){
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/contents/&paths_ignore[]=/contents/path_files_cache_files/test2/&paths_ignore[]=/contents/path_files_cache.html' ,
@@ -319,7 +322,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/templates.ignore/template.html.md' ) );
@@ -332,11 +335,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
 	}//testPublishRegion()
@@ -346,7 +349,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 * @depends testBefore
 	 */
 	public function testPublishRegionWildcard(){
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/ignore/&paths_ignore[]=*.tmp_ig&paths_ignore[]=*/test2.html' ,
@@ -354,7 +357,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/test1.html' ) );
@@ -368,11 +371,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 
 	}//testPublishRegionWildcard()
@@ -383,7 +386,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 * @depends testBefore
 	 */
 	public function testNothingToPublish(){
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/nothing/to/publish/?PX=publish.run' ,
@@ -391,15 +394,15 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 
 		// 後始末
 		// $this->assertTrue( false );
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
 	}//testNothingToPublish()
@@ -417,7 +420,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
 
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run' ,
@@ -425,7 +428,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/new.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
 
@@ -464,7 +467,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/&paths_ignore[]=/' ,
@@ -472,7 +475,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/new.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
 
@@ -490,11 +493,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 
 	}//testPublishDirectoryTest()
@@ -511,7 +514,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
 
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/region1/&paths_region[]=/region/region3/' ,
@@ -519,13 +522,13 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
 
 
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/' ,
@@ -533,7 +536,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		// var_dump($output);
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
@@ -541,11 +544,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 
 	}//testPublishDirectoryMultiRegionTest()
@@ -559,48 +562,48 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	public function testStandardSingleFile(){
 
 		// pass扱いになる txt ファイルをパブリッシュ
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/pass_file.txt' ,
 		] );
 		// var_dump($output);
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/pass_file.txt' ) );
 
 
 		// 2重拡張子のSCSSファイルを単品パブリッシュ(2つ目の拡張子を付けてコール)
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css.scss' ,
 		] );
 		// var_dump($output);
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css' ) );
 
 
 		// 2重拡張子のSCSSファイルを単品パブリッシュ
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css' ,
 		] );
 		// var_dump($output);
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css' ) );
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 	}
@@ -613,7 +616,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	public function testPublishDuringGeneratingSitemapCache(){
 
 		// 一旦キャッシュを消去し、サイトマップキャッシュ生成中を示すロックファイルを作成する。
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		$this->fs->mkdir_r(__DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/');
@@ -624,7 +627,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// サイトマップ生成中にパブリッシュプロセスを発行
 		$memo_time1 = time();
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/index.html&keep_cache=1' ,
@@ -632,7 +635,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$memo_time2 = time();
 		// var_dump($output);
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		// $this->assertTrue( $memo_time2 - $memo_time1 >= 2 ); // 待ち時間はなくすことにした。 2016-10-28 @tomk79
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' ) );
@@ -644,11 +647,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 	}
@@ -660,75 +663,38 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testStandardClearcache(){
 		// トップページを実行
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php',
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/' ,
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/sitemap.array' ) );
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 
 		// 後始末
-		$output = $this->passthru( [
+		$output = $this->utils->passthru( [
 			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
-		$this->assertTrue( $this->common_error( $output ) );
+		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/publish/px2/px-files/_sys/ram/caches/sitemaps/' ) );
 
 		//↓realpathが記載されるため削除
 		unlink( __DIR__.'/testData/publish/published/php_error/notice.html' );
 		unlink( __DIR__.'/testData/publish/published/php_error/warning.html' );
-	}
-
-
-
-
-
-
-	/**
-	 * PHPがエラー吐いてないか確認しておく。
-	 */
-	private function common_error( $output ){
-		if( preg_match('/'.preg_quote('Parse error:', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Fatal error:', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Warning:', '/').'/si', $output) ){ return false; }
-		if( preg_match('/'.preg_quote('Notice:', '/').'/si', $output) ){ return false; }
-		return true;
-	}
-
-
-	/**
-	 * コマンドを実行し、標準出力値を返す
-	 * @param array $ary_command コマンドのパラメータを要素として持つ配列
-	 * @return string コマンドの標準出力値
-	 */
-	private function passthru( $ary_command ){
-		set_time_limit(60*10);
-		$cmd = array();
-		foreach( $ary_command as $row ){
-			$param = escapeshellcmd($row);
-			array_push( $cmd, $param );
-		}
-		$cmd = implode( ' ', $cmd );
-		ob_start();
-		passthru( $cmd );
-		$bin = ob_get_clean();
-		set_time_limit(30);
-		return $bin;
 	}
 
 }
