@@ -16,7 +16,7 @@ environment:
     secure: L7aFaHhJkScePf7T8vMrHn3xtwObmwfSjy36tXMOpb7qY8LXpSeieA6xx1oKiBk9
 
 # branches
-branches:
+#branches:
 #  only:
 #    - main
 #    - develop
