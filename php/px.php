@@ -89,7 +89,7 @@ class px{
 	 * @return string バージョン番号を示す文字列
 	 */
 	public function get_version(){
-		return '2.0.52';
+		return '2.0.53-alpha.1+dev';
 	}
 
 	/**
@@ -1994,6 +1994,7 @@ class px{
 	}
 
 
+
 	/**
 	 * アプリケーションロックする。
 	 *
@@ -2005,7 +2006,7 @@ class px{
 		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
 		$timeout_limit = 5;
 
-		if( !@is_dir( dirname( $lockfilepath ) ) ){
+		if( !$this->fs()->is_dir( dirname( $lockfilepath ) ) ){
 			$this->fs()->mkdir_r( dirname( $lockfilepath ) );
 		}
 
@@ -2029,7 +2030,7 @@ class px{
 		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$RTN = $this->fs()->save_file( $lockfilepath , $src );
 		return	$RTN;
-	} // lock()
+	}
 
 	/**
 	 * アプリケーションロックされているか確認する。
@@ -2053,7 +2054,7 @@ class px{
 			return true;
 		}
 		return false;
-	} // is_locked()
+	}
 
 	/**
 	 * アプリケーションロックを解除する。
@@ -2066,9 +2067,12 @@ class px{
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
+		if( !$this->fs()->is_file( $lockfilepath ) ){
+			return true;
+		}
 
-		return @unlink( $lockfilepath );
-	} // unlock()
+		return unlink( $lockfilepath );
+	}
 
 	/**
 	 * アプリケーションロックファイルの更新日を更新する。
@@ -2081,12 +2085,14 @@ class px{
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
-		if( !is_file( $lockfilepath ) ){
+		if( !$this->fs()->is_file( $lockfilepath ) ){
 			return false;
 		}
 
 		return touch( $lockfilepath );
-	} // touch_lockfile()
+	}
+
+
 
 	/**
 	 * Pickles 2 の SVG ロゴソースを取得する。
@@ -2104,6 +2110,6 @@ class px{
 		$svg_src = file_get_contents( __DIR__.'/files/svg/pickles2-logo.svg' );
 		$svg_src = str_replace( '#000000', htmlspecialchars($logo_color), $svg_src );
 		return $svg_src;
-	}//get_pickles_logo_svg()
+	}
 
 }

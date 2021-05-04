@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.3, v2.0.53 (リリース日未定)
+
+- 内部コードの細かい改善。
+
 ### Pickles Framework v2.1.2, v2.0.52 (2021年4月23日)
 
 - プラグイン `autoindex` で、複数の同名の見出しを含むコンテンツで、アンカー名が重複する場合がある問題を修正。
