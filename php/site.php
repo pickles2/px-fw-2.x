@@ -1221,7 +1221,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 		}
 		$sitemap_page_originated_csv = @include($path_sitemap_cache_dir.'sitemap_page_originated_csv.array');
 		$page_info = $this->get_page_info($path);
-		if( !array_key_exists( $page_info['path'], $sitemap_page_originated_csv ) ){
+		if( !isset($page_info['path']) || !is_array($sitemap_page_originated_csv) || !array_key_exists( $page_info['path'], $sitemap_page_originated_csv ) ){
 			return null;
 		}
 		$rtn = $sitemap_page_originated_csv[$page_info['path']];
