@@ -1602,7 +1602,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info($path);
-		if( !strlen($page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id']) ){
 			//トップページの兄弟はトップページだけ。
 			return array('');
 		}
@@ -1627,7 +1627,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
-		if( !strlen($page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id']) ){
 			//トップページの次の兄弟はいない。
 			return false;
 		}
@@ -1666,7 +1666,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
-		if( !strlen($page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id']) ){
 			//トップページの前の兄弟はいない。
 			return false;
 		}

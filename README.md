@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.4, v2.0.54 (リリース日未定)
+
+- 内部コードの細かい不具合の修正。
+
 ### Pickles Framework v2.1.3, v2.0.53 (2021年5月25日)
 
 - `$px->get_version()` が示す値を、 v2.1系の番号に統一した。
