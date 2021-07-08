@@ -59,6 +59,11 @@ class px{
 	private $errors = array();
 
 	/**
+	 * 言語コード
+	 */
+	private $lang = null;
+
+	/**
 	 * 応答ステータスコード
 	 * @access private
 	 */
@@ -174,6 +179,12 @@ class px{
 		if ( property_exists($this->conf, 'default_timezone') && strlen($this->conf->default_timezone) ) {
 			date_default_timezone_set($this->conf->default_timezone);
 		}
+		if ( !property_exists($this->conf, 'default_lang') || !strlen($this->conf->default_lang) ) {
+			$this->conf->default_lang = 'ja';
+		}
+		if ( !property_exists($this->conf, 'accept_langs') || !is_array($this->conf->accept_langs) ) {
+			$this->conf->accept_langs = array($this->conf->default_lang);
+		}
 		if ( !property_exists($this->conf, 'path_files') || ( !is_callable($this->conf->path_files) && !strlen($this->conf->path_files) ) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
@@ -263,6 +274,18 @@ class px{
 		}
 
 
+		// 言語設定を決める
+		$this->lang = $this->conf->default_lang;
+		$tmp_param_lang = $this->req->get_param("LANG");
+		$tmp_cookie_lang = $this->req->get_cookie("LANG");
+		if( strlen( $tmp_param_lang ) && ( $tmp_param_lang == $this->conf->default_lang || array_search( $tmp_param_lang, $this->conf->accept_langs ) !== false ) ){
+			$this->lang = $tmp_param_lang;
+			$this->req->set_cookie("LANG", $tmp_param_lang);
+		}elseif( strlen($tmp_cookie_lang) ){
+			$this->lang = $tmp_cookie_lang;
+		}
+
+
 		// 公開キャッシュフォルダが存在しない場合、作成する
 		if( property_exists($this->conf, 'public_cache_dir') && strlen($this->conf->public_cache_dir) && !is_dir( './'.$this->conf->public_cache_dir ) ){
 			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
@@ -276,7 +299,7 @@ class px{
 			'/_sys/ram/data/',
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
-			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !@is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
+			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
 				$this->fs()->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
@@ -386,7 +409,9 @@ class px{
 
 
 		// funcs: Before contents
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_content, $this );
+		if( isset( $this->conf->funcs->before_content ) ){
+			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_content, $this );
+		}
 
 
 		// PXコマンドが有効、かつ ignore か pass の場合、
@@ -409,12 +434,16 @@ class px{
 
 
 		// funcs: process functions
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->processor->{$this->proc_type}, $this );
+		if( isset( $this->conf->funcs->processor->{$this->proc_type} ) ){
+			$this->fnc_call_plugin_funcs( $this->conf->funcs->processor->{$this->proc_type}, $this );
+		}
 
 
 
 		// funcs: Before output
-		$this->fnc_call_plugin_funcs( @$this->conf->funcs->before_output, $this );
+		if( isset( $this->conf->funcs->before_output ) ){
+			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_output, $this );
+		}
 
 	}
 
@@ -579,6 +608,33 @@ class px{
 	}
 
 	/**
+	 * 言語コードを取得する
+	 * @return string 言語コード
+	 */
+	public function lang(){
+		return $this->lang;
+	}
+
+	/**
+	 * 言語コードを設定する
+	 * @param string $new_lang 言語コード
+	 * @return boolean 成功時 `true`、 失敗時 `false`
+	 */
+	public function set_lang( $new_lang ){
+		if( !strlen( $new_lang ) ){
+			return false;
+		}
+
+		if( $new_lang != $this->conf->default_lang && array_search( $new_lang, $this->conf->accept_langs ) === false ){
+			return false;
+		}
+
+		$this->lang = $new_lang;
+		$this->req->set_cookie("LANG", $new_lang);
+		return true;
+	}
+
+	/**
 	 * ホームディレクトリの絶対パスを取得する (deprecated)
 	 * このメソッドの使用は推奨されません。
 	 * 代わりに `$px->get_realpath_homedir()` を使用してください。
@@ -645,7 +701,7 @@ class px{
 		}
 		$rtn = '(?:'.implode( '|', $directory_index ).')';
 		return $rtn;
-	}//get_directory_index_preg_pattern()
+	} // get_directory_index_preg_pattern()
 
 	/**
 	 * 最も優先されるインデックスファイル名を得る。
@@ -655,7 +711,7 @@ class px{
 	public function get_directory_index_primary(){
 		$directory_index = $this->get_directory_index();
 		return $directory_index[0];
-	}//get_directory_index_primary()
+	} // get_directory_index_primary()
 
 	/**
 	 * ファイルの処理方法を調べる。
@@ -723,7 +779,9 @@ class px{
 		}
 		$rtn[$path] = 'pass';// <- default
 		return $rtn[$path];
-	}//get_path_proc_type();
+
+	} // get_path_proc_type();
+
 
 	/**
 	 * サイトマップのロードが有効なパスか調べる。
@@ -772,7 +830,9 @@ class px{
 		}
 		$rtn[$path] = false;// <- default
 		return $rtn[$path];
-	}//is_path_enable_sitemap();
+
+	} // is_path_enable_sitemap();
+
 
 	/**
 	 * 除外ファイルか調べる。
@@ -786,7 +846,8 @@ class px{
 			return true;
 		}
 		return false;
-	}//is_ignore_path();
+	}
+
 
 	/**
 	 * デフォルトの MIME Type を取得する。
@@ -837,7 +898,7 @@ class px{
 				$rtn = 'text/plain'; break;
 		}
 		return $rtn;
-	} // get_default_mime_type()
+	}
 
 	/**
 	 * Pickles 2 内部でサブリクエストを発行し、結果を受け取る
@@ -962,6 +1023,7 @@ class px{
 	public function get_status(){
 		return $this->response_status;
 	}
+
 	/**
 	 * response ステータスメッセージを取得する。
 	 *
@@ -1071,7 +1133,7 @@ class px{
 			$rtn = explode('.', $cmd);
 		}
 		return $rtn;
-	}// get_px_command()
+	}
 
 	/**
 	 * コンテンツを実行する。
@@ -1250,7 +1312,7 @@ class px{
 		}
 
 		return $path;
-	}//href()
+	} // href()
 
 	/**
 	 * リンク先の正式なURLを生成する。
@@ -1280,7 +1342,7 @@ class px{
 			return $href;
 		}
 		return $scheme.'://'.$domain.$href;
-	}//canonical()
+	} // canonical()
 
 	/**
 	 * リンクタグ(aタグ)を生成する。
@@ -1457,7 +1519,7 @@ class px{
 			.($is_popup?' onclick="window.open(this.href);return false;"':'')
 			.'>'.$label.'</a>';
 		return $rtn;
-	}
+	} // mk_link()
 
 	/**
 	 * スキーマ名を取得する。
@@ -1621,7 +1683,7 @@ class px{
 		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		return $rtn;
-	}//path_files()
+	} // path_files()
 
 	/**
 	 * ローカルリソースディレクトリのサーバー内部パスを得る。
@@ -1635,7 +1697,7 @@ class px{
 		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
-	}//realpath_files()
+	}
 
 	/**
 	 * ローカルリソースのキャッシュのパスを得る。
@@ -1683,7 +1745,7 @@ class px{
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		$this->add_relatedlink($rtn);
 		return $rtn;
-	}//path_files_cache()
+	}
 
 	/**
 	 * ローカルリソースのキャッシュディレクトリのサーバー内部パスを得る。
@@ -1704,7 +1766,7 @@ class px{
 		$rtn = $this->fs()->get_realpath( $this->get_realpath_docroot().$rtn );
 		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
-	} // realpath_files_cache()
+	}
 
 
 	/**
@@ -1737,7 +1799,7 @@ class px{
 		$rtn = $this->fs()->get_realpath( $rtn );
 		$rtn = $this->fs()->normalize_path($rtn);
 		return $rtn;
-	}//realpath_files_private_cache()
+	}
 
 	/**
 	 * プラグイン別公開キャッシュのパスを得る。
@@ -1934,7 +1996,7 @@ class px{
 			$path_type = false;
 		}
 		return $path_type;
-	}//get_path_type()
+	}
 
 
 

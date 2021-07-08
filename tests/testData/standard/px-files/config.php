@@ -10,6 +10,8 @@ return call_user_func( function(){
 	$conf->scheme = 'http'; // スキーマ
 	$conf->domain = 'pickles2.pxt.jp'; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
+	$conf->default_lang = 'ja'; // デフォルトの言語
+	$conf->accept_langs = array('en'); // 対応するの言語
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
