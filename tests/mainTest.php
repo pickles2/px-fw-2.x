@@ -31,6 +31,12 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $px->get_scheme(), 'http' );
 		$this->assertEquals( $px->get_domain(), 'pickles2.pxt.jp' );
 
+		$this->assertEquals( $px->lang(), 'ja' );
+		$this->assertEquals( $px->set_lang('undefined-lang'), false );
+		$this->assertEquals( $px->lang(), 'ja' );
+		$this->assertEquals( $px->set_lang('en'), true );
+		$this->assertEquals( $px->lang(), 'en' );
+
 
 		// サブリクエストでキャッシュを消去
 		$output = $px->internal_sub_request(

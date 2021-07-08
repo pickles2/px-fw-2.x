@@ -16,6 +16,15 @@ return call_user_func( function(){
 	$conf->name = 'Pickles Framework 2';
 	/** コピーライト表記 */
 	$conf->copyright = 'Pickles Project';
+	/** デフォルトの言語 */
+	$conf->default_lang = 'ja';
+	/** 対応する言語 */
+	$conf->accept_langs = array(
+		'ja',
+		'en',
+		'zh-CN',
+		'zh-TW',
+	);
 	/**
 	 * スキーマ
 	 * 本番環境のスキーマ
