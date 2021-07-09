@@ -536,6 +536,16 @@ Search.appendIndex(
             "summary": "\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
             "url": "classes/picklesFramework2-px.html#property_conf"
         },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024lang",
+            "name": "lang",
+            "summary": "\u8A00\u8A9E\u30B3\u30FC\u30C9",
+            "url": "classes/picklesFramework2-px.html#property_lang"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Aset_lang\u0028\u0029",
+            "name": "set_lang",
+            "summary": "\u8A00\u8A9E\u30B3\u30FC\u30C9\u3092\u8A2D\u5B9A\u3059\u308B",
+            "url": "classes/picklesFramework2-px.html#method_set_lang"
+        },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003Aget_path_homedir\u0028\u0029",
             "name": "get_path_homedir",
             "summary": "\u30DB\u30FC\u30E0\u30C7\u30A3\u30EC\u30AF\u30C8\u30EA\u306E\u7D76\u5BFE\u30D1\u30B9\u3092\u53D6\u5F97\u3059\u308B\u0020\u0028deprecated\u0029\n\u3053\u306E\u30E1\u30BD\u30C3\u30C9\u306E\u4F7F\u7528\u306F\u63A8\u5968\u3055\u308C\u307E\u305B\u3093\u3002\n\u4EE3\u308F\u308A\u306B\u0020\u0060\u0024px\u002D\u003Eget_realpath_homedir\u0028\u0029\u0060\u0020\u3092\u4F7F\u7528\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
