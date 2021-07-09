@@ -1165,10 +1165,10 @@ class px{
 	public function get_contents_manifesto(){
 		$px = $this;
 		$rtn = '';
-		if( !strlen( @$this->conf()->contents_manifesto ) ){
+		if( !isset( $this->conf()->contents_manifesto ) || !strlen( $this->conf()->contents_manifesto ) ){
 			return '';
 		}
-		$realpath = $this->get_realpath_docroot().$this->href( @$this->conf()->contents_manifesto );
+		$realpath = $this->get_realpath_docroot().$this->href( $this->conf()->contents_manifesto );
 		if( !$this->fs()->is_file( $realpath ) ){
 			return '';
 		}
@@ -1184,11 +1184,11 @@ class px{
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
-		if( !strlen( @$_SERVER['HTTP_USER_AGENT'] ) ){
+		if( !isset( $_SERVER['HTTP_USER_AGENT'] ) || !strlen( $_SERVER['HTTP_USER_AGENT'] ) ){
 			// UAが空白なら パブリッシュツール
 			return true;
 		}
-		if( preg_match( '/PicklesCrawler/', @$_SERVER['HTTP_USER_AGENT'] ) ){
+		if( preg_match( '/PicklesCrawler/', $_SERVER['HTTP_USER_AGENT'] ) ){
 			// "PicklesCrawler" が含まれていたら パブリッシュツール
 			return true;
 		}
@@ -1227,21 +1227,29 @@ class px{
 	 */
 	public function href( $linkto ){
 		$parsed_url = parse_url($linkto);
+		if( !array_key_exists('path', $parsed_url) ){
+			$parsed_url['path'] = '';
+		}
 		$tmp_page_info_by_id = null;
+
 		if( $this->site() !== false ){
 			$tmp_page_info_by_id = $this->site()->get_page_info_by_id($linkto);
 			if( !$tmp_page_info_by_id ){
-				$tmp_page_info_by_id = $this->site()->get_page_info_by_id(@$parsed_url['path']);
+				$tmp_page_info_by_id = $this->site()->get_page_info_by_id($parsed_url['path']);
 			}
 		}
+
 		$path = $linkto;
 		$path_type = false;
 		$path_type = $this->get_path_type( $linkto );
 		if(
 			is_array($tmp_page_info_by_id) && array_key_exists('id', $tmp_page_info_by_id) && 
-			(@$tmp_page_info_by_id['id'] == $linkto || @$tmp_page_info_by_id['id'] == @$parsed_url['path'])
+			($tmp_page_info_by_id['id'] == $linkto || $tmp_page_info_by_id['id'] == $parsed_url['path'])
 		){
-			$path = @$tmp_page_info_by_id['path'];
+			if( !array_key_exists('path', $tmp_page_info_by_id) ){
+				$tmp_page_info_by_id['path'] = null;
+			}
+			$path = $tmp_page_info_by_id['path'];
 			$path_type = $this->get_path_type( $path );
 		}
 		unset($tmp_page_info_by_id);
@@ -1249,6 +1257,7 @@ class px{
 		if( preg_match( '/^alias[0-9]*\:(.+)/' , $path , $tmp_matched ) ){
 			//  エイリアスを解決
 			$path = $tmp_matched[1];
+
 		}elseif( $path_type == 'dynamic' ){
 			//  ダイナミックパスをバインド
 			// $sitemap_dynamic_path = $this->site()->get_dynamic_path_info( $linkto );
@@ -1282,6 +1291,7 @@ class px{
 			case 'javascript':
 			case 'anchor':
 				break;
+
 			default:
 				// apply normalize_path()
 				$path = $tmp_path;
@@ -1300,15 +1310,16 @@ class px{
 				// パラメータを、引数の生の状態に戻す。
 				if( array_key_exists('query', $parsed_url) && strlen($parsed_url['query']) ){
 					$path .= '?'.$parsed_url['query'];
-				}elseif( array_key_exists('query', $parsed_url_fin) && strlen(@$parsed_url_fin['query']) ){
-					$path .= '?'.@$parsed_url_fin['query'];
+				}elseif( array_key_exists('query', $parsed_url_fin) && strlen($parsed_url_fin['query']) ){
+					$path .= '?'.$parsed_url_fin['query'];
 				}
 				if( array_key_exists('fragment', $parsed_url) && strlen($parsed_url['fragment']) ){
 					$path .= '#'.$parsed_url['fragment'];
-				}elseif( array_key_exists('fragment', $parsed_url_fin) && strlen(@$parsed_url_fin['fragment']) ){
-					$path .= '#'.@$parsed_url_fin['fragment'];
+				}elseif( array_key_exists('fragment', $parsed_url_fin) && strlen($parsed_url_fin['fragment']) ){
+					$path .= '#'.$parsed_url_fin['fragment'];
 				}
 				break;
+
 		}
 
 		return $path;
@@ -1334,15 +1345,24 @@ class px{
 			$linkto = $this->site()->get_current_page_info('id');
 		}
 		$href = $this->href( $linkto );
-		$scheme = @$this->conf()->scheme;
+
+		$scheme = null;
+		if( isset($this->conf()->scheme) ){
+			$scheme = $this->conf()->scheme;
+		}
 		if( !strlen($scheme) ){ $scheme = 'http'; }
-		$domain = @$this->conf()->domain;
+
+		$domain = null;
+		if( isset($this->conf()->domain) ){
+			$domain = $this->conf()->domain;
+		}
 		if( !strlen($domain) ){
 			$this->error('Config "domain" is required.');
 			return $href;
 		}
+
 		return $scheme.'://'.$domain.$href;
-	} // canonical()
+	}
 
 	/**
 	 * リンクタグ(aタグ)を生成する。
@@ -1813,7 +1833,7 @@ class px{
 	 * @return string 公開キャッシュのパス
 	 */
 	public function path_plugin_files( $localpath_resource = null ){
-		if( !strlen( @$this->conf()->public_cache_dir ) ){
+		if( !isset( $this->conf()->public_cache_dir ) || !strlen( $this->conf()->public_cache_dir ) ){
 			return false;
 		}
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
