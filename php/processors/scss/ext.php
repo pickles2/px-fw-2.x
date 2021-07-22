@@ -12,8 +12,14 @@ class ext{
 	/**
 	 * 変換処理の実行
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options オプション
 	 */
-	public static function exec( $px ){
+	public static function exec( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
+
 		foreach( $px->bowl()->get_keys() as $key ){
 			$src = $px->bowl()->pull( $key );
 

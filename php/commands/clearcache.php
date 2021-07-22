@@ -34,8 +34,14 @@ class clearcache{
 	/**
 	 * Starting function
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options プラグイン設定
 	 */
-	public static function register( $px ){
+	public static function register( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
+
 		$px->pxcmd()->register('clearcache', function($px){
 			(new self( $px ))->kick();
 			exit;

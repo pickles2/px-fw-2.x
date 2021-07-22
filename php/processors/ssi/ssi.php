@@ -17,8 +17,14 @@ class ssi{
 	/**
 	 * Starting function
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options オプション
 	 */
-	public static function exec( $px ){
+	public static function exec( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
+
 		$me = new self( $px );
 		$px->bowl()->each( array($me, 'apply') );
 	}

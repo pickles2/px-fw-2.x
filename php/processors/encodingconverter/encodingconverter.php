@@ -46,7 +46,12 @@ class encodingconverter{
 	 * 
 	 * どちらにも設定がない場合、encodingconverter は変換を実行しません。
 	 */
-	public static function exec( $px, $options = null ){
+	public static function exec( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
+
 		$me = new self( $px, $options );
 		$px->bowl()->each( array($me, 'apply') );
 	}
