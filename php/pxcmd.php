@@ -139,7 +139,7 @@ class pxcmd{
 		<title><?= htmlspecialchars( $this->px->conf()->name ) ?></title>
 
 		<!-- jQuery -->
-		<script src="<?= htmlspecialchars( $path_pxcache.'scripts/jquery-1.10.1.min.js' ); ?>" type="text/javascript"></script>
+		<script src="<?= htmlspecialchars( $path_pxcache.'scripts/jquery-3.6.0.min.js' ); ?>" type="text/javascript"></script>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="<?= htmlspecialchars( $path_pxcache.'styles/bootstrap/css/bootstrap.min.css' ); ?>">

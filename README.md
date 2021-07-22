@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.5, v2.0.55 (リリース日未定)
+
+- 同梱のプラグインが、より直接的な表現で設定できるようになった。
+
 ### Pickles Framework v2.1.4, v2.0.54 (2021年7月10日)
 
 - 新しいコンフィグ項目 `$conf->default_lang`、 `$conf->accept_langs` を追加。

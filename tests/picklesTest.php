@@ -705,5 +705,39 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 	} // testProcType()
 
+	/**
+	 * プラグインメソッドを `config.php` から直接的な呼び出し方で設定するテスト
+	 */
+	public function testGettingPluginsName(){
+		$this->assertEquals( \picklesFramework2\processors\ssi\ssi::exec(), 'picklesFramework2\processors\ssi\ssi::exec()' );
+		$this->assertEquals( \picklesFramework2\processors\scss\ext::exec(), 'picklesFramework2\processors\scss\ext::exec()' );
+		$this->assertEquals( \picklesFramework2\processors\md\ext::exec(), 'picklesFramework2\processors\md\ext::exec()' );
+		$this->assertEquals( \picklesFramework2\processors\encodingconverter\encodingconverter::exec(), 'picklesFramework2\processors\encodingconverter\encodingconverter::exec()' );
+		$this->assertEquals( \picklesFramework2\processors\autoindex\autoindex::exec(), 'picklesFramework2\processors\autoindex\autoindex::exec()' );
+		$this->assertEquals( \picklesFramework2\commands\publish::register(), 'picklesFramework2\commands\publish::register()' );
+		$this->assertEquals( \picklesFramework2\commands\phpinfo::register(), 'picklesFramework2\commands\phpinfo::register()' );
+		$this->assertEquals( \picklesFramework2\commands\config::register(), 'picklesFramework2\commands\config::register()' );
+		$this->assertEquals( \picklesFramework2\commands\clearcache::register(), 'picklesFramework2\commands\clearcache::register()' );
+		$this->assertEquals( \picklesFramework2\commands\api::register(), 'picklesFramework2\commands\api::register()' );
+
+		// オプションを設定するテスト
+		$options = array(
+			'test' => 1,
+		);
+		$this->assertEquals( \picklesFramework2\commands\publish::register( $options ), 'picklesFramework2\commands\publish::register('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\processors\ssi\ssi::exec( $options ), 'picklesFramework2\processors\ssi\ssi::exec('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\processors\scss\ext::exec( $options ), 'picklesFramework2\processors\scss\ext::exec('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\processors\md\ext::exec( $options ), 'picklesFramework2\processors\md\ext::exec('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\processors\encodingconverter\encodingconverter::exec( $options ), 'picklesFramework2\processors\encodingconverter\encodingconverter::exec('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\processors\autoindex\autoindex::exec( $options ), 'picklesFramework2\processors\autoindex\autoindex::exec('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\commands\publish::register( $options ), 'picklesFramework2\commands\publish::register('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\commands\phpinfo::register( $options ), 'picklesFramework2\commands\phpinfo::register('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\commands\config::register( $options ), 'picklesFramework2\commands\config::register('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\commands\clearcache::register( $options ), 'picklesFramework2\commands\clearcache::register('.json_encode($options).')' );
+		$this->assertEquals( \picklesFramework2\commands\api::register( $options ), 'picklesFramework2\commands\api::register('.json_encode($options).')' );
+
+
+	} // testGettingPluginsName()
+
 
 }

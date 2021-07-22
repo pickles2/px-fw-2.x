@@ -54,7 +54,7 @@ class publish{
 	/**
 	 * Before content function
 	 * @param object $px Picklesオブジェクト
-	 * @param object $json プラグイン設定
+	 * @param object $options プラグイン設定
 	 * ```
 	 * {
 	 * 	"paths_ignore": [
@@ -65,18 +65,21 @@ class publish{
 	 * }
 	 * ```
 	 */
-	public static function register( $px, $json ){
+	public static function register( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
 
 		// プラグイン設定の初期化
-		if( !is_object(@$json) ){
-			$json = json_decode('{}');
+		if( !is_object($options) ){
+			$options = json_decode('{}');
 		}
-		if( !is_array(@$json->paths_ignore) ){
-			$json->paths_ignore = array();
+		if( !isset($options->paths_ignore) || !is_array($options->paths_ignore) ){
+			$options->paths_ignore = array();
 		}
-		// var_dump($json);
 
-		$self = new self( $px, $json );
+		$self = new self( $px, $options );
 
 		$px->pxcmd()->register('publish', array($self, 'exec_home'));
 	}

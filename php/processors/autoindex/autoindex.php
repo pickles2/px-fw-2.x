@@ -23,8 +23,14 @@ class autoindex{
 	 * extensions function
 	 *
 	 * @param object $px Picklesオブジェクト
+	 * @param object $options オプション
 	 */
-	public static function exec( $px ){
+	public static function exec( $px = null, $options = null ){
+
+		if( count(func_get_args()) <= 1 ){
+			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
+		}
+
 		$autoindex = new self( $px );
 
 		//  autoindex
