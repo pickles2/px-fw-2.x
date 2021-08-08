@@ -229,11 +229,6 @@ pre code {
   list-style-type: none;
   display: inline; }
 /**
- * トップページ: ウェルカムボード
- */
-.theme_welcome {
-  /* top.html に実装 */ }
-/**
  * .anchor_links
  */
 .anchor_links {

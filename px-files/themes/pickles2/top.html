@@ -1,23 +1,4 @@
-<?php
-	require_once( __DIR__.'/php/theme_top.php' );
-	$theme_top = new picklesFramework2\theme\theme_top($px, $theme);
-
-	//↓ $page_info にページの情報を格納しています。
-	//	 test::var_dump( $page_info ); で、変数の内容を確認できます。
-	$page_info = $px->site()->get_current_page_info();
-	$colors = $theme_top->get_color_scheme();
-	$test_results = $theme_top->setup_test();
-	$messageBoxSetting = array();
-	$messageBoxSetting['main'] = $colors['main'];
-	$messageBoxSetting['bg'] = '#fff';
-	$messageBoxSetting['radius'] = '1em';
-	if( count($test_results) ){
-		// エラーが検出された場合
-		$messageBoxSetting['main'] = '#ff0000';
-		$messageBoxSetting['bg'] = '#ffeeee';
-		$messageBoxSetting['radius'] = '0px';
-	}
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8" />
@@ -25,46 +6,6 @@
 <?php include(__DIR__.'/inc/headsection.inc'); ?>
 <?= $px->bowl()->get_clean('head') ?>
 
-		<style type="text/css">
-			.theme_welcome{
-				background:#fff;
-				min-height:300px;
-				text-align: center;
-				padding:20px 1em 0;
-			}
-			.theme_welcome .theme_welcome-inner{
-				width:auto;
-				max-width:900px;
-				margin:0 auto;
-				padding:0;
-			}
-			.theme_welcome .theme_welcome-title{
-				color: <?php print htmlspecialchars($colors['link']); ?>;
-				font-weight:bold;
-				font-size:xx-large;
-				margin:1em 0 0.5em 0;
-			}
-			.theme_welcome .theme_welcome-message{
-				color: <?php print $messageBoxSetting['main']; ?>;
-				border:2px solid <?php print $messageBoxSetting['main']; ?>;
-				background-color: <?php print $messageBoxSetting['bg']; ?>;
-				border-radius: <?php print $messageBoxSetting['radius']; ?>;
-				padding:0.5em 1em;
-				max-width:680px;
-				margin:0 auto 10px auto;
-			}
-			.theme_welcome .theme_welcome-message *{
-				margin-top:0;
-				margin-bottom:0;
-			}
-			.theme_welcome .theme_welcome-message ul{
-				text-align:left;
-				word-break:break-all;
-			}
-			.theme_welcome .theme_welcome-image_everyone{
-				text-align:center;
-			}
-		</style>
 	</head>
 	<body>
 		<header class="theme_header" id="page_top">
@@ -72,19 +13,6 @@
 				<h1 class="theme_si"><?= htmlspecialchars( $px->conf()->name ) ?></h1>
 			</div>
 		</header>
-		<div class="theme_welcome">
-			<div class="theme_welcome-inner">
-				<p class="theme_welcome-title"><?php print $theme_top->create_src_welcome_svg(); ?></p>
-				<div class="theme_welcome-body clearfix">
-					<div class="theme_welcome-message">
-						<?php print $theme_top->mk_setup_test( $test_results ); ?>
-					</div>
-					<?php if( !count($test_results) ){ ?>
-						<div class="theme_welcome-image_everyone"><img src="<?php print $px->path_plugin_files('images/everyone.png'); ?>" alt="" /></div>
-					<?php } ?>
-				</div>
-			</div>
-		</div><!-- /.theme_welcome -->
 		<div class="theme_mainblock">
 			<div class="container">
 				<div class="contents">
