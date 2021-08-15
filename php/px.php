@@ -758,7 +758,7 @@ class px{
 			return $rtn[$path];
 		}
 
-		$realpath_controot = $this->fs()->normalize_path( $this->fs()->get_realpath( $this->get_path_docroot().$this->get_path_controot() ) );
+		$realpath_controot = $this->fs()->normalize_path( $this->fs()->get_realpath( $this->get_realpath_docroot().$this->get_path_controot() ) );
 		foreach( $this->conf->paths_proc_type as $row => $type ){
 			if(!is_string($row)){continue;}
 			$preg_pattern = preg_quote($this->fs()->normalize_path($this->fs()->get_realpath($row)), '/');
