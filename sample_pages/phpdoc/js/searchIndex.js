@@ -1291,51 +1291,6 @@ Search.appendIndex(
             "summary": "Pickles\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
             "url": "classes/picklesFramework2-processors-ssi-ssi.html#property_px"
         },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top",
-            "name": "theme_top",
-            "summary": "theme\u0020\u0022pickles\u0022\u0020class",
-            "url": "classes/picklesFramework2-theme-theme-top.html"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "constructor",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method___construct"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003Aget_color_scheme\u0028\u0029",
-            "name": "get_color_scheme",
-            "summary": "\u30AB\u30E9\u30FC\u30B9\u30AD\u30FC\u30E0\u3092\u53D6\u5F97",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method_get_color_scheme"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003Acreate_src_link_icon_uri\u0028\u0029",
-            "name": "create_src_link_icon_uri",
-            "summary": "\u30EA\u30F3\u30AF\u30A2\u30A4\u30B3\u30F3\u306ESVG\u30ED\u30B4\u30BD\u30FC\u30B9\u3092\u8FD4\u3059\u3002",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method_create_src_link_icon_uri"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003Acreate_src_welcome_svg\u0028\u0029",
-            "name": "create_src_welcome_svg",
-            "summary": "welcome\u30A4\u30E1\u30FC\u30B8\u306E\u30BD\u30FC\u30B9\u3092\u8FD4\u3059\u3002",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method_create_src_welcome_svg"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003Asetup_test\u0028\u0029",
-            "name": "setup_test",
-            "summary": "\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u3092\u691C\u8A3C\u3059\u308B",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method_setup_test"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003Amk_setup_test\u0028\u0029",
-            "name": "mk_setup_test",
-            "summary": "\u30BB\u30C3\u30C8\u30A2\u30C3\u30D7\u691C\u8A3C\u7D50\u679C\u3092\u8868\u793A\u3059\u308B",
-            "url": "classes/picklesFramework2-theme-theme-top.html#method_mk_setup_test"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003A\u0024px",
-            "name": "px",
-            "summary": "objects",
-            "url": "classes/picklesFramework2-theme-theme-top.html#property_px"
-        },                {
-            "fqsen": "\\picklesFramework2\\theme\\theme_top\u003A\u003A\u0024theme",
-            "name": "theme",
-            "summary": "objects",
-            "url": "classes/picklesFramework2-theme-theme-top.html#property_theme"
-        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
