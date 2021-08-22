@@ -66,8 +66,8 @@ install:
 
 
 build_script:
-  - php composer.phar install
   - php composer.phar global require symfony/flex
+  - php composer.phar install
   - php vendor\phpunit\phpunit\phpunit
 
 
