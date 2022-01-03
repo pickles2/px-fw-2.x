@@ -1524,18 +1524,18 @@ class px{
 		if( !array_key_exists('no_escape', $options) || !@$options['no_escape'] ){
 			// no_escape(エスケープしない)指示がなければ、
 			// HTMLをエスケープする。
-			$label = htmlspecialchars(''.$label);
+			$label = htmlspecialchars(''.$label, ENT_COMPAT);
 		}
 
 		// target属性 (2020-05-27 追加)
 		$target = null;
 		if( array_key_exists('target', $options) && strlen(''.$options['target']) ){
-			$target = htmlspecialchars(''.$options['target']);
+			$target = htmlspecialchars(''.$options['target'], ENT_COMPAT);
 		}
 
-		$rtn = '<a href="'.htmlspecialchars(''.$href).'"'
-			.(strlen(''.$target)?' target="'.htmlspecialchars(''.$target).'"':'').''
-			.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes)).'"':'').''
+		$rtn = '<a href="'.htmlspecialchars(''.$href, ENT_COMPAT).'"'
+			.(strlen(''.$target)?' target="'.htmlspecialchars(''.$target, ENT_COMPAT).'"':'').''
+			.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes), ENT_COMPAT).'"':'').''
 			.($is_popup?' onclick="window.open(this.href);return false;"':'')
 			.'>'.$label.'</a>';
 		return $rtn;
@@ -2199,7 +2199,7 @@ class px{
 			$logo_color = $opt['color'];
 		}
 		$svg_src = file_get_contents( __DIR__.'/files/svg/pickles2-logo.svg' );
-		$svg_src = str_replace( '#000000', htmlspecialchars(''.$logo_color), $svg_src );
+		$svg_src = str_replace( '#000000', htmlspecialchars(''.$logo_color, ENT_COMPAT), $svg_src );
 		return $svg_src;
 	}
 
