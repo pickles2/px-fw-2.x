@@ -123,8 +123,8 @@ class publish{
 			return true;
 		};
 		$param_path_region = $this->px->req()->get_param('path_region');
-		$param_path_region = preg_replace( '/^\\/*/is', '/', $param_path_region ); // 先頭がスラッシュじゃない場合は追加する
-		if( strlen( $param_path_region ) && $param_path_region != $path_region && $func_check_param_path( $param_path_region ) ){
+		$param_path_region = preg_replace( '/^\\/*/is', '/', ''.$param_path_region ); // 先頭がスラッシュじゃない場合は追加する
+		if( strlen( ''.$param_path_region ) && $param_path_region != $path_region && $func_check_param_path( $param_path_region ) ){
 			$path_region = $param_path_region;
 		}
 		$this->paths_region = array( $path_region );
@@ -223,7 +223,7 @@ class publish{
 			$this->exec_publish( $px );
 			exit;
 		}
-		if( @strlen($pxcmd[1]) ){
+		if( @strlen(''.$pxcmd[1]) ){
 			// 命令が不明の場合、エラーを表示する。
 			if( $this->px->req()->is_cmd() ){
 				header('Content-type: text/plain;');
@@ -248,22 +248,22 @@ class publish{
 			if(!is_dir($this->path_tmp_publish)){
 				$html .= '<div class="unit">'."\n";
 				$html .= '	<p class="error">パブリッシュ先一時ディレクトリが存在しません。</p>'."\n";
-				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_tmp_publish ).'</li></ul>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( ''.$this->path_tmp_publish ).'</li></ul>'."\n";
 				$html .= '</div><!-- /.unit -->'."\n";
 			}elseif(!is_writable($this->path_tmp_publish)){
 				$html .= '<div class="unit">'."\n";
 				$html .= '	<p class="error">パブリッシュ先一時ディレクトリに書き込み許可がありません。</p>'."\n";
-				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->path_tmp_publish ).'</li></ul>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( ''.$this->path_tmp_publish ).'</li></ul>'."\n";
 				$html .= '</div><!-- /.unit -->'."\n";
-			}elseif( strlen($this->path_publish_dir) && !is_dir($this->path_publish_dir) ){
+			}elseif( strlen(''.$this->path_publish_dir) && !is_dir($this->path_publish_dir) ){
 				$html .= '<div class="unit">'."\n";
 				$html .= '	<p class="error">パブリッシュ先ディレクトリが存在しません。</p>'."\n";
-				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( ''.$this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
 				$html .= '</div><!-- /.unit -->'."\n";
-			}elseif( strlen($this->path_publish_dir) && !is_writable($this->path_publish_dir) ){
+			}elseif( strlen(''.$this->path_publish_dir) && !is_writable($this->path_publish_dir) ){
 				$html .= '<div class="unit">'."\n";
 				$html .= '	<p class="error">パブリッシュ先ディレクトリに書き込み許可がありません。</p>'."\n";
-				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( $this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
+				$html .= '	<ul><li style="word-break:break-all;">'.htmlspecialchars( ''.$this->px->dbh()->get_realpath( $this->path_publish_dir ).'/' ).'</li></ul>'."\n";
 				$html .= '</div><!-- /.unit -->'."\n";
 			}elseif( $this->is_locked() ){
 				$html .= '<div class="unit">'."\n";
@@ -275,7 +275,7 @@ class publish{
 				$html .= '	<p>'."\n";
 				$html .= '		ロックファイルの内容を下記に示します。<br />'."\n";
 				$html .= '	</p>'."\n";
-				$html .= '	<blockquote><pre>'.htmlspecialchars( $this->px->fs()->read_file( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( ''.$this->px->fs()->read_file( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
 				$html .= '	<p>'."\n";
 				$html .= '		ロックファイルは下記の時刻に更新されました。<br />'."\n";
 				$html .= '	</p>'."\n";
@@ -283,7 +283,7 @@ class publish{
 				$html .= '	<p>'."\n";
 				$html .= '		ロックファイルは、次のパスに存在します。<br />'."\n";
 				$html .= '	</p>'."\n";
-				$html .= '	<blockquote><pre>'.htmlspecialchars( realpath( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( ''.realpath( $this->path_lockfile ) ).'</pre></blockquote>'."\n";
 				$html .= '</div><!-- /.unit -->'."\n";
 			}else{
 				ob_start(); ?>
@@ -299,35 +299,35 @@ function cont_EditPublishTargetPathApply(formElm){
 }
 </script>
 <div class="unit">
-	<p>プロジェクト『<?= htmlspecialchars($this->px->conf()->name) ?>』をパブリッシュします。</p>
+	<p>プロジェクト『<?= htmlspecialchars(''.$this->px->conf()->name) ?>』をパブリッシュします。</p>
 	<table class="def" style="width:100%;">
 		<colgroup><col width="30%" /><col width="70%" /></colgroup>
 		<tr>
 			<th style="word-break:break-all;">publish directory(tmp)</th>
-			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_tmp_publish) ?></td>
+			<td style="word-break:break-all;"><?= htmlspecialchars(''.$this->path_tmp_publish) ?></td>
 		</tr>
 		<tr>
 			<th style="word-break:break-all;">publish directory</th>
-			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_publish_dir) ?></td>
+			<td style="word-break:break-all;"><?= htmlspecialchars(''.$this->path_publish_dir) ?></td>
 		</tr>
 		<tr>
 			<th style="word-break:break-all;">domain</th>
-			<td style="word-break:break-all;"><?= htmlspecialchars($this->domain) ?></td>
+			<td style="word-break:break-all;"><?= htmlspecialchars(''.$this->domain) ?></td>
 		</tr>
 		<tr>
 			<th style="word-break:break-all;">docroot directory</th>
-			<td style="word-break:break-all;"><?= htmlspecialchars($this->path_docroot) ?></td>
+			<td style="word-break:break-all;"><?= htmlspecialchars(''.$this->path_docroot) ?></td>
 		</tr>
 		<tr>
 			<th style="word-break:break-all;">region</th>
 			<td style="word-break:break-all;">
 				<div class="cont_publish_target_path_preview">
-					<div style="word-break:break-all;"><?= htmlspecialchars($this->paths_region[0]) ?></div>
+					<div style="word-break:break-all;"><?= htmlspecialchars(''.$this->paths_region[0]) ?></div>
 					<div class="small"><a href="javascript:cont_EditPublishTargetPath();" class="icon">変更する</a></div>
 				</div>
 				<div class="cont_publish_target_path_editor" style="display:none;">
 					<form action="?" method="get" onsubmit="cont_EditPublishTargetPathApply(this); return false;" class="inline">
-						<input type="text" name="path" size="25" style="max-width:70%;" value="<?= htmlspecialchars($this->paths_region[0]) ?>" />
+						<input type="text" name="path" size="25" style="max-width:70%;" value="<?= htmlspecialchars(''.$this->paths_region[0]) ?>" />
 						<input type="submit" style="width:20%;" value="変更する" />
 					</form>
 				</div>
@@ -339,7 +339,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	<p>次のボタンをクリックしてパブリッシュを実行してください。</p>
 	<form action="?" method="get" target="_blank">
 	<p class="center"><button class="xlarge">パブリッシュを実行する</button></p>
-	<div><input type="hidden" name="PX" value="publish.run" /><input type="hidden" name="path_region" value="<?= htmlspecialchars($this->px->req()->get_param('path_region')) ?>" /></div>
+	<div><input type="hidden" name="PX" value="publish.run" /><input type="hidden" name="path_region" value="<?= htmlspecialchars(''.$this->px->req()->get_param('path_region')) ?>" /></div>
 	</form>
 </div>
 <?php
@@ -592,8 +592,8 @@ function cont_EditPublishTargetPathApply(formElm){
 				// var_dump($row);
 				$tmp_number = '  ['.($key+1).'] ';
 				print $tmp_number;
-				print preg_replace('/(\r\n|\r|\n)/s', '$1'.str_pad('', strlen($tmp_number), ' '), $row[2])."\n";
-				print str_pad('', strlen($tmp_number), ' ').'  in '.$row[1]."\n";
+				print preg_replace('/(\r\n|\r|\n)/s', '$1'.str_pad('', strlen(''.$tmp_number), ' '), $row[2])."\n";
+				print str_pad('', strlen(''.$tmp_number), ' ').'  in '.$row[1]."\n";
 				if( $counter >= $max_preview_count ){ break; }
 			}
 			if( $alert_total_count > $max_preview_count ){
@@ -602,7 +602,7 @@ function cont_EditPublishTargetPathApply(formElm){
 			print "\n";
 			print '    You got total '.$alert_total_count.' alerts.'."\n";
 			print '    see more: '.realpath($path_logfile)."\n";
-			print str_pad('', strlen($alert_header), '*')."\n";
+			print str_pad('', strlen(''.$alert_header), '*')."\n";
 			print "\n";
 		}
 
@@ -978,7 +978,7 @@ function cont_EditPublishTargetPathApply(formElm){
 			if( $type != 'ignore' ){
 				continue;
 			}
-			if( strrpos($row, '/*') !== strlen($row)-2 ){
+			if( strrpos($row, '/*') !== strlen(''.$row)-2 ){
 				continue;
 			}
 			// var_dump($row);
@@ -1170,7 +1170,7 @@ function cont_EditPublishTargetPathApply(formElm){
 	 * パブリッシュ先ディレクトリを取得
 	 */
 	private function get_path_publish_dir(){
-		if( @!strlen( $this->px->conf()->path_publish_dir ) ){
+		if( @!strlen( ''.$this->px->conf()->path_publish_dir ) ){
 			return false;
 		}
 		$tmp_path = $this->px->fs()->get_realpath( $this->px->conf()->path_publish_dir.'/' );

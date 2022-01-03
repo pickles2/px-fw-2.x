@@ -75,7 +75,7 @@ class clearcache{
 			print json_encode($val);
 			exit;
 		}
-		if( @strlen($pxcmd[1]) ){
+		if( @strlen(''.$pxcmd[1]) ){
 			// 命令が不明の場合、エラーを表示する。
 			if( $this->px->req()->is_cmd() ){
 				header('Content-type: text/plain;');
@@ -123,7 +123,7 @@ class clearcache{
 		print '-- cleaning "publish"'."\n";
 		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
 		print "\n";
-		if( strlen( @$this->px->conf()->public_cache_dir ) ){
+		if( strlen( ''.@$this->px->conf()->public_cache_dir ) ){
 			print '-- cleaning "public caches"'."\n";
 			print $this->cleanup_dir( $this->path_public_caches ).' items done.'."\n";
 			print "\n";

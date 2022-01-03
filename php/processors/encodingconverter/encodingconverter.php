@@ -67,10 +67,10 @@ class encodingconverter{
 		$this->px = $px;
 
 		if( is_object($options) ){
-			if( property_exists($options, 'output_encoding') && strlen($options->output_encoding) ){
+			if( property_exists($options, 'output_encoding') && strlen(''.$options->output_encoding) ){
 				$this->output_encoding = $options->output_encoding;
 			}
-			if( property_exists($options, 'output_eol_coding') && strlen($options->output_eol_coding) ){
+			if( property_exists($options, 'output_eol_coding') && strlen(''.$options->output_eol_coding) ){
 				$this->output_eol_coding = $options->output_eol_coding;
 			}
 			if( property_exists($options, 'ext') && $options->ext ){
@@ -84,18 +84,18 @@ class encodingconverter{
 
 		// オプションなしの場合、$px->conf() を参照
 		$conf = $this->px->conf();
-		if( !strlen($this->output_encoding) && property_exists($conf, 'output_encoding') ){
+		if( !strlen(''.$this->output_encoding) && property_exists($conf, 'output_encoding') ){
 			$this->output_encoding = $conf->output_encoding;
 		}
-		if( !strlen($this->output_eol_coding) && property_exists($conf, 'output_eol_coding') ){
+		if( !strlen(''.$this->output_eol_coding) && property_exists($conf, 'output_eol_coding') ){
 			$this->output_eol_coding = $conf->output_eol_coding;
 		}
 
 		// それでも設定なしならデフォルト値
-		if( !strlen($this->output_encoding) ){
+		if( !strlen(''.$this->output_encoding) ){
 			$this->output_encoding = 'UTF-8';
 		}
-		if( !strlen($this->output_eol_coding) ){
+		if( !strlen(''.$this->output_eol_coding) ){
 			$this->output_eol_coding = 'crlf';
 		}
 
@@ -124,19 +124,19 @@ class encodingconverter{
 			}
 		}
 
-		if( strlen( $this->output_encoding ) ){
+		if( strlen( ''.$this->output_encoding ) ){
 			$output_encoding = $this->output_encoding;
-			if( !strlen($output_encoding) ){ $output_encoding = 'UTF-8'; }
+			if( !strlen(''.$output_encoding) ){ $output_encoding = 'UTF-8'; }
 
 			//出力ソースの文字コード変換(HTML)
-			$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars($output_encoding).'";',$src);
-			$src = preg_replace('/\@charset\s+\'[a-zA-Z0-9\_\-\.]+\'\;/si','@charset \''.htmlspecialchars($output_encoding).'\';',$src);
-			$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
-			$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars($output_encoding).'$2',$src);
+			$src = preg_replace('/\@charset\s+"[a-zA-Z0-9\_\-\.]+"\;/si','@charset "'.htmlspecialchars(''.$output_encoding).'";',$src);
+			$src = preg_replace('/\@charset\s+\'[a-zA-Z0-9\_\-\.]+\'\;/si','@charset \''.htmlspecialchars(''.$output_encoding).'\';',$src);
+			$src = preg_replace('/(<meta\s+charset\=")[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars(''.$output_encoding).'$2',$src);
+			$src = preg_replace('/(<meta\s+http\-equiv\="Content-Type"\s+content\="[a-zA-Z0-9\_\-\+]+\/[a-zA-Z0-9\_\-\+]+\;\s*charset\=)[a-zA-Z0-9\_\-\.]+("\s*\/?'.'>)/si','$1'.htmlspecialchars(''.$output_encoding).'$2',$src);
 			$src = $this->px->convert_encoding( $src, $output_encoding );
 		}
 
-		if( strlen( $this->output_eol_coding ) ){
+		if( strlen( ''.$this->output_eol_coding ) ){
 			//出力ソースの改行コード変換
 			$eol_code = "\r\n";
 			switch( strtolower( $this->output_eol_coding ) ){

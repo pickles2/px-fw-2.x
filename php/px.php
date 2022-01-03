@@ -176,19 +176,19 @@ class px{
 			);
 		}
 
-		if ( property_exists($this->conf, 'default_timezone') && strlen($this->conf->default_timezone) ) {
+		if ( property_exists($this->conf, 'default_timezone') && strlen(''.$this->conf->default_timezone) ) {
 			date_default_timezone_set($this->conf->default_timezone);
 		}
-		if ( !property_exists($this->conf, 'default_lang') || !strlen($this->conf->default_lang) ) {
+		if ( !property_exists($this->conf, 'default_lang') || !strlen(''.$this->conf->default_lang) ) {
 			$this->conf->default_lang = 'ja';
 		}
 		if ( !property_exists($this->conf, 'accept_langs') || !is_array($this->conf->accept_langs) ) {
 			$this->conf->accept_langs = array($this->conf->default_lang);
 		}
-		if ( !property_exists($this->conf, 'path_files') || ( !is_callable($this->conf->path_files) && !strlen($this->conf->path_files) ) ) {
+		if ( !property_exists($this->conf, 'path_files') || ( !is_callable($this->conf->path_files) && !strlen(''.$this->conf->path_files) ) ) {
 			$this->conf->path_files = '{$dirname}/{$filename}_files/';
 		}
-		if ( !property_exists($this->conf, 'copyright') || !strlen($this->conf->copyright) ) {
+		if ( !property_exists($this->conf, 'copyright') || !strlen(''.$this->conf->copyright) ) {
 			// NOTE: 2016-03-15 $conf->copyright 追加
 			// 古い環境で Notice レベルのエラーが出る可能性があることを考慮し、初期化する。
 			$this->conf->copyright = null;
@@ -208,18 +208,18 @@ class px{
 
 		// Apply command-line option "--command-php"
 		$temporary_req = new \tomk79\request();
-		if( strlen($temporary_req->get_cli_option( '--command-php' )) ){
+		if( strlen(''.$temporary_req->get_cli_option( '--command-php' )) ){
 			$this->conf->commands->php = $temporary_req->get_cli_option( '--command-php' );
 		}
-		if( strlen($temporary_req->get_cli_option( '-c' )) ){
+		if( strlen(''.$temporary_req->get_cli_option( '-c' )) ){
 			$this->conf->path_phpini = $temporary_req->get_cli_option( '-c' );
 		}
-		if( strlen($temporary_req->get_cli_option( '--method' )) ){
+		if( strlen(''.$temporary_req->get_cli_option( '--method' )) ){
 			$_SERVER['REQUEST_METHOD'] = strtoupper($temporary_req->get_cli_option( '--method' ));
 		}
 		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
 			$tmp_body_file = $temporary_req->get_cli_option( '--body-file' );
-			if( strlen($tmp_body_file) ){
+			if( strlen(''.$tmp_body_file) ){
 				// ファイルからPOSTパラメータを読み取る
 				if( is_file($this->realpath_homedir.'/_sys/ram/data/'.$tmp_body_file) ){
 					// 先に _sys/ram/data/ の中を探す
@@ -228,7 +228,7 @@ class px{
 					// なければ、絶対パスとして探す
 					parse_str(file_get_contents( $tmp_body_file ), $_POST);
 				}
-			}elseif( strlen($temporary_req->get_cli_option( '--body' )) ){
+			}elseif( strlen(''.$temporary_req->get_cli_option( '--body' )) ){
 				// POSTパラメータを直接受け取る
 				parse_str($temporary_req->get_cli_option( '--body' ), $_POST);
 			}
@@ -250,7 +250,7 @@ class px{
 		$req_conf->session_expire = $this->conf->session_expire;
 		$req_conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $req_conf );
-		if( strlen($this->req->get_cli_option( '-u' )) ){
+		if( strlen(''.$this->req->get_cli_option( '-u' )) ){
 			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 		if(!count($_GET)){
@@ -278,16 +278,16 @@ class px{
 		$this->lang = $this->conf->default_lang;
 		$tmp_param_lang = $this->req->get_param("LANG");
 		$tmp_cookie_lang = $this->req->get_cookie("LANG");
-		if( strlen( $tmp_param_lang ) && ( $tmp_param_lang == $this->conf->default_lang || array_search( $tmp_param_lang, $this->conf->accept_langs ) !== false ) ){
+		if( strlen( ''.$tmp_param_lang ) && ( $tmp_param_lang == $this->conf->default_lang || array_search( $tmp_param_lang, $this->conf->accept_langs ) !== false ) ){
 			$this->lang = $tmp_param_lang;
 			$this->req->set_cookie("LANG", $tmp_param_lang);
-		}elseif( strlen($tmp_cookie_lang) ){
+		}elseif( strlen(''.$tmp_cookie_lang) ){
 			$this->lang = $tmp_cookie_lang;
 		}
 
 
 		// 公開キャッシュフォルダが存在しない場合、作成する
-		if( property_exists($this->conf, 'public_cache_dir') && strlen($this->conf->public_cache_dir) && !is_dir( './'.$this->conf->public_cache_dir ) ){
+		if( property_exists($this->conf, 'public_cache_dir') && strlen(''.$this->conf->public_cache_dir) && !is_dir( './'.$this->conf->public_cache_dir ) ){
 			$this->fs()->mkdir( './'.$this->conf->public_cache_dir );
 		}
 		// _sysフォルダが存在しない場合、作成する
@@ -299,7 +299,7 @@ class px{
 			'/_sys/ram/data/',
 			'/_sys/ram/publish/'
 		) as $tmp_path_sys_dir ){
-			if( strlen($this->realpath_homedir.$tmp_path_sys_dir) && !is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
+			if( strlen(''.$this->realpath_homedir.$tmp_path_sys_dir) && !is_dir( $this->realpath_homedir.$tmp_path_sys_dir ) ){
 				$this->fs()->mkdir( $this->realpath_homedir.$tmp_path_sys_dir );
 			}
 		}
@@ -307,7 +307,7 @@ class px{
 		// 環境変数 `$_SERVER['DOCUMENT_ROOT']` をセット
 		// `$px->get_realpath_docroot()` は、`$conf`, `$fs` を参照するので、
 		// これらの初期化の後が望ましい。
-		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( $_SERVER['DOCUMENT_ROOT'] ) ){
+		if( !array_key_exists( 'DOCUMENT_ROOT' , $_SERVER ) || !strlen( ''.$_SERVER['DOCUMENT_ROOT'] ) ){
 			// commandline only
 			$_SERVER['DOCUMENT_ROOT'] = $this->get_realpath_docroot();
 			$_SERVER['DOCUMENT_ROOT'] = realpath( $_SERVER['DOCUMENT_ROOT'] );
@@ -485,7 +485,7 @@ class px{
 					$option_value = @$matched[2];
 				}
 				unset($matched);
-				if( strlen( trim($option_value) ) ){
+				if( strlen( trim(''.$option_value) ) ){
 					$option_value = json_decode( $option_value );
 				}else{
 					$option_value = null;
@@ -493,7 +493,7 @@ class px{
 				// var_dump($fnc_name);
 				// var_dump($option_value);
 				$this->proc_num ++;
-				if( @!strlen($this->proc_id) ){
+				if( @!strlen(''.$this->proc_id) ){
 					$this->proc_id = $this->proc_type.'_'.$this->proc_num;
 				}
 				array_push( $param_arr, $option_value );
@@ -621,7 +621,7 @@ class px{
 	 * @return boolean 成功時 `true`、 失敗時 `false`
 	 */
 	public function set_lang( $new_lang ){
-		if( !strlen( $new_lang ) ){
+		if( !strlen( ''.$new_lang ) ){
 			return false;
 		}
 
@@ -679,7 +679,7 @@ class px{
 		$this->directory_index = array();
 		foreach( $tmp_di as $file_name ){
 			$file_name = trim($file_name);
-			if( !strlen($file_name) ){ continue; }
+			if( !strlen(''.$file_name) ){ continue; }
 			array_push( $this->directory_index, $file_name );
 		}
 		if( !count( $this->directory_index ) ){
@@ -748,7 +748,7 @@ class px{
 				return $rtn_after_sitemap[$path];
 			}
 			$page_info = $this->site()->get_page_info( $path );
-			if( @strlen( $page_info['proc_type'] ) ){
+			if( @strlen( ''.$page_info['proc_type'] ) ){
 				$rtn_after_sitemap[$path] = $page_info['proc_type'];
 				return $rtn_after_sitemap[$path];
 			}
@@ -857,7 +857,7 @@ class px{
 	 */
 	private function get_default_mime_type( $path = null ){
 		$rtn = null;
-		if(@!strlen($path)){
+		if(@!strlen(''.$path)){
 			$path = $this->req()->get_request_file_path();
 		}
 		$extension = $this->get_path_proc_type( $path );
@@ -919,14 +919,14 @@ class px{
 			$this->error('Invalid argument supplied for 1st option $request_path in $px->internal_sub_request(). It required String value.');
 			return false;
 		}
-		if(!strlen($request_path)){ $request_path = '/'; }
+		if(!strlen(''.$request_path)){ $request_path = '/'; }
 		if(is_null($options)){ $options = array(); }
 		if(!is_array($options)){ $options = (array) $options; }
 		$php_command = array();
 		array_push( $php_command, addslashes($this->conf()->commands->php) );
 			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
 
-		if( strlen($this->conf()->path_phpini) ){
+		if( strlen(''.$this->conf()->path_phpini) ){
 			$php_command = array_merge(
 				$php_command,
 				array(
@@ -934,7 +934,7 @@ class px{
 				)
 			);
 		}
-		if( strlen($this->req()->get_cli_option( '-d' )) ){
+		if( strlen(''.$this->req()->get_cli_option( '-d' )) ){
 			$php_command = array_merge(
 				$php_command,
 				array(
@@ -951,23 +951,23 @@ class px{
 		}
 
 		// USER_AGENT
-		if( array_key_exists('user_agent', $options) && strlen($options['user_agent']) ){
+		if( array_key_exists('user_agent', $options) && strlen(''.$options['user_agent']) ){
 			array_push($php_command, '-u');
 			array_push($php_command, escapeshellarg($options['user_agent']));
 		}
 
 		// Request Method
-		if( array_key_exists('method', $options) && strlen($options['method']) ){
+		if( array_key_exists('method', $options) && strlen(''.$options['method']) ){
 			array_push($php_command, '--method');
 			array_push($php_command, escapeshellarg($options['method']));
 		}
 
 		// Request Body
-		if( array_key_exists('body', $options) && strlen($options['body']) ){
+		if( array_key_exists('body', $options) && strlen(''.$options['body']) ){
 			array_push($php_command, '--body');
 			array_push($php_command, escapeshellarg($options['body']));
 		}
-		if( array_key_exists('body_file', $options) && strlen($options['body_file']) ){
+		if( array_key_exists('body_file', $options) && strlen(''.$options['body_file']) ){
 			array_push($php_command, '--body-file');
 			array_push($php_command, escapeshellarg($options['body_file']));
 		}
@@ -1002,7 +1002,7 @@ class px{
 		ob_get_clean();
 
 		$bin = $io[1]; // stdout
-		if( strlen( $io[2] ) ){
+		if( strlen( ''.$io[2] ) ){
 			$this->error($io[2]); // stderr
 		}
 
@@ -1043,14 +1043,14 @@ class px{
 	 */
 	public function set_status($code, $message = null){
 		$code = intval($code);
-		if( strlen( $code ) != 3 ){
+		if( strlen( ''.$code ) != 3 ){
 			return false;
 		}
 		if( !($code >= 100 && $code <= 599) ){
 			return false;
 		}
 		$this->response_status = intval($code);
-		if( !strlen($message) ){
+		if( !strlen(''.$message) ){
 			switch( $this->response_status ){
 				case 200: $message = 'OK'; break;
 				case 403: $message = 'Forbidden'; break;
@@ -1097,7 +1097,7 @@ class px{
 	 */
 	public function add_relatedlink( $path ){
 		$path = trim($path);
-		if(!strlen($path)){
+		if(!strlen(''.$path)){
 			return false;
 		}
 		array_push( $this->relatedlinks , $path );
@@ -1165,7 +1165,7 @@ class px{
 	public function get_contents_manifesto(){
 		$px = $this;
 		$rtn = '';
-		if( !isset( $this->conf()->contents_manifesto ) || !strlen( $this->conf()->contents_manifesto ) ){
+		if( !isset( $this->conf()->contents_manifesto ) || !strlen( ''.$this->conf()->contents_manifesto ) ){
 			return '';
 		}
 		$realpath = $this->get_realpath_docroot().$this->href( $this->conf()->contents_manifesto );
@@ -1184,7 +1184,7 @@ class px{
 	 * @return bool パブリッシュツールの場合 `true`, それ以外の場合 `false` を返します。
 	 */
 	public function is_publish_tool(){
-		if( !isset( $_SERVER['HTTP_USER_AGENT'] ) || !strlen( $_SERVER['HTTP_USER_AGENT'] ) ){
+		if( !isset( $_SERVER['HTTP_USER_AGENT'] ) || !strlen( ''.$_SERVER['HTTP_USER_AGENT'] ) ){
 			// UAが空白なら パブリッシュツール
 			return true;
 		}
@@ -1270,7 +1270,7 @@ class px{
 					break;
 				}
 				$path .= $tmp_matched[1];
-				if(!strlen($tmp_matched[3])){
+				if(!strlen(''.$tmp_matched[3])){
 					//無名のパラメータはバインドしない。
 				}elseif( !is_null( $this->req()->get_path_param($tmp_matched[3]) ) ){
 					$path .= $this->req()->get_path_param($tmp_matched[3]);
@@ -1308,14 +1308,14 @@ class px{
 				$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
 
 				// パラメータを、引数の生の状態に戻す。
-				if( array_key_exists('query', $parsed_url) && strlen($parsed_url['query']) ){
+				if( array_key_exists('query', $parsed_url) && strlen(''.$parsed_url['query']) ){
 					$path .= '?'.$parsed_url['query'];
-				}elseif( array_key_exists('query', $parsed_url_fin) && strlen($parsed_url_fin['query']) ){
+				}elseif( array_key_exists('query', $parsed_url_fin) && strlen(''.$parsed_url_fin['query']) ){
 					$path .= '?'.$parsed_url_fin['query'];
 				}
-				if( array_key_exists('fragment', $parsed_url) && strlen($parsed_url['fragment']) ){
+				if( array_key_exists('fragment', $parsed_url) && strlen(''.$parsed_url['fragment']) ){
 					$path .= '#'.$parsed_url['fragment'];
-				}elseif( array_key_exists('fragment', $parsed_url_fin) && strlen($parsed_url_fin['fragment']) ){
+				}elseif( array_key_exists('fragment', $parsed_url_fin) && strlen(''.$parsed_url_fin['fragment']) ){
 					$path .= '#'.$parsed_url_fin['fragment'];
 				}
 				break;
@@ -1341,7 +1341,7 @@ class px{
 	 * @return string href属性値
 	 */
 	public function canonical( $linkto = null ){
-		if( !strlen($linkto) ){
+		if( !strlen(''.$linkto) ){
 			$linkto = $this->site()->get_current_page_info('id');
 		}
 		$href = $this->href( $linkto );
@@ -1350,13 +1350,13 @@ class px{
 		if( isset($this->conf()->scheme) ){
 			$scheme = $this->conf()->scheme;
 		}
-		if( !strlen($scheme) ){ $scheme = 'http'; }
+		if( !strlen(''.$scheme) ){ $scheme = 'http'; }
 
 		$domain = null;
 		if( isset($this->conf()->domain) ){
 			$domain = $this->conf()->domain;
 		}
-		if( !strlen($domain) ){
+		if( !strlen(''.$domain) ){
 			$this->error('Config "domain" is required.');
 			return $href;
 		}
@@ -1494,7 +1494,7 @@ class px{
 
 		$is_popup = false;
 		if( $this->site() !== false ){
-			if( strpos( $this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){ // <- 'popup' で始まるlayoutは、ポップアップとして扱う。
+			if( strpos( ''.$this->site()->get_page_info($linkto,'layout') , 'popup' ) === 0 ){ // <- 'popup' で始まるlayoutは、ポップアップとして扱う。
 				$is_popup = true;
 			}
 		}
@@ -1524,17 +1524,17 @@ class px{
 		if( !array_key_exists('no_escape', $options) || !@$options['no_escape'] ){
 			// no_escape(エスケープしない)指示がなければ、
 			// HTMLをエスケープする。
-			$label = htmlspecialchars($label);
+			$label = htmlspecialchars(''.$label);
 		}
 
 		// target属性 (2020-05-27 追加)
 		$target = null;
-		if( array_key_exists('target', $options) && strlen($options['target']) ){
-			$target = htmlspecialchars($options['target']);
+		if( array_key_exists('target', $options) && strlen(''.$options['target']) ){
+			$target = htmlspecialchars(''.$options['target']);
 		}
 
-		$rtn = '<a href="'.htmlspecialchars($href).'"'
-			.(strlen($target)?' target="'.htmlspecialchars($target).'"':'').''
+		$rtn = '<a href="'.htmlspecialchars(''.$href).'"'
+			.(strlen(''.$target)?' target="'.htmlspecialchars(''.$target).'"':'').''
 			.(count($classes)?' class="'.htmlspecialchars(implode(' ', $classes)).'"':'').''
 			.($is_popup?' onclick="window.open(this.href);return false;"':'')
 			.'>'.$label.'</a>';
@@ -1556,16 +1556,16 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		if( @strlen( $this->conf->scheme ) ){
+		if( @strlen( ''.$this->conf->scheme ) ){
 			$rtn = $this->conf->scheme;
 			return $rtn;
 		}
-		if( @strlen( $_SERVER['REQUEST_SCHEME'] ) ){
+		if( @strlen( ''.$_SERVER['REQUEST_SCHEME'] ) ){
 			// ただし、値がセットされていることはPHPによって保証されてはいない
 			$rtn = $_SERVER['REQUEST_SCHEME'];
 			return $rtn;
 		}
-		if( @strlen( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == '443' ){
+		if( @strlen( ''.$_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == '443' ){
 			// ただし、ポート 443 だからといって https とは限らない
 			$rtn = 'https';
 			return $rtn;
@@ -1588,7 +1588,7 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		if( @strlen( $this->conf->domain ) ){
+		if( @strlen( ''.$this->conf->domain ) ){
 			$rtn = $this->conf->domain;
 			return $rtn;
 		}
@@ -1619,7 +1619,7 @@ class px{
 		}
 		if( $this->req()->is_cmd() ){
 			$rtn = '/';
-			if( @strlen( $this->conf->path_controot ) ){
+			if( @strlen( ''.$this->conf->path_controot ) ){
 				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
 				$rtn = $this->fs()->normalize_path($rtn);
@@ -1678,7 +1678,7 @@ class px{
 		if( is_callable($this->conf->path_files) ){
 			// コールバック関数が設定された場合
 			$rtn = call_user_func($this->conf->path_files, $this->fs()->normalize_path($path_content) );
-		}elseif( is_string($this->conf->path_files) && strpos(trim($this->conf->path_files), 'function') === 0 ){
+		}elseif( is_string($this->conf->path_files) && strpos(trim(''.$this->conf->path_files), 'function') === 0 ){
 			// function で始まる文字列が設定された場合
 			$rtn = call_user_func(eval('return '.$this->conf->path_files.';'), $this->fs()->normalize_path($path_content) );
 		}else{
@@ -1731,7 +1731,7 @@ class px{
 	 * @return string ローカルリソースキャッシュのパス
 	 */
 	public function path_files_cache( $localpath_resource = null ){
-		if( !strlen( @$this->conf()->public_cache_dir ) ){
+		if( !strlen( ''.@$this->conf()->public_cache_dir ) ){
 			return false;
 		}
 		$path_content = null;
@@ -1779,7 +1779,7 @@ class px{
 	 * @return string ローカルリソースキャッシュのサーバー内部パス
 	 */
 	public function realpath_files_cache( $localpath_resource = null ){
-		if( !strlen( @$this->conf()->public_cache_dir ) ){
+		if( !strlen( ''.@$this->conf()->public_cache_dir ) ){
 			return false;
 		}
 		$rtn = $this->path_files_cache( $localpath_resource );
@@ -1833,15 +1833,15 @@ class px{
 	 * @return string 公開キャッシュのパス
 	 */
 	public function path_plugin_files( $localpath_resource = null ){
-		if( !isset( $this->conf()->public_cache_dir ) || !strlen( $this->conf()->public_cache_dir ) ){
+		if( !isset( $this->conf()->public_cache_dir ) || !strlen( ''.$this->conf()->public_cache_dir ) ){
 			return false;
 		}
-		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id).'/';
+		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode(''.$this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
 		if( !$this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
 			$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
 		}
-		if( !strlen( $localpath_resource ) ){
+		if( !strlen( ''.$localpath_resource ) ){
 			return $this->fs()->normalize_path($rtn);
 		}
 		$rtn = $this->fs()->get_realpath( $rtn.'/'.$localpath_resource );
@@ -1869,7 +1869,7 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_files( $localpath_resource = null ){
-		if( !strlen( @$this->conf()->public_cache_dir ) ){
+		if( !strlen( ''.@$this->conf()->public_cache_dir ) ){
 			return false;
 		}
 		$rtn = $this->path_plugin_files( $localpath_resource );
@@ -1885,12 +1885,12 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_private_cache( $localpath_resource = null ){
-		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id).'/';
+		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode(''.$this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 		if( !$this->fs()->is_dir( $rtn ) ){
 			$this->fs()->mkdir_r( $rtn );
 		}
-		if( !strlen( $localpath_resource ) ){
+		if( !strlen( ''.$localpath_resource ) ){
 			return $rtn;
 		}
 		$rtn .= '/'.$localpath_resource;
@@ -1915,8 +1915,8 @@ class px{
 	 */
 	public function convert_encoding( $text, $encode = null, $encodefrom = null ){
 		if( !is_callable( 'mb_internal_encoding' ) ){ return $text; }
-		if( !strlen( $encode ) ){ $encode = mb_internal_encoding(); }
-		if( !strlen( $encodefrom ) ){ $encodefrom = mb_internal_encoding().',UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII'; }
+		if( !strlen( ''.$encode ) ){ $encode = mb_internal_encoding(); }
+		if( !strlen( ''.$encodefrom ) ){ $encodefrom = mb_internal_encoding().',UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII'; }
 
 		switch( strtolower( $encode ) ){
 			case 'sjis':
@@ -1947,7 +1947,7 @@ class px{
 				}
 			}
 		}else{
-			if( !strlen( $text ) ){ return $text; }
+			if( !strlen( ''.$text ) ){ return $text; }
 			$RTN = @mb_convert_encoding( $text , $encode , $encodefrom );
 		}
 		return $RTN;
@@ -1976,6 +1976,9 @@ class px{
 	 * @return string|bool 判定結果
 	 */
 	public function get_path_type( $path ) {
+		if( !is_string($path) ){
+			return false;
+		}
 		if( preg_match( '/^(?:alias[0-9]*\:)?javascript\:/i' , $path ) ) {
 			//  javascript: から始まる場合
 			//  サイトマップ上での重複を許容するために、
@@ -2091,7 +2094,7 @@ class px{
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function lock( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode(''.$app_name).'.lock.txt';
 		$timeout_limit = 5;
 
 		if( !$this->fs()->is_dir( dirname( $lockfilepath ) ) ){
@@ -2128,7 +2131,7 @@ class px{
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	public function is_locked( $app_name, $expire = 60 ){
-		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode(''.$app_name).'.lock.txt';
 		$lockfile_expire = $expire;
 
 		// PHPのFileStatusCacheをクリア
@@ -2151,7 +2154,7 @@ class px{
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function unlock( $app_name ){
-		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode(''.$app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -2169,7 +2172,7 @@ class px{
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function touch_lockfile( $app_name ){
-		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->get_realpath_homedir().'_sys/ram/applock/'.urlencode(''.$app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -2192,11 +2195,11 @@ class px{
 	 */
 	public function get_pickles_logo_svg( $opt = array() ){
 		$logo_color = '#f6f6f6';
-		if( @strlen( $opt['color'] ) ){
+		if( @strlen( ''.$opt['color'] ) ){
 			$logo_color = $opt['color'];
 		}
 		$svg_src = file_get_contents( __DIR__.'/files/svg/pickles2-logo.svg' );
-		$svg_src = str_replace( '#000000', htmlspecialchars($logo_color), $svg_src );
+		$svg_src = str_replace( '#000000', htmlspecialchars(''.$logo_color), $svg_src );
 		return $svg_src;
 	}
 

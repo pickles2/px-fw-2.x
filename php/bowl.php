@@ -58,7 +58,7 @@ class bowl{
 	 * @return bool 成功時 true、失敗時 false
 	 */
 	public function put( $src, $content_name = 'main' ){
-		if( !strlen($content_name) ){ $content_name = 'main'; }
+		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		if( !array_key_exists($content_name, $this->contents_bowl) ){
 			$this->contents_bowl[$content_name] = '';
@@ -101,7 +101,7 @@ class bowl{
 	 * @return bool 成功時 true、失敗時 false
 	 */
 	public function replace( $src, $content_name = 'main' ){
-		if( !strlen($content_name) ){ $content_name = 'main'; }
+		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		@$this->contents_bowl[$content_name] = $src;
 		return true;
@@ -116,7 +116,7 @@ class bowl{
 	 * @return mixed 成功時、ボウルから得られたHTMLソースを返す。失敗時、false
 	 */
 	public function get_clean( $content_name = 'main' ){
-		if( !strlen($content_name) ){ $content_name = 'main'; }
+		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		if( !array_key_exists($content_name, $this->contents_bowl) ){ return null; }
 
@@ -135,7 +135,7 @@ class bowl{
 	 * @return mixed 成功時、ボウルから得られたHTMLソースを返す。失敗時、false
 	 */
 	public function get( $content_name = 'main' ){
-		if( !strlen($content_name) ){ $content_name = 'main'; }
+		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
 		if( !is_string($content_name) ){ return false; }
 		if( !array_key_exists($content_name, $this->contents_bowl) ){ return null; }
 

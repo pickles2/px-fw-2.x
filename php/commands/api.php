@@ -171,7 +171,7 @@ class api{
 			// 	break;
 		}
 
-		if( !strlen( @$this->command[1] ) ){
+		if( !strlen( ''.@$this->command[1] ) ){
 			$this->homepage();
 		}
 		$this->error();
@@ -217,7 +217,7 @@ class api{
 		}else{
 			$html = '';
 			ob_start(); ?>
-	<p><?= htmlspecialchars($msg) ?></p>
+	<p><?= htmlspecialchars(''.$msg) ?></p>
 <?php
 			$html .= ob_get_clean();
 			print $this->px->pxcmd()->wrap_gui_frame($html);
@@ -238,7 +238,7 @@ class api{
 		$sitemap_filter_options = function($px, $cmd=null){
 			$options = array();
 			$options['filter'] = $px->req()->get_param('filter');
-			if( strlen($options['filter']) ){
+			if( strlen(''.$options['filter']) ){
 				switch( $options['filter'] ){
 					case 'true':
 					case '1':
@@ -445,7 +445,7 @@ class api{
 	 */
 	private function data_convert($val){
 		$data_type = $this->px->req()->get_param('type');
-		if( !is_string($data_type) || !strlen($data_type) ){
+		if( !is_string($data_type) || !strlen(''.$data_type) ){
 			$data_type = 'json';
 		}
 		header('Content-type: application/xml; charset=UTF-8');
@@ -499,7 +499,7 @@ class api{
 	private function data2jsonp($val){
 		//JSONPのコールバック関数名は、パラメータ callback に受け取る。
 		$cb = trim( $this->px->req()->get_param('callback') );
-		if( !strlen($cb) ){
+		if( !strlen(''.$cb) ){
 			$cb = 'callback';
 		}
 		// return $cb.'('.self::data2jssrc($val).');';
@@ -553,7 +553,7 @@ class api{
 				}
 				$RTN .= '<element';
 				if( $is_hash ){
-					$RTN .= ' name="'.htmlspecialchars( $key ).'"';
+					$RTN .= ' name="'.htmlspecialchars( ''.$key ).'"';
 				}
 				$RTN .= '>';
 				$RTN .= self::xml_encode( $value[$key] , $options );
@@ -576,7 +576,7 @@ class api{
 			$proparray = get_object_vars( $value );
 			$methodarray = get_class_methods( get_class( $value ) );
 			foreach( $proparray as $key=>$val ){
-				$RTN .= '<element name="'.htmlspecialchars( $key ).'">';
+				$RTN .= '<element name="'.htmlspecialchars( ''.$key ).'">';
 
 				$RTN .= self::xml_encode( $val , $options );
 				$RTN .= '</element>';
@@ -587,19 +587,19 @@ class api{
 
 		if( is_int( $value ) ){
 			#	数値
-			$RTN = '<value type="int">'.htmlspecialchars( $value ).'</value>';
+			$RTN = '<value type="int">'.htmlspecialchars( ''.$value ).'</value>';
 			return	$RTN;
 		}
 
 		if( is_float( $value ) ){
 			#	浮動小数点
-			$RTN = '<value type="float">'.htmlspecialchars( $value ).'</value>';
+			$RTN = '<value type="float">'.htmlspecialchars( ''.$value ).'</value>';
 			return	$RTN;
 		}
 
 		if( is_string( $value ) ){
 			#	文字列型
-			$RTN = '<value type="string">'.htmlspecialchars( $value ).'</value>';
+			$RTN = '<value type="string">'.htmlspecialchars( ''.$value ).'</value>';
 			return	$RTN;
 		}
 
