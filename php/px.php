@@ -121,8 +121,8 @@ class px{
 		}
 		@ini_set( 'default_charset' , 'UTF-8' );
 		if( is_callable('mb_detect_order') ){
-			@ini_set( 'mbstring.detect_order' , 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
-			mb_detect_order( 'UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
+			@ini_set( 'mbstring.detect_order' , 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
+			mb_detect_order( 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
@@ -1916,7 +1916,7 @@ class px{
 	public function convert_encoding( $text, $encode = null, $encodefrom = null ){
 		if( !is_callable( 'mb_internal_encoding' ) ){ return $text; }
 		if( !strlen( ''.$encode ) ){ $encode = mb_internal_encoding(); }
-		if( !strlen( ''.$encodefrom ) ){ $encodefrom = mb_internal_encoding().',UTF-8,SJIS-win,eucJP-win,SJIS,EUC-JP,JIS,ASCII'; }
+		if( !strlen( ''.$encodefrom ) ){ $encodefrom = mb_internal_encoding().',UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII'; }
 
 		switch( strtolower( $encode ) ){
 			case 'sjis':
@@ -1924,6 +1924,7 @@ class px{
 			case 'shift_jis':
 			case 'shift-jis':
 			case 'x-sjis':
+			case 'cp932':
 				// ※ 'ms_kanji'、'windows-31j'、'cp932' は、もともと SJIS-win になる
 				$encode = 'SJIS-win';
 				break;

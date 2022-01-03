@@ -19,7 +19,7 @@ class encodingConverterTest extends PHPUnit\Framework\TestCase{
 	 * 文字コード・改行コード変換テスト
 	 */
 	public function testEncodingConverter(){
-		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,cp932,EUC-JP,SJIS';
 
 		$output = $this->utils->px_execute(
 			'/encodingconverter/.px_execute.php',
@@ -32,7 +32,7 @@ class encodingConverterTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( preg_match( '/'.preg_quote(mb_convert_encoding('<p>美しき日本語ウェブの世界</p>', 'Shift_JIS', 'utf-8'), '/').'/s', $output ), 1 );
 		$this->assertEquals( preg_match( '/'.preg_quote('<p>美しき日本語ウェブの世界</p>', '/').'/s', $output ), 0 );
 		// var_dump(mb_detect_encoding($output, $detect_order));
-		$this->assertEquals( strtolower('SJIS-win'), strtolower(mb_detect_encoding($output, $detect_order)) );
+		$this->assertMatchesRegularExpression( '/^(?:SJIS\-win|cp932)$/i', mb_detect_encoding($output, $detect_order) );
 
 
 		$output = $this->utils->px_execute(
@@ -64,7 +64,7 @@ class encodingConverterTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( preg_match( '/'.preg_quote(mb_convert_encoding('美しき日本語ウェブの世界', 'SJIS-win', 'utf-8'), '/').'/s', $output ), 1 );
 		$this->assertEquals( preg_match( '/'.preg_quote('美しき日本語ウェブの世界', '/').'/s', $output ), 0 );
 		// var_dump(mb_detect_encoding($output, $detect_order));
-		$this->assertEquals( strtolower('SJIS-win'), strtolower(mb_detect_encoding($output, $detect_order)) );
+		$this->assertMatchesRegularExpression( '/^(?:SJIS\-win|cp932)$/i', mb_detect_encoding($output, $detect_order) );
 
 
 		// 後始末
@@ -80,7 +80,7 @@ class encodingConverterTest extends PHPUnit\Framework\TestCase{
 	 * direct と pass のテスト
 	 */
 	public function testEncodingConverterDirectAndPass(){
-		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,cp932,EUC-JP,SJIS';
 
 		$output = $this->utils->px_execute(
 			'/encodingconverter/.px_execute.php',

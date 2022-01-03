@@ -19,7 +19,7 @@ class autoindexTest extends PHPUnit\Framework\TestCase{
 	 * ページ内索引自動生成テスト
 	 */
 	public function testAutoIndex(){
-		$detect_order = 'UTF-8,eucJP-win,SJIS-win,EUC-JP,SJIS';
+		$detect_order = 'UTF-8,eucJP-win,SJIS-win,cp932,EUC-JP,SJIS';
 
 		$output = $this->utils->px_execute(
 			'/standard/.px_execute.php',
