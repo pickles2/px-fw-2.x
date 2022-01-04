@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.6 (リリース日未定)
+### Pickles Framework v2.1.6 (2022年1月4日)
 
 - PHP 8.1 に対応した。
 
