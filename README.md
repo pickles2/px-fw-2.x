@@ -371,7 +371,7 @@ $ composer run-script documentation
 
 ## ライセンス - License
 
-Copyright (c)2001-2021 Tomoya Koyanagi, and Pickles Project<br />
+Copyright (c)2001-2022 Tomoya Koyanagi, and Pickles Project<br />
 MIT License https://opensource.org/licenses/mit-license.php
 
 
