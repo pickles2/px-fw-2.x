@@ -1272,8 +1272,8 @@ class px{
 				$path .= $tmp_matched[1];
 				if(!strlen(''.$tmp_matched[3])){
 					//無名のパラメータはバインドしない。
-				}elseif( !is_null( $this->req()->get_path_param($tmp_matched[3]) ) ){
-					$path .= $this->req()->get_path_param($tmp_matched[3]);
+				}elseif( !is_null( $this->site()->get_path_param($tmp_matched[3]) ) ){
+					$path .= $this->site()->get_path_param($tmp_matched[3]);
 				}else{
 					$path .= $tmp_matched[3];
 				}
