@@ -11,10 +11,10 @@
     ],
     "scripts":{
         "test": [
-            "php ./vendor/phpunit/phpunit/phpunit"
+            "@php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "php ./vendor/phpdocumentor/phpdocumentor/bin/phpdoc --title \"Pickles Framework v2.1.6, v2.0.55 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.7 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "dev",

@@ -2,24 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Pickles Framework v2.1.6, v2.0.55 API Document</title>
+            <title>Pickles Framework v2.1.7 API Document</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/base.css">
-            <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/template.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
                 <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
         <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/js/all.min.js" integrity="sha256-0vuk8LXoyrmCjp1f0O300qo1M75ZQyhH9X3J6d+scmk=" crossorigin="anonymous"></script>
         <script src="js/search.js"></script>
         <script defer src="js/searchIndex.js"></script>
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Pickles Framework v2.1.6, v2.0.55 API Document</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Pickles Framework v2.1.7 API Document</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -48,18 +53,35 @@
     Menu
 </label>
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
-    
-    <section class="phpdocumentor-sidebar__category">
-        <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                                <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/picklesframework2.html"><abbr title="\picklesFramework2">picklesFramework2</abbr></a></h4>
-                <ul class="phpdocumentor-list">
-                                            <li><a href="namespaces/picklesframework2-commands.html"><abbr title="\picklesFramework2\commands">commands</abbr></a></li>
-                                            <li><a href="namespaces/picklesframework2-processors.html"><abbr title="\picklesFramework2\processors">processors</abbr></a></li>
-                                            <li><a href="namespaces/picklesframework2-theme.html"><abbr title="\picklesFramework2\theme">theme</abbr></a></li>
-                                    </ul>
-                        </section>
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/picklesframework2.html" class="">picklesFramework2</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/picklesframework2-commands.html" class="">commands</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/picklesframework2-processors.html" class="">processors</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/picklesframework2-theme.html" class="">theme</a>
+                
+            </li>
+            </ul>
 
-    
+                        </section>
+                <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Application.html" class="">Application</a>
+</h4>
+
+                        </section>
+            
     <section class="phpdocumentor-sidebar__category">
         <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
                 <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
@@ -84,6 +106,12 @@
     publish
 
     
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Application.html">Application</a></li>
+                            </ul>
+        </div>
     
     
     </h2>
@@ -92,7 +120,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">19</span>
-</aside>
+
+    </aside>
 
             <p class="phpdocumentor-summary">PX Commands &quot;publish&quot;</p>
 
@@ -119,276 +148,276 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -private">
+                    <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_domain">$domain</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>ドメイン設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_flg_keep_cache">$flg_keep_cache</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>キャッシュを消去しないフラグ</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_path_docroot">$path_docroot</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>パス設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_path_lockfile">$path_lockfile</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>ロックファイルの格納パス</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_path_publish_dir">$path_publish_dir</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>パス設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_path_tmp_publish">$path_tmp_publish</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>パス設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_paths_done">$paths_done</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>処理済みのパス一覧</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_paths_ignore">$paths_ignore</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>パブリッシュ対象外範囲設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_paths_queue">$paths_queue</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>処理待ちのパス一覧</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_paths_region">$paths_region</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>パブリッシュ範囲設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_plugin_conf">$plugin_conf</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>プラグイン設定</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_preg_exts">$preg_exts</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>Extension をマッチさせる正規表現</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-commands-publish.html#property_px">$px</a>
     <span>
-                &nbsp;: mixed            </span>
+                        &nbsp;: mixed            </span>
 </dt>
 <dd>Picklesオブジェクト</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/picklesFramework2-commands-publish.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>constructor</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/picklesFramework2-commands-publish.html#method_exec_home">exec_home()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>execute home</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/picklesFramework2-commands-publish.html#method_register">register()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>Before content function</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_add_queue">add_queue()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>add queue</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_alert_log">alert_log()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュアラートログ</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_cleanup_tmp_publish_dir">cleanup_tmp_publish_dir()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>一時パブリッシュディレクトリをクリーニング</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_clearcache">clearcache()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>clearcache</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_cli_footer">cli_footer()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>print CLI footer</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_cli_header">cli_header()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>print CLI header</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_cli_report">cli_report()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>report</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_exec_publish">exec_publish()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>execute publish</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_get_path_publish_dir">get_path_publish_dir()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>パブリッシュ先ディレクトリを取得</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_get_region_root_path">get_region_root_path()</a>
     <span>
-                        &nbsp;: string    </span>
+                                &nbsp;: string    </span>
 </dt>
 <dd>パブリッシュ範囲のルートパスを得る</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_is_ignore_path">is_ignore_path()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュ対象か調べる</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_is_locked">is_locked()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュがロックされているか確認する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_is_region_path">is_region_path()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュ範囲内か調べる</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_lock">lock()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュをロックする。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_log">log()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュログ</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_make_list_by_dir_scan">make_list_by_dir_scan()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>make list by directory scan</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_make_list_by_sitemap">make_list_by_sitemap()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>make list by sitemap</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_sync_dir">sync_dir()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>ディレクトリを同期する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_sync_dir_compare_and_cleanup">sync_dir_compare_and_cleanup()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>ディレクトリの内部を比較し、$comparisonに含まれない要素を$targetから削除する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_sync_dir_copy_r">sync_dir_copy_r()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>ディレクトリを複製する(下層ディレクトリも全てコピー)</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_touch_lockfile">touch_lockfile()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュロックファイルの更新日を更新する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_unlock">unlock()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd>パブリッシュロックを解除する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/picklesFramework2-commands-publish.html#method_validate">validate()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd>validate</dd>
 
@@ -421,7 +450,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">31</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">ドメイン設定</p>
 
@@ -431,6 +461,7 @@
     <span class="phpdocumentor-signature__name">$domain</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -453,7 +484,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">40</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">キャッシュを消去しないフラグ</p>
 
@@ -463,6 +495,7 @@
     <span class="phpdocumentor-signature__name">$flg_keep_cache</span>
      = <span class="phpdocumentor-signature__default-value">false</span></code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -485,7 +518,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">28</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パス設定</p>
 
@@ -495,6 +529,7 @@
     <span class="phpdocumentor-signature__name">$path_docroot</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -517,7 +552,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">43</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">ロックファイルの格納パス</p>
 
@@ -527,6 +563,7 @@
     <span class="phpdocumentor-signature__name">$path_lockfile</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -549,7 +586,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">28</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パス設定</p>
 
@@ -559,6 +597,7 @@
     <span class="phpdocumentor-signature__name">$path_publish_dir</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -581,7 +620,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">28</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パス設定</p>
 
@@ -591,6 +631,7 @@
     <span class="phpdocumentor-signature__name">$path_tmp_publish</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -613,7 +654,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">49</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">処理済みのパス一覧</p>
 
@@ -623,6 +665,7 @@
     <span class="phpdocumentor-signature__name">$paths_done</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -645,7 +688,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">37</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ対象外範囲設定</p>
 
@@ -655,6 +699,7 @@
     <span class="phpdocumentor-signature__name">$paths_ignore</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -677,7 +722,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">46</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">処理待ちのパス一覧</p>
 
@@ -687,6 +733,7 @@
     <span class="phpdocumentor-signature__name">$paths_queue</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -709,7 +756,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">34</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ範囲設定</p>
 
@@ -719,6 +767,7 @@
     <span class="phpdocumentor-signature__name">$paths_region</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -741,7 +790,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">25</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">プラグイン設定</p>
 
@@ -751,6 +801,7 @@
     <span class="phpdocumentor-signature__name">$plugin_conf</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -773,7 +824,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">52</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Extension をマッチさせる正規表現</p>
 
@@ -783,6 +835,7 @@
     <span class="phpdocumentor-signature__name">$preg_exts</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -805,7 +858,8 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">22</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Picklesオブジェクト</p>
 
@@ -815,6 +869,7 @@
     <span class="phpdocumentor-signature__name">$px</span>
     </code>
 
+    
         <section class="phpdocumentor-description"></section>
 
     
@@ -841,16 +896,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">92</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">constructor</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$json</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$json</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -878,8 +933,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -896,16 +950,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">211</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">execute home</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">exec_home</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">exec_home</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -924,8 +978,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -942,16 +995,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">68</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">Before content function</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">register</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">register</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$options</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -987,8 +1040,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1005,16 +1057,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1016</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">add queue</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">add_queue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">add_queue</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1052,16 +1104,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">805</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュアラートログ</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">alert_log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$row</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">alert_log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$row</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1099,16 +1151,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">848</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">一時パブリッシュディレクトリをクリーニング</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">cleanup_tmp_publish_dir</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$localpath</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">cleanup_tmp_publish_dir</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$localpath</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1136,8 +1188,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1154,24 +1205,23 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">829</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">clearcache</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">clearcache</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">clearcache</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1188,24 +1238,23 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">189</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">print CLI footer</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">cli_footer</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">cli_footer</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1222,24 +1271,23 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">169</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">print CLI header</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">cli_header</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">cli_header</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1256,24 +1304,23 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">198</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">report</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">cli_report</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">cli_report</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1290,16 +1337,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">358</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">execute publish</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">exec_publish</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">exec_publish</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1318,8 +1365,7 @@
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1336,24 +1382,23 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1172</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ先ディレクトリを取得</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">get_path_publish_dir</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">get_path_publish_dir</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
                     <article
@@ -1370,16 +1415,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1150</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ範囲のルートパスを得る</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">get_region_root_path</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+                    <span class="phpdocumentor-signature__name">get_region_root_path</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1405,16 +1450,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1059</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ対象か調べる</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">is_ignore_path</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">is_ignore_path</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1452,16 +1497,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1235</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュがロックされているか確認する。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">is_locked</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">is_locked</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1487,16 +1532,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1115</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュ範囲内か調べる</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">is_region_path</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">is_region_path</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1534,16 +1579,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1191</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュをロックする。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">lock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">lock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1569,16 +1614,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">782</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュログ</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$row</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$row</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1616,16 +1661,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">930</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">make list by directory scan</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">make_list_by_dir_scan</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">make_list_by_dir_scan</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1663,16 +1708,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">908</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">make list by sitemap</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">make_list_by_sitemap</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">make_list_by_sitemap</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1698,16 +1743,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">629</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">ディレクトリを同期する。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">sync_dir</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_sync_from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_sync_to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">sync_dir</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_sync_from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_sync_to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -1763,13 +1808,14 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">730</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">ディレクトリの内部を比較し、$comparisonに含まれない要素を$targetから削除する。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">sync_dir_compare_and_cleanup</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$target</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$comparison</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">sync_dir_compare_and_cleanup</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$target</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$comparison</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"><p>ただし、ignore指定されているパスに対しては操作を行わない。</p>
 </section>
@@ -1829,13 +1875,14 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">650</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">ディレクトリを複製する(下層ディレクトリも全てコピー)</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">sync_dir_copy_r</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$perm</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">sync_dir_copy_r</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$path_region</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$perm</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">null</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
         <section class="phpdocumentor-description"><p>ただし、ignore指定されているパスに対しては操作を行わない。</p>
 </section>
@@ -1904,16 +1951,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1271</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュロックファイルの更新日を更新する。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">touch_lockfile</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">touch_lockfile</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1939,16 +1986,16 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">1257</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">パブリッシュロックを解除する。</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">unlock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">unlock</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
@@ -1974,27 +2021,88 @@
     <abbr class="phpdocumentor-element-found-in__file" title="php/commands/publish.php"><a href="files/php-commands-publish.html"><abbr title="php/commands/publish.php">publish.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">821</span>
-</aside>
+
+    </aside>
 
         <p class="phpdocumentor-summary">validate</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">validate</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">validate</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
     <span class="phpdocumentor-signature__response_type">mixed</span>
             &mdash;
-            <section class="phpdocumentor-description"></section>
-
+        
     
 </article>
             </section>
+
+        
+    <script type="text/javascript">
+        function loadExternalCodeSnippets(line) {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                pre.setAttribute('data-line', line)
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        var modals = document.querySelectorAll("[data-modal]");
+
+        modals.forEach(function (trigger) {
+            trigger.addEventListener("click", function (event) {
+                //event.preventDefault();
+                const modal = document.getElementById(trigger.dataset.modal);
+                modal.classList.add("phpdocumentor-modal__open");
+                loadExternalCodeSnippets(trigger.dataset.line)
+                const exits = modal.querySelectorAll("[data-exit-button]");
+                exits.forEach(function (exit) {
+                    exit.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        modal.classList.remove("phpdocumentor-modal__open");
+                    });
+                });
+            });
+        });
+    </script>
 
     </article>
                 <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
@@ -2017,5 +2125,9 @@
     <script>
         cssVars({});
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

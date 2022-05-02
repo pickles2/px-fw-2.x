@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.7 (リリース日未定)
+### Pickles Framework v2.1.7 (2022年5月2日)
 
 - ダイナミックパスに関する不具合を修正した。
 
@@ -362,14 +362,15 @@ $ chmod -R 777 ./caches
 
 ```
 $ cd {$documentRoot}
-$ php vendor/phpunit/phpunit/phpunit
+$ php vendor/phpunit/phpunit/phpunit;
 ```
 
 
 ### ドキュメント出力 - phpDocumentor
 
 ```
-$ composer run-script documentation
+$ wget https://phpdoc.org/phpDocumentor.phar;
+$ composer run-script documentation;
 ```
 
 

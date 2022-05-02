@@ -8,6 +8,7 @@ composer.lock
 
 # PHP Documentor
 .phpdoc
+phpDocumentor.phar
 
 # Pickles Framework
 px-files/_sys/ram/
