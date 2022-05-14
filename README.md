@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.8 (リリース日未定)
+
+- `$px->site()->get_sitemap_definition()` を追加。
+
 ### Pickles Framework v2.1.7 (2022年5月2日)
 
 - ダイナミックパスに関する不具合を修正した。

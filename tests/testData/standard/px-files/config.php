@@ -97,6 +97,12 @@ return call_user_func( function(){
 		'/common/styles/sitemap_loaded.*',
 	);
 
+	/**
+	 * custom_sitemap_definition
+	 *
+	 * サイトマップの定義を拡張することができます。
+	 */
+	$conf->custom_sitemap_definition = array();
 
 
 

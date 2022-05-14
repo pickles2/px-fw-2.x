@@ -138,11 +138,6 @@ class site{
 	 */
 	private $px;
 	/**
-	 * 設定オブジェクト
-	 * @access private
-	 */
-	private $conf;
-	/**
 	 * サイトマップ配列
 	 * @access private
 	 */
@@ -181,7 +176,6 @@ class site{
 	 */
 	public function __construct( $px ){
 		$this->px = $px;
-		$this->conf = $this->px->conf();
 
 		$this->pdo = false;//初期化
 		if( class_exists('\\PDO') ){
@@ -286,7 +280,7 @@ class site{
 		$path_sitemap_cache_dir = $this->px->get_realpath_homedir().'_sys/ram/caches/sitemaps/';
 
 		// $path_top の設定値をチューニング
-		$path_top = $this->conf->path_top;
+		$path_top = $this->px->conf()->path_top;
 		if(!strlen( ''.$path_top )){ $path_top = '/'; }
 		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top ); // index.htmlを付加する。
 
@@ -376,25 +370,7 @@ class site{
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
-		$sitemap_definition = array(
-			'path',
-			'content',
-			'id',
-			'title',
-			'title_breadcrumb',
-			'title_h1',
-			'title_label',
-			'title_full',
-			'logical_path',
-			'list_flg',
-			'layout',
-			'orderby',
-			'keywords',
-			'description',
-			'category_top_flg',
-			'role',
-			'proc_type',
-		);
+		$sitemap_definition = array_keys($this->get_sitemap_definition());
 		$sitemap_page_originated_csv = array();
 		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
@@ -805,6 +781,165 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 	 */
 	public function get_sitemap(){
 		return $this->sitemap_array;
+	}
+
+	/**
+	 * サイトマップ定義を取得する。
+	 *
+	 * このメソッドは、 Pickles Framework v2.1.8 で追加されました。
+	 *
+	 * @return array サイトマップ定義
+	 */
+	public function get_sitemap_definition(){
+
+		// デフォルトのサイトマップ定義
+		$sitemap_definition = array(
+			'path' => array(
+				'label' => 'ページのパス',
+				'lang' => array(
+					'en' => 'Path',
+				),
+				'type' => 'path',
+			),
+			'content' => array(
+				'label' => 'コンテンツファイルの格納先',
+				'lang' => array(
+					'en' => 'Content File',
+				),
+				'type' => 'path',
+			),
+			'id' => array(
+				'label' => 'ページID',
+				'lang' => array(
+					'en' => 'Page ID',
+				),
+				'type' => 'page_id',
+			),
+			'title' => array(
+				'label' => 'ページタイトル',
+				'lang' => array(
+					'en' => 'Title',
+				),
+				'type' => 'text',
+			),
+			'title_breadcrumb' => array(
+				'label' => 'ページタイトル(パン屑表示用)',
+				'lang' => array(
+					'en' => 'Title (Breadcrumb)',
+				),
+				'type' => 'text',
+			),
+			'title_h1' => array(
+				'label' => 'ページタイトル(H1表示用)',
+				'lang' => array(
+					'en' => 'Title (H1)',
+				),
+				'type' => 'text',
+			),
+			'title_label' => array(
+				'label' => 'ページタイトル(リンク表示用)',
+				'lang' => array(
+					'en' => 'Title (Link)',
+				),
+				'type' => 'text',
+			),
+			'title_full' => array(
+				'label' => 'ページタイトル(タイトルタグ用)',
+				'lang' => array(
+					'en' => 'Title (Document Title)',
+				),
+				'type' => 'text',
+			),
+			'logical_path' => array(
+				'label' => '論理構造上のパス',
+				'lang' => array(
+					'en' => 'Logical Path',
+				),
+				'type' => 'logical_path',
+			),
+			'list_flg' => array(
+				'label' => '一覧表示フラグ',
+				'lang' => array(
+					'en' => 'List Flag',
+				),
+				'type' => 'boolean',
+			),
+			'layout' => array(
+				'label' => 'レイアウト',
+				'lang' => array(
+					'en' => 'Layout',
+				),
+				'type' => 'layout_id',
+			),
+			'orderby' => array(
+				'label' => '表示順',
+				'lang' => array(
+					'en' => 'Order',
+				),
+				'type' => 'integer',
+			),
+			'keywords' => array(
+				'label' => 'metaキーワード',
+				'lang' => array(
+					'en' => 'Keywords',
+				),
+				'type' => 'text',
+			),
+			'description' => array(
+				'label' => 'metaディスクリプション',
+				'lang' => array(
+					'en' => 'Description',
+				),
+				'type' => 'text',
+			),
+			'category_top_flg' => array(
+				'label' => 'カテゴリトップフラグ',
+				'lang' => array(
+					'en' => 'Category Top Flag',
+				),
+				'type' => 'boolean',
+			),
+			'role' => array(
+				'label' => 'ロール',
+				'lang' => array(
+					'en' => 'Role',
+				),
+				'type' => 'page_id',
+			),
+			'proc_type' => array(
+				'label' => 'コンテンツの処理方法',
+				'lang' => array(
+					'en' => 'Processing Type',
+				),
+				'type' => 'text',
+			),
+		);
+
+		// カスタムサイトマップ定義の設定を取り込む
+		if( isset($this->px->conf()->custom_sitemap_definition) && is_array($this->px->conf()->custom_sitemap_definition) ){
+			foreach( $this->px->conf()->custom_sitemap_definition as $key => $val ){
+				if( !isset($sitemap_definition[$key]) ){
+					$sitemap_definition[$key] = array(
+						'label' => null,
+						'lang' => array(),
+						'type' => null,
+					);
+				}
+				foreach( $val as $key2 => $val2 ){
+					$sitemap_definition[$key][$key2] = $val2;
+				}
+			}
+		}
+
+		// 返却値を生成
+		$rtn = array();
+		foreach( $sitemap_definition as $key => $val ){
+			$rtn[$key] = array(
+				'label' => $val['label'],
+				'type' => $val['type'],
+			);
+		}
+		return $sitemap_definition;
 	}
 
 	/**
