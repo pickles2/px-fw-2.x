@@ -17,6 +17,8 @@ namespace picklesFramework2\commands;
  *
  * 	<dt>PX=api.get.sitemap</dt>
  * 		<dd>サイトマップ全体の配列を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
+ * 	<dt>PX=api.get.sitemap_definition</dt>
+ * 		<dd>サイトマップ定義を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * 	<dt>PX=api.get.page_info&path={$path}</dt>
  * 		<dd><code>$px->site()->get_page_info({$path})</code> の返却値を取得します。<code>$path</code>を省略した場合は、カレントページの情報を取得します。<code>$px->site()</code>が利用できない場合、<code>false</code>を返します。</dd>
  * 	<dt>PX=api.get.page_originated_csv&path={$path}</dt>
@@ -149,26 +151,6 @@ class api{
 				//各種情報の評価
 				$this->api_is();
 				break;
-			// case 'dlfile':
-			// 	//ファイルダウンロード
-			// 	$this->api_dlfile();
-			// 	break;
-			// case 'ulfile':
-			// 	//ファイルアップロード
-			// 	$this->api_ulfile();
-			// 	break;
-			// case 'ls':
-			// 	//ファイルの一覧を取得
-			// 	$this->api_ls();
-			// 	break;
-			// case 'delete':
-			// 	//ファイル削除
-			// 	$this->api_delete();
-			// 	break;
-			// case 'hash':
-			// 	//ハッシュ値を取得
-			// 	$this->api_hash();
-			// 	break;
 		}
 
 		if( !strlen( ''.@$this->command[1] ) ){
@@ -264,6 +246,10 @@ class api{
 				break;
 			case 'sitemap':
 				$val = ($this->px->site() ? $this->px->site()->get_sitemap() : false);
+				print $this->data_convert( $val );
+				break;
+			case 'sitemap_definition':
+				$val = ($this->px->site() ? $this->px->site()->get_sitemap_definition() : false);
 				print $this->data_convert( $val );
 				break;
 			case 'page_info':

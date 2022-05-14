@@ -68,6 +68,40 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->{"alias21:/sample_pages/page2/index.html"}->title, 'サンプルページ2へのエイリアス' );
 		$this->assertEquals( $output->{"/sample_pages/help/index.html"}->id, 'help' );
 
+
+		// -------------------
+		// api.get.sitemap_definition
+		$output = $this->utils->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.sitemap_definition' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path->label, 'ページのパス' );
+		$this->assertEquals( $output->path->type, 'path' );
+		$this->assertEquals( $output->id->label, 'ページID' );
+		$this->assertEquals( $output->id->type, 'page_id' );
+
+		$output = $this->utils->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.sitemap_definition&LANG=en' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->path->label, 'Path' );
+		$this->assertEquals( $output->path->type, 'path' );
+		$this->assertEquals( $output->id->label, 'Page ID' );
+		$this->assertEquals( $output->id->type, 'page_id' );
+
+
 		// -------------------
 		// api.get.page_info
 		$output = $this->utils->passthru( [

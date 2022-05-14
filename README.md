@@ -86,6 +86,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework v2.1.8 (リリース日未定)
 
 - `$px->site()->get_sitemap_definition()` を追加。
+- `PX=api.get.sitemap_definition` を追加。
 
 ### Pickles Framework v2.1.7 (2022年5月2日)
 

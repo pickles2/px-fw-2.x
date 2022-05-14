@@ -942,7 +942,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 				$rtn[$key]['label'] = $val['lang'][$this->px->lang()];
 			}
 		}
-		return $sitemap_definition;
+		return $rtn;
 	}
 
 	/**
