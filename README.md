@@ -70,7 +70,7 @@ $ chmod -R 777 ./caches
 - Apache
   - mod_rewrite が利用可能であること
   - .htaccess が利用可能であること
-- PHP 5.4 以上
+- PHP 7.3 以上
   - [mbstring](https://www.php.net/manual/ja/book.mbstring.php) PHP Extension
   - [JSON](https://www.php.net/manual/ja/book.json.php) PHP Extension
   - [PDO](https://www.php.net/manual/ja/book.pdo.php) PHP Extension
