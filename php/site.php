@@ -938,6 +938,9 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 				'label' => $val['label'],
 				'type' => $val['type'],
 			);
+			if( isset($val['lang'][$this->px->lang()]) ){
+				$rtn[$key]['label'] = $val['lang'][$this->px->lang()];
+			}
 		}
 		return $sitemap_definition;
 	}
