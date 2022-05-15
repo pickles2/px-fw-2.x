@@ -11,7 +11,7 @@ return call_user_func( function(){
 	$conf->domain = 'pickles2.pxt.jp'; // ドメイン
 	$conf->path_controot = '/'; // コンテンツルートディレクトリ
 	$conf->default_lang = 'ja'; // デフォルトの言語
-	$conf->accept_langs = array('en'); // 対応するの言語
+	$conf->accept_langs = array('en', 'zh-CN'); // 対応するの言語
 
 	// paths
 	$conf->path_top = '/'; // トップページのパス(デフォルト "/")
@@ -102,7 +102,16 @@ return call_user_func( function(){
 	 *
 	 * サイトマップの定義を拡張することができます。
 	 */
-	$conf->custom_sitemap_definition = array();
+	$conf->custom_sitemap_definition = array(
+		'title' => array(
+			'lang' => array(
+				'zh' => '标题',
+			),
+		),
+		'custom_001' => array(
+			'label' => 'カスタム項目001',
+		),
+	);
 
 
 

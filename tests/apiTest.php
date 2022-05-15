@@ -85,6 +85,8 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path->type, 'path' );
 		$this->assertEquals( $output->id->label, 'ページID' );
 		$this->assertEquals( $output->id->type, 'page_id' );
+		$this->assertEquals( $output->title->label, 'ページタイトル' );
+		$this->assertEquals( $output->title->type, 'text' );
 
 		$output = $this->utils->passthru( [
 			'php',
@@ -100,6 +102,21 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path->type, 'path' );
 		$this->assertEquals( $output->id->label, 'Page ID' );
 		$this->assertEquals( $output->id->type, 'page_id' );
+		$this->assertEquals( $output->title->label, 'Title' );
+		$this->assertEquals( $output->title->type, 'text' );
+
+		$output = $this->utils->passthru( [
+			'php',
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/?PX=api.get.sitemap_definition&LANG=zh-CN' ,
+		] );
+		clearstatcache();
+
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		$output = json_decode($output);
+		// var_dump($output);
+		$this->assertEquals( $output->title->label, '标题' );
+		$this->assertEquals( $output->title->type, 'text' );
 
 
 		// -------------------

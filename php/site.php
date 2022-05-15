@@ -926,20 +926,42 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 					);
 				}
 				foreach( $val as $key2 => $val2 ){
-					$sitemap_definition[$key][$key2] = $val2;
+					if( is_array($val2) || is_object($val2) ){
+						$sitemap_definition[$key][$key2] = array_merge($sitemap_definition[$key][$key2], (array) $val2);
+					}else{
+						$sitemap_definition[$key][$key2] = $val2;
+					}
 				}
 			}
 		}
 
 		// 返却値を生成
 		$rtn = array();
+
+		$lang_full = strtolower($this->px->lang()); // 国コードを含む(または含まない)コード全体 (Insensitive Case)
+		$lang = preg_replace('/^([a-zA-Z0-9]+)(\-.*)$/', '$1', $lang_full); // 国コードを除去した言語コードのみの値
+
 		foreach( $sitemap_definition as $key => $val ){
 			$rtn[$key] = array(
 				'label' => $val['label'],
 				'type' => $val['type'],
 			);
-			if( isset($val['lang'][$this->px->lang()]) ){
-				$rtn[$key]['label'] = $val['lang'][$this->px->lang()];
+			if( isset($val['lang']) && is_array($val['lang']) ){
+				// 言語コードのみで検索する (Insensitive Case)
+				foreach($val['lang'] as $lang_code => $lang_val){
+					if( $lang == strtolower($lang_code) ){
+						$rtn[$key]['label'] = $val['lang'][$lang];
+						break;
+					}
+				}
+
+				// 国コードを含む言語コード全体で検索する (Insensitive Case)
+				foreach($val['lang'] as $lang_code => $lang_val){
+					if( $lang_full == strtolower($lang_code) ){
+						$rtn[$key]['label'] = $val['lang'][$lang_full];
+						break;
+					}
+				}
 			}
 		}
 		return $rtn;
