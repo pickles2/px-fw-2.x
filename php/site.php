@@ -580,6 +580,10 @@ class site{
 			// SQLiteキャッシュのテーブルを作成する
 			$tmp_db_column_defs = array();
 			foreach( $sitemap_definition as $sitemap_definition_key ){
+				if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
+					// カスタムカラムのカラム名が定形外の場合、列を作らない
+					continue;
+				}
 				$tmp_db_column_def = $sitemap_definition_key;
 				if( preg_match('/\_date$/si', $sitemap_definition_key) ){
 					$tmp_db_column_def .= ' DATE';
@@ -614,6 +618,10 @@ CREATE TABLE sitemap(
 			ob_start(); ?>
 INSERT INTO sitemap( <?php
 foreach( $sitemap_definition as $sitemap_definition_key ){
+	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
+		// カスタムカラムのカラム名が定形外の場合、列を作らない
+		continue;
+	}
 	echo $sitemap_definition_key.',';
 }
 ?>
@@ -623,6 +631,10 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 	____originated_csv_row
 )VALUES(<?php
 foreach( $sitemap_definition as $sitemap_definition_key ){
+	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
+		// カスタムカラムのカラム名が定形外の場合、列を作らない
+		continue;
+	}
 	echo ':'.$sitemap_definition_key.',';
 }
 ?>
@@ -651,6 +663,10 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 
 				$values = array();
 				foreach( $sitemap_definition as $sitemap_definition_key ){
+					if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
+						// カスタムカラムのカラム名が定形外の場合、列を作らない
+						continue;
+					}
 					if( !array_key_exists($sitemap_definition_key, $tmp_page_info) || !array_key_exists('id', $tmp_page_info) ){
 						$values[':'.$sitemap_definition_key] = null;
 					}elseif( $sitemap_definition_key == 'role' ){

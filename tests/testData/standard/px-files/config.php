@@ -111,6 +111,9 @@ return call_user_func( function(){
 		'custom_001' => array(
 			'label' => 'カスタム項目001',
 		),
+		'custom-column--002' => array(
+			'label' => 'カスタム項目002 (使用できないカラム名)',
+		),
 	);
 
 
