@@ -788,6 +788,19 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 	 *
 	 * このメソッドは、 Pickles Framework v2.1.8 で追加されました。
 	 *
+	 * `type` には、カラムの型を表す以下のいずれかの値を格納します。
+	 *
+	 * - `text`: 単行のテキスト (デフォルト)
+	 * - `textarea`: 複数行のテキスト
+	 * - `boolean`: 空白、0 または 1 がセットされる真偽値
+	 * - `integer`: 整数値
+	 * - `date`: 日付を表す文字列
+	 * - `datetime`: 日時を表す文字列
+	 * - `path`: スラッシュから始まるパスを表す文字列
+	 * - `page_id`: ページIDを表す文字列
+	 * - `logical_path`: 論理構造上のパスを表す文字列
+	 * - `layout_id`: テーマのレイアウトIDを表す文字列
+	 *
 	 * @return array サイトマップ定義
 	 */
 	public function get_sitemap_definition(){
