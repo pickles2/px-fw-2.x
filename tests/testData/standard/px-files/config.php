@@ -111,6 +111,28 @@ return call_user_func( function(){
 		'custom_001' => array(
 			'label' => 'カスタム項目001',
 		),
+
+		// type の自動判定
+		'is-custom-column-test-date' => array(
+			'label' => 'カスタム項目 (boolean型)',
+		),
+		'custom-column-test-date' => array(
+			'label' => 'カスタム項目 (date型)',
+		),
+		'custom-column-test-datetime' => array(
+			'label' => 'カスタム項目 (datetime型)',
+		),
+		'custom-column-test-flag' => array(
+			'label' => 'カスタム項目 (boolean型/flag)',
+		),
+		'custom-column-test-flg' => array(
+			'label' => 'カスタム項目 (boolean型/flg)',
+		),
+		'custom-column-test' => array(
+			'label' => 'カスタム項目 (text型)',
+		),
+
+		// 使用できないカラム名
 		'custom-column--002' => array(
 			'label' => 'カスタム項目002 (使用できないカラム名)',
 		),

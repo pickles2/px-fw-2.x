@@ -580,20 +580,27 @@ class site{
 		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
 			$tmp_db_column_defs = array();
-			foreach( $sitemap_definition_keys as $sitemap_definition_key ){
+			foreach( $sitemap_definition as $sitemap_definition_key => $sitemap_definition_row ){
 				if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
 					// カスタムカラムのカラム名が定形外の場合、列を作らない
 					continue;
 				}
 				$tmp_db_column_def = $sitemap_definition_key;
-				if( preg_match('/\_date$/si', $sitemap_definition_key) ){
-					$tmp_db_column_def .= ' DATE';
-				}elseif( preg_match('/\_datetime$/si', $sitemap_definition_key) ){
-					$tmp_db_column_def .= ' DATETIME';
-				}elseif( $sitemap_definition_key == 'orderby' || preg_match('/\_fla?g$/si', $sitemap_definition_key) ){
-					$tmp_db_column_def .= ' INTEGER';
-				}else{
-					$tmp_db_column_def .= ' TEXT';
+				switch( $sitemap_definition_row['type'] ){
+					case "date":
+						$tmp_db_column_def .= ' DATE';
+						break;
+					case "datetime":
+						$tmp_db_column_def .= ' DATETIME';
+						break;
+					case "boolean":
+					case "integer":
+						$tmp_db_column_def .= ' INTEGER';
+						break;
+					case "text":
+					default:
+						$tmp_db_column_def .= ' TEXT';
+						break;
 				}
 				if( $sitemap_definition_key == 'id' || $sitemap_definition_key == 'path' ){
 					$tmp_db_column_def .= ' UNIQUE';
@@ -960,6 +967,20 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 						$sitemap_definition[$key][$key2] = array_merge($sitemap_definition[$key][$key2], (array) $val2);
 					}else{
 						$sitemap_definition[$key][$key2] = $val2;
+					}
+				}
+
+				if( !isset( $sitemap_definition[$key]['type'] ) || !is_string($sitemap_definition[$key]['type']) || !strlen($sitemap_definition[$key]['type']) ){
+					if( preg_match('/^is(?:\_|\-)/si', $key) ){
+						$sitemap_definition[$key]['type'] = 'boolean';
+					}elseif( preg_match('/(?:\_|\-)date$/si', $key) ){
+						$sitemap_definition[$key]['type'] = 'date';
+					}elseif( preg_match('/(?:\_|\-)datetime$/si', $key) ){
+						$sitemap_definition[$key]['type'] = 'datetime';
+					}elseif( $key == 'orderby' || preg_match('/(?:\_|\-)fla?g$/si', $key) ){
+						$sitemap_definition[$key]['type'] = 'boolean';
+					}else{
+						$sitemap_definition[$key]['type'] = 'text';
 					}
 				}
 			}

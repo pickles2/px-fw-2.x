@@ -87,6 +87,12 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->id->type, 'page_id' );
 		$this->assertEquals( $output->title->label, 'ページタイトル' );
 		$this->assertEquals( $output->title->type, 'text' );
+		$this->assertEquals( $output->{'is-custom-column-test-date'}->type, 'boolean' );
+		$this->assertEquals( $output->{'custom-column-test-date'}->type, 'date' );
+		$this->assertEquals( $output->{'custom-column-test-datetime'}->type, 'datetime' );
+		$this->assertEquals( $output->{'custom-column-test-flag'}->type, 'boolean' );
+		$this->assertEquals( $output->{'custom-column-test-flg'}->type, 'boolean' );
+		$this->assertEquals( $output->{'custom-column-test'}->type, 'text' );
 
 		$output = $this->utils->passthru( [
 			'php',
