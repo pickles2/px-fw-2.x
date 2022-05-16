@@ -370,7 +370,8 @@ class site{
 
 		//  サイトマップをロード
 		$num_auto_pid = 0;
-		$sitemap_definition = array_keys($this->get_sitemap_definition());
+		$sitemap_definition = $this->get_sitemap_definition();
+		$sitemap_definition_keys = array_keys( $sitemap_definition );
 		$sitemap_page_originated_csv = array();
 		// var_dump($ary_sitemap_files);
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
@@ -434,8 +435,8 @@ class site{
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
-					if( array_search( $defrow['key'], $sitemap_definition ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) && !preg_match('/^\_\_\_\_/si', $defrow['key']) ){
-						array_push($sitemap_definition, $defrow['key']);
+					if( array_search( $defrow['key'], $sitemap_definition_keys ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) && !preg_match('/^\_\_\_\_/si', $defrow['key']) ){
+						array_push($sitemap_definition_keys, $defrow['key']);
 					}
 				}
 
@@ -579,7 +580,7 @@ class site{
 		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
 			$tmp_db_column_defs = array();
-			foreach( $sitemap_definition as $sitemap_definition_key ){
+			foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
 					// カスタムカラムのカラム名が定形外の場合、列を作らない
 					continue;
@@ -617,7 +618,7 @@ CREATE TABLE sitemap(
 			// INSERT文をストア
 			ob_start(); ?>
 INSERT INTO sitemap( <?php
-foreach( $sitemap_definition as $sitemap_definition_key ){
+foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
 		// カスタムカラムのカラム名が定形外の場合、列を作らない
 		continue;
@@ -630,7 +631,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 	____originated_csv,
 	____originated_csv_row
 )VALUES(<?php
-foreach( $sitemap_definition as $sitemap_definition_key ){
+foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
 		// カスタムカラムのカラム名が定形外の場合、列を作らない
 		continue;
@@ -662,7 +663,7 @@ foreach( $sitemap_definition as $sitemap_definition_key ){
 				// var_dump($role_id);
 
 				$values = array();
-				foreach( $sitemap_definition as $sitemap_definition_key ){
+				foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 					if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
 						// カスタムカラムのカラム名が定形外の場合、列を作らない
 						continue;
