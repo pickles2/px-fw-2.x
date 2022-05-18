@@ -437,6 +437,10 @@ class site{
 					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
 					if( array_search( $defrow['key'], $sitemap_definition_keys ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) && !preg_match('/^\_\_\_\_/si', $defrow['key']) ){
 						array_push($sitemap_definition_keys, $defrow['key']);
+						$sitemap_definition[$defrow['key']] = array(
+							'label' => null,
+							'type' => null,
+						);
 					}
 				}
 
@@ -658,7 +662,6 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$____order = 0;
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
 			set_time_limit(30);//タイマー延命
-			// sleep(1); // 時間がかかる場合をシミュレーション
 			if( $tmp_pdo !== false ){
 				$____parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$____parent_page_id = $____parent_page_id[count($____parent_page_id)-1];
@@ -666,8 +669,6 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 					$____parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $____parent_page_id );
 					$____parent_page_id = @$this->sitemap_array[$____parent_page_id]['id'];
 				}
-
-				// var_dump($role_id);
 
 				$values = array();
 				foreach( $sitemap_definition_keys as $sitemap_definition_key ){
