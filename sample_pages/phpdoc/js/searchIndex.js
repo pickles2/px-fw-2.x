@@ -1041,6 +1041,11 @@ Search.appendIndex(
             "summary": "\u30B5\u30A4\u30C8\u30DE\u30C3\u30D7\u914D\u5217\u3092\u53D6\u5F97\u3059\u308B\u3002",
             "url": "classes/picklesFramework2-site.html#method_get_sitemap"
         },                {
+            "fqsen": "\\picklesFramework2\\site\u003A\u003Aget_sitemap_definition\u0028\u0029",
+            "name": "get_sitemap_definition",
+            "summary": "\u30B5\u30A4\u30C8\u30DE\u30C3\u30D7\u5B9A\u7FA9\u3092\u53D6\u5F97\u3059\u308B\u3002",
+            "url": "classes/picklesFramework2-site.html#method_get_sitemap_definition"
+        },                {
             "fqsen": "\\picklesFramework2\\site\u003A\u003Aget_parent\u0028\u0029",
             "name": "get_parent",
             "summary": "\u89AA\u30DA\u30FC\u30B8\u306EID\u3092\u53D6\u5F97\u3059\u308B\u3002",
@@ -1195,11 +1200,6 @@ Search.appendIndex(
             "name": "px",
             "summary": "Pickles\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
             "url": "classes/picklesFramework2-site.html#property_px"
-        },                {
-            "fqsen": "\\picklesFramework2\\site\u003A\u003A\u0024conf",
-            "name": "conf",
-            "summary": "\u8A2D\u5B9A\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
-            "url": "classes/picklesFramework2-site.html#property_conf"
         },                {
             "fqsen": "\\picklesFramework2\\site\u003A\u003A\u0024sitemap_array",
             "name": "sitemap_array",

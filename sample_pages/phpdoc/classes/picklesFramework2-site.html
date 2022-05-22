@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>Pickles Framework v2.1.7 API Document</title>
+            <title>Pickles Framework v2.1.8 API Document</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
@@ -24,7 +24,7 @@
     </head>
 <body id="top">
     <header class="phpdocumentor-header phpdocumentor-section">
-    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Pickles Framework v2.1.7 API Document</a></h1>
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">Pickles Framework v2.1.8 API Document</a></h1>
     <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
     <label class="phpdocumentor-header__menu-icon" for="menu-button">
         <i class="fas fa-bars"></i>
@@ -269,13 +269,6 @@
 
 <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/picklesFramework2-site.html#property_conf">$conf</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-<dd>設定オブジェクト</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -private">
     <a href="classes/picklesFramework2-site.html#property_dynamic_path_param">$dynamic_path_param</a>
     <span>
                         &nbsp;: mixed            </span>
@@ -517,6 +510,13 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
 <dd>サイトマップ配列を取得する。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/picklesFramework2-site.html#method_get_sitemap_definition">get_sitemap_definition()</a>
+    <span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>サイトマップ定義を取得する。</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/picklesFramework2-site.html#method_is_match_dynamic_path">is_match_dynamic_path()</a>
     <span>
                                 &nbsp;: bool    </span>
@@ -612,55 +612,6 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_conf">
-        $conf
-        <a href="classes/picklesFramework2-site.html#property_conf" class="headerlink"><i class="fas fa-link"></i></a>
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">144</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">設定オブジェクト</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$conf</span>
-    </code>
-
-    
-        <section class="phpdocumentor-description"></section>
-
-    
-    <h5 class="phpdocumentor-tag-list__heading" id="tags">
-        Tags
-        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
-    </h5>
-    <dl class="phpdocumentor-tag-list">
-                                    <dt class="phpdocumentor-tag-list__entry">
-                    <span class="phpdocumentor-tag__name">access</span>
-                </dt>
-                <dd class="phpdocumentor-tag-list__definition">
-                                                                                
-                                                 <section class="phpdocumentor-description"><p>private</p>
-</section>
-
-                                    </dd>
-                        </dl>
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -private
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="property_dynamic_path_param">
         $dynamic_path_param
         <a href="classes/picklesFramework2-site.html#property_dynamic_path_param" class="headerlink"><i class="fas fa-link"></i></a>
@@ -670,7 +621,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">169</span>
+    <span class="phpdocumentor-element-found-in__line">164</span>
 
     </aside>
 
@@ -719,7 +670,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">175</span>
+    <span class="phpdocumentor-element-found-in__line">170</span>
 
     </aside>
 
@@ -818,7 +769,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">144</span>
 
     </aside>
 
@@ -867,7 +818,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">159</span>
+    <span class="phpdocumentor-element-found-in__line">154</span>
 
     </aside>
 
@@ -916,7 +867,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">154</span>
+    <span class="phpdocumentor-element-found-in__line">149</span>
 
     </aside>
 
@@ -965,7 +916,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">164</span>
+    <span class="phpdocumentor-element-found-in__line">159</span>
 
     </aside>
 
@@ -1018,7 +969,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">182</span>
+    <span class="phpdocumentor-element-found-in__line">177</span>
 
     </aside>
 
@@ -1063,7 +1014,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">226</span>
+    <span class="phpdocumentor-element-found-in__line">220</span>
 
     </aside>
 
@@ -1096,7 +1047,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1310</span>
+    <span class="phpdocumentor-element-found-in__line">1522</span>
 
     </aside>
 
@@ -1152,7 +1103,7 @@ $sitemap_page_tree のキャッシュにSQLiteを使用するためのデータ�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1376</span>
+    <span class="phpdocumentor-element-found-in__line">1588</span>
 
     </aside>
 
@@ -1203,7 +1154,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1831</span>
+    <span class="phpdocumentor-element-found-in__line">2043</span>
 
     </aside>
 
@@ -1250,7 +1201,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1600</span>
+    <span class="phpdocumentor-element-found-in__line">1812</span>
 
     </aside>
 
@@ -1306,7 +1257,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1621</span>
+    <span class="phpdocumentor-element-found-in__line">1833</span>
 
     </aside>
 
@@ -1362,7 +1313,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1660</span>
+    <span class="phpdocumentor-element-found-in__line">1872</span>
 
     </aside>
 
@@ -1418,7 +1369,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">843</span>
+    <span class="phpdocumentor-element-found-in__line">1055</span>
 
     </aside>
 
@@ -1468,7 +1419,7 @@ Actor がない場合、空の配列が返されます。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1446</span>
+    <span class="phpdocumentor-element-found-in__line">1658</span>
 
     </aside>
 
@@ -1551,7 +1502,7 @@ print '&lt;/ul&gt;';
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1248</span>
+    <span class="phpdocumentor-element-found-in__line">1460</span>
 
     </aside>
 
@@ -1605,7 +1556,7 @@ var_dump( $page_info );
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1290</span>
+    <span class="phpdocumentor-element-found-in__line">1502</span>
 
     </aside>
 
@@ -1652,7 +1603,7 @@ var_dump( $page_info );
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">885</span>
+    <span class="phpdocumentor-element-found-in__line">1097</span>
 
     </aside>
 
@@ -1694,7 +1645,7 @@ var_dump( $page_info );
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1705</span>
+    <span class="phpdocumentor-element-found-in__line">1917</span>
 
     </aside>
 
@@ -1756,7 +1707,7 @@ var_dump( $page_info );
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1189</span>
+    <span class="phpdocumentor-element-found-in__line">1401</span>
 
     </aside>
 
@@ -1803,7 +1754,7 @@ var_dump( $page_info );
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">951</span>
+    <span class="phpdocumentor-element-found-in__line">1163</span>
 
     </aside>
 
@@ -1879,7 +1830,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1179</span>
+    <span class="phpdocumentor-element-found-in__line">1391</span>
 
     </aside>
 
@@ -1926,7 +1877,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1217</span>
+    <span class="phpdocumentor-element-found-in__line">1429</span>
 
     </aside>
 
@@ -1976,7 +1927,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1203</span>
+    <span class="phpdocumentor-element-found-in__line">1415</span>
 
     </aside>
 
@@ -2023,7 +1974,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">816</span>
+    <span class="phpdocumentor-element-found-in__line">1028</span>
 
     </aside>
 
@@ -2070,7 +2021,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">249</span>
+    <span class="phpdocumentor-element-found-in__line">243</span>
 
     </aside>
 
@@ -2117,7 +2068,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1898</span>
+    <span class="phpdocumentor-element-found-in__line">2110</span>
 
     </aside>
 
@@ -2167,7 +2118,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">239</span>
+    <span class="phpdocumentor-element-found-in__line">233</span>
 
     </aside>
 
@@ -2204,7 +2155,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1769</span>
+    <span class="phpdocumentor-element-found-in__line">1981</span>
 
     </aside>
 
@@ -2264,7 +2215,7 @@ logical_path 列はロール側の値が、それぞれ強制的に採用され�
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1343</span>
+    <span class="phpdocumentor-element-found-in__line">1555</span>
 
     </aside>
 
@@ -2314,7 +2265,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">909</span>
+    <span class="phpdocumentor-element-found-in__line">1121</span>
 
     </aside>
 
@@ -2357,7 +2308,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">806</span>
+    <span class="phpdocumentor-element-found-in__line">807</span>
 
     </aside>
 
@@ -2385,6 +2336,66 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_get_sitemap_definition">
+        get_sitemap_definition()
+        <a href="classes/picklesFramework2-site.html#method_get_sitemap_definition" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">831</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">サイトマップ定義を取得する。</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">get_sitemap_definition</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+        <section class="phpdocumentor-description"><p>このメソッドは、 Pickles Framework v2.1.8 で追加されました。</p>
+<p><code class="prettyprint">type</code> には、カラムの型を表す以下のいずれかの値を格納します。</p>
+<ul>
+<li>
+<code class="prettyprint">text</code>: 単行のテキスト (デフォルト)</li>
+<li>
+<code class="prettyprint">textarea</code>: 複数行のテキスト</li>
+<li>
+<code class="prettyprint">boolean</code>: 空白、0 または 1 がセットされる真偽値</li>
+<li>
+<code class="prettyprint">integer</code>: 整数値</li>
+<li>
+<code class="prettyprint">date</code>: 日付を表す文字列</li>
+<li>
+<code class="prettyprint">datetime</code>: 日時を表す文字列</li>
+<li>
+<code class="prettyprint">path</code>: スラッシュから始まるパスを表す文字列</li>
+<li>
+<code class="prettyprint">page_id</code>: ページIDを表す文字列</li>
+<li>
+<code class="prettyprint">logical_path</code>: 論理構造上のパスを表す文字列</li>
+<li>
+<code class="prettyprint">layout_id</code>: テーマのレイアウトIDを表す文字列</li>
+</ul>
+</section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>サイトマップ定義</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_is_match_dynamic_path">
         is_match_dynamic_path()
         <a href="classes/picklesFramework2-site.html#method_is_match_dynamic_path" class="headerlink"><i class="fas fa-link"></i></a>
@@ -2392,7 +2403,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1274</span>
+    <span class="phpdocumentor-element-found-in__line">1486</span>
 
     </aside>
 
@@ -2439,7 +2450,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1856</span>
+    <span class="phpdocumentor-element-found-in__line">2068</span>
 
     </aside>
 
@@ -2495,7 +2506,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1263</span>
+    <span class="phpdocumentor-element-found-in__line">1475</span>
 
     </aside>
 
@@ -2542,7 +2553,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1070</span>
+    <span class="phpdocumentor-element-found-in__line">1282</span>
 
     </aside>
 
@@ -2598,7 +2609,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">266</span>
+    <span class="phpdocumentor-element-found-in__line">260</span>
 
     </aside>
 
@@ -2654,7 +2665,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2002</span>
+    <span class="phpdocumentor-element-found-in__line">2214</span>
 
     </aside>
 
@@ -2712,7 +2723,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1916</span>
+    <span class="phpdocumentor-element-found-in__line">2128</span>
 
     </aside>
 
@@ -2774,7 +2785,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">2017</span>
+    <span class="phpdocumentor-element-found-in__line">2229</span>
 
     </aside>
 
@@ -2821,7 +2832,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">778</span>
+    <span class="phpdocumentor-element-found-in__line">779</span>
 
     </aside>
 
@@ -2856,7 +2867,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">285</span>
+    <span class="phpdocumentor-element-found-in__line">279</span>
 
     </aside>
 
@@ -2898,7 +2909,7 @@ roleページが更にroleを持つ場合、再帰的に検索します。</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="php/site.php"><a href="files/php-site.html"><abbr title="php/site.php">site.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1576</span>
+    <span class="phpdocumentor-element-found-in__line">1788</span>
 
     </aside>
 
