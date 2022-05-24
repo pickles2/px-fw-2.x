@@ -1836,20 +1836,23 @@ class px{
 		if( !isset( $this->conf()->public_cache_dir ) || !strlen( ''.$this->conf()->public_cache_dir ) ){
 			return false;
 		}
+
+		$realpath_docroot = $this->get_realpath_docroot();
+
 		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode(''.$this->proc_id).'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
-		if( !$this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
-			$this->fs()->mkdir_r( $this->get_realpath_docroot().$rtn );
+		if( !$this->fs()->is_dir( $realpath_docroot.$rtn ) ){
+			$this->fs()->mkdir_r( $realpath_docroot.$rtn );
 		}
 		if( !strlen( ''.$localpath_resource ) ){
 			return $this->fs()->normalize_path($rtn);
 		}
 		$rtn = $this->fs()->get_realpath( $rtn.'/'.$localpath_resource );
-		if( $this->fs()->is_dir( $this->get_realpath_docroot().$rtn ) ){
+		if( $this->fs()->is_dir( $realpath_docroot.$rtn ) ){
 			$rtn .= '/';
 		}
-		if( !$this->fs()->is_dir( dirname($this->get_realpath_docroot().$rtn) ) ){
-			$this->fs()->mkdir_r( dirname($this->get_realpath_docroot().$rtn) );
+		if( !$this->fs()->is_dir( dirname($realpath_docroot.$rtn) ) ){
+			$this->fs()->mkdir_r( dirname($realpath_docroot.$rtn) );
 		}
 		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
