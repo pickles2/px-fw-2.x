@@ -86,6 +86,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework v2.1.9 (リリース日未定)
 
 - 一部機能のパフォーマンス改善。
+- HTTPレスポンスステータスメッセージを網羅した。
 
 ### Pickles Framework v2.1.8 (2022年5月22日)
 
