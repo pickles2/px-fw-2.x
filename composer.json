@@ -14,7 +14,7 @@
             "@php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.8 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.9 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "dev",
