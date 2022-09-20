@@ -585,6 +585,10 @@ class site{
 
 		if( $tmp_pdo !== false ){
 			// SQLiteキャッシュのテーブルを作成する
+
+			// すでに存在していた場合は、一旦削除する。
+			@$tmp_pdo->query('DROP TABLE IF EXISTS sitemap;');
+
 			$tmp_db_column_defs = array();
 			foreach( $sitemap_definition as $sitemap_definition_key => $sitemap_definition_row ){
 				if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
