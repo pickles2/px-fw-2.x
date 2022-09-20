@@ -615,7 +615,7 @@ class site{
 			}
 			ob_start();
 ?>
-CREATE TABLE sitemap(
+CREATE TABLE IF NOT EXISTS sitemap(
 	<?= implode(', ', $tmp_db_column_defs) ?>,
 	____parent_page_id TEXT,
 	____order INTEGER,
