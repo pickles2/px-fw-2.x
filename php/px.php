@@ -207,18 +207,24 @@ class px{
 		$this->bowl = new bowl();
 
 		// Apply command-line option "--command-php"
-		$temporary_req = new \tomk79\request();
-		if( strlen(''.$temporary_req->get_cli_option( '--command-php' )) ){
-			$this->conf->commands->php = $temporary_req->get_cli_option( '--command-php' );
+		// make instance $req
+		$req_conf = new \stdClass;
+		$req_conf->session_name   = $this->conf->session_name;
+		$req_conf->session_expire = $this->conf->session_expire;
+		$req_conf->directory_index_primary = $this->get_directory_index_primary();
+		$this->req = new \tomk79\request( $req_conf );
+
+		if( strlen(''.$this->req->get_cli_option( '--command-php' )) ){
+			$this->conf->commands->php = $this->req->get_cli_option( '--command-php' );
 		}
-		if( strlen(''.$temporary_req->get_cli_option( '-c' )) ){
-			$this->conf->path_phpini = $temporary_req->get_cli_option( '-c' );
+		if( strlen(''.$this->req->get_cli_option( '-c' )) ){
+			$this->conf->path_phpini = $this->req->get_cli_option( '-c' );
 		}
-		if( strlen(''.$temporary_req->get_cli_option( '--method' )) ){
-			$_SERVER['REQUEST_METHOD'] = strtoupper($temporary_req->get_cli_option( '--method' ));
+		if( strlen(''.$this->req->get_cli_option( '--method' )) ){
+			$_SERVER['REQUEST_METHOD'] = strtoupper($this->req->get_cli_option( '--method' ));
 		}
 		if( strtoupper($_SERVER['REQUEST_METHOD']) == "POST" ){
-			$tmp_body_file = $temporary_req->get_cli_option( '--body-file' );
+			$tmp_body_file = $this->req->get_cli_option( '--body-file' );
 			if( strlen(''.$tmp_body_file) ){
 				// ファイルからPOSTパラメータを読み取る
 				if( is_file($this->realpath_homedir.'/_sys/ram/data/'.$tmp_body_file) ){
@@ -228,11 +234,14 @@ class px{
 					// なければ、絶対パスとして探す
 					parse_str(file_get_contents( $tmp_body_file ), $_POST);
 				}
-			}elseif( strlen(''.$temporary_req->get_cli_option( '--body' )) ){
+			}elseif( strlen(''.$this->req->get_cli_option( '--body' )) ){
 				// POSTパラメータを直接受け取る
-				parse_str($temporary_req->get_cli_option( '--body' ), $_POST);
+				parse_str($this->req->get_cli_option( '--body' ), $_POST);
 			}
 			unset($tmp_body_file);
+		}
+		if( strlen(''.$this->req->get_cli_option( '-u' )) ){
+			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
 		}
 
 		// make instance $fs
@@ -244,15 +253,6 @@ class px{
 		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 		$this->realpath_homedir = $this->fs()->normalize_path($this->realpath_homedir);
 
-		// make instance $req
-		$req_conf = new \stdClass;
-		$req_conf->session_name   = $this->conf->session_name;
-		$req_conf->session_expire = $this->conf->session_expire;
-		$req_conf->directory_index_primary = $this->get_directory_index_primary();
-		$this->req = new \tomk79\request( $req_conf );
-		if( strlen(''.$this->req->get_cli_option( '-u' )) ){
-			$_SERVER['HTTP_USER_AGENT'] = @$this->req->get_cli_option( '-u' );
-		}
 		if(!count($_GET)){
 			$tmp_cli_params = $this->req->get_cli_params();
 			if( count($tmp_cli_params) ){
