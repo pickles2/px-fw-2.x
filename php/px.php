@@ -124,6 +124,7 @@ class px{
 			@ini_set( 'mbstring.detect_order' , 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 			mb_detect_order( 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
+		@ini_set( 'session.cookie_httponly' , '1' ); // NOTE: Pickles Framework v2.1.11 で追加
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
 
