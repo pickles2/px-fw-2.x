@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.11 (リリース日未定)
+### Pickles Framework v2.1.11 (2022年11月3日)
 
 - セッション関連の設定が正しく反映されない不具合を修正。
 - 初期化時に `session.cookie_httponly = 1` をセットするようになった。
