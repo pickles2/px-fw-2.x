@@ -373,7 +373,7 @@ class site{
 		$sitemap_definition = $this->get_sitemap_definition();
 		$sitemap_definition_keys = array_keys( $sitemap_definition );
 		$sitemap_page_originated_csv = array();
-		// var_dump($ary_sitemap_files);
+
 		foreach( $ary_sitemap_files as $basename_sitemap_csv ){
 			$tmp_sitemap_definition = array();
 
@@ -385,13 +385,16 @@ class site{
 				// Libre Office, Open Office 形式の一時ファイルを無視する
 				continue;
 			}
-			// var_dump($basename_sitemap_csv);
 
-			$tmp_sitemap = $this->px->fs()->read_csv( $path_sitemap_dir.$basename_sitemap_csv );
+			$tmp_sitemap = $this->px->fs()->read_csv(
+				$path_sitemap_dir.$basename_sitemap_csv,
+				array(
+					"charset" => "UTF-8", // NOTE: px-fw-2.x v2.1.12: 追加
+				)
+			);
 			foreach ($tmp_sitemap as $row_number=>$row) {
-				// sleep(1); // 時間がかかる場合をシミュレーション
 
-				set_time_limit(30);//タイマー延命
+				set_time_limit(30); // タイマー延命
 				$num_auto_pid++;
 				$tmp_array = array();
 				if( preg_match( '/^(?:\*)/is' , $row[0] ) ){
@@ -470,7 +473,7 @@ class site{
 						break;
 				}
 				if( !array_key_exists('id', $tmp_array) || !strlen( ''.$tmp_array['id'] ) ){
-					//ページID文字列を自動生成
+					// ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
 					$tmp_array['id'] = $tmp_id;
 					unset($tmp_id);
@@ -524,7 +527,6 @@ class site{
 				if( !array_key_exists('content', $tmp_array) || !strlen( ''.@$tmp_array['content'] ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
-					// $tmp_array['content'] = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content']);
 				}
 				$tmp_array['content'] = preg_replace( '/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content'] );//index.htmlを付加する。
 				if( preg_match( '/^alias\:/s' , $tmp_array['path'] ) ){
@@ -667,7 +669,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$this->sitemap_page_tree = array();
 		$____order = 0;
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
-			set_time_limit(30);//タイマー延命
+			set_time_limit(30); // タイマー延命
 			if( $tmp_pdo !== false ){
 				$____parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$____parent_page_id = $____parent_page_id[count($____parent_page_id)-1];
@@ -721,11 +723,11 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 			unset( $lockfile_src );
 		}
-		set_time_limit(30);//タイマーリセット
+		set_time_limit(30); // タイマーリセット
 		unset($tmp_path, $tmp_page_info );
 
-		//  キャッシュディレクトリを作成
-		set_time_limit(0);//タイマー延命
+		// キャッシュディレクトリを作成
+		set_time_limit(0); // タイマー延命
 		$this->px->fs()->mkdir($path_sitemap_cache_dir);
 
 		// キャッシュファイルを作成
@@ -772,7 +774,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		// サイトマップキャッシュ作成中のアプリケーションロックを解除
 		$this->px->fs()->rm( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' );
 
-		set_time_limit(30);//タイマーリセット
+		set_time_limit(30); // タイマーリセット
 
 		return true;
 	} // load_sitemap_csv();

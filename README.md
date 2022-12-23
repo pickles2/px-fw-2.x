@@ -86,6 +86,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework v2.1.12 (リリース日未定)
 
 - 初期化時に `session.cookie_secure = 1` をセットするようになった。
+- サイトマップCSVの読み込み時に、UTF-8 を明示するようになった。
 
 ### Pickles Framework v2.1.11 (2022年11月3日)
 
