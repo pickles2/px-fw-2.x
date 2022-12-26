@@ -164,6 +164,35 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	}
 
 	/**
+	 * `$px->h()` のテスト
+	 */
+	public function testH(){
+		$cd = realpath('.');
+		chdir(__DIR__.'/testData/standard/');
+
+		$px = new picklesFramework2\px('./px-files/');
+
+		$this->assertSame( '', $px->h() );
+		$this->assertSame( '', $px->h(null) );
+		$this->assertSame( '0', $px->h('0') );
+		$this->assertSame( '&lt;html lang=&quot;ja&quot;&gt;', $px->h('<html lang="ja">') );
+		$this->assertSame( '&lt;html<br />'."\n".'lang=&quot;ja&quot;&gt;', nl2br($px->h('<html'."\n".'lang="ja">')) );
+
+
+		chdir($cd);
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 後始末
+		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		clearstatcache();
+		// var_dump($output);
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+	/**
 	 * サイトマップCSVの解釈のテスト
 	 */
 	public function testSitemap(){

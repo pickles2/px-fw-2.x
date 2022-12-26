@@ -2256,10 +2256,33 @@ class px{
 		return touch( $lockfilepath );
 	}
 
-
+	/**
+	 * HTML特殊文字をエスケープする
+	 *
+	 * `htmlspecialchars()` のラッパーです。
+	 *
+	 * Pickles Framework v2.1.12 で追加されました。
+	 *
+	 * @param string|null $str 変換対象の文字列。`null` も受け付けます。
+	 * @param integer|null $flags 変換オプション。`htmlspecialchars()` に引き継がれます。
+	 * 省略時、 `ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401` をデフォルトとします。
+	 * @return string HTML特殊文字エスケープ後の文字列。
+	 * `$str` に `null` が与えられた場合は、 空白文字列を返します。
+	 */
+	public function h( $str = null, $flags = null ){
+		if( is_null($str) ){
+			return '';
+		}
+		if( is_null($flags) ){
+			$flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401; // PHP 8.1 以降のデフォルトをデフォルトとする
+		}
+		$str = htmlspecialchars(''.$str, $flags);
+		return $str;
+	}
 
 	/**
 	 * Pickles 2 の SVG ロゴソースを取得する。
+	 *
 	 * @param array $opt オプション
 	 * <dl>
 	 * 	<dt>color</dt><dd>ロゴの色コード</dd>
