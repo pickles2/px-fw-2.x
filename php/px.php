@@ -1681,17 +1681,18 @@ class px{
 		if( !is_null($rtn) ){
 			return $rtn;
 		}
-		$rtn = $this->fs()->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
-		if( $rtn != '/' ){
-			$rtn .= '/';
-		}
-		if( $this->req()->is_cmd() ){
+		if( !$this->req()->is_cmd() ){
+			// Web
+			$rtn = $this->fs()->normalize_path( dirname( $_SERVER['SCRIPT_NAME'] ) );
+			if( $rtn != '/' ){
+				$rtn .= '/';
+			}
+		}else{
+			// CLI
 			$rtn = '/';
 			if( @strlen( ''.$this->conf->path_controot ) ){
 				$rtn = $this->conf->path_controot;
 				$rtn = preg_replace('/^(.*?)\/*$/s', '$1/', $rtn);
-				$rtn = $this->fs()->normalize_path($rtn);
-				return $rtn;
 			}
 		}
 		$rtn = $this->fs()->normalize_path($rtn);
