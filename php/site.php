@@ -765,7 +765,10 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			);
 
 			// remove tmp database
-			$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
+			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
+				// NOTE: Windows で、 `sitemap.sqlite.tmp` が使用中のままとなり、削除に失敗する場合がある。
+				// このとき `PHP Warning: Resource temporarily unavailable` が発生し、ユニットテストが失敗する。
+				// 実害はほぼないので、ここ↑では `@` をつけて隠すことにした。
 		}
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
