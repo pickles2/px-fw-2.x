@@ -241,7 +241,7 @@ class site{
 	 * @return string ダイナミックパスパラメータ値
 	 */
 	public function get_path_param( $key = '' ){
-		if( !strlen(''.$key) ){
+		if( !strlen($key ?? "") ){
 			$key = '';
 		}
 		if( !array_key_exists($key, $this->dynamic_path_param) ){
@@ -281,7 +281,9 @@ class site{
 
 		// $path_top の設定値をチューニング
 		$path_top = $this->px->conf()->path_top;
-		if(!strlen( ''.$path_top )){ $path_top = '/'; }
+		if(!strlen( $path_top ?? "" )){
+			$path_top = '/';
+		}
 		$path_top = preg_replace( '/\/$/s' , '/'.$this->px->get_directory_index_primary() , $path_top ); // index.htmlを付加する。
 
 
@@ -437,7 +439,7 @@ class site{
 					continue;
 				}
 				foreach ($tmp_sitemap_definition as $defrow) {
-					$tmp_array[$defrow['key']] = @$row[$defrow['num']];
+					$tmp_array[$defrow['key']] = $row[$defrow['num']] ?? null;
 					if( array_search( $defrow['key'], $sitemap_definition_keys ) === false && preg_match('/^[a-zA-Z0-9\_]+$/si', $defrow['key']) && !preg_match('/^\_\_\_\_/si', $defrow['key']) ){
 						array_push($sitemap_definition_keys, $defrow['key']);
 						$sitemap_definition[$defrow['key']] = array(
@@ -454,7 +456,7 @@ class site{
 					}
 				}
 
-				if( !preg_match( '/^(?:\/|alias\:|data\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , @$tmp_array['path'] ) ){
+				if( !preg_match( '/^(?:\/|alias\:|data\:|javascript\:|\#|[a-zA-Z0-9]+\:\/\/)/is' , $tmp_array['path'] ?? "" ) ){
 					// 不正な形式のチェック
 					continue;
 				}
@@ -472,7 +474,7 @@ class site{
 						$tmp_array['path'] = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $tmp_array['path'] );
 						break;
 				}
-				if( !array_key_exists('id', $tmp_array) || !strlen( ''.$tmp_array['id'] ) ){
+				if( !array_key_exists('id', $tmp_array) || !strlen( $tmp_array['id'] ?? "" ) ){
 					// ページID文字列を自動生成
 					$tmp_id = ':auto_page_id.'.($num_auto_pid);
 					$tmp_array['id'] = $tmp_id;
@@ -482,7 +484,7 @@ class site{
 				// project.path_top の設定に対する処理
 				if( $tmp_array['path'] == $path_top ){
 					$tmp_array['id'] = '';
-				}elseif( !strlen(''.$tmp_array['id']) ){
+				}elseif( !strlen($tmp_array['id'] ?? "") ){
 					$tmp_array['id'] = ':auto_page_id.'.($num_auto_pid);
 				}
 
@@ -515,7 +517,7 @@ class site{
 						'preg'=>'/^'.$preg_pattern.'$/s',
 						'pattern_map'=>$pattern_map[2],
 					) );
-					if( !strlen( ''.@$tmp_array['content'] ) ){
+					if( !strlen( $tmp_array['content'] ?? "" ) ){
 						$tmp_array['content'] = $tmp_array['path'];
 					}
 					$tmp_array['path'] = $tmp_path_original;
@@ -524,7 +526,7 @@ class site{
 					unset($tmp_path_original);
 				}
 
-				if( !array_key_exists('content', $tmp_array) || !strlen( ''.@$tmp_array['content'] ) ){
+				if( !array_key_exists('content', $tmp_array) || !strlen( $tmp_array['content'] ?? "" ) ){
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
 				}
@@ -536,7 +538,7 @@ class site{
 				}
 
 				//  パンくず欄の先頭が > から始まっていた場合、削除
-				$tmp_array['logical_path'] = @preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] );
+				$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] ?? "" );
 
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 				$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
@@ -560,8 +562,8 @@ class site{
 		usort($this->sitemap_dynamic_paths, function($a,$b){
 			$path_short_a = preg_replace( '/\{.*$/si', '', $a['path_original'] );
 			$path_short_b = preg_replace( '/\{.*$/si', '', $b['path_original'] );
-			if( strlen(''.$path_short_a) > strlen(''.$path_short_b) ){ return -1; }
-			if( strlen(''.$path_short_a) < strlen(''.$path_short_b) ){ return  1; }
+			if( strlen($path_short_a ?? "") > strlen($path_short_b ?? "") ){ return -1; }
+			if( strlen($path_short_a ?? "") < strlen($path_short_b ?? "") ){ return  1; }
 			if( $path_short_a > $path_short_b ){ return -1; }
 			if( $path_short_a < $path_short_b ){ return  1; }
 			return 0;
@@ -673,9 +675,9 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			if( $tmp_pdo !== false ){
 				$____parent_page_id = explode('>', $tmp_page_info['logical_path']);
 				$____parent_page_id = $____parent_page_id[count($____parent_page_id)-1];
-				if(is_null(@$this->sitemap_id_map[$____parent_page_id])){
+				if( is_null($this->sitemap_id_map[$____parent_page_id] ?? null) ){
 					$____parent_page_id = preg_replace( '/\/((?:\?|\#).*)?$/s' , '/'.$this->px->get_directory_index_primary().'$1' , $____parent_page_id );
-					$____parent_page_id = @$this->sitemap_array[$____parent_page_id]['id'];
+					$____parent_page_id = $this->sitemap_array[$____parent_page_id]['id'] ?? null;
 				}
 
 				$values = array();
@@ -692,12 +694,12 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 						$values[':'.$sitemap_definition_key] = intval($tmp_page_info[$sitemap_definition_key]);
 					}elseif( preg_match('/\_date$/si', $sitemap_definition_key) ){
 						$values[':'.$sitemap_definition_key] = '';
-						if( strlen(''.$tmp_page_info[$sitemap_definition_key]) ){
+						if( strlen($tmp_page_info[$sitemap_definition_key] ?? "") ){
 							$values[':'.$sitemap_definition_key] = date('Y-m-d', strtotime($tmp_page_info[$sitemap_definition_key]));
 						}
 					}elseif( preg_match('/\_datetime$/si', $sitemap_definition_key) ){
 						$values[':'.$sitemap_definition_key] = '';
-						if( strlen(''.$tmp_page_info[$sitemap_definition_key]) ){
+						if( strlen($tmp_page_info[$sitemap_definition_key] ?? "") ){
 							$values[':'.$sitemap_definition_key] = date('Y-m-d H:i:s', strtotime($tmp_page_info[$sitemap_definition_key]));
 						}
 					}else{
@@ -763,7 +765,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			);
 
 			// remove tmp database
-			@$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
+			$this->px->fs()->rm( $path_sitemap_cache_dir.'sitemap.sqlite.tmp' );
 		}
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap.array' , self::data2phpsrc($this->sitemap_array) );
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'sitemap_id_map.array' , self::data2phpsrc($this->sitemap_id_map) );
@@ -1037,12 +1039,14 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		if( is_null( $path ) ){
 			$path = $this->px->req()->get_request_file_path();
 		}
-		if(!strlen(''.$this->get_page_info($path,'id'))){
+		if(!strlen($this->get_page_info($path,'id') ?? "")){
 			// トップページの親はいない。
 			return false;
 		}
 		$logical_path = $this->get_page_info( $path , 'logical_path' );
-		if( !strlen(''.$logical_path) ){return '';}
+		if( !strlen($logical_path ?? "") ){
+			return '';
+		}
 		$logical_paths = explode('>',$logical_path);
 		$rtn = $logical_paths[count($logical_paths)-1];
 		if(is_null($rtn)){
@@ -1068,22 +1072,22 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		if(!is_array( $current_page_info )){
 			return '';
 		}
-		if( @$current_page_info['category_top_flg'] ){
+		if( $current_page_info['category_top_flg'] ?? null ){
 			//  自身がカテゴリトップだった場合。
 			return $current_page_info['id'];
 		}
-		if( !strlen(''.$current_page_info['id']) ){
+		if( !strlen($current_page_info['id'] ?? "") ){
 			//  自身がトップページだった場合。
 			return '';
 		}
 		$page_info = $current_page_info;
 		$parent_pid = $page_info['id'];
 		while( $parent_pid = $this->get_parent($parent_pid) ){
-			if(!strlen(''.$parent_pid)){
+			if(!strlen($parent_pid ?? "")){
 				break;
 			}
 			$page_info = $this->get_page_info($parent_pid);
-			if( @$page_info['category_top_flg'] ){
+			if( $page_info['category_top_flg'] ?? null ){
 				//  自身がカテゴリトップだった場合。
 				return $page_info['id'];
 			}
@@ -1107,7 +1111,9 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$home_children = $this->get_children('', array('filter'=>true));//PxFW 1.0.4 list_flg を参照するように変更
 		foreach( $home_children as $page_id ){
 			$page_info = $this->get_page_info($page_id);
-			if(!@$page_info['category_top_flg']){continue;}
+			if( !($page_info['category_top_flg'] ?? null) ){
+				continue;
+			}
 			array_push($rtn, $page_id);
 		}
 		return $rtn;
@@ -1131,7 +1137,9 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$home_children = $this->get_children('', array('filter'=>true));
 		foreach( $home_children as $page_id ){
 			$page_info = $this->get_page_info($page_id);
-			if(@$page_info['category_top_flg']){continue;}
+			if( $page_info['category_top_flg'] ?? null ){
+				continue;
+			}
 			array_push($rtn, $page_id);
 		}
 		return $rtn;
@@ -1169,16 +1177,20 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 	 * @return mixed 単一ページ情報を格納する連想配列、`$key` が指定された場合は、その値のみ。
 	 */
 	public function get_page_info( $path, $key = null ){
-		if( is_null($path) ){ return null; }
-		if( @array_key_exists($path, $this->sitemap_id_map) && !@is_null($this->sitemap_id_map[$path]) ){
-			//ページIDで指定された場合、パスに置き換える
+		if( is_null($path) ){
+			return null;
+		}
+		if( array_key_exists($path ?? null, $this->sitemap_id_map) && !is_null($this->sitemap_id_map[$path] ?? null) ){
+			// ページIDで指定された場合、パスに置き換える
 			$path = $this->sitemap_id_map[$path];
 		}
 		if( !preg_match( '/^(?:\/|[a-zA-Z0-9]+\:)/s', $path ) ){
 			// $path が相対パスで指定された場合
 			preg_match( '/(\/)$/s', $path, $tmp_matched );
 			$path = $this->px->fs()->get_realpath( dirname( $this->px->req()->get_request_file_path() ).'/'.$path );
-			if( @strlen(''.$tmp_matched[1]) ){ $path .= $tmp_matched[1]; }
+			if( strlen($tmp_matched[1] ?? "") ){
+				$path .= $tmp_matched[1];
+			}
 			$path = $this->px->fs()->normalize_path($path);
 			unset( $tmp_matched );
 		}
@@ -1206,7 +1218,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 						$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/s','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
 						break;
 				}
-				if( array_key_exists($tmp_path, $this->sitemap_array) && !is_null( @$this->sitemap_array[$tmp_path] ) ){
+				if( array_key_exists($tmp_path, $this->sitemap_array) && !is_null( $this->sitemap_array[$tmp_path] ?? null ) ){
 					break;
 				}
 			}
@@ -1215,7 +1227,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$parsed_url = parse_url($path);
 		unset($tmp_path);
 
-		if( !array_key_exists($path, $this->sitemap_array) || is_null( @$this->sitemap_array[$path] ) ){
+		if( !array_key_exists($path, $this->sitemap_array) || is_null( $this->sitemap_array[$path] ?? null ) ){
 			//  サイトマップにズバリなければ、
 			//  ダイナミックパスを検索する。
 			$sitemap_dynamic_path = $this->get_dynamic_path_info( $path );
@@ -1233,19 +1245,19 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				break;
 			default:
 				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
-				if( !array_key_exists($path, $this->sitemap_array) || is_null( @$this->sitemap_array[$path] ) ){
+				if( !array_key_exists($path, $this->sitemap_array) || is_null( $this->sitemap_array[$path] ?? null ) ){
 					//  サイトマップにズバリなければ、
 					//  引数からパラメータを外したパスだけで再検索
-					$path = @$parsed_url['path'];
+					$path = $parsed_url['path'] ?? null;
 				}
 				break;
 		}
 
 		$rtn = null;
 		if( array_key_exists($path, $this->sitemap_array) ){
-			$rtn = @$this->sitemap_array[$path];
+			$rtn = $this->sitemap_array[$path] ?? null;
 		}
-		if( is_array($rtn) && array_key_exists('role', $rtn) && @strlen( ''.$rtn['role'] ) ){
+		if( strlen( $rtn['role'] ?? "" ) ){
 			// $args[0] = $rtn['role'];
 			$tmp_page_info_original = $rtn;
 			$rtn = $this->get_page_info( $tmp_page_info_original['role'] );
@@ -1254,7 +1266,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 					// これらの値はrole側の値を強制採用
 					continue;
 				}
-				if(strlen(''.$tmpVal)){
+				if( strlen($tmpVal ?? "") ){
 					$rtn[$tmpKey] = $tmpVal;
 				}
 			}
@@ -1264,18 +1276,16 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$rtn['role'] = $tmp_page_info_original['role'];
 			unset($tmp_page_info_original, $tmpKey, $tmpVal);
 		}
-		if( !is_array($rtn) ){ return null; }
-		if( !array_key_exists('title', $rtn)            || !strlen( ''.@$rtn['title'] ) ){ $rtn['title'] = ''; }
-		if( !array_key_exists('title_breadcrumb', $rtn) || !strlen( ''.@$rtn['title_breadcrumb'] ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
-		if( !array_key_exists('title_h1', $rtn)         || !strlen( ''.@$rtn['title_h1'] ) ){ $rtn['title_h1'] = $rtn['title']; }
-		if( !array_key_exists('title_label', $rtn)      || !strlen( ''.@$rtn['title_label'] ) ){ $rtn['title_label'] = $rtn['title']; }
-		if( !array_key_exists('title_full', $rtn)       || !strlen( ''.@$rtn['title_full'] ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
+		if( !is_array($rtn) ){
+			return null;
+		}
+		if( !strlen( $rtn['title'] ?? "" ) ){ $rtn['title'] = ''; }
+		if( !strlen( $rtn['title_breadcrumb'] ?? "" ) ){ $rtn['title_breadcrumb'] = $rtn['title']; }
+		if( !strlen( $rtn['title_h1'] ?? "" ) ){ $rtn['title_h1'] = $rtn['title']; }
+		if( !strlen( $rtn['title_label'] ?? "" ) ){ $rtn['title_label'] = $rtn['title']; }
+		if( !strlen( $rtn['title_full'] ?? "" ) ){ $rtn['title_full'] = $rtn['title'].' | '.$this->px->conf()->name; }
 		if( count($args) >= 2 ){
-			if( array_key_exists($args[1], $rtn) ){
-				$rtn = @$rtn[$args[1]];
-			}else{
-				$rtn = null;
-			}
+			$rtn = $rtn[$args[1]] ?? null;
 		}
 		return $rtn;
 	} // get_page_info()
@@ -1322,7 +1332,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			if( is_string( $path_type ) ){
 				//  パスでの指定だった場合
 				$before_page_info['path'] = $path;
-				if( @!strlen(''.$page_info['id']) ){
+				if( !strlen($page_info['id'] ?? "") ){
 					//ページIDを動的に発行
 					$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 				}
@@ -1331,13 +1341,13 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				$before_page_info['id'] = $path;
 				$page_info['id'] = $path;
 			}
-		}elseif(!@is_null($this->sitemap_id_map[$path])){
+		}elseif( !is_null($this->sitemap_id_map[$path] ?? null) ){
 			//既存ページをページIDで指定されていたら
 			$before_page_info['id'] = $path;
 		}else{
 			// 既存ページをパスで指定されていたら
 			$before_page_info['path'] = $path;
-			if( !@strlen(''.$page_info['id']) ){
+			if( !strlen($page_info['id'] ?? "") ){
 				// ページIDが未定義なら、動的に発行する
 				$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 			}
@@ -1347,7 +1357,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$tmp_array[$key] = $val;
 		}
 
-		if( @strlen(''.$page_info['title']) && $page_info['title']!=@$tmp_array['title'] ){
+		if( strlen($page_info['title'] ?? "") && $page_info['title'] != ($tmp_array['title'] ?? null) ){
 			//タイトルの指定があったら
 			//タイトル系オプション値も自動で振りたいので、あえて消す。
 			unset( $tmp_array['title_breadcrumb'] );
@@ -1357,14 +1367,14 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 
 		//  パンくず欄の先頭が > から始まっていた場合、削除
-		$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , ''.@$tmp_array['logical_path'] );
+		$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] ?? "" );
 
 		//  指定値を反映
 		foreach( $page_info as $key=>$val ){
 			$tmp_array[$key] = $val;
 		}
 
-		if( !@strlen( ''.$tmp_array['title'] ) ){
+		if( !strlen( $tmp_array['title'] ?? "" ) ){
 			$tmp_array['title'] = $tmp_array['path'];
 		}
 		if( is_null( $tmp_array['id'] ) ){
@@ -1383,7 +1393,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$this->px->add_relatedlink( $this->px->href($tmp_array['path']) );
 
 		// // カレントページにレイアウトの指示があったら、テーマに反映する。
-		// if( $is_target_current_page && @strlen(''.$page_info['layout']) ){
+		// if( $is_target_current_page && strlen($page_info['layout'] ?? "") ){
 		// 	$this->px->theme()->set_layout_id( $page_info['layout'] );
 		// }
 
@@ -1565,18 +1575,18 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$id = $this->get_page_id_by_path( $path );
-		$page_info = @$this->sitemap_array[$this->sitemap_id_map[$id]];
+		$page_info = $this->sitemap_array[$this->sitemap_id_map[$id]] ?? null;
 
-		if( !@strlen(''.$page_info['role']) ){
+		if( !strlen($page_info['role'] ?? "") ){
 			return null;
 		}
 
-		$rtn = $this->get_page_id_by_path( @$page_info['role'] );
+		$rtn = $this->get_page_id_by_path( $page_info['role'] ?? null );
 		for($i=0; $i<20; $i++){
-			if(!@strlen( ''.$this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] )){
+			if( !strlen( $this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] ?? "" ) ){
 				break;
 			}
-			$rtn = $this->get_page_id_by_path( @$this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] );
+			$rtn = $this->get_page_id_by_path( $this->sitemap_array[$this->sitemap_id_map[$rtn]]['role'] ?? null );
 			break;
 		}
 
@@ -1617,7 +1627,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}else{
 			// 非PDO+SQLiteの処理
 			foreach( $this->get_sitemap() as $row ){
-				if( !@strlen(''.$row['role']) ){continue;}
+				if( !strlen($row['role'] ?? "") ){continue;}
 				if( $page_info['id'] == $this->get_role($row['id']) ){
 					array_push($rtn, $row['id']);
 				}
@@ -1668,21 +1678,23 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
-		if(!array_key_exists('filter', @$opt)){
+		if(!array_key_exists('filter', $opt ?? null)){
 			$opt['filter'] = null;
 		}
-		if(!is_null(@$opt['filter'])){ $filter = !empty($opt['filter']); }
+		if(!is_null($opt['filter'] ?? null)){
+			$filter = !empty($opt['filter'] ?? null);
+		}
 
 		$page_info = $this->get_page_info( $path );
 		if( !is_array($page_info) ){
 			return array();
 		}
 
-		if( $filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children', $this->sitemap_page_tree[$page_info['path']] ) && is_array( @$this->sitemap_page_tree[$page_info['path']]['children'] ) ){
+		if( $filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children', $this->sitemap_page_tree[$page_info['path']] ) && is_array( $this->sitemap_page_tree[$page_info['path']]['children'] ?? null ) ){
 			//  ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children'];
 		}
-		if( !$filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children_all', $this->sitemap_page_tree[$page_info['path']] ) && is_array( @$this->sitemap_page_tree[$page_info['path']]['children_all'] ) ){
+		if( !$filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children_all', $this->sitemap_page_tree[$page_info['path']] ) && is_array( $this->sitemap_page_tree[$page_info['path']]['children_all'] ?? null ) ){
 			//  ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children_all'];
 		}
@@ -1708,18 +1720,18 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 			// var_dump($results);
 			foreach( $results as $row ){
-				if( isset($row['role']) && strlen(''.$row['role'] )){
+				if( strlen( $row['role'] ?? "" )){
 					// 役者はリストされない。
 					continue;
 				}
 
-				if( isset($row['orderby']) && strlen(''.$row['orderby']) ){
+				if( strlen($row['orderby'] ?? "") ){
 					array_push( $tmp_children_orderby_manual , $row['id'] );
 				}else{
 					array_push( $tmp_children_orderby_auto , $row['id'] );
 				}
 				if( isset($row['list_flg']) && $row['list_flg'] ){
-					if(@strlen(''.$row['orderby'])){
+					if(strlen($row['orderby'] ?? "")){
 						array_push( $tmp_children_orderby_listed_manual , $row['id'] );
 					}else{
 						array_push( $tmp_children_orderby_listed_auto , $row['id'] );
@@ -1732,15 +1744,16 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$actors = $this->get_actors( $page_info['id'] );
 
 			foreach( $this->get_sitemap() as $row ){
-				if(@strlen(''.$row['role'])){continue;}//役者はリストされない。
-
-				if( !strlen( trim(''.$row['id']) ) ){
+				if( strlen($row['role'] ?? "") ){
+					//役者はリストされない。
+					continue;
+				}
+				if( !strlen( trim($row['id'] ?? "") ) ){
 					continue;
 				}
 
-				// $target_layer = '';
 				$____parent_page_id = '';
-				$tmp_breadcrumb = @explode( '>', $row['logical_path'] );
+				$tmp_breadcrumb = explode( '>', $row['logical_path'] ?? "" );
 				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
 				$____parent_page_id = trim($tmp_page_info['id']);
 				$parent_page_role = $this->get_role($____parent_page_id);
@@ -1754,18 +1767,18 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				}
 
 				if( $page_info['id'] == $____parent_page_id ){
-					if( isset($row['role']) && strlen(''.$row['role']) ){
+					if( strlen($row['role'] ?? "") ){
 						// 役者はリストされない。
 						continue;
 					}
 
-					if( isset($row['orderby']) && strlen(''.$row['orderby']) ){
+					if( strlen($row['orderby'] ?? "") ){
 						array_push( $tmp_children_orderby_manual , $row['id'] );
 					}else{
 						array_push( $tmp_children_orderby_auto , $row['id'] );
 					}
 					if( isset($row['list_flg']) && $row['list_flg'] ){
-						if(@strlen(''.$row['orderby'])){
+						if(strlen($row['orderby'] ?? "")){
 							array_push( $tmp_children_orderby_listed_manual , $row['id'] );
 						}else{
 							array_push( $tmp_children_orderby_listed_auto , $row['id'] );
@@ -1804,9 +1817,9 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$page_info_b = $this->get_page_info( $b );
 		$orderby_a = $page_info_a['orderby'];
 		$orderby_b = $page_info_b['orderby'];
-		if( strlen( ''.$orderby_a ) && !strlen( ''.$orderby_b ) ){
+		if( strlen( $orderby_a ?? "" ) && !strlen( $orderby_b ?? "" ) ){
 			return	-1;
-		}elseif( strlen( ''.$orderby_b ) && !strlen( ''.$orderby_a ) ){
+		}elseif( strlen( $orderby_b ?? "" ) && !strlen( $orderby_a ?? "" ) ){
 			return	1;
 		}elseif( $orderby_a < $orderby_b ){
 			return	-1;
@@ -1828,7 +1841,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info($path);
-		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen(''.$page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
 			//トップページの兄弟はトップページだけ。
 			return array('');
 		}
@@ -1849,13 +1862,13 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
-		if( !is_null(@$opt['filter']) ){
+		if( !is_null( $opt['filter'] ?? null ) ){
 			$filter = !empty($opt['filter']);
 		}
 
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
-		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen(''.$page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
 			//トップページの次の兄弟はいない。
 			return false;
 		}
@@ -1866,7 +1879,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				break;
 			}
 		}
-		for($i = $num+1; @!is_null($bros[$i]); $i ++){
+		for($i = $num+1; !is_null($bros[$i] ?? null); $i ++){
 			if(is_null($bros[$i])){
 				return false;
 			}
@@ -1890,13 +1903,13 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
-		if( !is_null(@$opt['filter']) ){
+		if( !is_null( $opt['filter'] ?? null ) ){
 			$filter = !empty($opt['filter']);
 		}
 
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
-		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen(''.$page_info['id']) ){
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
 			//トップページの前の兄弟はいない。
 			return false;
 		}
@@ -1937,12 +1950,12 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
-		if( !is_null(@$opt['filter']) ){
-			$filter = !@empty($opt['filter']);
+		if( !is_null( $opt['filter'] ?? null ) ){
+			$filter = !empty( $opt['filter'] ?? null );
 		}
 		$skip_children = false;
-		if( !is_null(@$opt['skip_children']) ){
-			$skip_children = !@empty($opt['skip_children']);
+		if( !is_null( $opt['skip_children'] ?? null ) ){
+			$skip_children = !empty( $opt['skip_children'] ?? null );
 		}
 
 		$fin = null;
@@ -2001,8 +2014,8 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$filter = true;
-		if(!is_null(@$opt['filter'])){
-			$filter = !@empty($opt['filter']);
+		if(!is_null( $opt['filter'] ?? null )){
+			$filter = !empty($opt['filter'] ?? null);
 		}
 
 		$fin = null;
@@ -2063,12 +2076,16 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		$page_info = $this->get_page_info( $path );
-		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen(''.$page_info['id']) ){return array();}
+		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
+			return array();
+		}
 
 		$rtn = array('');
-		$tmp_breadcrumb = @explode( '>', $page_info['logical_path'] );
+		$tmp_breadcrumb = explode( '>', $page_info['logical_path'] ?? "" );
 		foreach( $tmp_breadcrumb as $tmp_id ){
-			if( !strlen(''.$tmp_id) ){continue;}
+			if( !strlen($tmp_id ?? "") ){
+				continue;
+			}
 			$tmp_page_info = $this->get_page_info( trim($tmp_id) );
 			array_push( $rtn , $tmp_page_info['id'] );
 		}
@@ -2088,7 +2105,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$path = $this->px->req()->get_request_file_path();
 		}
 		for($i=0; $i<20; $i ++){
-			if(strlen(''.$this->get_page_info($path,'role'))){
+			if(strlen($this->get_page_info($path,'role') ?? "")){
 				$path = $this->get_page_info($this->get_page_info($path,'role'),'path');
 				continue;
 			}
@@ -2103,7 +2120,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		foreach( $breadcrumb as $row ){
 			$row_id = $this->get_page_id_by_path($row);
 			for($i=0; $i<20; $i ++){
-				if( strlen(''.$this->get_page_info($row_id,'role')) ){
+				if( strlen($this->get_page_info($row_id,'role') ?? "") ){
 					$row_id = $this->get_page_info($this->get_page_info($row_id,'role'),'id');
 					continue;
 				}
@@ -2154,7 +2171,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 			$keylist = array_keys( $value );
 			foreach( $keylist as $Line ){
-				if( isset($options['delete_arrayelm_if_null']) && $options['delete_arrayelm_if_null'] && is_null( @$value[$Line] ) ){
+				if( isset($options['delete_arrayelm_if_null']) && $options['delete_arrayelm_if_null'] && is_null( $value[$Line] ?? null ) ){
 					// 配列のnull要素を削除するオプションが有効だった場合
 					continue;
 				}

@@ -142,7 +142,7 @@ class api{
 
 		$this->command = $this->px->get_px_command();
 
-		switch( @$this->command[1] ){
+		switch( $this->command[1] ?? "" ){
 			case 'get':
 				//各種情報の取得
 				$this->api_get();
@@ -153,7 +153,7 @@ class api{
 				break;
 		}
 
-		if( !strlen( ''.@$this->command[1] ) ){
+		if( !strlen( $this->command[1] ?? "" ) ){
 			$this->homepage();
 		}
 		$this->error();
@@ -199,7 +199,7 @@ class api{
 		}else{
 			$html = '';
 			ob_start(); ?>
-	<p><?= htmlspecialchars(''.$msg) ?></p>
+	<p><?= htmlspecialchars($msg ?? "") ?></p>
 <?php
 			$html .= ob_get_clean();
 			print $this->px->pxcmd()->wrap_gui_frame($html);
@@ -220,7 +220,7 @@ class api{
 		$sitemap_filter_options = function($px, $cmd=null){
 			$options = array();
 			$options['filter'] = $px->req()->get_param('filter');
-			if( strlen(''.$options['filter']) ){
+			if( strlen($options['filter'] ?? "") ){
 				switch( $options['filter'] ){
 					case 'true':
 					case '1':
@@ -431,7 +431,7 @@ class api{
 	 */
 	private function data_convert($val){
 		$data_type = $this->px->req()->get_param('type');
-		if( !is_string($data_type) || !strlen(''.$data_type) ){
+		if( !is_string($data_type) || !strlen($data_type ?? "") ){
 			$data_type = 'json';
 		}
 		header('Content-type: application/xml; charset=UTF-8');
@@ -485,7 +485,7 @@ class api{
 	private function data2jsonp($val){
 		//JSONPのコールバック関数名は、パラメータ callback に受け取る。
 		$cb = trim( $this->px->req()->get_param('callback') );
-		if( !strlen(''.$cb) ){
+		if( !strlen($cb ?? "") ){
 			$cb = 'callback';
 		}
 		// return $cb.'('.self::data2jssrc($val).');';
@@ -509,17 +509,17 @@ class api{
 	private static function xml_encode( $value = null , $options = array() ){
 
 		if( is_array( $value ) ){
-			#	配列
+			// 配列
 			$is_hash = false;
 			$i = 0;
 			foreach( $value as $key=>$val ){
-				#	ArrayかHashか見極める
+				// ArrayかHashか見極める
 				if( !is_int( $key ) ){
 					$is_hash = true;
 					break;
 				}
 				if( $key != $i ){
-					#	順番通りに並んでなかったらHash とする。
+					// 順番通りに並んでなかったらHash とする。
 					$is_hash = true;
 					break;
 				}
@@ -534,12 +534,12 @@ class api{
 			if( $options['array_break'] ){ $RTN .= "\n"; }
 			foreach( $value as $key=>$val ){
 				if( $options['delete_arrayelm_if_null'] && is_null( $value[$key] ) ){
-					#	配列のnull要素を削除するオプションが有効だった場合
+					// 配列のnull要素を削除するオプションが有効だった場合
 					continue;
 				}
 				$RTN .= '<element';
 				if( $is_hash ){
-					$RTN .= ' name="'.htmlspecialchars( ''.$key ).'"';
+					$RTN .= ' name="'.htmlspecialchars( $key ?? "" ).'"';
 				}
 				$RTN .= '>';
 				$RTN .= self::xml_encode( $value[$key] , $options );
@@ -556,13 +556,13 @@ class api{
 		}
 
 		if( is_object( $value ) ){
-			#	オブジェクト型
+			// オブジェクト型
 			$RTN = '';
 			$RTN .= '<object>';
 			$proparray = get_object_vars( $value );
 			$methodarray = get_class_methods( get_class( $value ) );
 			foreach( $proparray as $key=>$val ){
-				$RTN .= '<element name="'.htmlspecialchars( ''.$key ).'">';
+				$RTN .= '<element name="'.htmlspecialchars( $key ?? "" ).'">';
 
 				$RTN .= self::xml_encode( $val , $options );
 				$RTN .= '</element>';
@@ -572,35 +572,35 @@ class api{
 		}
 
 		if( is_int( $value ) ){
-			#	数値
-			$RTN = '<value type="int">'.htmlspecialchars( ''.$value ).'</value>';
+			// 数値
+			$RTN = '<value type="int">'.htmlspecialchars( $value ?? "" ).'</value>';
 			return	$RTN;
 		}
 
 		if( is_float( $value ) ){
-			#	浮動小数点
-			$RTN = '<value type="float">'.htmlspecialchars( ''.$value ).'</value>';
+			// 浮動小数点
+			$RTN = '<value type="float">'.htmlspecialchars( $value ?? "" ).'</value>';
 			return	$RTN;
 		}
 
 		if( is_string( $value ) ){
-			#	文字列型
-			$RTN = '<value type="string">'.htmlspecialchars( ''.$value ).'</value>';
+			// 文字列型
+			$RTN = '<value type="string">'.htmlspecialchars( $value ?? "" ).'</value>';
 			return	$RTN;
 		}
 
 		if( is_null( $value ) ){
-			#	ヌル
+			// ヌル
 			return	'<value type="null"></value>';
 		}
 
 		if( is_resource( $value ) ){
-			#	リソース型
+			// リソース型
 			return	'<value type="undefined"></value>';
 		}
 
 		if( is_bool( $value ) ){
-			#	ブール型
+			// ブール型
 			if( $value ){
 				return	'<value type="bool">true</value>';
 			}else{

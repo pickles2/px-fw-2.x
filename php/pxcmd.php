@@ -136,7 +136,7 @@ class pxcmd{
 <html>
 	<head>
 		<meta charset="UTF-8" />
-		<title><?= htmlspecialchars( ''.$this->px->conf()->name ) ?></title>
+		<title><?= htmlspecialchars( $this->px->conf()->name ?? "" ) ?></title>
 
 		<!-- jQuery -->
 		<script src="<?= htmlspecialchars( $path_pxcache.'scripts/jquery-3.6.0.min.js' ); ?>" type="text/javascript"></script>
@@ -156,14 +156,14 @@ class pxcmd{
 	<body class="pxcmd">
 		<div class="pxcmd-outline">
 			<div class="pxcmd-pxfw clearfix">
-				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles 2 (version: <?= htmlspecialchars( ''.$this->px->get_version() ) ?>)</div>
+				<div class="pxcmd-pxfw_l"><?= $this->px->get_pickles_logo_svg() ?> Pickles 2 (version: <?= htmlspecialchars( $this->px->get_version() ?? "" ) ?>)</div>
 				<div class="pxcmd-pxfw_r">
 <?php
 	// $pxcommands = $this->pxcommands;
 	// if( count($pxcommands) ){
 	// 	print '<select onchange="window.location.href=\'?PX=\'+this.options[this.selectedIndex].value;">';
 	// 	foreach( $pxcommands as $row ){
-	// 		print '<option value="'.htmlspecialchars($row['cmd']).'"'.($row['cmd']==$pxcmd[0]?' selected="selected"':'').'>'.htmlspecialchars(''.$row['name']).'</option>';
+	// 		print '<option value="'.htmlspecialchars($row['cmd']).'"'.($row['cmd']==$pxcmd[0]?' selected="selected"':'').'>'.htmlspecialchars($row['name'] ?? "").'</option>';
 	// 	}
 	// 	print '</select>';
 	// }
@@ -172,20 +172,20 @@ class pxcmd{
 			</div><!-- /.pxcmd-pxfw -->
 
 			<div class="pxcmd-header">
-				<div class="pxcmd-project_title"><?= htmlspecialchars( ''.@$this->px->conf()->name ) ?></div>
+				<div class="pxcmd-project_title"><?= htmlspecialchars( $this->px->conf()->name ?? "" ) ?></div>
 			</div><!-- /.pxcmd-header -->
 
 			<div class="pxcmd-middle">
 <?php
-		$command_title = $pxcmd[0].(@strlen(''.$pxcmd[1])?'.'.$pxcmd[1]:'');
+		$command_title = $pxcmd[0].(strlen($pxcmd[1] ?? "")?'.'.$pxcmd[1]:'');
 		$page_title = null;
 ?>
 			<div class="pxcmd-title">
-		<?php if(strlen(''.$page_title)){ ?>
-				<p class="pxcmd-category_title"><a href="?PX=<?= htmlspecialchars( ''.$command_title ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars($command_title) ?></a></p>
-				<h1><?= htmlspecialchars( ''.$page_title ) ?></h1>
+		<?php if(strlen($page_title ?? "")){ ?>
+				<p class="pxcmd-category_title"><a href="?PX=<?= htmlspecialchars( $command_title ?? "" ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars($command_title) ?></a></p>
+				<h1><?= htmlspecialchars( $page_title ?? "" ) ?></h1>
 		<?php }else{ ?>
-				<h1><a href="?PX=<?= htmlspecialchars( ''.$command_title ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars( ''.$command_title ) ?></a></h1>
+				<h1><a href="?PX=<?= htmlspecialchars( $command_title ?? "" ) ?>" style="color:inherit; text-decoration:none;"><?= htmlspecialchars( $command_title ?? "" ) ?></a></h1>
 		<?php } ?>
 			</div><!-- /.pxcmd-title -->
 			<div id="content" class="contents">
@@ -196,7 +196,7 @@ class pxcmd{
 			<div class="pxcmd-footer">
 				<p><a href="?" class="btn btn-default">PX Commands を終了する</a></p>
 				<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
-				<p><?= htmlspecialchars(@date('Y-m-d H:i:s')) ?></p>
+				<p><?= htmlspecialchars(@date('Y-m-d H:i:s') ?? "") ?></p>
 				<p class="pxcmd-credits"><a href="https://pickles2.pxt.jp/" target="_blank">Pickles Framework</a> (C)Tomoya Koyanagi, and Pickles Project.</p>
 			</div><!-- /.footer -->
 		</div>

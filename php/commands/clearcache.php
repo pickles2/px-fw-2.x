@@ -56,7 +56,7 @@ class clearcache{
 		$this->px = $px;
 		$this->path_homedir = $this->px->fs()->get_realpath( $this->px->get_realpath_homedir().'/' );
 		$this->path_docroot = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().$this->px->get_path_controot().'/' );
-		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().$this->px->get_path_controot().@$this->px->conf()->public_cache_dir.'/' );
+		$this->path_public_caches = $this->px->fs()->get_realpath( $this->px->get_realpath_docroot().$this->px->get_path_controot().($this->px->conf()->public_cache_dir ?? "").'/' );
 
 		$this->path_lockfile = $this->px->fs()->get_realpath( $this->px->get_realpath_homedir().'_sys/ram/publish/applock.txt' );
 	}
@@ -68,14 +68,14 @@ class clearcache{
 	private function kick(){
 		$pxcmd = $this->px->get_px_command();
 
-		if( @$pxcmd[1] == 'version' ){
+		if( ($pxcmd[1] ?? null) == 'version' ){
 			// 命令が clearcache.version の場合、バージョン番号を返す。
 			$val = $this->px->get_version();
 			@header('Content-type: application/json; charset=UTF-8');
 			print json_encode($val);
 			exit;
 		}
-		if( @strlen(''.$pxcmd[1]) ){
+		if( strlen($pxcmd[1] ?? "") ){
 			// 命令が不明の場合、エラーを表示する。
 			if( $this->px->req()->is_cmd() ){
 				header('Content-type: text/plain;');
@@ -123,7 +123,7 @@ class clearcache{
 		print '-- cleaning "publish"'."\n";
 		print $this->cleanup_dir( $this->path_homedir.'_sys/ram/publish/' ).' items done.'."\n";
 		print "\n";
-		if( strlen( ''.@$this->px->conf()->public_cache_dir ) ){
+		if( strlen( $this->px->conf()->public_cache_dir ?? "" ) ){
 			print '-- cleaning "public caches"'."\n";
 			print $this->cleanup_dir( $this->path_public_caches ).' items done.'."\n";
 			print "\n";

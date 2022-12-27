@@ -58,8 +58,12 @@ class bowl{
 	 * @return bool 成功時 true、失敗時 false
 	 */
 	public function put( $src, $content_name = 'main' ){
-		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
-		if( !is_string($content_name) ){ return false; }
+		if( !is_string($content_name ?? "") ){
+			return false;
+		}
+		if( !strlen($content_name ?? "") ){
+			$content_name = 'main';
+		}
 		if( !array_key_exists($content_name, $this->contents_bowl) ){
 			$this->contents_bowl[$content_name] = '';
 		}
@@ -101,9 +105,13 @@ class bowl{
 	 * @return bool 成功時 true、失敗時 false
 	 */
 	public function replace( $src, $content_name = 'main' ){
-		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
-		if( !is_string($content_name) ){ return false; }
-		@$this->contents_bowl[$content_name] = $src;
+		if( !is_string($content_name ?? "") ){
+			return false;
+		}
+		if( !strlen($content_name ?? "") ){
+			$content_name = 'main';
+		}
+		$this->contents_bowl[$content_name] = $src;
 		return true;
 	}
 
@@ -116,11 +124,17 @@ class bowl{
 	 * @return mixed 成功時、ボウルから得られたHTMLソースを返す。失敗時、false
 	 */
 	public function get_clean( $content_name = 'main' ){
-		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
-		if( !is_string($content_name) ){ return false; }
-		if( !array_key_exists($content_name, $this->contents_bowl) ){ return null; }
+		if( !is_string($content_name ?? "") ){
+			return false;
+		}
+		if( !strlen($content_name ?? "") ){
+			$content_name = 'main';
+		}
+		if( !array_key_exists($content_name, $this->contents_bowl) ){
+			return null;
+		}
 
-		$content = $this->contents_bowl[$content_name];
+		$content = $this->contents_bowl[$content_name] ?? null;
 		unset( $this->contents_bowl[$content_name] );// コンテンツを取り出したら、ボウル上にはなくなる。
 
 		return $content;
@@ -135,11 +149,17 @@ class bowl{
 	 * @return mixed 成功時、ボウルから得られたHTMLソースを返す。失敗時、false
 	 */
 	public function get( $content_name = 'main' ){
-		if( !strlen(''.$content_name) ){ $content_name = 'main'; }
-		if( !is_string($content_name) ){ return false; }
-		if( !array_key_exists($content_name, $this->contents_bowl) ){ return null; }
+		if( !is_string($content_name ?? "") ){
+			return false;
+		}
+		if( !strlen($content_name ?? "") ){
+			$content_name = 'main';
+		}
+		if( !array_key_exists($content_name, $this->contents_bowl) ){
+			return null;
+		}
 
-		$content = $this->contents_bowl[$content_name];
+		$content = $this->contents_bowl[$content_name] ?? null;
 
 		return $content;
 	}

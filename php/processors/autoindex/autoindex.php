@@ -34,7 +34,7 @@ class autoindex{
 		$autoindex = new self( $px );
 
 		//  autoindex
-		if( strlen( ''.$autoindex->func_data_memos ) ){
+		if( strlen( $autoindex->func_data_memos ?? "" ) ){
 			$px->bowl()->each( array($autoindex, 'apply_autoindex') );
 		}
 
@@ -107,7 +107,7 @@ class autoindex{
 			if( $tmp['headlevel'] ){ // 引っかかったのが見出しの場合
 				// $content .= $this->back2top();
 				$content .= '<span';
-				$content .= ' id="'.htmlspecialchars(''.$tmp['anch']).'"';
+				$content .= ' id="'.htmlspecialchars($tmp['anch'] ?? "").'"';
 				$content .= '></span>';
 			}
 			$content .= $matched[2];
@@ -127,9 +127,9 @@ class autoindex{
 			$anchorlinks .= '<div style="margin:0; padding:0; text-align:center; font-weight:bold;">INDEX</div>';
 			foreach($index as $key=>$row){
 				$csa = $row['headlevel'] - $headlevel;
-				$nextLevel = @$index[$key+1]['headlevel'];
+				$nextLevel = $index[$key+1]['headlevel'] ?? null;
 				$nsa = null;
-				if( strlen( ''.$nextLevel ) ){
+				if( strlen( $nextLevel ?? "" ) ){
 					$nsa = $nextLevel - $row['headlevel'];
 				}
 				$headlevel = $row['headlevel'];
@@ -157,7 +157,7 @@ class autoindex{
 					}
 					$anchorlinks .= '<li style="'.$style_li.'">';
 				}
-				$anchorlinks .= '<a href="#'.htmlspecialchars(''.$row['anch']).'">'.($row['label']).'</a>';
+				$anchorlinks .= '<a href="#'.htmlspecialchars($row['anch'] ?? "").'">'.($row['label']).'</a>';
 				if( is_null($nsa) ){
 					break;
 				}elseif( $nsa>0 ){
