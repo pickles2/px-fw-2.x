@@ -891,6 +891,11 @@ Search.appendIndex(
             "summary": "\u30A2\u30D7\u30EA\u30B1\u30FC\u30B7\u30E7\u30F3\u30ED\u30C3\u30AF\u30D5\u30A1\u30A4\u30EB\u306E\u66F4\u65B0\u65E5\u3092\u66F4\u65B0\u3059\u308B\u3002",
             "url": "classes/picklesFramework2-px.html#method_touch_lockfile"
         },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Ah\u0028\u0029",
+            "name": "h",
+            "summary": "HTML\u7279\u6B8A\u6587\u5B57\u3092\u30A8\u30B9\u30B1\u30FC\u30D7\u3059\u308B",
+            "url": "classes/picklesFramework2-px.html#method_h"
+        },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003Aget_pickles_logo_svg\u0028\u0029",
             "name": "get_pickles_logo_svg",
             "summary": "Pickles\u00202\u0020\u306E\u0020SVG\u0020\u30ED\u30B4\u30BD\u30FC\u30B9\u3092\u53D6\u5F97\u3059\u308B\u3002",
