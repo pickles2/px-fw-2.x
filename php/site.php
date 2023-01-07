@@ -984,15 +984,16 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 					}
 				}
 
-				if( !isset( $sitemap_definition[$key]['type'] ) || !is_string($sitemap_definition[$key]['type']) || !strlen($sitemap_definition[$key]['type']) ){
+				if( !strlen($sitemap_definition[$key]['type'] ?? "") ){
+					// 型が明示されていない場合、項目名の規則から自動的に推定する。
 					if( preg_match('/^is(?:\_|\-)/si', $key) ){
+						$sitemap_definition[$key]['type'] = 'boolean';
+					}elseif( preg_match('/(?:\_|\-)fla?g$/si', $key) ){
 						$sitemap_definition[$key]['type'] = 'boolean';
 					}elseif( preg_match('/(?:\_|\-)date$/si', $key) ){
 						$sitemap_definition[$key]['type'] = 'date';
 					}elseif( preg_match('/(?:\_|\-)datetime$/si', $key) ){
 						$sitemap_definition[$key]['type'] = 'datetime';
-					}elseif( $key == 'orderby' || preg_match('/(?:\_|\-)fla?g$/si', $key) ){
-						$sitemap_definition[$key]['type'] = 'boolean';
 					}else{
 						$sitemap_definition[$key]['type'] = 'text';
 					}

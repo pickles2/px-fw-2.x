@@ -85,7 +85,7 @@ $ chmod -R 777 ./caches
 
 ### Pickles Framework v2.1.13 (リリース日未定)
 
-- ?????????????????
+- その他、内部コードの細かい修正。
 
 ### Pickles Framework v2.1.12 (2022年12月28日)
 
