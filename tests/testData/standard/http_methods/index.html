@@ -2,8 +2,8 @@
 <p>$_GET['test'] = <?= $_GET['test'] ?></p>
 <p>$_POST['test'] = <?= $_POST['test'] ?></p>
 
-<pre><?php var_dump($_GET); ?></pre>
-<pre><?php var_dump($_POST); ?></pre>
-<pre><?php var_dump($_REQUEST); ?></pre>
-<pre><?php var_dump($_COOKIE); ?></pre>
-<pre><?php var_dump($_SESSION); ?></pre>
+<pre><?php var_dump($_GET ?? null); ?></pre>
+<pre><?php var_dump($_POST ?? null); ?></pre>
+<pre><?php var_dump($_REQUEST ?? null); ?></pre>
+<pre><?php var_dump($_COOKIE ?? null); ?></pre>
+<pre><?php var_dump($_SESSION ?? null); ?></pre>

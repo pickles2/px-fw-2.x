@@ -32,7 +32,7 @@ class theme{
 		$this->px = $px;
 		$this->path_tpl = $px->fs()->get_realpath(__DIR__.'/../').DIRECTORY_SEPARATOR;
 		$this->page = $this->px->site()->get_current_page_info();
-		if( @!strlen( $this->page['layout'] ) ){
+		if( !strlen( $this->page['layout'] ?? '' ) ){
 			$this->page['layout'] = 'default';
 		}
 		if( !$px->fs()->is_file( $this->path_tpl.$this->page['layout'].'.html' ) ){

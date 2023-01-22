@@ -43,7 +43,7 @@
                 "php"
             ],
             "picklesFramework2\\theme\\": [
-                "px-files/themes/pickles2/php"
+                "theme/php"
             ]
         }
     }
