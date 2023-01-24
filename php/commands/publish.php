@@ -525,7 +525,7 @@ function cont_EditPublishTargetPathApply(formElm){
 					$status_code ,
 					$status_message ,
 					$str_errors,
-					@filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path),
+					(file_exists($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path) ? filesize($this->path_tmp_publish.'/htdocs'.$this->path_docroot.$path) : false),
 					microtime(true)-$microtime
 				));
 
@@ -1261,8 +1261,11 @@ function cont_EditPublishTargetPathApply(formElm){
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
+		if( !$this->px->fs()->is_file( $lockfilepath ) ){
+			return true;
+		}
 
-		return @unlink( $lockfilepath );
+		return unlink( $lockfilepath );
 	}
 
 	/**

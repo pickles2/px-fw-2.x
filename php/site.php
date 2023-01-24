@@ -1453,7 +1453,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		if( !is_file($path_sitemap_cache_dir.'sitemap_page_originated_csv.array') ){
 			return false;
 		}
-		$sitemap_page_originated_csv = @include($path_sitemap_cache_dir.'sitemap_page_originated_csv.array');
+		$sitemap_page_originated_csv = include($path_sitemap_cache_dir.'sitemap_page_originated_csv.array') ?? null;
 		$page_info = $this->get_page_info($path);
 		if( !isset($page_info['path']) || !is_array($sitemap_page_originated_csv) || !array_key_exists( $page_info['path'], $sitemap_page_originated_csv ) ){
 			return null;

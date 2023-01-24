@@ -314,7 +314,7 @@ class api{
 				break;
 			case 'bind_dynamic_path_param':
 				$param = $this->px->req()->get_param('param');
-				$param = @json_decode( $param, true );
+				$param = json_decode( $param, true );
 				$val = ($this->px->site() ? $this->px->site()->bind_dynamic_path_param($this->px->req()->get_param('path'), $param) : false);
 				print $this->data_convert( $val );
 				unset($param);

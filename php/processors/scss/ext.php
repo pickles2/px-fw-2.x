@@ -34,7 +34,13 @@ class ext{
 				trigger_error('SCSS Proccessor is NOT available.');
 				continue;
 			}
-			$src = $scss->compile( $src );
+
+			if( is_callable( array( $scss, 'compileString' ) ) ){
+				$src = $scss->compileString( $src )->getCss();
+			}else{
+				$src = $scss->compile( $src ); // 古い $scss への配慮
+			}
+
 			chdir( $tmp_current_dir );
 
 			$px->bowl()->replace( $src, $key );

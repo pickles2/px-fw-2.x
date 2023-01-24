@@ -171,7 +171,7 @@ class clearcache{
 					print 'rm '.$this->px->fs()->get_realpath( $path.$localpath.$basename );
 					while(1){
 						$i ++;
-						if( @$this->px->fs()->rm($path.$localpath.$basename) ){
+						if( $this->px->fs()->rm($path.$localpath.$basename) ){
 							// NOTE: Windows で、 `sitemap.sqlite` が使用中のままとなり、削除に失敗する場合がある。
 							// このとき `PHP Warning: Resource temporarily unavailable` が発生し、ユニットテストが失敗する。
 							// 実害はほぼないので、ここ↑では `@` をつけて隠すことにした。
