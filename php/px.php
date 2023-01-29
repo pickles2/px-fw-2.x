@@ -123,6 +123,7 @@ class px{
 		if( is_callable('mb_detect_order') ){
 			mb_detect_order( 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
+		@ini_set( 'session.use_strict_mode' , '1' ); // NOTE: Pickles Framework v2.1.13 で追加
 		@ini_set( 'session.cookie_secure' , '1' ); // NOTE: Pickles Framework v2.1.12 で追加
 		@ini_set( 'session.cookie_httponly' , '1' ); // NOTE: Pickles Framework v2.1.11 で追加
 		@header_remove('X-Powered-By');
@@ -209,8 +210,11 @@ class px{
 
 		// Apply command-line option "--command-php"
 		$req_conf = new \stdClass;
-		$req_conf->session_name   = $this->conf->session_name;
-		$req_conf->session_expire = $this->conf->session_expire;
+		$req_conf->session_name   = $this->conf->session_name ?? 'PXSID';
+		$req_conf->session_expire = $this->conf->session_expire ?? (24 * 60 * 60);
+		$req_conf->cookie_default_expire = $this->conf->cookie_default_expire ?? (7 * 24 * 60 * 60);
+		$req_conf->cookie_default_domain = $this->conf->cookie_default_domain ?? null;
+		$req_conf->cookie_default_path = $this->conf->cookie_default_path ?? $this->conf->path_controot ?? '/';
 		$temporary_req = new \tomk79\request( $req_conf );
 		if( strlen($temporary_req->get_cli_option( '--command-php' ) ?? "") ){
 			$this->conf->commands->php = $temporary_req->get_cli_option( '--command-php' );
@@ -248,10 +252,7 @@ class px{
 		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 		$this->realpath_homedir = $this->fs()->normalize_path($this->realpath_homedir);
 
-		// make instance $req
-		$req_conf = new \stdClass;
-		$req_conf->session_name   = $this->conf->session_name;
-		$req_conf->session_expire = $this->conf->session_expire;
+		// Re-make instance $req
 		$req_conf->directory_index_primary = $this->get_directory_index_primary();
 		$this->req = new \tomk79\request( $req_conf );
 		if( strlen($this->req->get_cli_option( '-u' ) ?? "") ){

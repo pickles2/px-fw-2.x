@@ -169,7 +169,13 @@ return call_user_func( function(){
 	/** セッション名 */
 	$conf->session_name = 'PXSID';
 	/** セッションの有効期間 */
-	$conf->session_expire = 1800;
+	$conf->session_expire = 30 * 60;
+	/** Cookieのデフォルトのドメイン */
+	$conf->cookie_default_domain = null;
+	/** Cookieのデフォルトの有効パス */
+	$conf->cookie_default_path = '/';
+	/** Cookieのデフォルトの有効期間 */
+	$conf->cookie_default_expire = 24 * 60 * 60;
 	/** PX Commands のウェブインターフェイスからの実行を許可 */
 	$conf->allow_pxcommands = 1;
 	/** タイムゾーン */

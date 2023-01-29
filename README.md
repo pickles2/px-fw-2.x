@@ -87,6 +87,8 @@ $ chmod -R 777 ./caches
 
 - テーマクラス `picklesFramework2\theme\theme` がリンクされなくなっていた不具合を修正。
 - PHP設定の初期化処理を更新した。
+- 新しい設定項目 `$conf->cookie_default_domain`, `$conf->cookie_default_path`, `$conf->cookie_default_expire` を追加した。
+- 初期化時に `session.use_strict_mode = 1` をセットするようになった。
 - その他、内部コードの細かい修正。
 
 ### Pickles Framework v2.1.12 (2022年12月28日)
