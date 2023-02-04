@@ -14,7 +14,7 @@
             "@php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.12 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
+            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.13 API Document\" -d \"./php/\",\"./px-files/themes/\" -t \"./sample_pages/phpdoc/\""
         ]
     } ,
     "minimum-stability": "dev",
@@ -29,8 +29,8 @@
         "ext-mbstring": "*",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
-        "tomk79/filesystem": "~1.0",
-        "tomk79/request": "~1.0",
+        "tomk79/filesystem": "~1.1",
+        "tomk79/request": "~1.4",
         "michelf/php-markdown": "~1.6",
         "scssphp/scssphp": "^1.4"
     },

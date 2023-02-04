@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.13 (リリース日未定)
+### Pickles Framework v2.1.13 (2023年2月5日)
 
 - テーマクラス `picklesFramework2\theme\theme` がリンクされなくなっていた不具合を修正。
 - PHP設定の初期化処理を更新した。
