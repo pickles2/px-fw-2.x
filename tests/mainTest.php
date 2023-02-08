@@ -23,7 +23,6 @@ class mainTest extends PHPUnit\Framework\TestCase{
 
 		$px = new picklesFramework2\px('./px-files/');
 		$toppage_info = $px->site()->get_page_info('');
-		// var_dump($toppage_info);
 		$this->assertEquals( $toppage_info['title'], '<HOME>' );
 		$this->assertEquals( $toppage_info['path'], '/index.html' );
 		$this->assertEquals( $_SERVER['HTTP_USER_AGENT'], '' );
@@ -38,6 +37,14 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $px->lang(), 'en' );
 
 
+		// 動的なプロパティを登録する
+		$custom_property = 'custom_property';
+		$px->custom_property = $custom_property;
+		$this->assertEquals( $px->custom_property, 'custom_property' );
+		$px->conf = $custom_property;
+		$this->assertEquals( $px->conf, 'custom_property' );
+
+
 		// サブリクエストでキャッシュを消去
 		$output = $px->internal_sub_request(
 			'/index.html?PX=clearcache',
@@ -45,9 +52,6 @@ class mainTest extends PHPUnit\Framework\TestCase{
 			$vars
 		);
 		$error = $px->get_errors();
-		// var_dump($output);
-		// var_dump($vars);
-		// var_dump($error);
 		$this->assertTrue( is_string($output) );
 		$this->assertSame( 0, $vars ); // <- strict equals
 		$this->assertSame( array(), $error );

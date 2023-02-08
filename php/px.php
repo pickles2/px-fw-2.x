@@ -76,6 +76,15 @@ class px{
 	private $response_message = 'OK';
 
 	/**
+	 * 動的に追加されたプロパティ
+	 *
+	 * NOTE: Pickles Framework v2.1.14 で追加されました。
+	 *
+	 * @access private
+	 */
+	private $custom_dynamic_property = array();
+
+	/**
 	 * Pickles Framework のバージョン番号を取得する。
 	 *
 	 * Pickles Framework のバージョン番号はこのメソッドにハードコーディングされます。
@@ -450,6 +459,24 @@ class px{
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_output, $this );
 		}
 
+	}
+
+	/**
+	 * 動的なプロパティを登録する
+	 *
+	 * NOTE: Pickles Framework v2.1.14 で追加されました。
+	 */
+	public function __set( $name, $property ){
+		$this->custom_dynamic_property[$name] = $property;
+	}
+
+	/**
+	 * 動的に追加されたプロパティを取り出す
+	 *
+	 * NOTE: Pickles Framework v2.1.14 で追加されました。
+	 */
+	public function __get( $name ){
+		return $this->custom_dynamic_property[$name];
 	}
 
 	/**
