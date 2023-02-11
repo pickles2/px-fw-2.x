@@ -1013,6 +1013,7 @@ class simple_html_dom
         'b'=>array('b'=>1),
 		'option'=>array('option'=>1),
     );
+    private $optional_closing_array = null;
 
     function __construct($str=null, $lowercase=true, $forceTagsClosed=true, $target_charset=DEFAULT_TARGET_CHARSET, $stripRN=true, $defaultBRText=DEFAULT_BR_TEXT, $defaultSpanText=DEFAULT_SPAN_TEXT)
     {
@@ -1510,8 +1511,10 @@ class simple_html_dom
                 $node->attr[$name] = $this->restore_noise($this->copy_until($this->token_attr));
         }
         // PaperG: Attributes should not have \r or \n in them, that counts as html whitespace.
-        $node->attr[$name] = str_replace("\r", "", $node->attr[$name]);
-        $node->attr[$name] = str_replace("\n", "", $node->attr[$name]);
+        //     NOTE: 2 lines below were commented out. (by @tomk79)
+        // $node->attr[$name] = str_replace("\r", "", $node->attr[$name]);
+        // $node->attr[$name] = str_replace("\n", "", $node->attr[$name]);
+
         // PaperG: If this is a "class" selector, lets get rid of the preceeding and trailing space since some people leave it in the multi class case.
         if ($name == "class") {
             $node->attr[$name] = trim($node->attr[$name]);
