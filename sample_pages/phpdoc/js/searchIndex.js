@@ -606,6 +606,16 @@ Search.appendIndex(
             "summary": "Constructor",
             "url": "classes/picklesFramework2-px.html#method___construct"
         },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A__set\u0028\u0029",
+            "name": "__set",
+            "summary": "\u52D5\u7684\u306A\u30D7\u30ED\u30D1\u30C6\u30A3\u3092\u767B\u9332\u3059\u308B",
+            "url": "classes/picklesFramework2-px.html#method___set"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A__get\u0028\u0029",
+            "name": "__get",
+            "summary": "\u52D5\u7684\u306B\u8FFD\u52A0\u3055\u308C\u305F\u30D7\u30ED\u30D1\u30C6\u30A3\u3092\u53D6\u308A\u51FA\u3059",
+            "url": "classes/picklesFramework2-px.html#method___get"
+        },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003A__destruct\u0028\u0029",
             "name": "__destruct",
             "summary": "Destructor",
@@ -955,6 +965,11 @@ Search.appendIndex(
             "name": "response_message",
             "summary": "\u5FDC\u7B54\u30B9\u30C6\u30FC\u30BF\u30B9\u30E1\u30C3\u30BB\u30FC\u30B8",
             "url": "classes/picklesFramework2-px.html#property_response_message"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024custom_dynamic_property",
+            "name": "custom_dynamic_property",
+            "summary": "\u52D5\u7684\u306B\u8FFD\u52A0\u3055\u308C\u305F\u30D7\u30ED\u30D1\u30C6\u30A3",
+            "url": "classes/picklesFramework2-px.html#property_custom_dynamic_property"
         },                {
             "fqsen": "\\picklesFramework2\\pxcmd",
             "name": "pxcmd",
