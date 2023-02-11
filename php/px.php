@@ -467,7 +467,12 @@ class px{
 	 * NOTE: Pickles Framework v2.1.14 で追加されました。
 	 */
 	public function __set( $name, $property ){
+		if( isset($this->custom_dynamic_property[$name]) ){
+			$this->error('$px->'.$name.' is already registered.');
+			return;
+		}
 		$this->custom_dynamic_property[$name] = $property;
+		return;
 	}
 
 	/**
