@@ -10,6 +10,12 @@
         }
     ],
     "scripts":{
+        "start": [
+            "@php -S \"localhost:8080\" -t \"./\" \"./px-files/_sys/serve/route.php\""
+        ],
+        "start-pub": [
+            "@php -S \"localhost:8081\" -t \"./px-files/dist/\" \"./px-files/_sys/serve/route_pub.php\""
+        ],
         "test": [
             "@php ./vendor/phpunit/phpunit/phpunit"
         ] ,

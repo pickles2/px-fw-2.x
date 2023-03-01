@@ -121,11 +121,13 @@ return call_user_func( function(){
 		'/vendor/*' => 'ignore' ,
 		'/tests/*' => 'ignore' ,
 		'/php/*' => 'ignore' ,
+		'/theme/*' => 'ignore' ,
 		'*/.DS_Store' => 'ignore' ,
 		'*/Thumbs.db' => 'ignore' ,
 		'*/.svn/*' => 'ignore' ,
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
+		'*/.gitattributes' => 'ignore' ,
 
 		'/sample_pages/phpdoc/*' => 'pass' ,
 		'/sample_pages/page1/4/test2/*' => 'pass' ,
