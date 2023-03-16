@@ -392,40 +392,20 @@ class px{
 
 
 
-		// execute Content
-		$this->path_content = $this->req()->get_request_file_path();
-		$ext = $this->get_path_proc_type( $this->req()->get_request_file_path() );
-		if($ext !== 'direct' && $ext !== 'pass'){
-			if( $is_enable_sitemap ){
-				$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
-				$this->path_content = null;
-				if( is_array($current_page_info) && array_key_exists('content', $current_page_info) ){
-					$this->path_content = $current_page_info['content'];
-				}
-				if( is_null( $this->path_content ) ){
-					$this->path_content = $this->req()->get_request_file_path();
-				}
-				unset($current_page_info);
-			}
-
-		}
-
-		foreach( array_keys( get_object_vars( $this->conf->funcs->processor ) ) as $tmp_ext ){
-			if( $this->fs()->is_file( './'.$this->path_content.'.'.$tmp_ext ) ){
-				$ext = $tmp_ext;
-				$this->path_content = $this->path_content.'.'.$tmp_ext;
-				break;
-			}
-		}
-
-		$this->proc_type = $ext;
-		unset($ext);
+		// コンテンツファイルのパスと処理タイプを求める
+		// $this->conf->funcs->before_content の処理前に、暫定計算しておく。
+		list($this->path_content, $this->proc_type) = $this->assemble_path_content_and_proc_type();
 
 
 		// funcs: Before contents
 		if( isset( $this->conf->funcs->before_content ) ){
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_content, $this );
 		}
+
+
+		// コンテンツファイルのパスと処理タイプを求める (再計算)
+		// $this->conf->funcs->before_content の処理を受けて再計算する
+		list($this->path_content, $this->proc_type) = $this->assemble_path_content_and_proc_type();
 
 
 		// PXコマンドが有効、かつ ignore か pass の場合、
@@ -459,6 +439,42 @@ class px{
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_output, $this );
 		}
 
+	}
+
+	/**
+	 * $path_content を計算する
+	 *
+	 * @return array $path_content, $proc_type
+	 */
+	private function assemble_path_content_and_proc_type(){
+		$path_content = $this->req()->get_request_file_path();
+		$ext = $this->get_path_proc_type( $this->req()->get_request_file_path() );
+		if($ext !== 'direct' && $ext !== 'pass'){
+			if( is_object($this->site) ){
+				$current_page_info = $this->site()->get_page_info( $this->req()->get_request_file_path() );
+				$path_content = null;
+				if( is_array($current_page_info) && array_key_exists('content', $current_page_info) ){
+					$path_content = $current_page_info['content'];
+				}
+				if( is_null( $path_content ) ){
+					$path_content = $this->req()->get_request_file_path();
+				}
+				unset($current_page_info);
+			}
+
+		}
+
+		foreach( array_keys( get_object_vars( $this->conf->funcs->processor ) ) as $tmp_ext ){
+			if( $this->fs()->is_file( './'.$path_content.'.'.$tmp_ext ) ){
+				$ext = $tmp_ext;
+				$path_content = $path_content.'.'.$tmp_ext;
+				break;
+			}
+		}
+
+		$proc_type = $ext;
+		unset($ext);
+		return array($path_content, $proc_type);
 	}
 
 	/**

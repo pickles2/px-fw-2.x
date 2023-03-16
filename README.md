@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.15 (リリース日未定)
+
+- `$path_content` と `$proc_type` が、`before_content` プラグインの処理を受けて再計算されるようになった。
+
 ### Pickles Framework v2.1.14 (2023年2月11日)
 
 - `$px` は、外部からの動的なプロパティ登録を受け付けるようになった。
