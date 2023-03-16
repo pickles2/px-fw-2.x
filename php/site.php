@@ -1292,7 +1292,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$rtn = $rtn[$args[1]] ?? null;
 		}
 		return $rtn;
-	} // get_page_info()
+	}
 
 	/**
 	 * ページ情報をセットする。
@@ -1315,7 +1315,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			case 'anchor':
 				break;
 			default:
-				//  $path がスラドメされている場合に index.html を付加
+				// $path がスラドメされている場合に index.html を付加
 				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
 				break;
 		}
@@ -1331,22 +1331,22 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			!is_array($before_page_info) ||
 			( $before_page_info['path'] != $path && $before_page_info['id'] != $path )
 		){
-			//まったく新しいページだったら
+			// まったく新しいページだったら
 			$before_page_info = $this->get_current_page_info();
 			if( is_string( $path_type ) ){
-				//  パスでの指定だった場合
+				// パスでの指定だった場合
 				$before_page_info['path'] = $path;
 				if( !strlen($page_info['id'] ?? "") ){
-					//ページIDを動的に発行
+					// ページIDを動的に発行
 					$before_page_info['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 				}
 			}else{
-				//  ページIDでの指定だった場合
+				// ページIDでの指定だった場合
 				$before_page_info['id'] = $path;
 				$page_info['id'] = $path;
 			}
 		}elseif( !is_null($this->sitemap_id_map[$path] ?? null) ){
-			//既存ページをページIDで指定されていたら
+			// 既存ページをページIDで指定されていたら
 			$before_page_info['id'] = $path;
 		}else{
 			// 既存ページをパスで指定されていたら
@@ -1357,23 +1357,24 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 		}
 		$tmp_array = $before_page_info;
-		foreach( $page_info as $key=>$val ){
-			$tmp_array[$key] = $val;
-		}
 
-		if( strlen($page_info['title'] ?? "") && $page_info['title'] != ($tmp_array['title'] ?? null) ){
-			//タイトルの指定があったら
-			//タイトル系オプション値も自動で振りたいので、あえて消す。
+		if( strlen($page_info['title'] ?? "") && $current_page_info['title'] != ($page_info['title'] ?? null) ){
+			// タイトルの指定があったら
+			// タイトル系オプション値も自動で振りたいので、あえて消す。
 			unset( $tmp_array['title_breadcrumb'] );
 			unset( $tmp_array['title_h1'] );
 			unset( $tmp_array['title_label'] );
 			unset( $tmp_array['title_full'] );
 		}
 
-		//  パンくず欄の先頭が > から始まっていた場合、削除
+		foreach( $page_info as $key=>$val ){
+			$tmp_array[$key] = $val;
+		}
+
+		// パンくず欄の先頭が > から始まっていた場合、削除
 		$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] ?? "" );
 
-		//  指定値を反映
+		// 指定値を反映
 		foreach( $page_info as $key=>$val ){
 			$tmp_array[$key] = $val;
 		}
@@ -1385,24 +1386,19 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$tmp_array['id'] = ':live_auto_page_id.'.($num_auto_pid++);
 		}
 
-		//  サイトマップに登録
+		// サイトマップに登録
 		$this->sitemap_array[$tmp_array['path']] = $tmp_array;
 		$this->sitemap_id_map[$tmp_array['id']] = $tmp_array['path'];
 
-		//  ページツリーキャッシュを削除
+		// ページツリーキャッシュを削除
 		$parent = $this->get_page_info_by_id( $this->get_parent( $tmp_array['path'] ) );
 		$this->sitemap_page_tree[$parent['path']] = null;
 
-		//  パブリッシュ対象にリンクを追加
+		// パブリッシュ対象にリンクを追加
 		$this->px->add_relatedlink( $this->px->href($tmp_array['path']) );
 
-		// // カレントページにレイアウトの指示があったら、テーマに反映する。
-		// if( $is_target_current_page && strlen($page_info['layout'] ?? "") ){
-		// 	$this->px->theme()->set_layout_id( $page_info['layout'] );
-		// }
-
 		return true;
-	} // set_page_info()
+	}
 
 	/**
 	 * ページIDからページ情報を得る。
