@@ -1321,7 +1321,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 
 		$before_page_info = $this->get_page_info( $path );
-		$current_page_info = $this->get_current_page_info();
+		$current_page_info = $this->get_current_page_info() ?? array();
 		$is_target_current_page = false;
 		if( $before_page_info === $current_page_info ){
 			$is_target_current_page = true;
@@ -1358,7 +1358,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 		$tmp_array = $before_page_info;
 
-		if( strlen($page_info['title'] ?? "") && $current_page_info['title'] != ($page_info['title'] ?? null) ){
+		if( strlen($page_info['title'] ?? "") && ($current_page_info['title'] ?? null) != ($page_info['title'] ?? null) ){
 			// タイトルの指定があったら
 			// タイトル系オプション値も自動で振りたいので、あえて消す。
 			unset( $tmp_array['title_breadcrumb'] );

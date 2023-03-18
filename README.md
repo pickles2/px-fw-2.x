@@ -87,6 +87,7 @@ $ chmod -R 777 ./caches
 
 - `$path_content` と `$proc_type` が、`before_content` プラグインの処理を受けて再計算されるようになった。
 - `$site->set_page_info()` で、ページタイトルの更新が反映されない場合がある不具合を修正した。
+- その他、細かい不具合などの修正。
 
 ### Pickles Framework v2.1.14 (2023年2月11日)
 
