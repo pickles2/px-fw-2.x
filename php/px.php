@@ -497,7 +497,7 @@ class px{
 	 * NOTE: Pickles Framework v2.1.14 で追加されました。
 	 */
 	public function __get( $name ){
-		return $this->custom_dynamic_property[$name];
+		return $this->custom_dynamic_property[$name] ?? null;
 	}
 
 	/**
