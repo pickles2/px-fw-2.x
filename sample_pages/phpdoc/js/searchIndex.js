@@ -421,10 +421,10 @@ Search.appendIndex(
             "summary": "\u30D1\u30B9\u8A2D\u5B9A",
             "url": "classes/picklesFramework2-commands-publish.html#property_path_publish_dir"
         },                {
-            "fqsen": "\\picklesFramework2\\commands\\publish\u003A\u003A\u0024path_docroot",
-            "name": "path_docroot",
+            "fqsen": "\\picklesFramework2\\commands\\publish\u003A\u003A\u0024path_controot",
+            "name": "path_controot",
             "summary": "\u30D1\u30B9\u8A2D\u5B9A",
-            "url": "classes/picklesFramework2-commands-publish.html#property_path_docroot"
+            "url": "classes/picklesFramework2-commands-publish.html#property_path_controot"
         },                {
             "fqsen": "\\picklesFramework2\\commands\\publish\u003A\u003A\u0024domain",
             "name": "domain",
@@ -605,6 +605,11 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "Constructor",
             "url": "classes/picklesFramework2-px.html#method___construct"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Aassemble_path_content_and_proc_type\u0028\u0029",
+            "name": "assemble_path_content_and_proc_type",
+            "summary": "\u0024path_content\u0020\u3092\u8A08\u7B97\u3059\u308B",
+            "url": "classes/picklesFramework2-px.html#method_assemble_path_content_and_proc_type"
         },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003A__set\u0028\u0029",
             "name": "__set",

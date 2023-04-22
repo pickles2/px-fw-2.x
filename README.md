@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.15 (リリース日未定)
+### Pickles Framework v2.1.15 (2023年4月22日)
 
 - `$path_content` と `$proc_type` が、`before_content` プラグインの処理を受けて再計算されるようになった。
 - `$site->set_page_info()` で、ページタイトルの更新が反映されない場合がある不具合を修正した。
