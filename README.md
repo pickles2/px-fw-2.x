@@ -86,6 +86,7 @@ $ chmod -R 777 ./caches
 ### Pickles Framework v2.1.16 (リリース日未定)
 
 - `$conf->tagline` を追加した。
+- `autoindex` の処理を改善。id属性を見出し要素自体に与えるようになった。
 
 ### Pickles Framework v2.1.15 (2023年4月22日)
 

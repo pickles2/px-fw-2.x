@@ -99,19 +99,42 @@ class autoindex{
 			$indexCounter[$tmp['anch']] = 1;
 
 			$tmp['headlevel'] = intval($matched[3]);
-			if( $tmp['headlevel'] ){ // 引っかかったのが見出しの場合
-				array_push( $index , $tmp );
-			}
 
 			$content .= $matched[1];
-			if( $tmp['headlevel'] ){ // 引っかかったのが見出しの場合
-				// $content .= $this->back2top();
-				$content .= '<span';
-				$content .= ' id="'.htmlspecialchars($tmp['anch'] ?? "").'"';
-				$content .= '></span>';
+			if( $tmp['headlevel'] ){
+				// 引っかかったのが見出しの場合
+				$hxSrc = $matched[2];
+				if( preg_match('/^\<h'.preg_quote($tmp['headlevel'],'/').'(.*?)\>(.*)\<\/h'.preg_quote($tmp['headlevel'],'/').'\>$/i', $hxSrc, $matched_hxSrc) ){
+					$hxSrc_attrs = $matched_hxSrc[1];
+					$hxSrc_innerHTML = $matched_hxSrc[2];
+					if( strlen($hxSrc_attrs) ){
+						if( preg_match('/\sid\=(\"|\')(.*?)\1/i', ' '.$hxSrc_attrs, $matched_hxSrc_id) ){
+							// id属性をもともと持っていたら
+							$tmp['anch'] = $matched_hxSrc_id[2];
+						}else{
+							$hxSrc_attrs = trim($hxSrc_attrs).' id="'.htmlspecialchars($tmp['anch']).'"';
+						}
+					}else{
+						$hxSrc_attrs = trim($hxSrc_attrs).' id="'.htmlspecialchars($tmp['anch']).'"';
+					}
+					$hxSrc_attrs = ' '.trim($hxSrc_attrs);
+					$content .= '<h'.$tmp['headlevel'].$hxSrc_attrs.'>'.$hxSrc_innerHTML.'</h'.$tmp['headlevel'].'>';
+					unset($hxSrc_attrs, $hxSrc_innerHTML, $matched_hxSrc, $matched_hxSrc_id);
+				}else{
+					$content .= '<span';
+					$content .= ' id="'.htmlspecialchars($tmp['anch'] ?? "").'"';
+					$content .= '></span>';
+					$content .= $hxSrc;
+				}
+			}else{
+				$content .= $matched[2];
 			}
-			$content .= $matched[2];
 			$tmp_cont = $matched[5];
+
+			if( $tmp['headlevel'] ){
+				// 引っかかったのが見出しの場合
+				array_push( $index , $tmp );
+			}
 		}
 		set_time_limit(30);
 
@@ -186,6 +209,6 @@ class autoindex{
 		$content = preg_replace( '/'.$this->func_data_memos.'/s' , $anchorlinks , $content );
 		return $content;
 
-	} // apply_autoindex();
+	}
 
 }
