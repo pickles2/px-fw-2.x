@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.16 (リリース日未定)
+
+- `$conf->tagline` を追加した。
+
 ### Pickles Framework v2.1.15 (2023年4月22日)
 
 - `$path_content` と `$proc_type` が、`before_content` プラグインの処理を受けて再計算されるようになった。

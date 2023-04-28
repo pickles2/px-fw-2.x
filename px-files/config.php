@@ -14,6 +14,8 @@ return call_user_func( function(){
 
 	/** サイト名 */
 	$conf->name = 'Pickles Framework 2';
+	/** キャッチフレーズ */
+	$conf->tagline = 'A Static DB-LESS CMS';
 	/** コピーライト表記 */
 	$conf->copyright = 'Pickles Project';
 	/** デフォルトの言語 */
