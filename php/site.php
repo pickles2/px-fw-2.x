@@ -1228,7 +1228,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 		}
 		$path = $tmp_path;
-		$parsed_url = parse_url($path);
+		$parsed_url = parse_url($path ?? '');
 		unset($tmp_path);
 
 		if( !array_key_exists($path, $this->sitemap_array) || is_null( $this->sitemap_array[$path] ?? null ) ){

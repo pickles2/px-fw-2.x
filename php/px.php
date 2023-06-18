@@ -272,7 +272,7 @@ class px{
 			if( count($tmp_cli_params) ){
 				$tmp_path = $tmp_cli_params[count($tmp_cli_params)-1];
 				if( preg_match( '/^\//', $tmp_path ) ){
-					$tmp_path = parse_url($tmp_path);
+					$tmp_path = parse_url($tmp_path ?? '');
 					if( is_array($tmp_path) && array_key_exists('query', $tmp_path) ){
 						parse_str( $tmp_path['query'], $tmp_query );
 						if( is_array($tmp_query) ){
@@ -1346,7 +1346,7 @@ class px{
 	 * @return string href属性値
 	 */
 	public function href( $linkto ){
-		$parsed_url = parse_url($linkto);
+		$parsed_url = parse_url($linkto ?? '');
 		if( !array_key_exists('path', $parsed_url) ){
 			$parsed_url['path'] = '';
 		}
@@ -1424,7 +1424,7 @@ class px{
 					// $path = preg_replace( '/^\/+/' , '' , $path );
 					$path = preg_replace('/\/$/', '', $this->get_path_controot()).$path;
 				}
-				$parsed_url_fin = parse_url($path);
+				$parsed_url_fin = parse_url($path ?? '');
 				$path = $this->fs()->normalize_path( $parsed_url_fin['path'] );
 
 				// パラメータを、引数の生の状態に戻す。
@@ -1557,7 +1557,7 @@ class px{
 	 * @return string HTMLソース(aタグ)
 	 */
 	public function mk_link( $linkto, $options = array() ){
-		$parsed_url = parse_url($linkto);
+		$parsed_url = parse_url($linkto ?? '');
 		$args = func_get_args();
 		$page_info = null;
 		if( $this->site() !== false ){

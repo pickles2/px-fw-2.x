@@ -83,6 +83,10 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.17 (リリース日未定)
+
+- 細かい不具合の修正。
+
 ### Pickles Framework v2.1.16 (2023年5月1日)
 
 - `$conf->tagline` を追加した。
