@@ -83,7 +83,7 @@ $ chmod -R 777 ./caches
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.17 (リリース日未定)
+### Pickles Framework v2.1.17 (2023年6月25日)
 
 - 細かい不具合の修正。
 
