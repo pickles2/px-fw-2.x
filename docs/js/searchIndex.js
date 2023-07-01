@@ -1256,6 +1256,66 @@ Search.appendIndex(
             "summary": "PDO\u30A4\u30F3\u30B9\u30BF\u30F3\u30B9\n\u0024sitemap_page_tree\u0020\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\u306BSQLite\u3092\u4F7F\u7528\u3059\u308B\u305F\u3081\u306E\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9\u3002",
             "url": "classes/picklesFramework2-site.html#property_pdo"
         },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme",
+            "name": "theme",
+            "summary": "theme\u0020\u0022pickles\u0022\u0020class",
+            "url": "classes/picklesFramework2-theme-theme.html"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "constructor",
+            "url": "classes/picklesFramework2-theme-theme.html#method___construct"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Aexec\u0028\u0029",
+            "name": "exec",
+            "summary": "entry\u0020method",
+            "url": "classes/picklesFramework2-theme-theme.html#method_exec"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Abind\u0028\u0029",
+            "name": "bind",
+            "summary": "bind\u0020content\u0020to\u0020theme",
+            "url": "classes/picklesFramework2-theme-theme.html#method_bind"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Amk_global_menu\u0028\u0029",
+            "name": "mk_global_menu",
+            "summary": "\u30B0\u30ED\u30FC\u30D0\u30EB\u30CA\u30D3\u3092\u81EA\u52D5\u751F\u6210\u3059\u308B",
+            "url": "classes/picklesFramework2-theme-theme.html#method_mk_global_menu"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Amk_shoulder_menu\u0028\u0029",
+            "name": "mk_shoulder_menu",
+            "summary": "\u30B7\u30E7\u30EB\u30C0\u30FC\u30CA\u30D3\u3092\u81EA\u52D5\u751F\u6210\u3059\u308B",
+            "url": "classes/picklesFramework2-theme-theme.html#method_mk_shoulder_menu"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Amk_sub_menu\u0028\u0029",
+            "name": "mk_sub_menu",
+            "summary": "\u6307\u5B9A\u3055\u308C\u305F\u30DA\u30FC\u30B8\u306E\u5C0F\u968E\u5C64\u306E\u30E1\u30CB\u30E5\u30FC\u3092\u5C55\u958B\u3059\u308B",
+            "url": "classes/picklesFramework2-theme-theme.html#method_mk_sub_menu"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Amk_megafooter_menu\u0028\u0029",
+            "name": "mk_megafooter_menu",
+            "summary": "\u30B0\u30ED\u30FC\u30D0\u30EB\u30CA\u30D3\u3092\u81EA\u52D5\u751F\u6210\u3059\u308B",
+            "url": "classes/picklesFramework2-theme-theme.html#method_mk_megafooter_menu"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003Amk_breadcrumb\u0028\u0029",
+            "name": "mk_breadcrumb",
+            "summary": "\u30D1\u30F3\u304F\u305A\u3092\u81EA\u52D5\u751F\u6210\u3059\u308B",
+            "url": "classes/picklesFramework2-theme-theme.html#method_mk_breadcrumb"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003A\u0024px",
+            "name": "px",
+            "summary": "objects",
+            "url": "classes/picklesFramework2-theme-theme.html#property_px"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003A\u0024path_tpl",
+            "name": "path_tpl",
+            "summary": "\u30C6\u30FC\u30DE\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u306E\u683C\u7D0D\u5148\u30D1\u30B9",
+            "url": "classes/picklesFramework2-theme-theme.html#property_path_tpl"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme\\theme\u003A\u003A\u0024page",
+            "name": "page",
+            "summary": "current_page_info",
+            "url": "classes/picklesFramework2-theme-theme.html#property_page"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
@@ -1300,5 +1360,10 @@ Search.appendIndex(
             "name": "ssi",
             "summary": "",
             "url": "namespaces/picklesframework2-processors-ssi.html"
+        },                {
+            "fqsen": "\\picklesFramework2\\theme",
+            "name": "theme",
+            "summary": "",
+            "url": "namespaces/picklesframework2-theme.html"
         }            ]
 );
