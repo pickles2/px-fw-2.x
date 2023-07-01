@@ -46,20 +46,18 @@ Pickles 2 は、[PxFW-1.x](https://github.com/tomk79/PxFW-1.x) の後継です�
 
 ## インストール手順 - Install
 
-Pickles Framework 2.x はラッパーである [Get start "Pickles 2" !](https://github.com/pickles2/preset-get-start-pickles2) からの利用をおすすめします。
-
-```
+```bash
 $ cd {$documentRoot}
-$ composer create-project pickles2/preset-get-start-pickles2 ./
+$ composer create-project pickles2/pickles2 ./
 ```
 
 `.px_execute.php` の置かれたディレクトリがドキュメントルートになるよう、ウェブサーバーを設定してください。
 
 Pickles Framework が書き込みを行うディレクトリがあります。次のコマンドは、書き込み権限を付与するためのものです。すでに権限がある場合は実行する必要はありません。
 
-```
+```bash
 $ chmod -R 777 ./px-files/_sys
-$ chmod -R 777 ./caches
+$ chmod -R 777 ./src_px2/caches
 ```
 
 
