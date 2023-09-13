@@ -94,7 +94,7 @@ class pxcmd{
 		print '------------'."\n";
 		print 'Pickles '.$this->px->get_version().' -> '.$pxcmd[0]."\n";
 		print 'PHP '.phpversion()."\n";
-		print @date('Y-m-d H:i:s')."\n";
+		print @date('c')."\n";
 		print '------------'."\n";
 		return ob_get_clean();
 	}
@@ -106,7 +106,7 @@ class pxcmd{
 	public function get_cli_footer(){
 		ob_start();
 		print '------------'."\n";
-		print @date('Y-m-d H:i:s')."\n";
+		print @date('c')."\n";
 		print 'PX Command END;'."\n";
 		print "\n";
 		return ob_get_clean();
@@ -196,7 +196,7 @@ class pxcmd{
 			<div class="pxcmd-footer">
 				<p><a href="?" class="btn btn-default">PX Commands を終了する</a></p>
 				<p>PHP <?= htmlspecialchars(phpversion()) ?></p>
-				<p><?= htmlspecialchars(@date('Y-m-d H:i:s') ?? "") ?></p>
+				<p><?= htmlspecialchars(@date('c') ?? "") ?></p>
 				<p class="pxcmd-credits"><a href="https://pickles2.pxt.jp/" target="_blank">Pickles Framework</a> (C)Tomoya Koyanagi, and Pickles Project.</p>
 			</div><!-- /.footer -->
 		</div>

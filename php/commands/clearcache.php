@@ -97,7 +97,7 @@ class clearcache{
 		print "\n";
 		if( $this->is_publish_locked() ){
 			print 'publish is now locked.'."\n";
-			print '  (lockfile updated: '.@date('Y-m-d H:i:s', filemtime($this->path_lockfile)).')'."\n";
+			print '  (lockfile updated: '.@date('c', filemtime($this->path_lockfile)).')'."\n";
 			print 'Try again later...'."\n";
 			print 'exit.'."\n";
 			print $this->px->pxcmd()->get_cli_footer();

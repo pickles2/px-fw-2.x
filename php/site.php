@@ -359,7 +359,7 @@ class site{
 		// サイトマップキャッシュ作成中のアプリケーションロックファイルを作成
 		$lockfile_src = '';
 		$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
-		$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$lockfile_src .= @date( 'c', time() )."\r\n";
 		$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 		unset( $lockfile_src );
 
@@ -551,7 +551,7 @@ class site{
 				// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
 				$lockfile_src = '';
 				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
-				$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+				$lockfile_src .= @date( 'c', time() )."\r\n";
 				$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 				unset( $lockfile_src );
 			}
@@ -700,7 +700,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 					}elseif( preg_match('/\_datetime$/si', $sitemap_definition_key) ){
 						$values[':'.$sitemap_definition_key] = '';
 						if( strlen($tmp_page_info[$sitemap_definition_key] ?? "") ){
-							$values[':'.$sitemap_definition_key] = date('Y-m-d H:i:s', strtotime($tmp_page_info[$sitemap_definition_key]));
+							$values[':'.$sitemap_definition_key] = date('c', strtotime($tmp_page_info[$sitemap_definition_key]));
 						}
 					}else{
 						$values[':'.$sitemap_definition_key] = $tmp_page_info[$sitemap_definition_key];
@@ -721,7 +721,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
 			$lockfile_src = '';
 			$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
-			$lockfile_src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+			$lockfile_src .= @date( 'c', time() )."\r\n";
 			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 			unset( $lockfile_src );
 		}

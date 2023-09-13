@@ -291,7 +291,7 @@ class publish{
 				$html .= '	<p>'."\n";
 				$html .= '		ロックファイルは下記の時刻に更新されました。<br />'."\n";
 				$html .= '	</p>'."\n";
-				$html .= '	<blockquote><pre>'.htmlspecialchars( ''.date( 'Y-m-d H:i:s', filemtime( $this->path_lockfile ) ) ?? "" ).'</pre></blockquote>'."\n";
+				$html .= '	<blockquote><pre>'.htmlspecialchars( ''.date( 'c', filemtime( $this->path_lockfile ) ) ?? "" ).'</pre></blockquote>'."\n";
 				$html .= '	<p>'."\n";
 				$html .= '		ロックファイルは、次のパスに存在します。<br />'."\n";
 				$html .= '	</p>'."\n";
@@ -382,7 +382,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		if( !$this->lock() ){//ロック
 			print '------'."\n";
 			print 'publish is now locked.'."\n";
-			print '  (lockfile updated: '.@date('Y-m-d H:i:s', filemtime($this->path_lockfile)).')'."\n";
+			print '  (lockfile updated: '.@date('c', filemtime($this->path_lockfile)).')'."\n";
 			print 'Try again later...'."\n";
 			print 'exit.'."\n";
 			print $this->cli_footer();
@@ -452,12 +452,12 @@ function cont_EditPublishTargetPathApply(formElm){
 						print $ext.' -> '.$proc_type."\n";
 						if( !$this->px->fs()->mkdir_r( dirname( $this->path_tmp_publish.'/htdocs'.$this->path_controot.$path ) ) ){
 							$status_code = 500;
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to making parent directory.' ));
+							$this->alert_log(array( @date('c'), $path, 'FAILED to making parent directory.' ));
 							break;
 						}
 						if( !$this->px->fs()->copy( dirname($_SERVER['SCRIPT_FILENAME']).$path , $this->path_tmp_publish.'/htdocs'.$this->path_controot.$path ) ){
 							$status_code = 500;
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'FAILED to copying file.' ));
+							$this->alert_log(array( @date('c'), $path, 'FAILED to copying file.' ));
 							break;
 						}
 						$status_code = 200;
@@ -487,17 +487,17 @@ function cont_EditPublishTargetPathApply(formElm){
 						$status_message = $bin->message ?? null;
 						$errors = $bin->errors ?? null;
 						if( $bin->status >= 500 ){
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+							$this->alert_log(array( @date('c'), $path, 'status: '.$bin->status.' '.$bin->message ));
 						}elseif( $bin->status >= 400 ){
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+							$this->alert_log(array( @date('c'), $path, 'status: '.$bin->status.' '.$bin->message ));
 						}elseif( $bin->status >= 300 ){
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+							$this->alert_log(array( @date('c'), $path, 'status: '.$bin->status.' '.$bin->message ));
 						}elseif( $bin->status >= 200 ){
 							// 200 番台は正常
 						}elseif( $bin->status >= 100 ){
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'status: '.$bin->status.' '.$bin->message ));
+							$this->alert_log(array( @date('c'), $path, 'status: '.$bin->status.' '.$bin->message ));
 						}else{
-							$this->alert_log(array( @date('Y-m-d H:i:s'), $path, 'Unknown status code.' ));
+							$this->alert_log(array( @date('c'), $path, 'Unknown status code.' ));
 						}
 
 						// コンテンツの書き出し処理
@@ -518,7 +518,7 @@ function cont_EditPublishTargetPathApply(formElm){
 						// エラーメッセージを alert_log に追記
 						if( is_array( $bin->errors ) && count( $bin->errors ) ){
 							foreach( $bin->errors as $tmp_error_row ){
-								$this->alert_log(array( @date('Y-m-d H:i:s'), $path, $tmp_error_row ));
+								$this->alert_log(array( @date('c'), $path, $tmp_error_row ));
 							}
 						}
 
@@ -531,7 +531,7 @@ function cont_EditPublishTargetPathApply(formElm){
 					$str_errors .= implode(', ', $errors).';';
 				}
 				$this->log(array(
-					@date('Y-m-d H:i:s') ,
+					@date('c') ,
 					$path ,
 					$proc_type ,
 					$status_code ,
@@ -1230,7 +1230,7 @@ function cont_EditPublishTargetPathApply(formElm){
 		}
 		$src = '';
 		$src .= 'ProcessID='.getmypid()."\r\n";
-		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$src .= @date( 'c', time() )."\r\n";
 		$RTN = $this->px->fs()->save_file( $lockfilepath , $src );
 
 		// 割り込みを検証
