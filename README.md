@@ -6,7 +6,7 @@ Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.18 (リリース日未定)
+### Pickles Framework v2.1.18 (2023年9月24日)
 
 - 内部で扱う時刻情報を ISO 8601 形式 に変更した。
 
