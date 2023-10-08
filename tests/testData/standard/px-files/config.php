@@ -177,7 +177,9 @@ return call_user_func( function(){
 
 	$conf->funcs->processor->html = [
 		// ページ内目次を自動生成する
-		'picklesFramework2\processors\autoindex\autoindex::exec' ,
+		\picklesFramework2\processors\autoindex\autoindex::exec(
+			include(__DIR__.'/config_ex/autoindex_options.array')
+		),
 
 		// テーマ
 		'theme'=>'picklesFramework2\theme\theme::exec' ,

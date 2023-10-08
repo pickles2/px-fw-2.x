@@ -7,12 +7,17 @@ namespace picklesFramework2\processors\autoindex;
 /**
  * PX Commands "autoindex"
  */
-class autoindex{
+class autoindex {
 
 	/**
 	 * Picklesオブジェクト
 	 */
 	private $px;
+
+	/**
+	 * プラグインオプション
+	 */
+	private $options;
 
 	/**
 	 * 機能別に値を記憶する領域
@@ -25,13 +30,13 @@ class autoindex{
 	 * @param object $px Picklesオブジェクト
 	 * @param object $options オプション
 	 */
-	public static function exec( $px = null, $options = null ){
+	public static function exec( $px = null, $options = null ) {
 
 		if( count(func_get_args()) <= 1 ){
 			return __CLASS__.'::'.__FUNCTION__.'('.( is_array($px) ? json_encode($px) : '' ).')';
 		}
 
-		$autoindex = new self( $px );
+		$autoindex = new self( $px, $options );
 
 		//  autoindex
 		if( strlen( $autoindex->func_data_memos ?? "" ) ){
@@ -46,8 +51,14 @@ class autoindex{
 	 *
 	 * @param object $px Picklesオブジェクト
 	 */
-	public function __construct( $px ){
+	public function __construct( $px, $options ) {
 		$this->px = $px;
+		$this->options = json_decode(json_encode($options));
+
+		if (!is_object($this->options)) {
+			$this->options = new \stdClass();
+		}
+		$this->options->class = $this->options->class ?? null;
 	}
 
 
@@ -63,7 +74,7 @@ class autoindex{
 	 * 
 	 * @return string 目次が反映されたHTMLソース
 	 */
-	public function apply_autoindex( $content ){
+	public function apply_autoindex( $content ) {
 		if( !preg_match( '/'.$this->func_data_memos.'/s', $content ) ){
 			// アンカーリンクが使われてなかったら、処理しない。
 			return $content;
@@ -74,6 +85,7 @@ class autoindex{
 		$index = array();
 		$indexCounter = array();
 		$i = 0;
+
 		while( 1 ){
 			set_time_limit(60*30);
 			if( !preg_match( '/^(.*?)(<\!\-\-(?:.*?)\-\->|<script(?:\s.*?)?>(?:.*?)<\/script>|<h([2-6])(?:\s.*?)?>(.*?)<\/h\3>)(.*)$/is' , $tmp_cont , $matched ) ){
@@ -138,17 +150,19 @@ class autoindex{
 		}
 		set_time_limit(30);
 
-		$style_ul = 'margin:0; padding:0 0 0 2em;';
-		$style_li = 'list-style-type:disc; display:list-item;';
+		$style_ul = (strlen($this->options->class ?? '') ? '' : ' style="margin:0; padding:0 0 0 2em;"');
+		$style_li = (strlen($this->options->class ?? '') ? '' : ' style="list-style-type:disc; display:list-item;"');
 
 		$anchorlinks = '';
 		$topheadlevel = 2;
 		$headlevel = $topheadlevel;
-		if( count( $index ) ){
+
+		if ( count( $index ) ) {
 			$anchorlinks .= '<!-- == autoindex == -->'."\n";
-			$anchorlinks .= '<div style="margin:2em 5%; border:1px solid #bbb; padding:1em; background:rgba(124, 124, 124, 0.05); border-radius:5px;">'."\n";
-			$anchorlinks .= '<div style="margin:0; padding:0; text-align:center; font-weight:bold;">INDEX</div>';
-			foreach($index as $key=>$row){
+			$anchorlinks .= '<div '.(strlen($this->options->class ?? '') ? 'class="'.htmlspecialchars($this->options->class).'"' : 'style="margin:2em 5%; border:1px solid #bbb8; padding:1em; background:rgba(124, 124, 124, 0.05); border-radius:5px;"').'>'."\n";
+			$anchorlinks .= '<div '.(strlen($this->options->class ?? '') ? 'class="'.htmlspecialchars($this->options->class).'__title"' : 'style="margin:0; padding:0; text-align:center; font-weight:bold;"').'>INDEX</div>';
+
+			foreach ($index as $key=>$row) {
 				$csa = $row['headlevel'] - $headlevel;
 				$nextLevel = $index[$key+1]['headlevel'] ?? null;
 				$nsa = null;
@@ -159,46 +173,40 @@ class autoindex{
 				if( $csa>0 ){
 					// いま下がるとき
 					if( $key == 0 ){
-						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+						$anchorlinks .= '<ul'.$style_ul.'><li'.$style_li.'>';
 					}
 					for( $i = $csa; $i>0; $i -- ){
-						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+						$anchorlinks .= '<ul'.$style_ul.'><li'.$style_li.'>';
 					}
 				}elseif( $csa<0 ){
 					// いま上がるとき
 					if( $key == 0 ){
-						$anchorlinks .= '<ul style="'.$style_ul.'"><li style="'.$style_li.'">';
+						$anchorlinks .= '<ul'.$style_ul.'><li'.$style_li.'>';
 					}
 					for( $i = $csa; $i<0; $i ++ ){
 						$anchorlinks .= '</li></ul>';
 					}
-					$anchorlinks .= '</li><li style="'.$style_li.'">';
+					$anchorlinks .= '</li><li'.$style_li.'>';
 				}else{
 					// いま現状維持
 					if( $key == 0 ){
-						$anchorlinks .= '<ul style="'.$style_ul.'">';
+						$anchorlinks .= '<ul'.$style_ul.'>';
 					}
-					$anchorlinks .= '<li style="'.$style_li.'">';
+					$anchorlinks .= '<li'.$style_li.'>';
 				}
 				$anchorlinks .= '<a href="#'.htmlspecialchars($row['anch'] ?? "").'">'.($row['label']).'</a>';
 				if( is_null($nsa) ){
 					break;
 				}elseif( $nsa>0 ){
 					// つぎ下がるとき
-					// for( $i = $nsa; $i>0; $i -- ){
-					// 	$anchorlinks .= '</li></ul></li>';
-					// }
 				}elseif( $nsa<0 ){
 					// つぎ上がるとき
-					for( $i = $nsa; $i<0; $i ++ ){
-						// $anchorlinks .= '</li></ul>'."\n";
-					}
 				}else{
 					// つぎ現状維持
 					$anchorlinks .= '</li>'."\n";
 				}
 			}
-			while($headlevel >= $topheadlevel){
+			while ($headlevel >= $topheadlevel) {
 				$anchorlinks .= '</li></ul>'."\n";
 				$headlevel --;
 			}
@@ -208,7 +216,5 @@ class autoindex{
 
 		$content = preg_replace( '/'.$this->func_data_memos.'/s' , $anchorlinks , $content );
 		return $content;
-
 	}
-
 }
