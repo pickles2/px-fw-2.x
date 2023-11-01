@@ -7,6 +7,7 @@
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
 namespace picklesFramework2;
+use picklesFramework2\helpers\sitemap_cache_insert;
 
 /**
  * Site and page Manager
@@ -635,39 +636,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 		}
 
 		// ページツリー情報を構成
-		if( $tmp_pdo !== false ){
-			// INSERT文をストア
-			ob_start(); ?>
-INSERT INTO sitemap( <?php
-foreach( $sitemap_definition_keys as $sitemap_definition_key ){
-	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
-		// カスタムカラムのカラム名が定形外の場合、列を作らない
-		continue;
-	}
-	echo $sitemap_definition_key.',';
-}
-?>
-	____parent_page_id,
-	____order,
-	____originated_csv,
-	____originated_csv_row
-)VALUES(<?php
-foreach( $sitemap_definition_keys as $sitemap_definition_key ){
-	if( !preg_match('/^[0-9a-zA-Z\_]{1,30}$/', $sitemap_definition_key) ){
-		// カスタムカラムのカラム名が定形外の場合、列を作らない
-		continue;
-	}
-	echo ':'.$sitemap_definition_key.',';
-}
-?>
-	:____parent_page_id,
-	:____order,
-	:____originated_csv,
-	:____originated_csv_row
-);
-<?php
-			$sth = $tmp_pdo->prepare( ob_get_clean() );
-		}
+		$sitemap_cache_insert = new sitemap_cache_insert($this->px, $tmp_pdo, $sitemap_definition_keys);
 		$this->sitemap_page_tree = array();
 		$____order = 0;
 		foreach( $this->sitemap_array as $tmp_path=>$tmp_page_info ){
@@ -711,7 +680,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 				$values[':____originated_csv'] = $sitemap_page_originated_csv[$tmp_page_info['path']]['basename'];
 				$values[':____originated_csv_row'] = $sitemap_page_originated_csv[$tmp_page_info['path']]['row'];
 
-				$sth->execute($values);
+				$sitemap_cache_insert->insert($values); // NOTE: ここでは実際には INSERT しない。ためておいて、あとで flush() で実際に挿入する。
 				$____order ++;
 
 			}else{
@@ -725,6 +694,9 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
 			unset( $lockfile_src );
 		}
+
+		$sitemap_cache_insert->flush(); // NOTE: 行の挿入を実行する
+
 		set_time_limit(30); // タイマーリセット
 		unset($tmp_path, $tmp_page_info );
 
