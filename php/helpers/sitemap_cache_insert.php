@@ -133,11 +133,13 @@ foreach( $this->sitemap_definition_keys as $sitemap_definition_key ){
 		}
 
 		// INSERT文をストア
+		set_time_limit(0);
 		$sql = $this->sql_insert_prefix.implode(', ', $this->strs_insert_values_template_row).';';
 		$sth = $this->pdo->prepare( $sql );
 		$sth->execute($this->insert_values_row);
 
 		// リセットする
+		set_time_limit(30);
 		$this->strs_insert_values_template_row = array();
 		$this->insert_values_row = array();
 
