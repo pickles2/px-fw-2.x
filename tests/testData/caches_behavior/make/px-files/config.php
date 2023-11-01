@@ -36,23 +36,28 @@ return call_user_func( function(){
 	$conf->commands = new stdClass;
 	$conf->commands->php = 'php';
 
-	// processor
+	/**
+	 * paths_proc_type
+	 *
+	 * パスのパターン別に処理方法を設定します。
+	 *
+	 * - ignore = 対象外パス。Pickles 2 のアクセス可能範囲から除外します。このパスへのアクセスは拒絶され、パブリッシュの対象からも外されます。
+	 * - direct = 物理ファイルを、ファイルとして読み込んでから加工処理を通します。 (direct以外の通常の処理は、PHPファイルとして `include()` されます)
+	 * - pass = 物理ファイルを、そのまま無加工で出力します。 (デフォルト)
+	 * - その他 = extension名
+	 *
+	 * パターンは先頭から検索され、はじめにマッチした設定を採用します。
+	 * ワイルドカードとして "*"(アスタリスク) が使用可能です。
+	 * 部分一致ではなく、完全一致で評価されます。従って、ディレクトリ以下すべてを表現する場合は、 `/*` で終わるようにしてください。
+	 *
+	 * extensionは、 `$conf->funcs->processor` に設定し、設定した順に実行されます。
+	 * 例えば、 '*.html' => 'html' にマッチしたリクエストは、
+	 * $conf->funcs->processor->html に設定したプロセッサのリストに沿って、上から順に処理されます。
+	 */
 	$conf->paths_proc_type = array(
-		// パスのパターン別に処理方法を設定
-		//     - ignore = 対象外パス
-		//     - direct = 加工せずそのまま出力する(デフォルト)
-		//     - その他 = extension 名
-		// パターンは先頭から検索され、はじめにマッチした設定を採用する。
-		// ワイルドカードとして "*"(アスタリスク) を使用可。
 		'/.htaccess' => 'ignore' ,
 		'/.px_execute.php' => 'ignore' ,
 		'/px-files/*' => 'ignore' ,
-		'*.ignore/*' => 'ignore' ,
-		'*.ignore.*' => 'ignore' ,
-		'*.pass/*' => 'pass' ,
-		'*.pass.*' => 'pass' ,
-		'*.direct/*' => 'direct' ,
-		'*.direct.*' => 'direct' ,
 		'/composer.json' => 'ignore' ,
 		'/composer.lock' => 'ignore' ,
 		'/README.md' => 'ignore' ,
@@ -63,6 +68,13 @@ return call_user_func( function(){
 		'*/.git/*' => 'ignore' ,
 		'*/.gitignore' => 'ignore' ,
 
+		'*.ignore/*' => 'ignore' ,
+		'*.ignore.*' => 'ignore' ,
+		'*.pass/*' => 'pass' ,
+		'*.pass.*' => 'pass' ,
+		'*.direct/*' => 'direct' ,
+		'*.direct.*' => 'direct' ,
+
 		'/path_ignored/*' => 'ignore' ,
 		'/files_ignored/index.html' => 'ignore' ,
 
@@ -70,10 +82,10 @@ return call_user_func( function(){
 		'*.htm' => 'html' ,
 		'*.css' => 'css' ,
 		'*.js' => 'js' ,
-		'*.png' => 'direct' ,
-		'*.jpg' => 'direct' ,
-		'*.gif' => 'direct' ,
-		'*.svg' => 'direct' ,
+		'*.png' => 'pass' ,
+		'*.jpg' => 'pass' ,
+		'*.gif' => 'pass' ,
+		'*.svg' => 'pass' ,
 	);
 
 

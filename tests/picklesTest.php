@@ -264,7 +264,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 		$px = new picklesFramework2\px('./px-files/');
 		$toppage_info = $px->site()->get_page_info('');
-		// var_dump($toppage_info);
 		clearstatcache();
 		$this->assertTrue( is_dir( './caches/' ) );
 		$this->assertTrue( is_dir( './px-files/_sys/' ) );
@@ -281,7 +280,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		$output = $this->utils->px_execute( '/caches_behavior/make/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/make/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/make/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -299,7 +297,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 		$px = new picklesFramework2\px('./px-files/');
 		$toppage_info = $px->site()->get_page_info('');
-		// var_dump($toppage_info);
 		clearstatcache();
 		$this->assertTrue( !is_dir( './caches/' ) );
 		$this->assertTrue( is_dir( './px-files/_sys/' ) );
@@ -316,12 +313,10 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		$output = $this->utils->px_execute( '/caches_behavior/notmake/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/notmake/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/caches_behavior/notmake/px-files/_sys/ram/caches/sitemaps/' ) );
 		$this->assertTrue( $this->fs->rm( __DIR__.'/testData/caches_behavior/notmake/px-files/_sys/' ) );
-
 	}
 
 	/**
