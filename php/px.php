@@ -545,8 +545,6 @@ class px{
 				}else{
 					$option_value = null;
 				}
-				// var_dump($fnc_name);
-				// var_dump($option_value);
 				$this->proc_num ++;
 				if( !strlen($this->proc_id ?? "") ){
 					$this->proc_id = $this->proc_type.'_'.$this->proc_num;

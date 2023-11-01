@@ -301,10 +301,10 @@ class site{
 			if( $i > 0 ){
 				// 他のプロセスがサイトマップキャッシュを作成中。
 				// 2秒待って解除されなければ、true を返して終了する。(=古い仕様)
-				//  → 待たずに false を返すように変更した。
+				//   → 待たずに false を返すように変更した。
 				$this->px->error('Sitemap cache generating is now in progress. This page has been incompletely generated.');
 
-				//  古いサイトマップキャッシュが存在する場合、ロードする。
+				// 古いサイトマップキャッシュが存在する場合、ロードする。
 				$this->sitemap_array         = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap.array') ? @include($path_sitemap_cache_dir.'sitemap.array') : array() );
 				$this->sitemap_id_map        = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_id_map.array') ? @include($path_sitemap_cache_dir.'sitemap_id_map.array') : array() );
 				$this->sitemap_dynamic_paths = ( $this->px->fs()->is_file($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') ? @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array') : array() );
@@ -348,7 +348,7 @@ class site{
 		}
 
 		if( $this->is_sitemap_cache() ){
-			//  サイトマップキャッシュが存在する場合、キャッシュからロードする。
+			// サイトマップキャッシュが存在する場合、キャッシュからロードする。
 			$this->sitemap_array         = @include($path_sitemap_cache_dir.'sitemap.array');
 			$this->sitemap_id_map        = @include($path_sitemap_cache_dir.'sitemap_id_map.array');
 			$this->sitemap_dynamic_paths = @include($path_sitemap_cache_dir.'sitemap_dynamic_paths.array');
@@ -370,7 +370,7 @@ class site{
 		}
 		sort($ary_sitemap_files);
 
-		//  サイトマップをロード
+		// サイトマップをロード
 		$num_auto_pid = 0;
 		$sitemap_definition = $this->get_sitemap_definition();
 		$sitemap_definition_keys = array_keys( $sitemap_definition );
@@ -537,7 +537,7 @@ class site{
 					$tmp_array['path'] = preg_replace( '/^alias\:/s' , 'alias'.$num_auto_pid.':' , $tmp_array['path'] );
 				}
 
-				//  パンくず欄の先頭が > から始まっていた場合、削除
+				// パンくず欄の先頭が > から始まっていた場合、削除
 				$tmp_array['logical_path'] = preg_replace( '/^\>+/s' , '' , $tmp_array['logical_path'] ?? "" );
 
 				$this->sitemap_array[$tmp_array['path']] = $tmp_array;
@@ -556,7 +556,7 @@ class site{
 				unset( $lockfile_src );
 			}
 		}
-		//  / サイトマップをロード
+		// / サイトマップをロード
 
 		// ダイナミックパスを並び替え
 		usort($this->sitemap_dynamic_paths, function($a,$b){
@@ -634,7 +634,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			$result = @$tmp_pdo->query(ob_get_clean());
 		}
 
-		//  ページツリー情報を構成
+		// ページツリー情報を構成
 		if( $tmp_pdo !== false ){
 			// INSERT文をストア
 			ob_start(); ?>
@@ -782,7 +782,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		set_time_limit(30); // タイマーリセット
 
 		return true;
-	} // load_sitemap_csv();
+	}
 
 	/**
 	 * サイトマップキャッシュが読み込み可能か調べる。
@@ -1077,11 +1077,11 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			return '';
 		}
 		if( $current_page_info['category_top_flg'] ?? null ){
-			//  自身がカテゴリトップだった場合。
+			// 自身がカテゴリトップだった場合。
 			return $current_page_info['id'];
 		}
 		if( !strlen($current_page_info['id'] ?? "") ){
-			//  自身がトップページだった場合。
+			// 自身がトップページだった場合。
 			return '';
 		}
 		$page_info = $current_page_info;
@@ -1092,7 +1092,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 			$page_info = $this->get_page_info($parent_pid);
 			if( $page_info['category_top_flg'] ?? null ){
-				//  自身がカテゴリトップだった場合。
+				// 自身がカテゴリトップだった場合。
 				return $page_info['id'];
 			}
 		}
@@ -1232,8 +1232,8 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		unset($tmp_path);
 
 		if( !array_key_exists($path, $this->sitemap_array) || is_null( $this->sitemap_array[$path] ?? null ) ){
-			//  サイトマップにズバリなければ、
-			//  ダイナミックパスを検索する。
+			// サイトマップにズバリなければ、
+			// ダイナミックパスを検索する。
 			$sitemap_dynamic_path = $this->get_dynamic_path_info( $path );
 			if( is_array( $sitemap_dynamic_path ) ){
 				$path = $sitemap_dynamic_path['path_original'];
@@ -1250,8 +1250,8 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			default:
 				$path = preg_replace( '/\/$/si' , '/'.$this->px->get_directory_index_primary() , $path );
 				if( !array_key_exists($path, $this->sitemap_array) || is_null( $this->sitemap_array[$path] ?? null ) ){
-					//  サイトマップにズバリなければ、
-					//  引数からパラメータを外したパスだけで再検索
+					// サイトマップにズバリなければ、
+					// 引数からパラメータを外したパスだけで再検索
 					$path = $parsed_url['path'] ?? null;
 				}
 				break;
@@ -1458,10 +1458,6 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		return $rtn;
 	}
 
-
-
-
-
 	/**
 	 * 現在のページの情報を得る。
 	 *
@@ -1546,7 +1542,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 			$path .= $tmp_matched[1];
 				// ※注意: このメソッドでは、無名のパラメータもバインドする。
-				//   (明示的に使用されるメソッドなので)
+				//  (明示的に使用されるメソッドなので)
 			if( !is_null( $params[$tmp_matched[3]] ) ){
 				$path .= $params[$tmp_matched[3]];
 			}else{
@@ -1559,7 +1555,6 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$path = preg_replace('/\/$/s','/'.$this->px->get_directory_index_primary(),$path); // index.htmlをつける
 		return $path;
 	}
-
 
 	/**
 	 * role を取得する
@@ -1691,11 +1686,11 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 
 		if( $filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children', $this->sitemap_page_tree[$page_info['path']] ) && is_array( $this->sitemap_page_tree[$page_info['path']]['children'] ?? null ) ){
-			//  ページキャッシュツリーがすでに作られている場合
+			// ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children'];
 		}
 		if( !$filter && array_key_exists( $page_info['path'], $this->sitemap_page_tree ) && is_array($this->sitemap_page_tree[$page_info['path']]) && array_key_exists( 'children_all', $this->sitemap_page_tree[$page_info['path']] ) && is_array( $this->sitemap_page_tree[$page_info['path']]['children_all'] ?? null ) ){
-			//  ページキャッシュツリーがすでに作られている場合
+			// ページキャッシュツリーがすでに作られている場合
 			return $this->sitemap_page_tree[$page_info['path']]['children_all'];
 		}
 
@@ -1718,7 +1713,6 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			);
 			$sth->execute(array());
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
-			// var_dump($results);
 			foreach( $results as $row ){
 				if( strlen( $row['role'] ?? "" )){
 					// 役者はリストされない。
@@ -1788,13 +1782,13 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 		}
 
-		//  ページキャッシュを作成しなおす
+		// ページキャッシュを作成しなおす
 		usort( $tmp_children_orderby_listed_manual , array( $this , 'usort_sitemap' ) );
 		$this->sitemap_page_tree[$page_info['path']]['children'] = array_merge( $tmp_children_orderby_listed_manual , $tmp_children_orderby_listed_auto );
 		usort( $tmp_children_orderby_manual , array( $this , 'usort_sitemap' ) );
 		$this->sitemap_page_tree[$page_info['path']]['children_all'] = array_merge( $tmp_children_orderby_manual , $tmp_children_orderby_auto );
 
-		//  return value
+		// return value
 		$rtn = null;
 		if($filter){
 			$rtn = $this->sitemap_page_tree[$page_info['path']]['children'];
@@ -1803,7 +1797,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 
 		return $rtn;
-	} // get_children()
+	}
 
 	/**
 	 * ページ情報の配列を並び替える。
@@ -1842,7 +1836,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		}
 		$page_info = $this->get_page_info($path);
 		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
-			//トップページの兄弟はトップページだけ。
+			// トップページの兄弟はトップページだけ。
 			return array('');
 		}
 		$parent = $this->get_parent( $path );
@@ -1869,7 +1863,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
 		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
-			//トップページの次の兄弟はいない。
+			// トップページの次の兄弟はいない。
 			return false;
 		}
 
@@ -1880,7 +1874,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 			}
 		}
 		for($i = $num+1; !is_null($bros[$i] ?? null); $i ++){
-			if(is_null($bros[$i])){
+			if( is_null($bros[$i]) ){
 				return false;
 			}
 
@@ -1910,7 +1904,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$bros = $this->get_bros($path,$opt);
 		$page_info = $this->get_page_info($path);
 		if( !is_array($page_info) || !array_key_exists('id', $page_info) || !strlen($page_info['id'] ?? "") ){
-			//トップページの前の兄弟はいない。
+			// トップページの前の兄弟はいない。
 			return false;
 		}
 
@@ -1964,14 +1958,14 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$page_bros_next = $this->get_bros_next($path, $opt);
 		$parent = $this->get_parent($path);
 
-		//  子供がいたら
+		// 子供がいたら
 		if( !$skip_children && is_array($children) && count($children) ){
 			$fin = $children[0];
 		}elseif( $page_bros_next!==false ){
-			//  次の兄弟がいたら、そのひとがnext
+			// 次の兄弟がいたら、そのひとがnext
 			$fin = $page_bros_next;
 		}elseif( $parent !== false ){
-			//  親の兄弟
+			// 親の兄弟
 			$fin = $this->get_next($parent, array('skip_children'=>true,'filter'=>$filter));
 		}else{
 			return false;
@@ -2021,7 +2015,7 @@ foreach( $sitemap_definition_keys as $sitemap_definition_key ){
 		$fin = null;
 		$current_page = $path;
 
-		//  前の兄弟がいたら、そのひとがprev
+		// 前の兄弟がいたら、そのひとがprev
 		$page_bros_prev = $this->get_bros_prev($current_page,$opt);
 		if($page_bros_prev!==false){
 			// [兄がいた場合]

@@ -601,7 +601,6 @@ function cont_EditPublishTargetPathApply(formElm){
 			$counter = 0;
 			foreach( $alert_log as $key=>$row ){
 				$counter ++;
-				// var_dump($row);
 				$tmp_number = '  ['.($key+1).'] ';
 				print $tmp_number;
 				print preg_replace('/(\r\n|\r|\n)/s', '$1'.str_pad('', strlen($tmp_number ?? ""), ' '), $row[2])."\n";
@@ -998,7 +997,6 @@ function cont_EditPublishTargetPathApply(formElm){
 			if( strrpos($row, '/*') !== strlen($row)-2 ){
 				continue;
 			}
-			// var_dump($row);
 			$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)), '/');
 			$realpath_controot = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $this->px->get_path_docroot().$this->px->get_path_controot() ) );
 			if( preg_match('/\*/',$preg_pattern) ){
@@ -1011,9 +1009,7 @@ function cont_EditPublishTargetPathApply(formElm){
 				$preg_pattern = preg_quote($this->px->fs()->normalize_path($this->px->fs()->get_realpath($row)),'/');
 			}
 			$path_child = $this->px->fs()->normalize_path( $this->px->fs()->get_realpath( $path ).'/' );
-			// var_dump($preg_pattern);
 			if( preg_match( '/^'.$preg_pattern.'$/s' , $path_child ) ){
-				// var_dump($path_child);
 				return true;
 			}
 		}
@@ -1176,7 +1172,6 @@ function cont_EditPublishTargetPathApply(formElm){
 			// while( !$this->px->fs()->is_dir('./'.$path) ){
 			// 	$path = $this->px->fs()->normalize_path(dirname($path).'/');
 			// }
-			// var_dump($path);
 			array_push($rtn, $path);
 		}
 		return $rtn;
