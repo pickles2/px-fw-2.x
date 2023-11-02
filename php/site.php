@@ -550,11 +550,13 @@ class site{
 				);
 
 				// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
-				$lockfile_src = '';
-				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
-				$lockfile_src .= @date( 'c', time() )."\r\n";
-				$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
-				unset( $lockfile_src );
+				if( $row_number % 5000 === 0 ){
+					$lockfile_src = '';
+					$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+					$lockfile_src .= @date( 'c', time() )."\r\n";
+					$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+					unset( $lockfile_src );
+				}
 			}
 		}
 		// / サイトマップをロード
@@ -692,11 +694,13 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			}
 
 			// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
-			$lockfile_src = '';
-			$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
-			$lockfile_src .= @date( 'c', time() )."\r\n";
-			$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
-			unset( $lockfile_src );
+			if( $____order % 5000 === 0 ){
+				$lockfile_src = '';
+				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
+				$lockfile_src .= @date( 'c', time() )."\r\n";
+				$this->px->fs()->save_file( $path_sitemap_cache_dir.'making_sitemap_cache.lock.txt' , $lockfile_src );
+				unset( $lockfile_src );
+			}
 		}
 
 		$sitemap_cache_insert->flush(); // NOTE: 行の挿入を実行する
