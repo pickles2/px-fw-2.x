@@ -550,7 +550,7 @@ class site{
 				);
 
 				// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
-				if( $row_number % 5000 === 0 ){
+				if( $row_number % 10000 === 0 ){
 					$lockfile_src = '';
 					$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
 					$lockfile_src .= @date( 'c', time() )."\r\n";
@@ -694,7 +694,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			}
 
 			// サイトマップキャッシュ作成中のアプリケーションロックファイルを更新
-			if( $____order % 5000 === 0 ){
+			if( $____order % 10000 === 0 ){
 				$lockfile_src = '';
 				$lockfile_src .= 'ProcessID='.getmypid()."\r\n";
 				$lockfile_src .= @date( 'c', time() )."\r\n";
