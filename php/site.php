@@ -683,7 +683,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 				$sitemap_cache_insert->insert($values); // NOTE: ここでは実際には INSERT しない。ためておいて、あとで flush() で実際に挿入する。
 				$____order ++;
 
-				if( $____order % 20 === 0 ){
+				if( $____order % intval($this->px->conf()->sitemap_cache_db_insert_unit_size ?? 20) === 0 ){
 					$sitemap_cache_insert->flush(); // NOTE: 行の挿入を実行する
 				}
 

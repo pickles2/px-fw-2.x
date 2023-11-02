@@ -213,6 +213,18 @@ class px{
 		if( !property_exists($this->conf->commands, 'php') ){
 			$this->conf->commands->php = null;
 		}
+		if( !property_exists($this->conf, 'file_default_permission') ){
+			$this->conf->file_default_permission = null;
+		}
+		if( !property_exists($this->conf, 'dir_default_permission') ){
+			$this->conf->dir_default_permission = null;
+		}
+		if( !property_exists($this->conf, 'filesystem_encoding') ){
+			$this->conf->filesystem_encoding = null;
+		}
+		if( !property_exists($this->conf, 'sitemap_cache_db_insert_unit_size') ){
+			$this->conf->sitemap_cache_db_insert_unit_size = 20; // NOTE: Pickles Framework v2.1.19 で追加されました。
+		}
 
 		// make instance $bowl
 		$this->bowl = new bowl();
@@ -254,9 +266,9 @@ class px{
 
 		// make instance $fs
 		$fs_conf = new \stdClass;
-		$fs_conf->file_default_permission = $this->conf->file_default_permission;
-		$fs_conf->dir_default_permission  = $this->conf->dir_default_permission;
-		$fs_conf->filesystem_encoding	 = $this->conf->filesystem_encoding;
+		$fs_conf->file_default_permission = $this->conf->file_default_permission ?? null;
+		$fs_conf->dir_default_permission = $this->conf->dir_default_permission ?? null;
+		$fs_conf->filesystem_encoding = $this->conf->filesystem_encoding ?? null;
 		$this->fs = new \tomk79\filesystem( $fs_conf );
 		$this->realpath_homedir = $this->fs()->get_realpath($this->realpath_homedir.'/');
 		$this->realpath_homedir = $this->fs()->normalize_path($this->realpath_homedir);

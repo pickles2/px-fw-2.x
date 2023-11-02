@@ -188,6 +188,8 @@ return call_user_func( function(){
 	$conf->allow_pxcommands = 1;
 	/** タイムゾーン */
 	$conf->default_timezone = 'Asia/Tokyo';
+	/** サイトマップキャッシュ生成時に一度にINSERTするページ数 */
+	$conf->sitemap_cache_db_insert_unit_size = 20;
 
 
 
