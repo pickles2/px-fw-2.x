@@ -225,6 +225,10 @@ class px{
 		if( !property_exists($this->conf, 'sitemap_cache_db_insert_unit_size') ){
 			$this->conf->sitemap_cache_db_insert_unit_size = 20; // NOTE: Pickles Framework v2.1.19 で追加されました。
 		}
+		if( !property_exists($this->conf, 'directory_index') ){
+			$this->conf->directory_index = array();
+		}
+
 
 		// make instance $bowl
 		$this->bowl = new bowl();
