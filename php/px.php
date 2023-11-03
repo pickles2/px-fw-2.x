@@ -222,6 +222,9 @@ class px{
 		if( !property_exists($this->conf, 'filesystem_encoding') ){
 			$this->conf->filesystem_encoding = null;
 		}
+		if( !property_exists($this->conf, 'allow_pxcommands') ){
+			$this->conf->allow_pxcommands = 0;
+		}
 		if( !property_exists($this->conf, 'sitemap_cache_db_insert_unit_size') ){
 			$this->conf->sitemap_cache_db_insert_unit_size = 20; // NOTE: Pickles Framework v2.1.19 で追加されました。
 		}
