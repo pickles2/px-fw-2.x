@@ -228,6 +228,9 @@ class px{
 		if( !property_exists($this->conf, 'directory_index') ){
 			$this->conf->directory_index = array();
 		}
+		if( !property_exists($this->conf, 'paths_proc_type') ){
+			$this->conf->paths_proc_type = array();
+		}
 
 
 		// make instance $bowl
