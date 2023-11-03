@@ -187,6 +187,9 @@ class px{
 			);
 		}
 
+		if ( !strlen($this->conf->path_top ?? "") ) {
+			$this->conf->path_top = '/';
+		}
 		if ( property_exists($this->conf, 'default_timezone') && strlen($this->conf->default_timezone ?? "") ) {
 			date_default_timezone_set($this->conf->default_timezone);
 		}
