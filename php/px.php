@@ -208,7 +208,7 @@ class px{
 			$this->conf->path_phpini = null;
 		}
 		if( !property_exists($this->conf, 'commands') ){
-			$this->conf->commands = null;
+			$this->conf->commands = new \stdClass();
 		}
 		if( !property_exists($this->conf->commands, 'php') ){
 			$this->conf->commands->php = null;

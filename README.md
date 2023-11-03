@@ -11,7 +11,7 @@ Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS
 - `autoindex` に、`class` オプションを追加。 CSSでのスタイル制御が容易になった。
 - サイトマップキャッシュ生成に関するパフォーマンスを改善した。
 - 新しい設定項目 `$conf->sitemap_cache_db_insert_unit_size` を追加した。
-- その他、細かい内部コードの修正など。
+- その他、細かい不具合の修正、内部コードの修正など。
 
 ### Pickles Framework v2.1.18 (2023年9月24日)
 
