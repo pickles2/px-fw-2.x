@@ -531,7 +531,7 @@ class site{
 					$tmp_array['content'] = $tmp_array['path'];
 					$tmp_array['content'] = preg_replace('/(?:\?|\#).*$/s','',$tmp_array['content']);
 				}
-				$tmp_array['content'] = preg_replace( '/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content'] );//index.htmlを付加する。
+				$tmp_array['content'] = preg_replace( '/\/$/s','/'.$this->px->get_directory_index_primary(), $tmp_array['content'] ); // index.htmlを付加する。
 				if( preg_match( '/^alias\:/s' , $tmp_array['path'] ) ){
 					//エイリアスの値調整
 					$tmp_array['content'] = null;
@@ -635,6 +635,9 @@ CREATE TABLE IF NOT EXISTS sitemap(
 );
 <?php
 			$result = @$tmp_pdo->query(ob_get_clean());
+			@$tmp_pdo->query('CREATE INDEX sitemap__id ON sitemap(id);');
+			@$tmp_pdo->query('CREATE INDEX sitemap__role ON sitemap(role);');
+			@$tmp_pdo->query('CREATE INDEX sitemap__parent ON sitemap(____parent_page_id);');
 		}
 
 		// ページツリー情報を構成
@@ -1092,7 +1095,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 	 */
 	public function get_global_menu(){
 		$rtn = array();
-		$home_children = $this->get_children('', array('filter'=>true));//PxFW 1.0.4 list_flg を参照するように変更
+		$home_children = $this->get_children('', array('filter'=>true)); // PxFW 1.0.4 list_flg を参照するように変更
 		foreach( $home_children as $page_id ){
 			$page_info = $this->get_page_info($page_id);
 			if( !($page_info['category_top_flg'] ?? null) ){
@@ -1185,7 +1188,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			case 'anchor':
 				break;
 			default:
-				$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path);//directory_index を一旦省略
+				$path = preg_replace('/\/'.$this->px->get_directory_index_preg_pattern().'((?:\?|\#).*)?$/si','/$1',$path); // directory_index を一旦省略
 				break;
 		}
 
@@ -1199,7 +1202,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 					case 'anchor':
 						break;
 					default:
-						$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/s','/'.$index_file_name.'$1',$path);//省略された index.html を付加。
+						$tmp_path = preg_replace('/\/((?:\?|\#).*)?$/s','/'.$index_file_name.'$1',$path); // 省略された index.html を付加。
 						break;
 				}
 				if( array_key_exists($tmp_path, $this->sitemap_array) && !is_null( $this->sitemap_array[$tmp_path] ?? null ) ){
