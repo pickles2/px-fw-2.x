@@ -501,6 +501,11 @@ Search.appendIndex(
             "summary": "Pickles\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
             "url": "classes/picklesFramework2-processors-autoindex-autoindex.html#property_px"
         },                {
+            "fqsen": "\\picklesFramework2\\processors\\autoindex\\autoindex\u003A\u003A\u0024options",
+            "name": "options",
+            "summary": "\u30D7\u30E9\u30B0\u30A4\u30F3\u30AA\u30D7\u30B7\u30E7\u30F3",
+            "url": "classes/picklesFramework2-processors-autoindex-autoindex.html#property_options"
+        },                {
             "fqsen": "\\picklesFramework2\\processors\\autoindex\\autoindex\u003A\u003A\u0024func_data_memos",
             "name": "func_data_memos",
             "summary": "\u6A5F\u80FD\u5225\u306B\u5024\u3092\u8A18\u61B6\u3059\u308B\u9818\u57DF",
@@ -1316,6 +1321,56 @@ Search.appendIndex(
             "summary": "current_page_info",
             "url": "classes/picklesFramework2-theme-theme.html#property_page"
         },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert",
+            "name": "sitemap_cache_insert",
+            "summary": "Sitemap\u0020cache\u0020insert\u0020helper",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Constructor",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#method___construct"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003Ainsert\u0028\u0029",
+            "name": "insert",
+            "summary": "\u884C\u3092\u633F\u5165\u3059\u308B",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_insert"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003Aflush\u0028\u0029",
+            "name": "flush",
+            "summary": "\u884C\u306E\u633F\u5165\u3092\u5B9F\u884C\u3059\u308B",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_flush"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024px",
+            "name": "px",
+            "summary": "Pickles\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_px"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024pdo",
+            "name": "pdo",
+            "summary": "PDO\u30A4\u30F3\u30B9\u30BF\u30F3\u30B9\n\u0024sitemap_page_tree\u0020\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\u306BSQLite\u3092\u4F7F\u7528\u3059\u308B\u305F\u3081\u306E\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9\u3002",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_pdo"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024sitemap_definition_keys",
+            "name": "sitemap_definition_keys",
+            "summary": "\u30B5\u30A4\u30C8\u30DE\u30C3\u30D7\u5B9A\u7FA9\u306E\u30AD\u30FC\u306E\u914D\u5217",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sitemap_definition_keys"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024strs_insert_values_template_row",
+            "name": "strs_insert_values_template_row",
+            "summary": "INSERT\u6587\u306E\u0020VALUES\u0020\u306E1\u884C\u5206\u306E\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8\u306E\u30EA\u30B9\u30C8",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_strs_insert_values_template_row"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024insert_values_row",
+            "name": "insert_values_row",
+            "summary": "INSERT\u6587\u306E\u0020VALUES\u0020\u306E1\u884C\u5206\u306E\u30C7\u30FC\u30BF\u306E\u30EA\u30B9\u30C8",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_insert_values_row"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers\\sitemap_cache_insert\u003A\u003A\u0024sql_insert_prefix",
+            "name": "sql_insert_prefix",
+            "summary": "INSERT\u6587\u306E\u524D\u534A\u90E8\u5206",
+            "url": "classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sql_insert_prefix"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
@@ -1330,6 +1385,11 @@ Search.appendIndex(
             "name": "commands",
             "summary": "",
             "url": "namespaces/picklesframework2-commands.html"
+        },                {
+            "fqsen": "\\picklesFramework2\\helpers",
+            "name": "helpers",
+            "summary": "",
+            "url": "namespaces/picklesframework2-helpers.html"
         },                {
             "fqsen": "\\picklesFramework2\\processors\\autoindex",
             "name": "autoindex",

@@ -102,11 +102,12 @@
             <div class="phpdocumentor-column -eight phpdocumentor-content">
                     <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/picklesframework2.html">picklesFramework2</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/picklesframework2-helpers.html">helpers</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    pxcmd
+    sitemap_cache_insert
 
     
             <div class="phpdocumentor-element__package">
@@ -120,18 +121,14 @@
     </h2>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">21</span>
+    <span class="phpdocumentor-element-found-in__line">14</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">PX Commands</p>
+            <p class="phpdocumentor-summary">Sitemap cache insert helper</p>
 
-    <section class="phpdocumentor-description"><p>Pickles 2 のコアオブジェクトの1つ <code class="prettyprint">$pxcmd</code> のオブジェクトクラスです。
-このオブジェクトは、Pickles 2 の初期化処理の中で自動的に生成され、<code class="prettyprint">$px</code> の内部に格納されます。</p>
-<p>メソッド <code class="prettyprint">$px-&gt;pxcmd()</code> を通じてアクセスします。</p>
-</section>
 
 
     <h5 class="phpdocumentor-tag-list__heading" id="tags">
@@ -162,67 +159,68 @@
 
 <dl class="phpdocumentor-table-of-contents">
                     <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/picklesFramework2-pxcmd.html#property_bowl">$bowl</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_insert_values_row">$insert_values_row</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
-<dd>オブジェクト</dd>
+<dd>INSERT文の VALUES の1行分のデータのリスト</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/picklesFramework2-pxcmd.html#property_px">$px</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_pdo">$pdo</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
-<dd>オブジェクト</dd>
+<dd>PDOインスタンス
+$sitemap_page_tree のキャッシュにSQLiteを使用するためのデータベース。</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/picklesFramework2-pxcmd.html#property_pxcommands">$pxcommands</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_px">$px</a>
     <span>
                         &nbsp;: mixed            </span>
 </dt>
-<dd>PXコマンド</dd>
+<dd>Picklesオブジェクト</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sitemap_definition_keys">$sitemap_definition_keys</a>
+    <span>
+                        &nbsp;: mixed            </span>
+</dt>
+<dd>サイトマップ定義のキーの配列</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sql_insert_prefix">$sql_insert_prefix</a>
+    <span>
+                        &nbsp;: mixed            </span>
+</dt>
+<dd>INSERT文の前半部分</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_strs_insert_values_template_row">$strs_insert_values_template_row</a>
+    <span>
+                        &nbsp;: mixed            </span>
+</dt>
+<dd>INSERT文の VALUES の1行分のテンプレートのリスト</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method___construct">__construct()</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method___construct">__construct()</a>
     <span>
                                 &nbsp;: mixed    </span>
 </dt>
 <dd>Constructor</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method_bowl">bowl()</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_flush">flush()</a>
     <span>
-                                &nbsp;: object    </span>
+                                &nbsp;: void    </span>
 </dt>
-<dd>`$bowl` オブジェクトを取得する。</dd>
+<dd>行の挿入を実行する</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method_get_cli_footer">get_cli_footer()</a>
+    <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_insert">insert()</a>
     <span>
-                                &nbsp;: string    </span>
+                                &nbsp;: void    </span>
 </dt>
-<dd>CLI footer を生成する。</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method_get_cli_header">get_cli_header()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>CLI header を生成する。</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method_register">register()</a>
-    <span>
-                                &nbsp;: bool    </span>
-</dt>
-<dd>PXコマンドを登録する。</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/picklesFramework2-pxcmd.html#method_wrap_gui_frame">wrap_gui_frame()</a>
-    <span>
-                                &nbsp;: string    </span>
-</dt>
-<dd>wrap GUI frame</dd>
+<dd>行を挿入する</dd>
 
         </dl>
 
@@ -234,7 +232,7 @@
     <section class="phpdocumentor-properties">
         <h3 class="phpdocumentor-elements__header" id="properties">
             Properties
-            <a href="classes/picklesFramework2-pxcmd.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="
@@ -243,25 +241,75 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_bowl">
-        $bowl
-        <a href="classes/picklesFramework2-pxcmd.html#property_bowl" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_insert_values_row">
+        $insert_values_row
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_insert_values_row" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">43</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">オブジェクト</p>
+        <p class="phpdocumentor-summary">INSERT文の VALUES の1行分のデータのリスト</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$bowl</span>
+    <span class="phpdocumentor-signature__name">$insert_values_row</span>
+     = <span class="phpdocumentor-signature__default-value">array()</span></code>
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">access</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>private</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_pdo">
+        $pdo
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_pdo" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">25</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">PDOインスタンス
+$sitemap_page_tree のキャッシュにSQLiteを使用するためのデータベース。</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$pdo</span>
     </code>
 
     
@@ -294,18 +342,18 @@
 >
     <h4 class="phpdocumentor-element__name" id="property_px">
         $px
-        <a href="classes/picklesFramework2-pxcmd.html#property_px" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_px" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">27</span>
+    <span class="phpdocumentor-element-found-in__line">19</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">オブジェクト</p>
+        <p class="phpdocumentor-summary">Picklesオブジェクト</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
@@ -341,25 +389,123 @@
             -private
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="property_pxcommands">
-        $pxcommands
-        <a href="classes/picklesFramework2-pxcmd.html#property_pxcommands" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="property_sitemap_definition_keys">
+        $sitemap_definition_keys
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sitemap_definition_keys" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">33</span>
+    <span class="phpdocumentor-element-found-in__line">31</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">PXコマンド</p>
+        <p class="phpdocumentor-summary">サイトマップ定義のキーの配列</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
         <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$pxcommands</span>
+    <span class="phpdocumentor-signature__name">$sitemap_definition_keys</span>
+    </code>
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">access</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>private</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_sql_insert_prefix">
+        $sql_insert_prefix
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_sql_insert_prefix" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">49</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">INSERT文の前半部分</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$sql_insert_prefix</span>
+    </code>
+
+    
+        <section class="phpdocumentor-description"></section>
+
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">access</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                
+                                                 <section class="phpdocumentor-description"><p>private</p>
+</section>
+
+                                    </dd>
+                        </dl>
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_strs_insert_values_template_row">
+        $strs_insert_values_template_row
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#property_strs_insert_values_template_row" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">37</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">INSERT文の VALUES の1行分のテンプレートのリスト</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">$strs_insert_values_template_row</span>
      = <span class="phpdocumentor-signature__default-value">array()</span></code>
 
     
@@ -388,7 +534,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/picklesFramework2-pxcmd.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article
         class="phpdocumentor-element
@@ -398,12 +544,12 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/picklesFramework2-pxcmd.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">40</span>
+    <span class="phpdocumentor-element-found-in__line">58</span>
 
     </aside>
 
@@ -411,7 +557,7 @@
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$px</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">object&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pdo</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$sitemap_definition_keys</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -422,6 +568,24 @@
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
                     <section class="phpdocumentor-description"><p>Picklesオブジェクト</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pdo</span>
+                : <span class="phpdocumentor-signature__argument__return-type">object</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>PDOオブジェクト</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$sitemap_definition_keys</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>サイトマップ定義のキーの配列</p>
 </section>
 
             </dd>
@@ -441,33 +605,31 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_bowl">
-        bowl()
-        <a href="classes/picklesFramework2-pxcmd.html#method_bowl" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_flush">
+        flush()
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_flush" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">82</span>
+    <span class="phpdocumentor-element-found-in__line">127</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">`$bowl` オブジェクトを取得する。</p>
+        <p class="phpdocumentor-summary">行の挿入を実行する</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">bowl</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+                    <span class="phpdocumentor-signature__name">flush</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">object</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>$bowlオブジェクト</p>
-</section>
-
+        
     
 </article>
                     <article
@@ -476,111 +638,32 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_get_cli_footer">
-        get_cli_footer()
-        <a href="classes/picklesFramework2-pxcmd.html#method_get_cli_footer" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_insert">
+        insert()
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#method_insert" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="php/helpers/sitemap_cache_insert.php"><a href="files/php-helpers-sitemap-cache-insert.html"><abbr title="php/helpers/sitemap_cache_insert.php">sitemap_cache_insert.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">106</span>
+    <span class="phpdocumentor-element-found-in__line">92</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">CLI footer を生成する。</p>
+        <p class="phpdocumentor-summary">行を挿入する</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">get_cli_footer</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Footer</p>
-</section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_get_cli_header">
-        get_cli_header()
-        <a href="classes/picklesFramework2-pxcmd.html#method_get_cli_header" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">90</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">CLI header を生成する。</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">get_cli_header</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>Header</p>
-</section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_register">
-        register()
-        <a href="classes/picklesFramework2-pxcmd.html#method_register" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">56</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">PXコマンドを登録する。</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">register</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$cmd</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type"><abbr title="\picklesFramework2\function">function</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fnc</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+                    <span class="phpdocumentor-signature__name">insert</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$values</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$cmd</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                <span class="phpdocumentor-signature__argument__name">$values</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>PXコマンド名</p>
-</section>
-
-            </dd>
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$fnc</span>
-                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\picklesFramework2\function">function</abbr></span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>実行するコマンド</p>
+                    <section class="phpdocumentor-description"><p>挿入する行データ</p>
 </section>
 
             </dd>
@@ -589,58 +672,9 @@
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">bool</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
-            <section class="phpdocumentor-description"><p>成功時 <code class="prettyprint">true</code>、失敗時 <code class="prettyprint">false</code></p>
-</section>
-
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_wrap_gui_frame">
-        wrap_gui_frame()
-        <a href="classes/picklesFramework2-pxcmd.html#method_wrap_gui_frame" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="php/pxcmd.php"><a href="files/php-pxcmd.html"><abbr title="php/pxcmd.php">pxcmd.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">121</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">wrap GUI frame</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">wrap_gui_frame</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$content</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
-
-    
-        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
-    <dl class="phpdocumentor-argument-list">
-                    <dt class="phpdocumentor-argument-list__entry">
-                <span class="phpdocumentor-signature__argument__name">$content</span>
-                : <span class="phpdocumentor-signature__argument__return-type">string</span>
-                            </dt>
-            <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>コンテンツ領域のHTMLソースコード</p>
-</section>
-
-            </dd>
-            </dl>
-
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">string</span>
-            &mdash;
-            <section class="phpdocumentor-description"><p>HTML全体のHTMLソースコード</p>
-</section>
-
+        
     
 </article>
             </section>
@@ -721,7 +755,7 @@
 </section>
             </div>
         </div>
-        <a href="classes/picklesFramework2-pxcmd.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/picklesFramework2-helpers-sitemap-cache-insert.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
