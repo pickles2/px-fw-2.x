@@ -38,7 +38,13 @@ class px{
 	 * プロセス関連情報
 	 * @access private
 	 */
-	private $proc_type, $proc_id, $proc_num = 0;
+	private $proc_type;
+
+	/**
+	 * プラグイン関連情報
+	 * @access private
+	 */
+	private $plugin_current_phase, $plugin_id, $plugin_num = 0;
 
 	/**
 	 * HTTP Response Header List
@@ -402,6 +408,7 @@ class px{
 		}
 
 		// funcs: Before sitemap
+		$this->plugin_current_phase = 'bs';
 		$this->fnc_call_plugin_funcs( $this->conf->funcs->before_sitemap ?? null, $this );
 
 
@@ -423,6 +430,7 @@ class px{
 
 
 		// funcs: Before contents
+		$this->plugin_current_phase = 'bc';
 		if( isset( $this->conf->funcs->before_content ) ){
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_content, $this );
 		}
@@ -453,6 +461,7 @@ class px{
 
 
 		// funcs: process functions
+		$this->plugin_current_phase = 'pr';
 		if( isset( $this->conf->funcs->processor->{$this->proc_type} ) ){
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->processor->{$this->proc_type}, $this );
 		}
@@ -460,6 +469,7 @@ class px{
 
 
 		// funcs: Before output
+		$this->plugin_current_phase = 'bo';
 		if( isset( $this->conf->funcs->before_output ) ){
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_output, $this );
 		}
@@ -570,13 +580,13 @@ class px{
 				}else{
 					$option_value = null;
 				}
-				$this->proc_num ++;
-				if( !strlen($this->proc_id ?? "") ){
-					$this->proc_id = $this->proc_type.'_'.$this->proc_num;
+				$this->plugin_num ++;
+				if( !strlen($this->plugin_id ?? "") ){
+					$this->plugin_id = ($this->plugin_current_phase == 'pr' ? $this->plugin_current_phase.'_'.$this->proc_type : $this->plugin_current_phase).'_'.$this->plugin_num;
 				}
 				array_push( $param_arr, $option_value );
 				call_user_func_array( $fnc_name, $param_arr);
-				$this->proc_id = null;
+				$this->plugin_id = null;
 
 			}elseif( is_array($func_list) ){
 				foreach( $func_list as $fnc_id=>$fnc_name ){
@@ -584,7 +594,7 @@ class px{
 						$fnc_name = preg_replace( '/^\\\\*/', '\\', $fnc_name );
 					}
 					if( is_string($fnc_id) && !preg_match('/^[0-9]+$/', $fnc_id) ){
-						$this->proc_id = $fnc_id;
+						$this->plugin_id = $fnc_id;
 					}
 					$param_arr_dd = $param_arr;
 					array_unshift( $param_arr_dd, $fnc_name );
@@ -1983,7 +1993,7 @@ class px{
 
 		$realpath_docroot = $this->get_realpath_docroot();
 
-		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->proc_id ?? "").'/';
+		$rtn = $this->get_path_controot().'/'.$this->conf()->public_cache_dir.'/p/'.urlencode($this->plugin_id ?? "").'/';
 		$rtn = $this->fs()->get_realpath( $rtn.'/' );
 		if( !$this->fs()->is_dir( $realpath_docroot.$rtn ) ){
 			$this->fs()->mkdir_r( $realpath_docroot.$rtn );
@@ -2032,7 +2042,7 @@ class px{
 	 * @return string プライベートキャッシュのサーバー内部パス
 	 */
 	public function realpath_plugin_private_cache( $localpath_resource = null ){
-		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode($this->proc_id ?? "").'/';
+		$lib_realpath = $this->get_realpath_homedir().'_sys/ram/caches/p/'.urlencode($this->plugin_id ?? "").'/';
 		$rtn = $this->fs()->get_realpath( $lib_realpath.'/' );
 		if( !$this->fs()->is_dir( $rtn ) ){
 			$this->fs()->mkdir_r( $rtn );

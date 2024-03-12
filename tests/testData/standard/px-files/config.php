@@ -159,6 +159,9 @@ return call_user_func( function(){
 		 // PX=phpinfo
 		'picklesFramework2\commands\phpinfo::register()' ,
 
+		 // PX=test-px2plugin
+		'picklesFramework2\tests\px2plugin::register()' ,
+
 	];
 
 	// funcs: Before content

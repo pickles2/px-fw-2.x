@@ -11,6 +11,7 @@
 			<file>./tests/apiTest.php</file>
 			<file>./tests/apiBeforeSitemapTest.php</file>
 			<file>./tests/configTest.php</file>
+			<file>./tests/pluginTest.php</file>
 			<file>./tests/publishTest.php</file>
 		</testsuite>
 	</testsuites>

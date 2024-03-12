@@ -30,7 +30,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
@@ -44,7 +43,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output->name, 'Pickles 2' );
@@ -62,7 +60,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->{"/dynamicPath/{*}"}->title, 'Dynamic Path' );
 		$this->assertNull( $output->{"alias21:/sample_pages/page2/index.html"}->content );
 		$this->assertEquals( $output->{"alias21:/sample_pages/page2/index.html"}->title, 'サンプルページ2へのエイリアス' );
@@ -80,7 +77,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path->label, 'ページのパス' );
 		$this->assertEquals( $output->path->type, 'path' );
 		$this->assertEquals( $output->id->label, 'ページID' );
@@ -103,7 +99,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path->label, 'Path' );
 		$this->assertEquals( $output->path->type, 'path' );
 		$this->assertEquals( $output->id->label, 'Page ID' );
@@ -120,7 +115,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->title->label, '标题' );
 		$this->assertEquals( $output->title->type, 'text' );
 
@@ -136,7 +130,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
@@ -148,7 +141,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/{*}' );
 
 		$output = $this->utils->passthru( [
@@ -160,7 +152,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/test1/index.html' );
 
 
@@ -175,7 +166,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
@@ -187,7 +177,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
@@ -199,7 +188,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/{*}' );
 
 		$output = $this->utils->passthru( [
@@ -211,7 +199,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/test1/index.html' );
 
 		// actor 機能に関連するテスト
@@ -223,7 +210,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/sample_pages/page3/2-actor1.html' );
 		$this->assertEquals( $output->title, 'サンプル3-2-actor1' );
 		$this->assertEquals( $output->title_breadcrumb, 'サンプル3-2' );
@@ -238,7 +224,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/sample_pages/page3/2-actor2.html' );
 		$this->assertEquals( $output->title, 'サンプル3-2-actor2' );
 		$this->assertEquals( $output->title_breadcrumb, 'sample3-2-actor2' );
@@ -257,7 +242,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->basename, 'sitemap.csv' );
 		$this->assertEquals( $output->row, 21 );
 
@@ -270,7 +254,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->basename, 'sitemap.csv' );
 		$this->assertEquals( $output->row, 16 );
 
@@ -283,7 +266,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->basename, 'sitemap.csv' );
 		$this->assertEquals( $output->row, 10 );
 
@@ -297,7 +279,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '' );
 
 		$output = $this->utils->passthru( [
@@ -307,7 +288,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.22' );
 
 		// actor機能に関連する get_parent() のテスト
@@ -318,7 +298,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'role-page' );
 
 		$output = $this->utils->passthru( [
@@ -328,7 +307,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'actor2' );
 
 
@@ -341,7 +319,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, array('actor1','actor2') );
 
 
@@ -354,7 +331,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'role-page' );
 
 
@@ -367,7 +343,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'trim_white_space_test' );
 		$this->assertEquals( $output[1], ':auto_page_id.16' );
 		$this->assertEquals( $output[6], ':auto_page_id.21' );
@@ -380,7 +355,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'Bros3-2' );
 		$this->assertEquals( $output[2], 'Bros3-6' );
 		$this->assertEquals( count($output), 3 );
@@ -392,7 +366,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'Bros3-2' );
 		$this->assertEquals( $output[4], 'Bros3-6' );
 		$this->assertEquals( count($output), 5 );
@@ -405,7 +378,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, array('role-page-child', 'actor2-child') );
 
 
@@ -418,7 +390,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'trim_white_space_test' );
 		$this->assertEquals( $output[1], ':auto_page_id.16' );
 		$this->assertEquals( $output[6], ':auto_page_id.21' );
@@ -431,7 +402,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'Bros3-2' );
 		$this->assertEquals( $output[2], 'Bros3-6' );
 		$this->assertEquals( count($output), 3 );
@@ -443,7 +413,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'Bros3-2' );
 		$this->assertEquals( $output[4], 'Bros3-6' );
 		$this->assertEquals( count($output), 5 );
@@ -458,7 +427,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.17' );
 
 
@@ -471,7 +439,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.16' );
 
 
@@ -484,7 +451,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.17' );
 
 
@@ -497,7 +463,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, ':auto_page_id.16' );
 
 
@@ -510,7 +475,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], '' );
 		$this->assertEquals( $output[1], ':auto_page_id.22' );
 		$this->assertEquals( count($output), 2 );
@@ -525,7 +489,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output->path, '/dynamicPath/' );
 		$this->assertEquals( $output->path_original, '/dynamicPath/{*}' );
 		$this->assertEquals( $output->id, ':auto_page_id.11' );
@@ -540,7 +503,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/abc.html' );
 
 		$output = $this->utils->passthru( [
@@ -550,7 +512,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/id_id/name_name/abc.html' );
 
 
@@ -564,7 +525,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -578,7 +538,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -593,7 +552,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/' );
 
 
@@ -608,7 +566,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -623,7 +580,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -634,28 +590,24 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/index.html' );
 
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/param.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/index.html' );
 
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/sample_pages/page1/3.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/sample_pages/page1/3.html.md' );
 
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/virtual_filename.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/index.html' );
 
 		// -------------------
@@ -664,14 +616,12 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/index_files/' );
 
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/index_files/dummypath/sample.png' );
 
 
@@ -681,7 +631,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -689,7 +638,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/dummypath/sample.png') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -700,14 +648,12 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/caches/c/index_files/' );
 
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/caches/c/index_files/dummypath/sample.png' );
 
 
@@ -717,7 +663,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -725,7 +670,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/dummypath/sample.png') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -736,7 +680,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -744,7 +687,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/dummypath/sample.png') );
 		$this->assertFalse( strpos($output, '\\') );
 
@@ -760,7 +702,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'pickles2.pxt.jp' );
 
 
@@ -775,7 +716,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output[0], 'index.html' );
 
 		// -------------------
@@ -789,7 +729,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'index.html' );
 
 
@@ -804,7 +743,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'html' );
 
 		$output = $this->utils->passthru( [
@@ -816,7 +754,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'pass' );
 
 		$output = $this->utils->passthru( [
@@ -828,7 +765,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'ignore' );
 
 
@@ -843,7 +779,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/sample_pages/page2/' );
 
 		$output = $this->utils->passthru( [
@@ -854,7 +789,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/sample_pages/page3/?a=b#anch' );
 
 		$output = $this->utils->passthru( [
@@ -865,7 +799,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
@@ -876,7 +809,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '//pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
@@ -887,7 +819,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
@@ -898,7 +829,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/?a=b#anch' );
 
 		$output = $this->utils->passthru( [
@@ -910,7 +840,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/' );
 
 		$output = $this->utils->passthru( [
@@ -922,7 +851,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/?a=b' );
 
 		$output = $this->utils->passthru( [
@@ -934,7 +862,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, '/dynamicPath/?a=b#testAnch' );
 
 
@@ -948,7 +875,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/sample_pages/page2/' );
 
 
@@ -986,7 +912,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
-		// var_dump($output);
 		$output = json_decode($output);
 		$this->assertTrue( $output );
 
@@ -999,7 +924,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertTrue( $output );
 
 
@@ -1014,7 +938,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertTrue( $output );
 
 		$output = $this->utils->passthru( [
@@ -1026,7 +949,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertTrue( $output );
 
 
@@ -1041,7 +963,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertFalse( $output );
 
 		$output = $this->utils->passthru( [
@@ -1053,7 +974,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertTrue( $output );
 
 
@@ -1107,7 +1027,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.path_files&path_resource='.urlencode($resource_path)] );
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $output, $result );
 
 		// -------------------
@@ -1115,7 +1034,6 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.realpath_files&path_resource='.urlencode($resource_path)] );
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
 		$this->assertEquals( $this->fs->get_realpath(realpath('/').$output), $this->fs->get_realpath(__DIR__.'/testData/standard'.$result) );
 
 
