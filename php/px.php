@@ -1476,7 +1476,7 @@ class px{
 		}
 
 		return $path;
-	} // href()
+	}
 
 	/**
 	 * リンク先の正式なURLを生成する。
@@ -1692,7 +1692,7 @@ class px{
 			.($is_popup?' onclick="window.open(this.href);return false;"':'')
 			.'>'.$label.'</a>';
 		return $rtn;
-	} // mk_link()
+	}
 
 	/**
 	 * スキーマ名を取得する。
@@ -1857,7 +1857,7 @@ class px{
 		$rtn = $this->fs()->normalize_path($rtn);
 		$rtn = preg_replace( '/^\/+/', '/', $rtn );
 		return $rtn;
-	} // path_files()
+	}
 
 	/**
 	 * ローカルリソースディレクトリのサーバー内部パスを得る。
@@ -2048,12 +2048,10 @@ class px{
 			$this->fs()->mkdir_r( $rtn );
 		}
 		if( !strlen( $localpath_resource ?? "" ) ){
+			$rtn = $this->fs()->normalize_path($rtn);
 			return $rtn;
 		}
 		$rtn .= '/'.$localpath_resource;
-		// if( $this->fs()->is_dir( $rtn ) ){
-		// 	$rtn .= '/';
-		// }
 		$rtn = $this->fs()->get_realpath( $rtn );
 		if( !$this->fs()->is_dir( dirname($rtn) ) ){
 			$this->fs()->mkdir_r( dirname($rtn) );
