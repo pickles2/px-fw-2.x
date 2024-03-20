@@ -941,15 +941,20 @@ Search.appendIndex(
             "summary": "\u30D7\u30ED\u30BB\u30B9\u95A2\u9023\u60C5\u5831",
             "url": "classes/picklesFramework2-px.html#property_proc_type"
         },                {
-            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024proc_id",
-            "name": "proc_id",
-            "summary": "\u30D7\u30ED\u30BB\u30B9\u95A2\u9023\u60C5\u5831",
-            "url": "classes/picklesFramework2-px.html#property_proc_id"
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024plugin_current_phase",
+            "name": "plugin_current_phase",
+            "summary": "\u30D7\u30E9\u30B0\u30A4\u30F3\u95A2\u9023\u60C5\u5831",
+            "url": "classes/picklesFramework2-px.html#property_plugin_current_phase"
         },                {
-            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024proc_num",
-            "name": "proc_num",
-            "summary": "\u30D7\u30ED\u30BB\u30B9\u95A2\u9023\u60C5\u5831",
-            "url": "classes/picklesFramework2-px.html#property_proc_num"
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024plugin_id",
+            "name": "plugin_id",
+            "summary": "\u30D7\u30E9\u30B0\u30A4\u30F3\u95A2\u9023\u60C5\u5831",
+            "url": "classes/picklesFramework2-px.html#property_plugin_id"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024plugin_num",
+            "name": "plugin_num",
+            "summary": "\u30D7\u30E9\u30B0\u30A4\u30F3\u95A2\u9023\u60C5\u5831",
+            "url": "classes/picklesFramework2-px.html#property_plugin_num"
         },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003A\u0024response_headers",
             "name": "response_headers",
