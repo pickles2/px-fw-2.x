@@ -26,21 +26,21 @@ class configTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->fs->copy( __DIR__.'/testData/configtest/px-files/config_sample/default.php', $conf_path );
 		clearstatcache();
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/configtest/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('/test.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/configtest/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('/test.png')] );
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		// var_dump($output);
+
 		$this->assertEquals( $output, '/index.html.files.callback/test.png' );
 
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/configtest/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/configtest/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertFalse( is_dir( __DIR__.'/testData/configtest/caches/p/' ) );
 		$this->assertFalse( is_dir( __DIR__.'/testData/configtest/px-files/_sys/ram/caches/sitemaps/' ) );
-	} // testConfPathCache();
+	}
 
 }

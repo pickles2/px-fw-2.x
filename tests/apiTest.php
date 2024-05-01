@@ -24,7 +24,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.vertion
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.version' ,
 		] );
@@ -37,7 +37,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.config
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.config' ,
 		] );
@@ -52,7 +52,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.sitemap
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.sitemap' ,
 		] );
@@ -69,7 +69,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.sitemap_definition
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.sitemap_definition' ,
 		] );
@@ -91,7 +91,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->{'custom-column-test'}->type, 'text' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.sitemap_definition&LANG=en' ,
 		] );
@@ -107,7 +107,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->title->type, 'text' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.sitemap_definition&LANG=zh-CN' ,
 		] );
@@ -122,7 +122,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.page_info
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page2/') ,
 		] );
@@ -133,7 +133,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/aaaaa.html') ,
 		] );
@@ -144,7 +144,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path, '/dynamicPath/{*}' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/test1/') ,
 		] );
@@ -158,7 +158,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.page_info
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page2/') ,
 		] );
@@ -169,7 +169,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/?PX=api.get.page_info' ,
 		] );
@@ -180,7 +180,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path, '/sample_pages/page2/index.html' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/aaaaa.html') ,
 		] );
@@ -191,7 +191,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->path, '/dynamicPath/{*}' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/dynamicPath/test1/') ,
 		] );
@@ -203,7 +203,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// actor 機能に関連するテスト
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page3/2-actor1.html') ,
 		] );
@@ -217,7 +217,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->logical_path, '/sample_pages/page3/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_info&path='.urlencode('/sample_pages/page3/2-actor2.html') ,
 		] );
@@ -234,7 +234,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.page_originated_csv
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.page_originated_csv&path='.urlencode('/sample_pages/page2/') ,
 		] );
@@ -246,7 +246,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->row, 21 );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/2.html?PX=api.get.page_originated_csv' ,
 		] );
@@ -258,7 +258,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output->row, 16 );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/dynamicPath/aaaaaa.html?PX=api.get.page_originated_csv' ,
 		] );
@@ -273,7 +273,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.parent
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/?PX=api.get.parent' ,
 		] );
 		clearstatcache();
@@ -282,7 +282,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '' );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/2.html?PX=api.get.parent' ,
 		] );
 		clearstatcache();
@@ -292,7 +292,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// actor機能に関連する get_parent() のテスト
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page3/2-child.html?PX=api.get.parent' ,
 		] );
 		clearstatcache();
@@ -301,7 +301,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'role-page' );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page3/2-actor2-child.html?PX=api.get.parent' ,
 		] );
 		clearstatcache();
@@ -313,7 +313,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.actors
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page3/2.html?PX=api.get.actors' ,
 		] );
 		clearstatcache();
@@ -325,7 +325,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.role
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page3/2-actor1.html?PX=api.get.role' ,
 		] );
 		clearstatcache();
@@ -337,7 +337,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.children
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/?PX=api.get.children' ,
 		] );
 		clearstatcache();
@@ -349,7 +349,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( count($output), 8 );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/prevnext/.px_execute.php' ,
 			'/bros3/?PX=api.get.children' ,
 		] );
 		clearstatcache();
@@ -360,7 +360,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( count($output), 3 );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/prevnext/.px_execute.php' ,
 			'/bros3/?PX=api.get.children&filter=false' ,
 		] );
 		clearstatcache();
@@ -372,7 +372,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// actor機能に関連する get_children() のテスト
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page3/2.html?PX=api.get.children' ,
 		] );
 		clearstatcache();
@@ -384,7 +384,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.bros
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/1.html?PX=api.get.bros' ,
 		] );
 		clearstatcache();
@@ -396,7 +396,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( count($output), 8 );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/prevnext/.px_execute.php' ,
 			'/bros3/3.html?PX=api.get.bros' ,
 		] );
 		clearstatcache();
@@ -407,7 +407,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( count($output), 3 );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/prevnext/.px_execute.php' ,
 			'/bros3/3.html?PX=api.get.bros&filter=false' ,
 		] );
 		clearstatcache();
@@ -421,7 +421,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.bros_next
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/1.html?PX=api.get.bros_next' ,
 		] );
 		clearstatcache();
@@ -433,7 +433,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.bros_prev
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/2.html?PX=api.get.bros_prev' ,
 		] );
 		clearstatcache();
@@ -445,7 +445,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.next
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/1.html?PX=api.get.next' ,
 		] );
 		clearstatcache();
@@ -457,7 +457,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.prev
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page1/2.html?PX=api.get.prev' ,
 		] );
 		clearstatcache();
@@ -469,7 +469,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.breadcrumb_array
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/2.html?PX=api.get.breadcrumb_array' ,
 		] );
 		clearstatcache();
@@ -483,7 +483,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.dynamic_path_info
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/?PX=api.get.dynamic_path_info&path='.urlencode('/dynamicPath/param.html') ,
 		] );
 		clearstatcache();
@@ -497,7 +497,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.bind_dynamic_path_param
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/?PX=api.get.bind_dynamic_path_param&path='.urlencode('/dynamicPath/{*}').'&param='.urlencode(json_encode([''=>'abc.html'])) ,
 		] );
 		clearstatcache();
@@ -506,7 +506,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '/dynamicPath/abc.html' );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/?PX=api.get.bind_dynamic_path_param&path='.urlencode('/dynamicPath/id_{$id}/name_{$name}/{*}').'&param='.urlencode(json_encode([''=>'abc.html','id'=>'id','name'=>'name'])) ,
 		] );
 		clearstatcache();
@@ -518,7 +518,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.path_homedir (deprecated)
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.path_homedir' ,
 		] );
 		clearstatcache();
@@ -531,7 +531,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.realpath_homedir
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.realpath_homedir' ,
 		] );
 		clearstatcache();
@@ -545,7 +545,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.path_controot
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php' ,
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.path_controot' ,
 		] );
 		clearstatcache();
@@ -558,7 +558,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.path_docroot (deprecated)
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.path_docroot' ,
 		] );
@@ -572,7 +572,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.realpath_docroot
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.realpath_docroot' ,
 		] );
@@ -586,25 +586,25 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.path_content
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_content'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, '/index.html' );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/param.html?PX=api.get.path_content'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/param.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, '/dynamicPath/index.html' );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/sample_pages/page1/3.html?PX=api.get.path_content'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/sample_pages/page1/3.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, '/sample_pages/page1/3.html.md' );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/virtual_filename.html?PX=api.get.path_content'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/dynamicPath/virtual_filename.html?PX=api.get.path_content'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -612,13 +612,13 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.path_files
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, '/index_files/' );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('dummypath/sample.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -627,14 +627,14 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.realpath_files
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files&path_resource='.urlencode('dummypath/sample.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -644,13 +644,13 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.path_files_cache
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, '/caches/c/index_files/' );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.path_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -659,14 +659,14 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.realpath_files_cache
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/caches/c/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -676,14 +676,14 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// -------------------
 		// api.get.realpath_files_private_cache
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache'] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache'] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( realpath($output), realpath(__DIR__.'/testData/standard/px-files/_sys/ram/caches/c/index_files/') );
 		$this->assertFalse( strpos($output, '\\') );
 
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache&path_resource='.urlencode('dummypath/sample.png')] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=api.get.realpath_files_private_cache&path_resource='.urlencode('dummypath/sample.png')] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
@@ -694,7 +694,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.domain
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.domain' ,
 		] );
@@ -708,7 +708,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.directory_index
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.directory_index' ,
 		] );
@@ -721,7 +721,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.directory_index_primary
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.directory_index_primary' ,
 		] );
@@ -735,7 +735,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.path_proc_type
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/?PX=api.get.path_proc_type' ,
 		] );
@@ -746,7 +746,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'html' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/common/notexists.png?PX=api.get.path_proc_type' ,
 		] );
@@ -757,7 +757,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'pass' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/vendor/autoload.php?PX=api.get.path_proc_type' ,
 		] );
@@ -772,7 +772,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.href
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('/sample_pages/page2/index.html') ,
 		] );
@@ -782,7 +782,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '/sample_pages/page2/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('/sample_pages/page3/index.html?a=b#anch') ,
 		] );
@@ -792,7 +792,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '/sample_pages/page3/?a=b#anch' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('pickles2.pxt.jp_1') ,
 		] );
@@ -802,7 +802,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('pickles2.pxt.jp_2') ,
 		] );
@@ -812,7 +812,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '//pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('http://pickles2.pxt.jp/') ,
 		] );
@@ -822,7 +822,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('http://pickles2.pxt.jp/?a=b#anch') ,
 		] );
@@ -832,7 +832,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, 'http://pickles2.pxt.jp/?a=b#anch' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}') ,
 		] );
@@ -843,7 +843,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '/dynamicPath/' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}?a=b') ,
 		] );
@@ -854,7 +854,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $output, '/dynamicPath/?a=b' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.href&linkto='.urlencode('/dynamicPath/{*}?a=b#testAnch') ,
 		] );
@@ -868,7 +868,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.canonical
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.canonical&linkto='.urlencode('/sample_pages/page2/index.html') ,
 		] );
@@ -884,7 +884,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -892,7 +892,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
 
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/prevnext/.px_execute.php', '/?PX=clearcache'
 		] );
 	}//testPxApiGetAnything();
 
@@ -905,7 +905,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.is.match_dynamic_path
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.is.match_dynamic_path&path='.urlencode('/dynamicPath/') ,
 		] );
@@ -916,7 +916,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( $output );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.is.match_dynamic_path&path='.urlencode('/dynamicPath/aaa.html') ,
 		] );
@@ -930,7 +930,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.is.page_in_breadcrumb
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/?PX=api.is.page_in_breadcrumb&path='.urlencode('/') ,
 		] );
@@ -941,7 +941,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( $output );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/sample_pages/page2/1.htm?PX=api.is.page_in_breadcrumb&path='.urlencode('/sample_pages/page2/') ,
 		] );
@@ -955,7 +955,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.is.ignore_path
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.is.ignore_path&path='.urlencode('/sample_pages/page2/') ,
 		] );
@@ -966,7 +966,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		$this->assertFalse( $output );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.is.ignore_path&path='.urlencode('/vendor/') ,
 		] );
@@ -983,7 +983,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -1024,14 +1024,14 @@ class apiTest extends PHPUnit\Framework\TestCase{
 		clearstatcache();
 		$this->fs->save_file( __DIR__.'/testData/standard/px-files/config_ex/path_files.txt', $conf_path_files );
 		clearstatcache();
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.path_files&path_resource='.urlencode($resource_path)] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.path_files&path_resource='.urlencode($resource_path)] );
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output, $result );
 
 		// -------------------
 		// api.get.realpath_files
-		$output = $this->utils->passthru( ['php', __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.realpath_files&path_resource='.urlencode($resource_path)] );
+		$output = $this->utils->passthru( [PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', $page_path.'?PX=api.get.realpath_files&path_resource='.urlencode($resource_path)] );
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $this->fs->get_realpath(realpath('/').$output), $this->fs->get_realpath(__DIR__.'/testData/standard'.$result) );
@@ -1040,7 +1040,7 @@ class apiTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );

@@ -1,11 +1,11 @@
 // パブリッシュを完全な同時に2つキックしたときに、
 // 2重に走ってしまわないことを確認するためのスクリプト
 const { spawn } = require('child_process');
-const process1 = spawn('php', [
+const process1 = spawn(PHP_BINARY, [
 	__dirname+'/px2/.px_execute.php',
 	'/?PX=publish.run'
 ]);
-const process2 = spawn('php', [
+const process2 = spawn(PHP_BINARY, [
 	__dirname+'/px2/.px_execute.php',
 	'/?PX=publish.run'
 ]);

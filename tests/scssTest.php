@@ -24,7 +24,6 @@ class scssTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/common/styles/test1.css'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match( '/'.preg_quote('.test-a .test-b .test-b p {', '/').'/s', $output ), 1 );
 

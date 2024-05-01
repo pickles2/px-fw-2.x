@@ -44,7 +44,6 @@ class headerTest extends PHPUnit\Framework\TestCase{
 		$px->header('X-TEST-HEADER-2: test2-2',false);
 
 		$headers = $px->header_list();
-		// var_dump($headers);
 		$this->assertEquals( $headers[0], 'Content-type: image/jpeg' );
 		$this->assertEquals( $headers[1], 'x-test-header: Test' );
 		$this->assertEquals( $headers[2], 'x-test-header: Test2' );
@@ -58,7 +57,6 @@ class headerTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );

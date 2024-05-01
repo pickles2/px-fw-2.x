@@ -24,20 +24,19 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.vertion
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.version' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// api.get.config
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.config' ,
 		] );
@@ -46,24 +45,22 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// publish.version
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.version' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// clearcache.version
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=clearcache.version' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
@@ -73,20 +70,19 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// -------------------
 		// api.get.vertion
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=api.get.version' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/^[0-9]+\.[0-9]+\.[0-9]+(?:\-(?:alpha|beta|rc)(?:\.[a-zA-Z0-9][a-zA-Z0-9\.]*)?)?(?:\+[a-zA-Z0-9\.]+)?$/s', json_decode($output)) );
 
 		// -------------------
 		// api.get.config
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=api.get.config' ,
 		] );
@@ -104,13 +100,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 			__DIR__.'/testData/publish/px2/px-files/config.php'
 		);
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
@@ -132,18 +127,15 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html' ) );
 		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html');
-		// var_dump( $fileSrc );
 		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $fileSrc ), 1 );
 		$this->assertEquals( preg_match( '/'.preg_quote(htmlspecialchars('<php_output>'), '/').'/s', $fileSrc ), 1 );
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html' ) );
 		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html');
-		// var_dump( $fileSrc );
 		$this->assertEquals( $fileSrc, '<'.'?= htmlspecialchars(\'<php_output>\'); ?'.'>' );
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/global_urls/index.html' ) );
 		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/sample_pages/global_urls/index.html');
-		// var_dump( $fileSrc );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="http://pickles2.pxt.jp/">Pickles2 Official Website(1)</a></li>','/').'/s', $fileSrc) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="http://pickles2.pxt.jp/index.html">Pickles2 Official Website(3)</a></li>','/').'/s', $fileSrc) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<li><a href="//pickles2.pxt.jp/index.html">Pickles2 Official Website(4)</a></li>','/').'/s', $fileSrc) );
@@ -155,13 +147,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// $px->path_files_private_cache() のテスト
 		$fileSrc = file_get_contents( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' );
-		// var_dump($fileSrc);
 		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->normalize_path( $this->fs->get_realpath( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
 
 		// ログファイルを確認
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
 		$publish_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' );
-		// var_dump($publish_log);
 		$this->assertEquals( $publish_log[0][0], 'datetime' );
 		$this->assertEquals( $publish_log[0][1], 'path' );
 		$this->assertEquals( $publish_log[0][2], 'proc_type' );
@@ -180,7 +170,6 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		}
 
 		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
-		// var_dump($alert_log);
 		$this->assertEquals( $alert_log[0][0], 'datetime' );
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
@@ -189,15 +178,14 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( strpos($alert_log[2][2], 'Unknown server error'), 0 );
 
 		// 後始末
-		// $this->assertTrue( false );
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
-	}//testStandardPublishBeforeSitemap()
+	}
 
 
 	/**
@@ -210,13 +198,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 			__DIR__.'/testData/publish/px2/px-files/config.php'
 		);
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
@@ -238,13 +225,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html' ) );
 		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test1/index.html');
-		// var_dump( $fileSrc );
 		$this->assertEquals( preg_match( '/'.preg_quote('<!DOCTYPE html>', '/').'/s', $fileSrc ), 1 );
 		$this->assertEquals( preg_match( '/'.preg_quote(htmlspecialchars('<php_output>'), '/').'/s', $fileSrc ), 1 );
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html' ) );
 		$fileSrc = file_get_contents(__DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/dynamicPath/test2_direct/index.html');
-		// var_dump( $fileSrc );
 		$this->assertEquals( $fileSrc, '<'.'?= htmlspecialchars(\'<php_output>\'); ?'.'>' );
 
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/caches/c/contents/path_files_cache_files/test.inc' ) );
@@ -252,13 +237,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// $px->path_files_private_cache() のテスト
 		$fileSrc = file_get_contents( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/contents/path_files_private_cache.html' );
-		// var_dump($fileSrc);
 		$this->assertEquals( preg_match( '/'.preg_quote('<pre>'.$this->fs->normalize_path( $this->fs->get_realpath( __DIR__.'/testData/standard/px-files/_sys/ram/caches/c/contents/path_files_private_cache_files/a.html' ) ), '/').'/s', $fileSrc ), 1 );
 
 		// ログファイルを確認
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' ) );
 		$publish_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/publish_log.csv' );
-		// var_dump($publish_log);
 		$this->assertEquals( $publish_log[0][0], 'datetime' );
 		$this->assertEquals( $publish_log[0][1], 'path' );
 		$this->assertEquals( $publish_log[0][2], 'proc_type' );
@@ -277,7 +260,6 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		}
 
 		$alert_log = $this->fs->read_csv( __DIR__.'/testData/standard/px-files/_sys/ram/publish/alert_log.csv' );
-		// var_dump($alert_log);
 		$this->assertEquals( $alert_log[0][0], 'datetime' );
 		$this->assertEquals( $alert_log[0][1], 'path' );
 		$this->assertEquals( $alert_log[0][2], 'error_message' );
@@ -288,13 +270,13 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		// $this->assertTrue( false );
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 
-	}//testStandardPublishBeforeContent()
+	}
 
 
 	/**
@@ -305,9 +287,8 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/hashtest/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/hashtest/child.html' ) );
 		$files = $this->fs->ls( __DIR__.'/testData/publish/published/hashtest/' );
-		// var_dump($files);
 		$this->assertEquals( count($files), 2 );
-	}//testPublishHashQueryPages()
+	}
 
 	/**
 	 * パブリッシュ範囲のテスト
@@ -315,13 +296,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testPublishRegion(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/contents/&paths_ignore[]=/contents/path_files_cache_files/test2/&paths_ignore[]=/contents/path_files_cache.html' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/index.html' ) );
@@ -336,7 +316,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		// $this->assertTrue( false );
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -350,13 +330,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testPublishRegionWildcard(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/ignore/&paths_ignore[]=*.tmp_ig&paths_ignore[]=*/test2.html' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/publish/px2/caches/p/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/px2/px-files/_sys/ram/publish/htdocs/region/ignore/index.html' ) );
@@ -372,7 +351,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		// $this->assertTrue( false );
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -387,19 +366,18 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testNothingToPublish(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/nothing/to/publish/?PX=publish.run' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 
 		// 後始末
 		// $this->assertTrue( false );
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -421,13 +399,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/new.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
@@ -468,13 +445,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/&paths_ignore[]=/' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/update_sync_test/new.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/update_sync_test/old.html' ) );
@@ -494,7 +470,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -515,13 +491,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region3/index.html' ) );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/region1/&paths_region[]=/region/region3/' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
@@ -529,13 +504,12 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/publish/px2/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/region/' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region1/index.html' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/publish/published/region/region2/index.html' ) );
@@ -545,7 +519,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -563,11 +537,10 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// pass扱いになる txt ファイルをパブリッシュ
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/pass_file.txt' ,
 		] );
-		// var_dump($output);
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/pass_file.txt' ) );
@@ -575,11 +548,10 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 2重拡張子のSCSSファイルを単品パブリッシュ(2つ目の拡張子を付けてコール)
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css.scss' ,
 		] );
-		// var_dump($output);
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
@@ -588,11 +560,10 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 2重拡張子のSCSSファイルを単品パブリッシュ
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/common/styles/sitemap_loaded.css' ,
 		] );
-		// var_dump($output);
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertFalse( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/publish/htdocs/common/styles/sitemap_loaded.css.scss' ) );
@@ -600,7 +571,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -617,7 +588,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 一旦キャッシュを消去し、サイトマップキャッシュ生成中を示すロックファイルを作成する。
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		$this->fs->mkdir_r(__DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/');
 		$this->fs->save_file(
@@ -628,12 +599,11 @@ class publishTest extends PHPUnit\Framework\TestCase{
 		// サイトマップ生成中にパブリッシュプロセスを発行
 		$memo_time1 = time();
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=publish.run&path_region=/index.html&keep_cache=1' ,
 		] );
 		$memo_time2 = time();
-		// var_dump($output);
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		// $this->assertTrue( $memo_time2 - $memo_time1 >= 2 ); // 待ち時間はなくすことにした。 2016-10-28 @tomk79
@@ -648,7 +618,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -664,7 +634,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 	public function testStandardClearcache(){
 		// トップページを実行
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/' ,
 		] );
@@ -676,7 +646,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/standard/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );
@@ -685,7 +655,7 @@ class publishTest extends PHPUnit\Framework\TestCase{
 
 		// 後始末
 		$output = $this->utils->passthru( [
-			'php', __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
+			PHP_BINARY, __DIR__.'/testData/publish/px2/.px_execute.php', '/?PX=clearcache'
 		] );
 		clearstatcache();
 		$this->assertTrue( $this->utils->common_error( $output ) );

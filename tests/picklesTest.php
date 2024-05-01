@@ -19,7 +19,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testCLIStandard(){
 		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/' );
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<h2>テストページ</h2><p>このページは /index.html です。</p>', '/').'/s', $output) );
 		$this->assertEquals( 0, preg_match('/'.preg_quote('<span id="hash_', '/').'/s', $output) );
@@ -27,7 +26,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 
 		$output = $this->utils->px_execute( '/prevnext/.px_execute.php', '/' );
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>Timezone = UTC</p>', '/').'/s', $output) );
 
@@ -50,7 +48,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 		// POSTメソッドをエミュレートするテスト
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php',
 			'-u', 'Mozilla',
 			'--method', 'post',
@@ -58,7 +56,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/http_methods/index.html?test=get_test'
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>method = POST</p>', '/').'/s', $output) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>$_GET[\'test\'] = get_test</p>', '/').'/s', $output) );
@@ -68,7 +65,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		$this->fs->save_file(__DIR__.'/post_request_body.txt', 'test=post_test_file&test2=post_test2_file');
 		clearstatcache();
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php',
 			'-u', 'Mozilla',
 			'--method', 'post',
@@ -77,7 +74,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		] );
 		$this->fs->rm(__DIR__.'/post_request_body.txt');
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>method = POST</p>', '/').'/s', $output) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>$_GET[\'test\'] = get_test</p>', '/').'/s', $output) );
@@ -89,7 +85,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		$this->fs->save_file(__DIR__.'/testData/standard/px-files/_sys/ram/data/post_request_body2.txt', 'test=post_test_file&test2=post_test2_file');
 		clearstatcache();
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php',
 			'-u', 'Mozilla',
 			'--method', 'post',
@@ -98,7 +94,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		] );
 		$this->fs->rm(__DIR__.'/testData/standard/px-files/_sys/ram/data/post_request_body2.txt');
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>method = POST</p>', '/').'/s', $output) );
 		$this->assertEquals( 1, preg_match('/'.preg_quote('<p>$_GET[\'test\'] = get_test</p>', '/').'/s', $output) );
@@ -122,12 +117,11 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	public function testAppLock(){
 		// ロックする
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/applock/lock.html' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/applock/' ) );
 		$this->assertTrue( is_file( __DIR__.'/testData/standard/px-files/_sys/ram/applock/testAppLock.lock.txt' ) );
@@ -135,7 +129,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 		// ロックされてて動かない
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/applock/lock.html' ,
 		] );
@@ -147,7 +141,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 
 		// ロックを解除
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/applock/unlock.html' ,
 		] );
@@ -186,7 +180,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -228,7 +221,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		$this->assertEquals( $page_info['path'], 'alias38://pickles2.pxt.jp/index.html' );
 
 		$page_info = $px->site()->get_page_info('trim_white_space_test');
-		// var_dump($page_info);
 		$this->assertEquals( count($page_info), 16 );
 		$this->assertEquals( $page_info['id'], 'trim_white_space_test' );
 		$this->assertEquals( $page_info['title'], '前後の空白文字を削除するテスト' );
@@ -248,7 +240,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 		// 後始末
 		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/caches/p/' ) );
 		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
@@ -325,25 +316,23 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testStandardSetPageInfo(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/site/set_page_info.html' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 'naked', $output );
 
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/site/no_page.html' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( 'no_page.html', $output );
 
@@ -364,7 +353,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/mk_link/'
 		);
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals(
 			'<a href="/" class="current">&lt;HOME&gt;</a><a href="/" class="current"><link0></a>'
@@ -419,9 +407,7 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			$vars
 		);
 		$error = $px->get_errors();
-		// var_dump($output);
-		// var_dump($vars);
-		// var_dump($error);
+
 		$this->assertTrue( is_string($output) );
 		$this->assertSame( 0, $vars ); // <- strict equals
 		$this->assertSame( array(), $error );
@@ -443,8 +429,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/common/styles/sitemap_loaded.css'
 		);
-
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match('/failed/', $output), 0 );
 
@@ -452,8 +436,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/common/styles/sitemap_not_loaded.css'
 		);
-
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match('/failed/', $output), 0 );
 
@@ -474,7 +456,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/dynamicPath/'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$html = $this->utils->simple_html_dom_parse($output);
 		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
@@ -483,7 +464,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/dynamicPath/test1.html'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$html = $this->utils->simple_html_dom_parse($output);
 		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
@@ -492,7 +472,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/dynamicPath/dummy_file_name.html'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$html = $this->utils->simple_html_dom_parse($output);
 		$this->assertEquals( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class, 'current' );
@@ -501,7 +480,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/standard/.px_execute.php',
 			'/dynamicPath---/test1.html'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$html = $this->utils->simple_html_dom_parse($output);
 		$this->assertFalse( $html->find('.theme_megafooter_navi li a[href=/dynamicPath/]')[0]->class );
@@ -522,25 +500,23 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testServerEnv(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match( '/'.preg_quote( '<p>DocumentRoot = <span>'.htmlspecialchars(realpath(__DIR__.'/testData/standard/')).'</span></p>', '/' ).'/', $output ), 1 );
 
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/subproj/sub1/.px_execute.php' ,
 			'/' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match( '/'.preg_quote( '<p>DocumentRoot = <span>'.htmlspecialchars(realpath(__DIR__.'/testData/standard/')).'</span></p>', '/' ).'/', $output ), 1 );
 
@@ -564,41 +540,38 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testStandardCmdExecByFarDirectory(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/contents/get_path_docroot.html' ,
 		] );
 		clearstatcache();
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
 		$cd = realpath('.');
 		chdir(__DIR__.'/');
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			'./testData/standard/.px_execute.php' ,
 			'/contents/get_path_docroot.html' ,
 		] );
 		clearstatcache();
 		chdir($cd);
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
 		$cd = realpath('.');
 		chdir(__DIR__.'/testData/standard/');
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			'./.px_execute.php' ,
 			'/contents/get_path_docroot.html' ,
 		] );
 		clearstatcache();
 		chdir($cd);
 
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( '<pre>'.$this->fs->normalize_path( __DIR__.'/testData/standard/' ).'</pre>', $output );
 
@@ -618,40 +591,37 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	public function testOverrideConfig(){
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=api.get.config' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
-		$this->assertEquals( $output->commands->php, 'php' );
-		$this->assertNull( @$output->commands->dummy );
+		$this->assertEquals( $output->commands->php, PHP_BINARY );
+		$this->assertNull( $output->commands->dummy ?? null );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'--command-php', '/path/to/command/php',
 			'-c', '/path/to/file/php.ini',
 			'/?PX=api.get.config' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output->commands->php, '/path/to/command/php' );
 		$this->assertEquals( $output->path_phpini, '/path/to/file/php.ini' );
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'--command-php', 'C:\path\to\command\php.exe',
 			'-c', 'C:\path\to\file\php.ini',
 			'/?PX=api.get.config' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$output = json_decode($output);
 		$this->assertEquals( $output->commands->php, 'C:\path\to\command\php.exe' );
@@ -680,7 +650,6 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 			'/sitemap_min/.px_execute.php',
 			'/'
 		);
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( preg_match( '/\<span\>FAILED\<\/span\>/', $output ), 0 );
 
@@ -701,23 +670,21 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	 */
 	public function testProcType(){
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/vendor/autoload.php' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( $output, 'ignored path' );
 
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/pass/pass.html' ,
 		] );
 		clearstatcache();
-		// var_dump($output);
 		$this->assertTrue( $this->utils->common_error( $output ) );
 		$this->assertEquals( trim($output), 'passed file.' );
 

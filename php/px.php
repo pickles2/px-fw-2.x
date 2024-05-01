@@ -220,7 +220,7 @@ class px{
 			$this->conf->commands = new \stdClass();
 		}
 		if( !property_exists($this->conf->commands, 'php') ){
-			$this->conf->commands->php = null;
+			$this->conf->commands->php = PHP_BINARY;
 		}
 		if( !property_exists($this->conf, 'file_default_permission') ){
 			$this->conf->file_default_permission = null;
@@ -1016,7 +1016,7 @@ class px{
 		if(is_null($options)){ $options = array(); }
 		if(!is_array($options)){ $options = (array) $options; }
 		$php_command = array();
-		array_push( $php_command, addslashes($this->conf()->commands->php) );
+		array_push( $php_command, addslashes($this->conf()->commands->php ?? PHP_BINARY) );
 			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
 
 		if( strlen($this->conf()->path_phpini ?? "") ){

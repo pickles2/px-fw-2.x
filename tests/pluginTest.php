@@ -20,7 +20,7 @@ class pluginTest extends PHPUnit\Framework\TestCase{
 	public function testBefore(){
 
 		$output = $this->utils->passthru( [
-			'php',
+			PHP_BINARY,
 			__DIR__.'/testData/standard/.px_execute.php' ,
 			'/?PX=test-px2plugin' ,
 		] );
