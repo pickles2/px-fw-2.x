@@ -1015,12 +1015,17 @@ class px{
 		if(!strlen($request_path ?? "")){ $request_path = '/'; }
 		if(is_null($options)){ $options = array(); }
 		if(!is_array($options)){ $options = (array) $options; }
+
+		$php_bin = 'php';
+		if( strlen($this->conf()->commands->php ?? '') ){
+			$php_bin = $this->conf()->commands->php;
+		}elseif( strlen(PHP_BINARY ?? '') ){
+			$php_bin = PHP_BINARY;
+		}
+
 		$php_command = array();
-		array_push(
-			$php_command,
-			addslashes(strlen($this->conf()->commands->php ?? '') ? $this->conf()->commands->php : (strlen(PHP_BINARY ?? '') ? PHP_BINARY : 'php'))
-				// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
-		);
+		array_push( $php_command, addslashes($php_bin));
+			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
 
 		if( strlen($this->conf()->path_phpini ?? "") ){
 			$php_command = array_merge(
