@@ -38,6 +38,10 @@ return call_user_func( function(){
 	$conf->allow_pxcommands = 0; // PX Commands の実行を許可
 	$conf->default_timezone = 'Asia/Tokyo';
 
+	// commands
+	$conf->commands = new stdClass;
+	$conf->commands->php = PHP_BINARY;
+
 	// processor
 	$conf->paths_proc_type = array(
 		// パスのパターン別に処理方法を設定
