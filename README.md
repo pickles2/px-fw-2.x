@@ -6,7 +6,7 @@ Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.21 (リリース日未定)
+### Pickles Framework v2.1.21 (2024年5月3日)
 
 - PHPコマンドのパスが設定されていないときに、実行中のPHPからコマンドのパスを取得するようになった。
 

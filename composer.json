@@ -20,7 +20,7 @@
             "@php ./vendor/phpunit/phpunit/phpunit"
         ] ,
         "documentation": [
-            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.20 API Document\" -d \"./php/\",\"./theme/php/\" -t \"./docs/\""
+            "@php ./phpDocumentor.phar --title \"Pickles Framework v2.1.21 API Document\" -d \"./php/\",\"./theme/php/\" -t \"./docs/\""
         ]
     } ,
     "minimum-stability": "dev",
