@@ -229,7 +229,7 @@ print $this->mk_config_unit('funcs', 'プロセス機能', 'hash');
 				$conf_value_test = get_object_vars($conf_value);
 			}
 			$conf_value_test = $conf_value;
-			if( !count($conf_value_test) ){
+			if( !count((array) $conf_value_test) ){
 				$src .= '---';
 			}else{
 				$src .= '<dl>';
