@@ -1,12 +1,12 @@
 # Pickles Framework 2
 
-Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS <a href="https://pickles2.com/" target="_blank">Pickles 2</a> のコア機能を提供します。<br />
+Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS <a href="https://pickles2.com/" target="_blank">Pickles 2</a> のコア機能を提供します。
 
 
 
 ## 更新履歴 - Change log
 
-### Pickles Framework v2.1.22 (リリース日未定)
+### Pickles Framework v2.1.22 (2025年4月5日)
 
 - 軽微な不具合の修正。
 
@@ -147,7 +147,7 @@ $ composer run-script documentation;
 
 ## ライセンス - License
 
-Copyright (c)2001-2024 Tomoya Koyanagi, and Pickles Project<br />
+Copyright (c)2001-2025 Tomoya Koyanagi, and Pickles Project<br />
 MIT License https://opensource.org/licenses/mit-license.php
 
 
