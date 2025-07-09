@@ -192,7 +192,9 @@ class api{
 	 */
 	private function user_message($msg){
 		if( $this->px->req()->is_cmd() ){
-			header('Content-type: text/plain;');
+			if (!headers_sent()) {
+				header('Content-type: text/plain;');
+			}
 			print $this->px->pxcmd()->get_cli_header();
 			print $msg."\n";
 			print $this->px->pxcmd()->get_cli_footer();
@@ -434,11 +436,13 @@ class api{
 		if( !is_string($data_type) || !strlen($data_type ?? "") ){
 			$data_type = 'json';
 		}
-		header('Content-type: application/xml; charset=UTF-8');
-		if( $data_type == 'json' ){
-			header('Content-type: application/json; charset=UTF-8');
-		}elseif( $data_type == 'jsonp' ){
-			header('Content-type: application/javascript; charset=UTF-8');
+		if (!headers_sent()) {
+			header('Content-type: application/xml; charset=UTF-8');
+			if( $data_type == 'json' ){
+				header('Content-type: application/json; charset=UTF-8');
+			}elseif( $data_type == 'jsonp' ){
+				header('Content-type: application/javascript; charset=UTF-8');
+			}
 		}
 		switch( $data_type ){
 			case 'jsonp':

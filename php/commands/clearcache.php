@@ -71,14 +71,18 @@ class clearcache{
 		if( ($pxcmd[1] ?? null) == 'version' ){
 			// 命令が clearcache.version の場合、バージョン番号を返す。
 			$val = $this->px->get_version();
-			@header('Content-type: application/json; charset=UTF-8');
+			if (!headers_sent()) {
+				header('Content-type: application/json; charset=UTF-8');
+			}
 			print json_encode($val);
 			exit;
 		}
 		if( strlen($pxcmd[1] ?? "") ){
 			// 命令が不明の場合、エラーを表示する。
 			if( $this->px->req()->is_cmd() ){
-				header('Content-type: text/plain;');
+				if (!headers_sent()) {
+					header('Content-type: text/plain;');
+				}
 				print $this->px->pxcmd()->get_cli_header();
 				print 'execute PX command => "?PX=clearcache"'."\n";
 				print $this->px->pxcmd()->get_cli_footer();

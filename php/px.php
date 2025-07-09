@@ -1220,7 +1220,9 @@ class px{
 		}
 		$this->response_message = $message;
 
-		@header('HTTP/1.1 '.$this->response_status.' '.$this->response_message);
+		if (!headers_sent()) {
+			header('HTTP/1.1 '.$this->response_status.' '.$this->response_message);
+		}
 		return true;
 	}
 
@@ -1232,7 +1234,9 @@ class px{
 	 */
 	public function error( $message = null ){
 		array_push( $this->errors , $message ?? null );
-		@header('X-PXFW-ERROR: '.$message.'', false);
+		if (!headers_sent()) {
+			header('X-PXFW-ERROR: '.$message.'', false);
+		}
 		return true;
 	}
 
@@ -1261,7 +1265,9 @@ class px{
 			return false;
 		}
 		array_push( $this->relatedlinks , $path );
-		@header('X-PXFW-RELATEDLINK: '.$path.'', false);
+		if (!headers_sent()) {
+			header('X-PXFW-RELATEDLINK: '.$path.'', false);
+		}
 
 		return true;
 	}
@@ -2224,7 +2230,9 @@ class px{
 			$this->set_status($matched[2], $matched[3]);
 		}
 
-		@header($string, $replace);
+		if (!headers_sent()) {
+			header($string, $replace);
+		}
 		return;
 	}
 

@@ -57,7 +57,9 @@ class config{
 		$this->conf = clone $this->px->conf();
 
 		if( $this->px->req()->is_cmd() ){
-			header('Content-type: text/plain;');
+			if (!headers_sent()) {
+				header('Content-type: text/plain;');
+			}
 			print $this->px->pxcmd()->get_cli_header();
 			var_dump( $this->conf );
 			print $this->px->pxcmd()->get_cli_footer();

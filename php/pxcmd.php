@@ -89,7 +89,9 @@ class pxcmd{
 	 */
 	public function get_cli_header(){
 		$pxcmd = $this->px->get_px_command();
-		@header('Content-type: text/plain');
+		if (!headers_sent()) {
+			header('Content-type: text/plain');
+		}
 		ob_start();
 		print '------------'."\n";
 		print 'Pickles '.$this->px->get_version().' -> '.$pxcmd[0]."\n";
@@ -122,7 +124,9 @@ class pxcmd{
 		$this->bowl()->send($content);
 		unset($content);
 
-		@header( 'Content-type: text/html; charset="UTF-8"' );
+		if (!headers_sent()) {
+			header( 'Content-type: text/html; charset="UTF-8"' );
+		}
 
 		// リソースをキャッシュ領域にコピー
 		$path_pxcache = $this->px->fs()->get_realpath( $this->px->get_path_controot().$this->px->conf()->public_cache_dir.'/px/' );
