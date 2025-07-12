@@ -9,7 +9,7 @@ namespace picklesFramework2;
  *
  * @author Tomoya Koyanagi <tomk79@gmail.com>
  */
-class px{
+class px {
 	/**
 	 * Pickles 2 のホームディレクトリのパス
 	 * @access private
@@ -115,7 +115,7 @@ class px{
 		// 同一のバージョンとして扱うことができる。
 		// 便宜上、 v2.1系 の番号で代表して示す。
 
-		return '2.1.23';
+		return '2.1.24';
 	}
 
 	/**
