@@ -6,6 +6,10 @@ Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS
 
 ## 更新履歴 - Change log
 
+### Pickles Framework v2.1.25 (リリース日未定)
+
+- サイトマップキャッシュ確定後に `$site->set_page_info()` で登録された新しいページの `list_flg` が考慮されない不具合を修正。
+
 ### Pickles Framework v2.1.24 (2025年7月12日)
 
 - ヘッダー情報の送信に関する改善。

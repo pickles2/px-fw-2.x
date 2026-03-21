@@ -1,0 +1,16 @@
+<?php
+/**
+ * get_children() が PDO+SQLite 利用時でも set_page_info() で追加した子を list_flg 付きで返すことの確認用
+ */
+$px->site()->set_page_info(
+	'/sample_pages/dynamic_runtime_child.html',
+	array(
+		'title' => 'runtime delta child',
+		'logical_path' => '/sample_pages/',
+		'list_flg' => 1,
+		'layout' => 'naked',
+	)
+);
+$child_id = $px->site()->get_page_id_by_path( '/sample_pages/dynamic_runtime_child.html' );
+$children = $px->site()->get_children( '/sample_pages/' );
+echo( in_array( $child_id, $children, true ) ? 'get_children_runtime_delta_ok' : 'get_children_runtime_delta_ng' );

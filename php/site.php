@@ -169,6 +169,11 @@ class site{
 	 * @access private
 	 */
 	private $pdo;
+	/**
+	 * サイトマップキャッシュ確定後に `set_page_info()` で変更されたページID（`get_children()` の PDO 経路で SQLite 結果へマージする）
+	 * @access private
+	 */
+	private $sitemap_runtime_delta = array();
 
 	/**
 	 * Constructor
@@ -1380,6 +1385,10 @@ CREATE TABLE IF NOT EXISTS sitemap(
 		// パブリッシュ対象にリンクを追加
 		$this->px->add_relatedlink( $this->px->href($tmp_array['path']) );
 
+		if( $this->is_sitemap_cache() ){
+			$this->sitemap_runtime_delta[$tmp_array['id']] = true;
+		}
+
 		return true;
 	}
 
@@ -1616,6 +1625,59 @@ CREATE TABLE IF NOT EXISTS sitemap(
 	}
 
 	/**
+	 * `get_children()` 用: 1ページ分が `$page_info` の直下の子か判定し、該当すればバケットに追加する。
+	 *
+	 * @param array $row サイトマップの1ページ分（`get_page_info()` の戻り想定）
+	 * @param array $page_info 起点ページ
+	 * @param array $actors `get_actors( $page_info['id'] )` の結果
+	 * @param array $tmp_children_orderby_manual 参照渡し
+	 * @param array $tmp_children_orderby_auto 参照渡し
+	 * @param array $tmp_children_orderby_listed_manual 参照渡し
+	 * @param array $tmp_children_orderby_listed_auto 参照渡し
+	 */
+	private function append_row_to_get_children_buckets( $row, $page_info, $actors, &$tmp_children_orderby_manual, &$tmp_children_orderby_auto, &$tmp_children_orderby_listed_manual, &$tmp_children_orderby_listed_auto ){
+		if( strlen($row['role'] ?? "") ){
+			return;
+		}
+		if( !strlen( trim($row['id'] ?? "") ) ){
+			return;
+		}
+
+		$____parent_page_id = '';
+		$tmp_breadcrumb = explode( '>', $row['logical_path'] ?? "" );
+		$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
+		$____parent_page_id = trim($tmp_page_info['id']);
+		$parent_page_role = $this->get_role($____parent_page_id);
+		if( !is_null($parent_page_role) ){
+			$____parent_page_id = $parent_page_role;
+		}
+		unset($tmp_breadcrumb,$tmp_page_info);
+
+		if( $page_info['id'] != $____parent_page_id && array_search( $____parent_page_id, $actors ) === false ){
+			return;
+		}
+
+		if( $page_info['id'] == $____parent_page_id ){
+			if( strlen($row['role'] ?? "") ){
+				return;
+			}
+
+			if( strlen($row['orderby'] ?? "") ){
+				array_push( $tmp_children_orderby_manual , $row['id'] );
+			}else{
+				array_push( $tmp_children_orderby_auto , $row['id'] );
+			}
+			if( isset($row['list_flg']) && $row['list_flg'] ){
+				if(strlen($row['orderby'] ?? "")){
+					array_push( $tmp_children_orderby_listed_manual , $row['id'] );
+				}else{
+					array_push( $tmp_children_orderby_listed_auto , $row['id'] );
+				}
+			}
+		}
+	}
+
+	/**
 	 * 子階層のページの一覧を取得する。
 	 *
 	 * このメソッドは、指定したページの子階層のページの一覧を返します。`$path` を省略した場合は、カレントページのパスを起点に一覧を抽出します。
@@ -1696,23 +1758,39 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			);
 			$sth->execute(array());
 			$results = $sth->fetchAll(\PDO::FETCH_ASSOC);
+			$seen_ids = array();
 			foreach( $results as $row ){
-				if( strlen( $row['role'] ?? "" )){
-					// 役者はリストされない。
+				$live = $this->get_page_info( $row['id'] );
+				if( !is_array($live) || !strlen( trim($live['id'] ?? "") ) ){
 					continue;
 				}
-
-				if( strlen($row['orderby'] ?? "") ){
-					array_push( $tmp_children_orderby_manual , $row['id'] );
-				}else{
-					array_push( $tmp_children_orderby_auto , $row['id'] );
+				if( strlen( $live['role'] ?? "" ) ){
+					continue;
 				}
-				if( isset($row['list_flg']) && $row['list_flg'] ){
-					if(strlen($row['orderby'] ?? "")){
-						array_push( $tmp_children_orderby_listed_manual , $row['id'] );
+				$seen_ids[$row['id']] = true;
+				if( strlen($live['orderby'] ?? "") ){
+					array_push( $tmp_children_orderby_manual , $live['id'] );
+				}else{
+					array_push( $tmp_children_orderby_auto , $live['id'] );
+				}
+				if( isset($live['list_flg']) && $live['list_flg'] ){
+					if(strlen($live['orderby'] ?? "")){
+						array_push( $tmp_children_orderby_listed_manual , $live['id'] );
 					}else{
-						array_push( $tmp_children_orderby_listed_auto , $row['id'] );
+						array_push( $tmp_children_orderby_listed_auto , $live['id'] );
 					}
+				}
+			}
+			if( count( $this->sitemap_runtime_delta ) ){
+				foreach( array_keys( $this->sitemap_runtime_delta ) as $child_id ){
+					if( isset( $seen_ids[$child_id] ) ){
+						continue;
+					}
+					$row = $this->get_page_info( $child_id );
+					if( !is_array($row) ){
+						continue;
+					}
+					$this->append_row_to_get_children_buckets( $row, $page_info, $actors, $tmp_children_orderby_manual, $tmp_children_orderby_auto, $tmp_children_orderby_listed_manual, $tmp_children_orderby_listed_auto );
 				}
 			}
 
@@ -1721,47 +1799,7 @@ CREATE TABLE IF NOT EXISTS sitemap(
 			$actors = $this->get_actors( $page_info['id'] );
 
 			foreach( $this->get_sitemap() as $row ){
-				if( strlen($row['role'] ?? "") ){
-					//役者はリストされない。
-					continue;
-				}
-				if( !strlen( trim($row['id'] ?? "") ) ){
-					continue;
-				}
-
-				$____parent_page_id = '';
-				$tmp_breadcrumb = explode( '>', $row['logical_path'] ?? "" );
-				$tmp_page_info = $this->get_page_info( trim($tmp_breadcrumb[count($tmp_breadcrumb)-1]) );
-				$____parent_page_id = trim($tmp_page_info['id']);
-				$parent_page_role = $this->get_role($____parent_page_id);
-				if( !is_null($parent_page_role) ){
-					$____parent_page_id = $parent_page_role;
-				}
-				unset($tmp_breadcrumb,$tmp_path,$tmp_page_info);
-
-				if( $page_info['id'] != $____parent_page_id && array_search( $____parent_page_id, $actors ) === false ){
-					continue;
-				}
-
-				if( $page_info['id'] == $____parent_page_id ){
-					if( strlen($row['role'] ?? "") ){
-						// 役者はリストされない。
-						continue;
-					}
-
-					if( strlen($row['orderby'] ?? "") ){
-						array_push( $tmp_children_orderby_manual , $row['id'] );
-					}else{
-						array_push( $tmp_children_orderby_auto , $row['id'] );
-					}
-					if( isset($row['list_flg']) && $row['list_flg'] ){
-						if(strlen($row['orderby'] ?? "")){
-							array_push( $tmp_children_orderby_listed_manual , $row['id'] );
-						}else{
-							array_push( $tmp_children_orderby_listed_auto , $row['id'] );
-						}
-					}
-				}
+				$this->append_row_to_get_children_buckets( $row, $page_info, $actors, $tmp_children_orderby_manual, $tmp_children_orderby_auto, $tmp_children_orderby_listed_manual, $tmp_children_orderby_listed_auto );
 			}
 		}
 

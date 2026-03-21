@@ -344,6 +344,35 @@ class picklesTest extends PHPUnit\Framework\TestCase{
 	}
 
 	/**
+	 * `set_page_info()` 後の `get_children()` が PDO+SQLite 利用時でも動的に追加した子ページを `list_flg` 付きで返す
+	 * @depends testCLIStandard
+	 */
+	public function testStandardGetChildrenRuntimeDelta(){
+		$output = $this->utils->passthru( [
+			PHP_BINARY,
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/sample_pages/' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->utils->common_error( $output ) );
+
+		$output = $this->utils->passthru( [
+			PHP_BINARY,
+			__DIR__.'/testData/standard/.px_execute.php' ,
+			'/site/get_children_runtime_delta.html' ,
+		] );
+		clearstatcache();
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		$this->assertStringContainsString( 'get_children_runtime_delta_ok', $output );
+		$this->assertStringNotContainsString( 'get_children_runtime_delta_ng', $output );
+
+		$output = $this->utils->px_execute( '/standard/.px_execute.php', '/?PX=clearcache' );
+		$this->assertTrue( $this->utils->common_error( $output ) );
+		clearstatcache();
+		$this->assertTrue( !is_dir( __DIR__.'/testData/standard/px-files/_sys/ram/caches/sitemaps/' ) );
+	}
+
+	/**
 	 * $px->mk_link() を実行してみるテスト
 	 * @depends testCLIStandard
 	 */
