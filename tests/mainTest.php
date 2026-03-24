@@ -64,4 +64,77 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		unset($px);
 	}
 
+	/**
+	 * session.cookie_secure の自動切替条件をテスト
+	 */
+	public function testSessionCookieSecureAutoSwitch(){
+		$cd = realpath('.');
+		$SCRIPT_FILENAME = $_SERVER['SCRIPT_FILENAME'] ?? null;
+		$server_backup = $_SERVER;
+
+		chdir(__DIR__.'/testData/standard/');
+		$_SERVER['SCRIPT_FILENAME'] = __DIR__.'/testData/standard/.px_execute.php';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['HTTP_USER_AGENT'] = '';
+
+		$px_factory = function($mocked_sapi_name){
+			return new class('./px-files/', $mocked_sapi_name) extends picklesFramework2\px {
+				private $mocked_sapi_name;
+				public function __construct($path_homedir, $mocked_sapi_name){
+					$this->mocked_sapi_name = $mocked_sapi_name;
+					parent::__construct($path_homedir);
+				}
+				protected function get_php_sapi_name(){
+					return $this->mocked_sapi_name;
+				}
+			};
+		};
+
+		$get_should_disable = function($px){
+			$reflection = new \ReflectionMethod('picklesFramework2\px', 'should_disable_session_cookie_secure_for_local_dev');
+			$reflection->setAccessible(true);
+			return $reflection->invoke($px);
+		};
+
+		// 3条件成立: REMOTE_ADDR=ローカル, HTTPS=off, built-in server
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$px = $px_factory('cli-server');
+		$this->assertTrue($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件1不成立: グローバルIP
+		$_SERVER['REMOTE_ADDR'] = '8.8.8.8';
+		$_SERVER['HTTPS'] = 'off';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件2不成立: HTTPS=on
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'on';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件3不成立: built-in server ではない
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$px = $px_factory('cli');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		chdir($cd);
+		if( is_null($SCRIPT_FILENAME) ){
+			unset($_SERVER['SCRIPT_FILENAME']);
+		}else{
+			$_SERVER['SCRIPT_FILENAME'] = $SCRIPT_FILENAME;
+		}
+		$_SERVER = $server_backup;
+	}
+
 }

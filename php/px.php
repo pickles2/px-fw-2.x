@@ -138,8 +138,9 @@ class px {
 		if( is_callable('mb_detect_order') ){
 			mb_detect_order( 'UTF-8,SJIS-win,cp932,eucJP-win,SJIS,EUC-JP,JIS,ASCII' );
 		}
+		$disable_cookie_secure_for_local_dev = $this->should_disable_session_cookie_secure_for_local_dev();
 		@ini_set( 'session.use_strict_mode' , '1' ); // NOTE: Pickles Framework v2.1.13 で追加
-		@ini_set( 'session.cookie_secure' , '1' ); // NOTE: Pickles Framework v2.1.12 で追加
+		@ini_set( 'session.cookie_secure' , ($disable_cookie_secure_for_local_dev ? '0' : '1') ); // NOTE: Pickles Framework v2.1.12 で追加
 		@ini_set( 'session.cookie_httponly' , '1' ); // NOTE: Pickles Framework v2.1.11 で追加
 		@header_remove('X-Powered-By');
 		$this->set_status(200);// 200 OK
@@ -252,6 +253,9 @@ class px {
 		$req_conf = new \stdClass;
 		$req_conf->session_name   = $this->conf->session_name ?? 'PXSID';
 		$req_conf->session_expire = $this->conf->session_expire ?? (24 * 60 * 60);
+		$req_conf->cookie_default_secure = !$disable_cookie_secure_for_local_dev;
+		$req_conf->cookie_default_httponly = true;
+		$req_conf->cookie_default_samesite = 'Lax';
 		$req_conf->cookie_default_expire = $this->conf->cookie_default_expire ?? (7 * 24 * 60 * 60);
 		$req_conf->cookie_default_domain = $this->conf->cookie_default_domain ?? null;
 		$req_conf->cookie_default_path = $this->conf->cookie_default_path ?? $this->conf->path_controot ?? '/';
@@ -474,6 +478,61 @@ class px {
 			$this->fnc_call_plugin_funcs( $this->conf->funcs->before_output, $this );
 		}
 
+	}
+
+	/**
+	 * ローカル開発時に secure Cookie を自動オフにするか判定する。
+	 *
+	 * 次の3条件を全て満たす場合のみ `true`:
+	 * - `REMOTE_ADDR` がループバックIPまたはローカルIP
+	 * - `HTTPS` が未設定または `off`
+	 * - PHP built-in server で実行されている
+	 *
+	 * @return bool secure Cookie を自動オフにする場合 `true`
+	 */
+	private function should_disable_session_cookie_secure_for_local_dev(){
+		$remote_addr = $_SERVER['REMOTE_ADDR'] ?? null;
+		if( !is_string($remote_addr) || !strlen($remote_addr ?? "") ){
+			return false;
+		}
+		if( filter_var($remote_addr, FILTER_VALIDATE_IP) === false ){
+			return false;
+		}
+		$is_remote_addr_loopback_or_local_ip = (
+			filter_var(
+			$remote_addr,
+			FILTER_VALIDATE_IP,
+			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+			) === false
+		);
+
+		$https = $_SERVER['HTTPS'] ?? null;
+		$is_https_disabled = (
+			is_null($https)
+			|| strtolower(trim((string) $https)) === 'off'
+		);
+
+		$is_php_builtin_server = (
+			PHP_SAPI === 'cli-server'
+			|| $this->get_php_sapi_name() === 'cli-server'
+		);
+
+		return (
+			$is_remote_addr_loopback_or_local_ip
+			&& $is_https_disabled
+			&& $is_php_builtin_server
+		);
+	}
+
+	/**
+	 * php_sapi_name() の戻り値を得る。
+	 *
+	 * テストで差し替えられるようにメソッド化している。
+	 *
+	 * @return string SAPI名
+	 */
+	protected function get_php_sapi_name(){
+		return php_sapi_name();
 	}
 
 	/**
