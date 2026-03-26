@@ -9,7 +9,12 @@ Pickles Framework(PxFW) は、DB不要、オープンソースのPHP製静的CMS
 ### Pickles Framework v2.1.25 (リリース日未定)
 
 - サイトマップキャッシュ確定後に `$site->set_page_info()` で登録された新しいページの `list_flg` が考慮されない不具合を修正。
-- セッションCookieの `secure` フラグはデフォルトで有効に固定し、`REMOTE_ADDR` がループバックまたはローカルIP かつ `HTTPS` が未設定/`off` かつ PHP built-in server の場合に限り、自動的に無効化するようにした。
+- セッションCookieの `secure` フラグはデフォルトで有効に固定し、次の5条件をすべて満たす場合に限り、自動的に無効化するようにした。
+    - `REMOTE_ADDR` がループバックまたはローカルIP
+    - `HTTPS` が未設定/`off`
+    - PHP built-in server で実行されている
+    - プロキシ経由のアクセスを示すHTTPヘッダ (`X-Forwarded-For`, `X-Forwarded-Proto`, `X-Real-IP` 等) が存在しない
+    - `HTTP_HOST` がローカル環境を示す (`localhost`, ループバックIP, プライベートIP, または未設定)
 
 ### Pickles Framework v2.1.24 (2025年7月12日)
 

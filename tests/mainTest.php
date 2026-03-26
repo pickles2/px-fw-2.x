@@ -96,7 +96,21 @@ class mainTest extends PHPUnit\Framework\TestCase{
 			return $reflection->invoke($px);
 		};
 
-		// 3条件成立: REMOTE_ADDR=ローカル, HTTPS=off, built-in server
+		$clean_headers = function(){
+			unset(
+				$_SERVER['HTTP_X_FORWARDED_FOR'],
+				$_SERVER['HTTP_X_FORWARDED_PROTO'],
+				$_SERVER['HTTP_X_FORWARDED_HOST'],
+				$_SERVER['HTTP_X_REAL_IP'],
+				$_SERVER['HTTP_FORWARDED'],
+				$_SERVER['HTTP_VIA'],
+				$_SERVER['HTTP_HOST'],
+				$_SERVER['SERVER_NAME']
+			);
+		};
+
+		// 5条件成立: REMOTE_ADDR=ローカル, HTTPS=off, built-in server, プロキシヘッダなし, Hostローカル
+		$clean_headers();
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['HTTPS'] = 'off';
 		$px = $px_factory('cli-server');
@@ -104,7 +118,28 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		$px->__destruct();// <- required on Windows
 		unset($px);
 
+		// 5条件成立: Host=localhost:8080
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = 'localhost:8080';
+		$px = $px_factory('cli-server');
+		$this->assertTrue($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 5条件成立: Host=プライベートIP
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '192.168.1.100';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = '192.168.1.100:8080';
+		$px = $px_factory('cli-server');
+		$this->assertTrue($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
 		// 条件1不成立: グローバルIP
+		$clean_headers();
 		$_SERVER['REMOTE_ADDR'] = '8.8.8.8';
 		$_SERVER['HTTPS'] = 'off';
 		$px = $px_factory('cli-server');
@@ -113,6 +148,7 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		unset($px);
 
 		// 条件2不成立: HTTPS=on
+		$clean_headers();
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['HTTPS'] = 'on';
 		$px = $px_factory('cli-server');
@@ -121,6 +157,7 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		unset($px);
 
 		// 条件3不成立: built-in server ではない
+		$clean_headers();
 		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 		$_SERVER['HTTPS'] = 'off';
 		$px = $px_factory('cli');
@@ -128,6 +165,88 @@ class mainTest extends PHPUnit\Framework\TestCase{
 		$px->__destruct();// <- required on Windows
 		unset($px);
 
+		// 条件4不成立: X-Forwarded-For が存在 (nginx等のプロキシ経由)
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.50';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件4不成立: X-Forwarded-Proto が存在
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'http';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件4不成立: X-Real-IP が存在
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_X_REAL_IP'] = '203.0.113.50';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件4不成立: Forwarded (RFC 7239) が存在
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_FORWARDED'] = 'for=203.0.113.50;proto=http';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件4不成立: Via が存在
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_VIA'] = '1.1 proxy.example.com';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件5不成立: Host がドメイン名 (本番環境を示唆)
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = 'www.example.com';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 条件5不成立: Host がグローバルIP
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = '203.0.113.50:80';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		// 複合: プロキシヘッダ + Host=localhost → プロキシヘッダ優先で false
+		$clean_headers();
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['HTTP_HOST'] = 'localhost';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '203.0.113.50';
+		$px = $px_factory('cli-server');
+		$this->assertFalse($get_should_disable($px));
+		$px->__destruct();// <- required on Windows
+		unset($px);
+
+		$clean_headers();
 		chdir($cd);
 		if( is_null($SCRIPT_FILENAME) ){
 			unset($_SERVER['SCRIPT_FILENAME']);

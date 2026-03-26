@@ -483,10 +483,12 @@ class px {
 	/**
 	 * ローカル開発時に secure Cookie を自動オフにするか判定する。
 	 *
-	 * 次の3条件を全て満たす場合のみ `true`:
+	 * 次の5条件を全て満たす場合のみ `true`:
 	 * - `REMOTE_ADDR` がループバックIPまたはローカルIP
 	 * - `HTTPS` が未設定または `off`
 	 * - PHP built-in server で実行されている
+	 * - プロキシ経由のアクセスを示すヘッダが存在しない
+	 * - `HTTP_HOST` がローカル環境を示す (`localhost`, ループバックIP, プライベートIP, または未設定)
 	 *
 	 * @return bool secure Cookie を自動オフにする場合 `true`
 	 */
@@ -517,11 +519,52 @@ class px {
 			|| $this->get_php_sapi_name() === 'cli-server'
 		);
 
+		$has_proxy_headers = (
+			!empty($_SERVER['HTTP_X_FORWARDED_FOR'] ?? null)
+			|| !empty($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? null)
+			|| !empty($_SERVER['HTTP_X_FORWARDED_HOST'] ?? null)
+			|| !empty($_SERVER['HTTP_X_REAL_IP'] ?? null)
+			|| !empty($_SERVER['HTTP_FORWARDED'] ?? null)
+			|| !empty($_SERVER['HTTP_VIA'] ?? null)
+		);
+
 		return (
 			$is_remote_addr_loopback_or_local_ip
 			&& $is_https_disabled
 			&& $is_php_builtin_server
+			&& !$has_proxy_headers
+			&& $this->is_host_header_local()
 		);
+	}
+
+	/**
+	 * HTTP_HOST ヘッダがローカル環境を示すか判定する。
+	 *
+	 * `localhost`, ループバックIP, プライベートIP の場合に `true` を返す。
+	 * ドメイン名やグローバルIP の場合は `false` を返す。
+	 * ヘッダが未設定の場合 (CLI等) は `true` とみなす。
+	 *
+	 * @return bool ローカルホストの場合 `true`
+	 */
+	private function is_host_header_local(){
+		$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? null;
+		if( !is_string($host) || !strlen($host) ){
+			return true;
+		}
+		$host_without_port = preg_replace('/:\d+$/', '', $host);
+		if( strtolower($host_without_port) === 'localhost' ){
+			return true;
+		}
+		if( filter_var($host_without_port, FILTER_VALIDATE_IP) !== false ){
+			return (
+				filter_var(
+					$host_without_port,
+					FILTER_VALIDATE_IP,
+					FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+				) === false
+			);
+		}
+		return false;
 	}
 
 	/**
