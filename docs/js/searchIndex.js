@@ -611,6 +611,21 @@ Search.appendIndex(
             "summary": "Constructor",
             "url": "classes/picklesFramework2-px.html#method___construct"
         },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Ashould_disable_session_cookie_secure_for_local_dev\u0028\u0029",
+            "name": "should_disable_session_cookie_secure_for_local_dev",
+            "summary": "\u30ED\u30FC\u30AB\u30EB\u958B\u767A\u6642\u306B\u0020secure\u0020Cookie\u0020\u3092\u81EA\u52D5\u30AA\u30D5\u306B\u3059\u308B\u304B\u5224\u5B9A\u3059\u308B\u3002",
+            "url": "classes/picklesFramework2-px.html#method_should_disable_session_cookie_secure_for_local_dev"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Ais_host_header_local\u0028\u0029",
+            "name": "is_host_header_local",
+            "summary": "HTTP_HOST\u0020\u30D8\u30C3\u30C0\u304C\u30ED\u30FC\u30AB\u30EB\u74B0\u5883\u3092\u793A\u3059\u304B\u5224\u5B9A\u3059\u308B\u3002",
+            "url": "classes/picklesFramework2-px.html#method_is_host_header_local"
+        },                {
+            "fqsen": "\\picklesFramework2\\px\u003A\u003Aget_php_sapi_name\u0028\u0029",
+            "name": "get_php_sapi_name",
+            "summary": "php_sapi_name\u0028\u0029\u0020\u306E\u623B\u308A\u5024\u3092\u5F97\u308B\u3002",
+            "url": "classes/picklesFramework2-px.html#method_get_php_sapi_name"
+        },                {
             "fqsen": "\\picklesFramework2\\px\u003A\u003Aassemble_path_content_and_proc_type\u0028\u0029",
             "name": "assemble_path_content_and_proc_type",
             "summary": "\u0024path_content\u0020\u3092\u8A08\u7B97\u3059\u308B",
@@ -1166,6 +1181,11 @@ Search.appendIndex(
             "summary": "Actor\u0020\u306E\u30DA\u30FC\u30B8ID\u4E00\u89A7\u3092\u53D6\u5F97\u3059\u308B",
             "url": "classes/picklesFramework2-site.html#method_get_actors"
         },                {
+            "fqsen": "\\picklesFramework2\\site\u003A\u003Aappend_row_to_get_children_buckets\u0028\u0029",
+            "name": "append_row_to_get_children_buckets",
+            "summary": "\u0060get_children\u0028\u0029\u0060\u0020\u7528\u003A\u00201\u30DA\u30FC\u30B8\u5206\u304C\u0020\u0060\u0024page_info\u0060\u0020\u306E\u76F4\u4E0B\u306E\u5B50\u304B\u5224\u5B9A\u3057\u3001\u8A72\u5F53\u3059\u308C\u3070\u30D0\u30B1\u30C3\u30C8\u306B\u8FFD\u52A0\u3059\u308B\u3002",
+            "url": "classes/picklesFramework2-site.html#method_append_row_to_get_children_buckets"
+        },                {
             "fqsen": "\\picklesFramework2\\site\u003A\u003Aget_children\u0028\u0029",
             "name": "get_children",
             "summary": "\u5B50\u968E\u5C64\u306E\u30DA\u30FC\u30B8\u306E\u4E00\u89A7\u3092\u53D6\u5F97\u3059\u308B\u3002",
@@ -1265,6 +1285,11 @@ Search.appendIndex(
             "name": "pdo",
             "summary": "PDO\u30A4\u30F3\u30B9\u30BF\u30F3\u30B9\n\u0024sitemap_page_tree\u0020\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\u306BSQLite\u3092\u4F7F\u7528\u3059\u308B\u305F\u3081\u306E\u30C7\u30FC\u30BF\u30D9\u30FC\u30B9\u3002",
             "url": "classes/picklesFramework2-site.html#property_pdo"
+        },                {
+            "fqsen": "\\picklesFramework2\\site\u003A\u003A\u0024sitemap_runtime_delta",
+            "name": "sitemap_runtime_delta",
+            "summary": "\u30B5\u30A4\u30C8\u30DE\u30C3\u30D7\u30AD\u30E3\u30C3\u30B7\u30E5\u78BA\u5B9A\u5F8C\u306B\u0020\u0060set_page_info\u0028\u0029\u0060\u0020\u3067\u5909\u66F4\u3055\u308C\u305F\u30DA\u30FC\u30B8ID\uFF08\u0060get_children\u0028\u0029\u0060\u0020\u306E\u0020PDO\u0020\u7D4C\u8DEF\u3067\u0020SQLite\u0020\u7D50\u679C\u3078\u30DE\u30FC\u30B8\u3059\u308B\uFF09",
+            "url": "classes/picklesFramework2-site.html#property_sitemap_runtime_delta"
         },                {
             "fqsen": "\\picklesFramework2\\theme\\theme",
             "name": "theme",
